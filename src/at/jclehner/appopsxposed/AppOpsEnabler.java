@@ -16,12 +16,12 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class AppOpsEnabler implements IXposedHookZygoteInit, IXposedHookLoadPackage
 {
-	private XModuleResources res;
+	private XModuleResources mRes;
 
 	@Override
 	public void initZygote(StartupParam startupParam) throws Throwable
 	{
-		res = XModuleResources.createInstance(startupParam.modulePath, null);
+		mRes = XModuleResources.createInstance(startupParam.modulePath, null);
 	}
 
 	@Override
@@ -30,7 +30,12 @@ public class AppOpsEnabler implements IXposedHookZygoteInit, IXposedHookLoadPack
 		if(!lpparam.packageName.equals("com.android.settings"))
 			return;
 
-		final int personalHeaderId = getPersonalSectionId(lpparam);
+		final XModuleResources settingsRes = XModuleResources.createInstance(lpparam.appInfo.sourceDir, null);
+		final int personalHeaderId = settingsRes.getIdentifier("personal_section", "id", lpparam.appInfo.packageName);
+		final int appOpsIcon = settingsRes.getIdentifier("ic_settings_applications", "drawable", lpparam.appInfo.packageName);
+		final int appOpsTitleId = settingsRes.getIdentifier("app_ops_setting", "string", lpparam.appInfo.packageName);
+
+		final String appOpsTitle = appOpsTitleId != 0 ? settingsRes.getString(appOpsTitleId) : "App ops";
 
 		findAndHookMethod("com.android.settings.Settings", lpparam.classLoader,
 				"updateHeaderList", List.class, new XC_MethodHook() {
@@ -41,9 +46,9 @@ public class AppOpsEnabler implements IXposedHookZygoteInit, IXposedHookLoadPack
 					{
 						final Header appOpsHeader = new Header();
 						appOpsHeader.fragment = "com.android.settings.applications.AppOpsSummary";
-						appOpsHeader.title = res.getString(R.string.app_ops_title);
+						appOpsHeader.title = appOpsTitle;
 						appOpsHeader.id = R.id.app_ops_settings;
-						appOpsHeader.iconRes = android.R.drawable.ic_menu_close_clear_cancel;
+						appOpsHeader.iconRes = appOpsIcon;
 
 						final List<Header> headers = (List<Header>) param.args[0];
 						for(int i = 0; i != headers.size(); ++i)
@@ -71,19 +76,5 @@ public class AppOpsEnabler implements IXposedHookZygoteInit, IXposedHookLoadPack
 						return true;
 					}
 		});
-	}
-
-	private static int getPersonalSectionId(LoadPackageParam lpparam)
-	{
-		try
-		{
-			final XModuleResources settingsRes = XModuleResources.createInstance(lpparam.appInfo.sourceDir, null);
-			return settingsRes.getIdentifier("personal_section", "id", lpparam.appInfo.packageName);
-		}
-		catch(Throwable t)
-		{
-			XposedBridge.log(t);
-			return 0;
-		}
 	}
 }
