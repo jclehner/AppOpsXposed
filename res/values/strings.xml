@@ -2,4 +2,6 @@
 <resources>
     <string name="description">Restores AppOps on Android 4.4.2. Note that you still need an app to launch
         AppOps!</string>
+
+    <string name="app_ops_title">AppOps</string>
 </resources>
