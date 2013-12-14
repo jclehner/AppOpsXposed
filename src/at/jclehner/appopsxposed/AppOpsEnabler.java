@@ -23,26 +23,17 @@ import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import java.util.List;
 
 import android.content.res.XModuleResources;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
+import android.os.Build;
 import android.preference.PreferenceActivity.Header;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
-import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
-public class AppOpsEnabler implements IXposedHookZygoteInit, IXposedHookLoadPackage
+public class AppOpsEnabler implements IXposedHookLoadPackage
 {
-	private XModuleResources mRes;
-
-	@Override
-	public void initZygote(StartupParam startupParam) throws Throwable
-	{
-		mRes = XModuleResources.createInstance(startupParam.modulePath, null);
-	}
+	private static final String APP_OPS_FRAGMENT = "com.android.settings.applications.AppOpsSummary";
 
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
@@ -51,68 +42,68 @@ public class AppOpsEnabler implements IXposedHookZygoteInit, IXposedHookLoadPack
 			return;
 
 		final XModuleResources settingsRes = XModuleResources.createInstance(lpparam.appInfo.sourceDir, null);
-		final int personalHeaderId = settingsRes.getIdentifier("personal_section", "id", lpparam.appInfo.packageName);
-		final int appOpsIcon = settingsRes.getIdentifier("ic_settings_applications", "drawable", lpparam.appInfo.packageName);
-		final int appOpsTitleId = settingsRes.getIdentifier("app_ops_setting", "string", lpparam.appInfo.packageName);
+		final int personalHeaderId = settingsRes.getIdentifier("id/personal_section", null, lpparam.appInfo.packageName);
+		final int appOpsIcon = settingsRes.getIdentifier("drawable/ic_settings_applications", null, lpparam.appInfo.packageName);
+		final int appOpsTitleId = settingsRes.getIdentifier("string/app_ops_setting", null, lpparam.appInfo.packageName);
 
 		final String appOpsTitle = appOpsTitleId != 0 ? settingsRes.getString(appOpsTitleId) : "App ops";
 
+		findAndHookMethod("com.android.settings.Settings", lpparam.classLoader,
+				"onBuildHeaders", List.class, new XC_MethodHook() {
+
+				@SuppressWarnings("unchecked")
+				@Override
+				protected void afterHookedMethod(MethodHookParam param) throws Throwable
+				{
+					final List<Header> headers = (List<Header>) param.args[0];
+					if(headers == null || headers.isEmpty())
+					{
+						XposedBridge.log("No headers available; not adding AppOps");
+						return;
+					}
+
+					final Header appOpsHeader = new Header();
+					appOpsHeader.fragment = APP_OPS_FRAGMENT;
+					appOpsHeader.title = appOpsTitle;
+					appOpsHeader.id = R.id.app_ops_settings;
+					appOpsHeader.iconRes = appOpsIcon;
+
+					for(int i = 0; i != headers.size(); ++i)
+					{
+						if(headers.get(i).id == personalHeaderId)
+						{
+							headers.add(i + 1, appOpsHeader);
+							return;
+						}
+					}
+
+					// If we reach this point, personalHeaderId was not found, so we
+					// just put the AppOps header last
+
+					headers.add(appOpsHeader);
+				}
+		});
+
 		try
 		{
 			findAndHookMethod("com.android.settings.Settings", lpparam.classLoader,
-					"updateHeaderList", List.class, new XC_MethodHook() {
+					"isValidFragment", String.class, new XC_MethodHook() {
 
-						@SuppressWarnings("unchecked")
-						@Override
-						protected void beforeHookedMethod(MethodHookParam param) throws Throwable
-						{
-							final Header appOpsHeader = new Header();
-							appOpsHeader.fragment = "com.android.settings.applications.AppOpsSummary";
-							appOpsHeader.title = appOpsTitle;
-							appOpsHeader.id = R.id.app_ops_settings;
-							appOpsHeader.iconRes = appOpsIcon;
-
-							final List<Header> headers = (List<Header>) param.args[0];
-							for(int i = 0; i != headers.size(); ++i)
-							{
-								if(headers.get(i).id == personalHeaderId)
-								{
-									headers.add(i + 1, appOpsHeader);
-									return;
-								}
-							}
-
-							// If we reach this point, personalHeaderId was not found, so we
-							// just put the AppOps header last
-
-							headers.add(appOpsHeader);
-						}
+					@Override
+					protected void afterHookedMethod(MethodHookParam param) throws Throwable
+					{
+						if(!((Boolean) param.getResult()) && param.args[0].equals(APP_OPS_FRAGMENT))
+							param.setResult(true);
+					}
 			});
 		}
-		catch(Throwable t)
-		{
-			XposedBridge.log(t);
-		}
-
-		try
-		{
-			findAndHookMethod("com.android.settings.Settings", lpparam.classLoader,
-					"isValidFragment", String.class, new XC_MethodReplacement() {
-
-						@Override
-						protected Object replaceHookedMethod(MethodHookParam param) throws Throwable
-						{
-							return true;
-						}
-			});
-		}
-		catch(Throwable t)
+		catch(NoSuchMethodError e)
 		{
 			// Apps before KitKat didn't need to override PreferenceActivity.isValidFragment,
-			// so we don't spam the log if it's a NoSuchMethodError
+			// so ignore a NoSuchMethodError in that case
 
-			if(!(t instanceof NoSuchMethodError) || VERSION.SDK_INT >= VERSION_CODES.KITKAT)
-				XposedBridge.log(t);
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+				throw e;
 		}
 	}
 }
