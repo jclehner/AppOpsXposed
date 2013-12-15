@@ -27,14 +27,11 @@ import android.content.res.XResources;
 import android.os.Build;
 import android.preference.PreferenceActivity.Header;
 
-import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class AppOpsEnabler implements IXposedHookZygoteInit, IXposedHookLoadPackage
@@ -110,26 +107,6 @@ public class AppOpsEnabler implements IXposedHookZygoteInit, IXposedHookLoadPack
 
 			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
 				throw e;
-		}
-
-		if(mPrefs.getBoolean("intercept_loadHeadersFromResource", false))
-		{
-			log("Intercepting loadHeadersFromResource");
-
-			final int headersResId = mSettingsRes.getIdentifier("xml/settings_headers", null, SETTINGS_APK_PACKAGE);
-
-			findAndHookMethodRecursive("com.android.settings.Settings", lpparam.classLoader,
-					"loadHeadersFromResource", int.class, List.class, new XC_MethodHook() {
-
-					@SuppressWarnings("unchecked")
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) throws Throwable
-					{
-						final int resIdArg = (Integer) param.args[0];
-						if(resIdArg == headersResId)
-							addAppOpsHeader((List<Header>) param.args[1]);
-					}
-			});
 		}
 	}
 
