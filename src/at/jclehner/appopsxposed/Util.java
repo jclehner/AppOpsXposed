@@ -17,7 +17,7 @@ public final class Util
 	public static XSharedPreferences modPrefs;
 
 	public static int getSettingsIdentifier(String name) {
-		return settingsRes.getIdentifier(name, null, AppOpsEnabler.SETTINGS_PACKAGE);
+		return settingsRes.getIdentifier(name, null, AppOpsXposed.SETTINGS_PACKAGE);
 	}
 
 	public static String getSettingsString(int resId) {

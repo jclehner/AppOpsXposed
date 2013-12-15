@@ -28,9 +28,9 @@ import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
-public class AppOpsEnabler implements IXposedHookZygoteInit, IXposedHookLoadPackage
+public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPackage
 {
-	public static final String MODULE_PACKAGE = AppOpsEnabler.class.getPackage().getName();
+	public static final String MODULE_PACKAGE = AppOpsXposed.class.getPackage().getName();
 	static final String SETTINGS_PACKAGE = "com.android.settings";
 
 
