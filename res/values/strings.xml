@@ -3,5 +3,5 @@
     <string name="description">Restores AppOps on Android 4.4.2 and adds an option to launch it from the 
         native Settings app.</string>
 
-    <string name="app_ops_title">AppOps</string>
+    <string name="app_ops_title">App ops</string>
 </resources>

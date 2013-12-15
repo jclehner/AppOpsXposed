@@ -1,13 +1,10 @@
 package at.jclehner.appopsxposed;
 
-import static at.jclehner.appopsxposed.Util.debug;
-import static at.jclehner.appopsxposed.Util.log;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Build;
-import at.jclehner.appopsxposed.variants.SamsungTabbed;
+import at.jclehner.appopsxposed.variants.Samsung;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
@@ -16,10 +13,10 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 	protected final String ANY = "";
 
 	private static final ApkVariant[] VARIANTS = {
-		new SamsungTabbed()
+		new Samsung()
 	};
 
-	public static List<ApkVariant> getMatching(LoadPackageParam lpparam)
+	public static List<ApkVariant> getAllMatching(LoadPackageParam lpparam)
 	{
 		List<ApkVariant> variants = new ArrayList<ApkVariant>();
 
@@ -50,6 +47,10 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 
 	public int minApiLevel() {
 		return 0;
+	}
+
+	public boolean blocksStockVariant() {
+		return false;
 	}
 
 	private boolean isMatching(LoadPackageParam lpparam)
