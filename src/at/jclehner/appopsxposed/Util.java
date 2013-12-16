@@ -12,6 +12,8 @@ import de.robv.android.xposed.XposedBridge;
 
 public final class Util
 {
+	private static final boolean DEBUG = false;
+
 	public static XModuleResources settingsRes;
 	public static XModuleResources modRes;
 	public static XSharedPreferences modPrefs;
@@ -38,7 +40,7 @@ public final class Util
 
 	public static void debug(String message)
 	{
-		if(!BuildConfig.DEBUG)
+		if(!DEBUG)
 			return;
 
 		log(message);
@@ -46,7 +48,7 @@ public final class Util
 
 	public static void debug(Throwable t)
 	{
-		if(!BuildConfig.DEBUG)
+		if(!DEBUG)
 			return;
 
 		log(t);
@@ -80,7 +82,7 @@ public final class Util
 				throw new IllegalStateException(e1);
 			}
 
-			log("findAndHookMethodRecursive: trying " + superClass);
+			debug("findAndHookMethodRecursive: trying " + superClass);
 			findAndHookMethodRecursive(superClass.getName(), classLoader, methodName, parameterTypesAndCallback);
 		}
 	}
