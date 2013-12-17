@@ -21,7 +21,6 @@ package at.jclehner.appopsxposed;
 import static at.jclehner.appopsxposed.Util.log;
 
 import android.content.res.XModuleResources;
-import at.jclehner.appopsxposed.variants.StockAndroid;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
@@ -31,8 +30,9 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPackage
 {
 	public static final String MODULE_PACKAGE = AppOpsXposed.class.getPackage().getName();
-	static final String SETTINGS_PACKAGE = "com.android.settings";
-
+	public static final String SETTINGS_PACKAGE = "com.android.settings";
+	public static final String APP_OPS_FRAGMENT = "com.android.settings.applications.AppOpsSummary";
+	public static final String APP_OPS_DETAILS_FRAGMENT = "com.android.settings.applications.AppOpsDetails";
 
 	@Override
 	public void initZygote(StartupParam startupParam) throws Throwable
@@ -44,19 +44,31 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
-		if(!lpparam.packageName.equals(SETTINGS_PACKAGE))
+		if(!lpparam.packageName.equals("com.android.settings"))
 			return;
 
-		Util.settingsRes = XModuleResources.createInstance(lpparam.appInfo.sourceDir, null);
+		try
+		{
+			lpparam.classLoader.loadClass(APP_OPS_FRAGMENT);
+		}
+		catch(ClassNotFoundException e)
+		{
+			log(APP_OPS_FRAGMENT + " class not found; bailing out!");
+			return;
+		}
 
-		boolean blockStockVariant = false;
+		Util.settingsRes = XModuleResources.createInstance(lpparam.appInfo.sourceDir, null);
 
 		for(ApkVariant variant : ApkVariant.getAllMatching(lpparam))
 		{
 			try
 			{
 				variant.handleLoadPackage(lpparam);
-				blockStockVariant |= variant.blocksStockVariant();
+				if(variant.isComplete())
+				{
+					log(variant.getClass() + ": [OK+]");
+					break;
+				}
 				log(variant.getClass() + ": [OK]");
 			}
 			catch(Throwable t)
@@ -65,8 +77,5 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 				log(t);
 			}
 		}
-
-		if(!blockStockVariant)
-			new StockAndroid().handleLoadPackage(lpparam);
 	}
 }
