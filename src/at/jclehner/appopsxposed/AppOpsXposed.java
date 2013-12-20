@@ -21,9 +21,12 @@ package at.jclehner.appopsxposed;
 import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import android.content.res.XModuleResources;
 import android.os.Build;
-
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
@@ -91,6 +94,8 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 				log(t);
 			}
 		}
+
+		hookLoaderLoadInBackground(lpparam);
 	}
 
 	private static void hookIsValidFragment(LoadPackageParam lpparam)
@@ -123,5 +128,30 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
 				throw e;
 		}
+	}
+
+	// We can do this crude comparison since AppOpsEntry.toString() returns the app's
+	// label, which is exactly what we need. No reflection necessary here!
+
+	private static final Comparator<Object> TO_STRING_COMPARATOR = new Comparator<Object>() {
+		@Override
+		public int compare(Object lhs, Object rhs)
+		{
+			return lhs.toString().compareToIgnoreCase(rhs.toString());
+		}
+	};
+
+	private static void hookLoaderLoadInBackground(LoadPackageParam lpparam)
+	{
+		findAndHookMethod("com.android.settings.applications.AppOpsCategory$AppListLoader", lpparam.classLoader,
+				"loadInBackground", new XC_MethodHook() {
+
+					@Override
+					protected void afterHookedMethod(MethodHookParam param) throws Throwable
+					{
+						List<?> entries = (List<?>) param.getResult();
+						Collections.sort(entries, TO_STRING_COMPARATOR);
+					}
+		});
 	}
 }
