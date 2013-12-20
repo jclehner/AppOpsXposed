@@ -12,7 +12,7 @@ import de.robv.android.xposed.XposedBridge;
 
 public final class Util
 {
-	private static final boolean DEBUG = false;
+	private static final boolean DEBUG = true;
 
 	public static XModuleResources settingsRes;
 	public static XModuleResources modRes;
@@ -30,20 +30,12 @@ public final class Util
 		return modRes.getString(resId);
 	}
 
-	public static void log(String message) {
-		XposedBridge.log("AppOpsXposed: " + message);
-	}
-
-	public static void log(Throwable t) {
-		XposedBridge.log(t);
-	}
-
 	public static void debug(String message)
 	{
 		if(!DEBUG)
 			return;
 
-		log(message);
+		XposedBridge.log(message);
 	}
 
 	public static void debug(Throwable t)
@@ -51,7 +43,7 @@ public final class Util
 		if(!DEBUG)
 			return;
 
-		log(t);
+		XposedBridge.log(t);
 	}
 
 	public static String[] appendToStringArray(String[] array, String str)

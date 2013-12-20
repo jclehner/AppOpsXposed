@@ -1,8 +1,5 @@
 package at.jclehner.appopsxposed;
 
-import static at.jclehner.appopsxposed.Util.debug;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +10,9 @@ import at.jclehner.appopsxposed.variants.Samsung;
 import at.jclehner.appopsxposed.variants.StockAndroid;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
+import de.robv.android.xposed.callbacks.XCallback;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 /**
@@ -30,11 +28,9 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
  */
 public abstract class ApkVariant implements IXposedHookLoadPackage
 {
-	private static final String[] VALID_FRAGMENTS = {
-		AppOpsXposed.APP_OPS_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT
-	};
-
 	protected final String ANY = "";
+
+	private String mLogTag = null;
 
 	private static final ApkVariant[] VARIANTS = {
 		new Samsung(),
@@ -113,79 +109,41 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 	 * <p>
 	 * Note: The return value need not be constant and is only checked after a call to {@link #handleLoadPackage(LoadPackageParam)}
 	 */
-	public boolean isComplete() {
-		return false;
-	}
+	public abstract boolean isComplete();
 
-
-
-	public static void hookOnBuildHeaders(LoadPackageParam lpparam)
+	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, final int[] hookResIds, final int addAfterHeaderId)
 	{
-		findAndHookMethod("com.android.settings.Settings", lpparam.classLoader,
-				"onBuildHeaders", List.class, new XC_MethodHook() {
-
-				@SuppressWarnings("unchecked")
-				@Override
-				protected void afterHookedMethod(MethodHookParam param) throws Throwable
-				{
-					final List<Header> headers = (List<Header>) param.args[0];
-					addAppOpsHeader(headers);
-				}
-		});
-	}
-
-	public static void hookLoadHeadersFromResource(LoadPackageParam lpparam, final int hookXmlResId)
-	{
-		Util.findAndHookMethodRecursive("com.android.settings.Settings", lpparam.classLoader,
-				"loadHeadersFromResource", int.class, List.class, new XC_MethodHook() {
+		hookLoadHeadersFromResource(lpparam, new XC_MethodHook() {
 
 				@SuppressWarnings("unchecked")
 				@Override
 				protected void afterHookedMethod(MethodHookParam param) throws Throwable
 				{
 					int xmlResId = (Integer) param.args[0];
-					if(xmlResId == hookXmlResId)
+
+					for(int hookResId : hookResIds)
 					{
-						final List<Header> headers = (List<Header>) param.args[1];
-						addAppOpsHeader(headers);
+						if(xmlResId == hookResId)
+						{
+							addAppOpsHeader((List<Header>) param.args[1], addAfterHeaderId);
+							break;
+						}
 					}
 				}
 		});
 	}
 
-	public static void hookIsValidFragment(LoadPackageParam lpparam)
-	{
-		try
-		{
-			findAndHookMethod("com.android.settings.Settings", lpparam.classLoader,
-					"isValidFragment", String.class, new XC_MethodHook() {
-
-					@Override
-					protected void beforeHookedMethod(MethodHookParam param) throws Throwable
-					{
-						for(String name : VALID_FRAGMENTS)
-						{
-							if(name.equals(param.args[0]))
-							{
-								param.setResult(true);
-								return;
-							}
-						}
-					}
-			});
-
-		}
-		catch(NoSuchMethodError e)
-		{
-			// Apps before KitKat didn't need to override PreferenceActivity.isValidFragment,
-			// so we ignore a NoSuchMethodError in that case.
-
-			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-				throw e;
-		}
+	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, final int hookResId, final int addAfterHeaderId) {
+		hookLoadHeadersFromResource(lpparam, new int[] { hookResId }, addAfterHeaderId);
 	}
 
-	public static void addAppOpsHeader(List<Header> headers)
+	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, XCallback callback)
+	{
+		Util.findAndHookMethodRecursive("com.android.settings.Settings", lpparam.classLoader,
+				"loadHeadersFromResource", int.class, List.class, callback);
+	}
+
+	protected final void addAppOpsHeader(List<Header> headers, int addAfterHeaderId)
 	{
 		if(headers == null || headers.isEmpty())
 		{
@@ -193,7 +151,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 			return;
 		}
 
-		final int personalHeaderId = Util.getSettingsIdentifier("id/personal_section");
+		//final int personalHeaderId = Util.getSettingsIdentifier("id/personal_section");
 		final int appOpsIcon = Util.getSettingsIdentifier("drawable/ic_settings_applications");
 		final int appOpsTitleId = Util.getSettingsIdentifier("string/app_ops_setting");
 
@@ -204,17 +162,17 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 			appOpsTitle = Util.getModString(R.string.app_ops_title);
 
 		final Header appOpsHeader = new Header();
-		appOpsHeader.fragment = APP_OPS_FRAGMENT;
+		appOpsHeader.fragment = AppOpsXposed.APP_OPS_FRAGMENT;
 		appOpsHeader.title = appOpsTitle;
 		appOpsHeader.id = R.id.app_ops_settings;
 		appOpsHeader.iconRes = appOpsIcon;
 
-		int personalHeaderIndex = -1;
+		int addAfterHeaderIndex = -1;
 
 		for(int i = 0; i != headers.size(); ++i)
 		{
-			if(headers.get(i).id == personalHeaderId)
-				personalHeaderIndex = i;
+			if(headers.get(i).id == addAfterHeaderId)
+				addAfterHeaderIndex = i;
 			else if(headers.get(i).id == R.id.app_ops_settings)
 			{
 				debug("addAppOpsHeader: header was already added");
@@ -222,10 +180,29 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 			}
 		}
 
-		if(personalHeaderIndex != -1)
-			headers.add(personalHeaderIndex + 1, appOpsHeader);
+		if(addAfterHeaderIndex != -1)
+			headers.add(addAfterHeaderIndex + 1, appOpsHeader);
 		else
+		{
+			debug("Appending appOpsHeader to header list!");
 			headers.add(appOpsHeader);
+		}
+	}
+
+	protected final void log(String message) {
+		XposedBridge.log(getLogPrefix() + message);
+	}
+
+	protected final void debug(String message) {
+		Util.debug(getLogPrefix() + message);
+	}
+
+	protected final void log(Throwable t) {
+		XposedBridge.log(t);
+	}
+
+	protected final void debug(Throwable t) {
+		Util.debug(t);
 	}
 
 	private boolean isMatching(LoadPackageParam lpparam)
@@ -246,14 +223,22 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		}
 		catch(IOException e)
 		{
-			Util.log("Failed to get MD5 hash of " + lpparam.appInfo.sourceDir);
-			Util.log(e);
+			log("Failed to get MD5 hash of " + lpparam.appInfo.sourceDir);
+			debug(e);
 			return false;
 		}
 
-		if(Build.VERSION.SDK_INT != apiLevel())
+		if(apiLevel() != 0 && Build.VERSION.SDK_INT != apiLevel())
 			return false;
 
 		return true;
+	}
+
+	private String getLogPrefix()
+	{
+		if(mLogTag == null)
+			mLogTag = getClass().getSimpleName() + ": ";
+
+		return mLogTag;
 	}
 }

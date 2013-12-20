@@ -18,12 +18,15 @@
 
 package at.jclehner.appopsxposed;
 
-import static at.jclehner.appopsxposed.Util.log;
+import static de.robv.android.xposed.XposedBridge.log;
+import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 
 import android.content.res.XModuleResources;
+import android.os.Build;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
+import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
@@ -33,6 +36,10 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	public static final String SETTINGS_PACKAGE = "com.android.settings";
 	public static final String APP_OPS_FRAGMENT = "com.android.settings.applications.AppOpsSummary";
 	public static final String APP_OPS_DETAILS_FRAGMENT = "com.android.settings.applications.AppOpsDetails";
+
+	private static final String[] VALID_FRAGMENTS = {
+		AppOpsXposed.APP_OPS_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT
+	};
 
 	@Override
 	public void initZygote(StartupParam startupParam) throws Throwable
@@ -57,25 +64,64 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 			return;
 		}
 
+		// Do this here as it's not dependent on a specific APK version.
+		hookIsValidFragment(lpparam);
+
 		Util.settingsRes = XModuleResources.createInstance(lpparam.appInfo.sourceDir, null);
+
+		log("Trying variants...");
 
 		for(ApkVariant variant : ApkVariant.getAllMatching(lpparam))
 		{
+			final String variantName = "  " + variant.getClass().getSimpleName();
+
 			try
 			{
 				variant.handleLoadPackage(lpparam);
 				if(variant.isComplete())
 				{
-					log(variant.getClass() + ": [OK+]");
+					log(variantName + ": [OK+]");
 					break;
 				}
-				log(variant.getClass() + ": [OK]");
+				log(variantName + ": [OK]");
 			}
 			catch(Throwable t)
 			{
-				log(variant.getClass() + ": [!!]");
+				log(variantName + ": [!!]");
 				log(t);
 			}
+		}
+	}
+
+	private static void hookIsValidFragment(LoadPackageParam lpparam)
+	{
+		try
+		{
+			findAndHookMethod("com.android.settings.Settings", lpparam.classLoader,
+					"isValidFragment", String.class, new XC_MethodHook() {
+
+					@Override
+					protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+					{
+						for(String name : VALID_FRAGMENTS)
+						{
+							if(name.equals(param.args[0]))
+							{
+								param.setResult(true);
+								return;
+							}
+						}
+					}
+			});
+
+		}
+		catch(NoSuchMethodError e)
+		{
+			// Apps before KitKat didn't need to override PreferenceActivity.isValidFragment,
+			// so we ignore a NoSuchMethodError in that case.
+
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+				throw e;
 		}
 	}
 }

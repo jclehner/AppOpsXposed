@@ -3,10 +3,6 @@ package at.jclehner.appopsxposed.variants;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
-import static at.jclehner.appopsxposed.Util.debug;
-import static at.jclehner.appopsxposed.Util.log;
-
-import android.os.Bundle;
 import at.jclehner.appopsxposed.ApkVariant;
 import at.jclehner.appopsxposed.Util;
 import de.robv.android.xposed.XC_MethodHook;
@@ -16,13 +12,6 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class Samsung extends ApkVariant
 {
-	// No idea why they used UpperCamelCase for a private member...
-
-	private static final String[][] TAB_INFOS = {
-		{ "SettingsInGeneralTab", "general_headers" },
-		{ "SettingsInMoreTab", "more_headers" }
-	};
-
 	private boolean mIsComplete = false;
 
 	@Override
@@ -38,39 +27,42 @@ public class Samsung extends ApkVariant
 	@Override
 	public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable
 	{
-		String xmlResName = null;
+		// Adding the fragment to both arrays should pose no problem. No idea why they used
+		// UpperCamelCase for a private member...
+		hookConstuctorAddFragmentNameToTab(lpparam, "SettingsInMoreTab");
+		hookConstuctorAddFragmentNameToTab(lpparam, "SettingsInGeneralTab");
 
-		for(String[] tabInfo : TAB_INFOS)
-		{
-			if(hookConstuctorAddFragmentNameToTab(lpparam, tabInfo[0]))
-			{
-				xmlResName = tabInfo[1];
-				break;
-			}
-		}
+		/*
+		 * In SecSettings.apk, the regular "Manage applications" header is referenced in
+		 * three xml resources:
+		 *
+		 * xml/settings_headers (also used in stock Android)
+		 * xml/general_headers
+		 * xml/management_headers
+		 *
+		 * To keep things simple and not having to determine which of these is actually used,
+		 * we'll hook any call to loadHeadersFromResource and check if the resource argument
+		 * matches any of the three. If it does, we'll just put it right after the
+		 * "Manage applications" header. The chances of more than one being used at the same time
+		 * should be rather slim - if they are, there'll be more than one occurence of "App ops",
+		 * so no biggie.
+		 */
 
-		if(xmlResName == null)
-		{
-			log("No matching tab-info found; defaulting to general_headers");
-			xmlResName = "general_headers";
-		}
-		else
-			debug("Using xmlResName=" + xmlResName);
+		final int[] xmlHookResIds = {
+				Util.getSettingsIdentifier("xml/settings_headers"),
+				Util.getSettingsIdentifier("xml/general_headers"),
+				Util.getSettingsIdentifier("xml/management_headers")
+		};
 
-		final int xmlResId = Util.getSettingsIdentifier("xml/" + xmlResName);
-		if(xmlResId == 0)
-		{
-			log("xml/" + xmlResId + " not found in resources");
-			return;
-		}
+		debug("xmlHookResIds=" + Arrays.toString(xmlHookResIds));
 
-		hookOnCreate(lpparam, xmlResId);
-		hookIsValidFragment(lpparam);
+		final int manageAppsHeaderId = Util.getSettingsIdentifier("id/application_settings");
+		hookLoadHeadersFromResource(lpparam, xmlHookResIds, manageAppsHeaderId);
 
 		mIsComplete = true;
 	}
 
-	public static boolean hookConstuctorAddFragmentNameToTab(LoadPackageParam lpparam, final String tabsFieldName)
+	protected final boolean hookConstuctorAddFragmentNameToTab(LoadPackageParam lpparam, final String tabsFieldName)
 	{
 		try
 		{
@@ -78,8 +70,8 @@ public class Samsung extends ApkVariant
 			final Field f = XposedHelpers.findField(settingsClazz, tabsFieldName);
 			if(f.getType() != String[].class)
 			{
-				log("Warning: field exists, but not a string array: " + tabsFieldName);
-				return true;
+				log("Field exists, but not a string array: " + tabsFieldName);
+				return false;
 			}
 
 			XposedBridge.hookAllConstructors(settingsClazz, new XC_MethodHook() {
@@ -105,35 +97,4 @@ public class Samsung extends ApkVariant
 		}
 	}
 
-	public static boolean hookOnCreate(final LoadPackageParam lpparam, final int headersXmlResId)
-	{
-		try
-		{
-			final Class<?> settingsClazz = lpparam.classLoader.loadClass("com.android.settings.Settings");
-			final Field isTabStyleField = XposedHelpers.findField(settingsClazz, "mPhoneTabStyle");
-
-			XposedHelpers.findAndHookMethod(settingsClazz, "onCreate",
-					Bundle.class, new XC_MethodHook() {
-						@Override
-						protected void afterHookedMethod(MethodHookParam param) throws Throwable
-						{
-							final boolean isTabStyle = isTabStyleField.getBoolean(param.thisObject);
-							debug("isTabStyle=" + isTabStyle);
-							StockAndroid.hookLoadHeadersFromResource(lpparam, headersXmlResId);
-						}
-			});
-
-			return true;
-		}
-		catch(NoSuchFieldError e)
-		{
-			log("mPhoneTabStyle not found?; trying xml/settings_headers");
-			return false;
-		}
-		catch(Throwable t)
-		{
-			log(t);
-			return false;
-		}
-	}
 }
