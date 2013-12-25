@@ -100,6 +100,13 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		return 0;
 	}
 
+	/**
+	 * HACK! DO NOT USE!
+	 */
+	public boolean useAppOpsIntent() {
+		return false;
+	}
+
 
 	/**
 	 * Check if the variant is complete.
@@ -166,7 +173,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		appOpsHeader.id = R.id.app_ops_settings;
 		appOpsHeader.iconRes = appOpsIcon;
 
-		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
+		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT && useAppOpsIntent())
 		{
 			appOpsHeader.intent = new Intent("android.settings.APP_OPS_SETTINGS");
 			appOpsHeader.intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
