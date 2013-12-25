@@ -1,5 +1,5 @@
 /*
- * AppOpsXposed - AppOps for Android 4.4.2
+ * AppOpsXposed - AppOps for Android 4.3+
  * Copyright (C) 2013 Joseph C. Lehner
  *
  * This program is free software: you can redistribute it and/or modify it
