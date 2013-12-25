@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import android.content.res.XModuleResources;
 
+import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
 
@@ -58,6 +59,16 @@ public final class Util
 	public static void findAndHookMethodRecursive(String className, ClassLoader classLoader,
 			String methodName, Object... parameterTypesAndCallback)
 	{
+		final Object callback = parameterTypesAndCallback[parameterTypesAndCallback.length - 1];
+		if(callback instanceof XC_MethodHookRecursive)
+		{
+			XC_MethodHookRecursive hook = (XC_MethodHookRecursive) callback;
+			if(!hook.hasClass())
+				hook.setClass(className, classLoader);
+		}
+		else
+			throw new IllegalArgumentException("Callback must extend XC_MethodHookRecursive");
+
 		try
 		{
 			findAndHookMethod(className, classLoader, methodName, parameterTypesAndCallback);
@@ -76,6 +87,72 @@ public final class Util
 
 			debug("findAndHookMethodRecursive: trying " + superClass);
 			findAndHookMethodRecursive(superClass.getName(), classLoader, methodName, parameterTypesAndCallback);
+		}
+	}
+
+	public static class XC_MethodHookRecursive extends XC_MethodHook
+	{
+		private Class<?> mClass = null;
+
+		/*public XC_MethodHookRecursive(String className, ClassLoader classLoader)
+		{
+			try
+			{
+				mClass = classLoader.loadClass(className);
+			}
+			catch(ClassNotFoundException e)
+			{
+				throw new IllegalArgumentException(e);
+			}
+		}
+
+		public XC_MethodHookRecursive(Class<?> clazz) {
+			mClass = clazz;
+		}*/
+
+		/* package */ void setClass(Class<?> clazz) {
+			mClass = clazz;
+		}
+
+		/* package */ void setClass(String className, ClassLoader classLoader)
+		{
+			try
+			{
+				mClass = classLoader.loadClass(className);
+			}
+			catch(ClassNotFoundException e)
+			{
+				throw new IllegalArgumentException(e);
+			}
+		}
+
+		/* package */ boolean hasClass() {
+			return mClass != null;
+		}
+
+		@Override
+		protected final void beforeHookedMethod(MethodHookParam param) throws Throwable
+		{
+			if(isValidThisObject(param))
+				onBeforeHookedMethod(param);
+			else
+				debug("Skipping beforeHookedMethod with this=" + param.thisObject.getClass());
+		}
+
+		@Override
+		protected final void afterHookedMethod(MethodHookParam param) throws Throwable
+		{
+			if(isValidThisObject(param))
+				onAfterHookedMethod(param);
+			else
+				debug("Skipping afterHookedMethod with this=" + param.thisObject.getClass());
+		}
+
+		protected void onBeforeHookedMethod(MethodHookParam param) throws Throwable {}
+		protected void onAfterHookedMethod(MethodHookParam param) throws Throwable {}
+
+		private boolean isValidThisObject(MethodHookParam param) {
+			return mClass == null || mClass.isInstance(param.thisObject);
 		}
 	}
 

@@ -4,15 +4,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Build;
 import android.preference.PreferenceActivity.Header;
+import at.jclehner.appopsxposed.Util.XC_MethodHookRecursive;
 import at.jclehner.appopsxposed.variants.Samsung;
 import at.jclehner.appopsxposed.variants.StockAndroid;
 import de.robv.android.xposed.IXposedHookLoadPackage;
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.callbacks.XCallback;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 /**
@@ -64,7 +64,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 	/**
 	 * Get the matching device manufacturer of this variant (as specified in {@link Build.VERSION.MANUFACTURER}).
 	 * <p>
-	 * The strings are compared using {@link String#equalsIgnoreCase(String)}.
+	 * The strings are converted to lower case and matched using {@link String#contains(CharSequence)}
 	 */
 	public String manufacturer() {
 		return ANY;
@@ -113,11 +113,11 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 
 	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, final int[] hookResIds, final int addAfterHeaderId)
 	{
-		hookLoadHeadersFromResource(lpparam, new XC_MethodHook() {
+		hookLoadHeadersFromResource(lpparam, new XC_MethodHookRecursive() {
 
 				@SuppressWarnings("unchecked")
 				@Override
-				protected void afterHookedMethod(MethodHookParam param) throws Throwable
+				protected void onAfterHookedMethod(MethodHookParam param) throws Throwable
 				{
 					int xmlResId = (Integer) param.args[0];
 
@@ -137,10 +137,10 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		hookLoadHeadersFromResource(lpparam, new int[] { hookResId }, addAfterHeaderId);
 	}
 
-	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, XCallback callback)
+	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, XC_MethodHookRecursive hook)
 	{
 		Util.findAndHookMethodRecursive("com.android.settings.Settings", lpparam.classLoader,
-				"loadHeadersFromResource", int.class, List.class, callback);
+				"loadHeadersFromResource", int.class, List.class, hook);
 	}
 
 	protected final void addAppOpsHeader(List<Header> headers, int addAfterHeaderId)
@@ -162,10 +162,17 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 			appOpsTitle = Util.getModString(R.string.app_ops_title);
 
 		final Header appOpsHeader = new Header();
-		appOpsHeader.fragment = AppOpsXposed.APP_OPS_FRAGMENT;
 		appOpsHeader.title = appOpsTitle;
 		appOpsHeader.id = R.id.app_ops_settings;
 		appOpsHeader.iconRes = appOpsIcon;
+
+		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
+		{
+			appOpsHeader.intent = new Intent("android.settings.APP_OPS_SETTINGS");
+			appOpsHeader.intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		}
+		else
+			appOpsHeader.fragment = AppOpsXposed.APP_OPS_FRAGMENT;
 
 		int addAfterHeaderIndex = -1;
 
@@ -207,8 +214,11 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 
 	private boolean isMatching(LoadPackageParam lpparam)
 	{
-		if(manufacturer() != ANY && !Build.MANUFACTURER.equalsIgnoreCase(manufacturer()))
-			return false;
+		if(manufacturer() != ANY)
+		{
+			if(!Build.MANUFACTURER.toLowerCase().contains(manufacturer().toLowerCase()))
+				return false;
+		}
 
 		if(release() != ANY && !Build.VERSION.RELEASE.equals(release()))
 			return false;
