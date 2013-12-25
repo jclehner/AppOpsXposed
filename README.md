@@ -1,8 +1,5 @@
 AppOpsXposed
 ============
 
-Module for the [Xposed Framework](http://forum.xda-developers.com/showthread.php?t=1574401) that restores the
-"AppOps" functionality on Android 4.4.2. 
+For information see the Xposed Module Repository: [AppOpsXposed](http://repo.xposed.info/node/137)
 
-AppOps can be started from the  native Settings app, under the "Personal" section or, as a fallback, at the 
-bottom (usually below the "About" section).
