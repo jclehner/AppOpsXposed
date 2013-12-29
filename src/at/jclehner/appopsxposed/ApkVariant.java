@@ -178,7 +178,6 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		appOpsHeader.title = appOpsTitle;
 		appOpsHeader.id = R.id.app_ops_settings;
 		appOpsHeader.iconRes = appOpsIcon;
-
 		appOpsHeader.fragment = AppOpsXposed.APP_OPS_FRAGMENT;
 
 		return appOpsHeader;
