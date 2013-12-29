@@ -18,6 +18,10 @@
 
 package at.jclehner.appopsxposed.variants;
 
+import android.content.Intent;
+import android.os.Build;
+import android.preference.PreferenceActivity.Header;
+
 public class Sony extends StockAndroid
 {
 	@Override
@@ -26,7 +30,16 @@ public class Sony extends StockAndroid
 	}
 
 	@Override
-	public boolean useAppOpsIntent() {
-		return true;
+	protected Header onCreateAppOpsHeader()
+	{
+		final Header header = super.onCreateAppOpsHeader();
+		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
+		{
+			log("Using Intent instead of Fragment in header");
+			header.fragment = null;
+			header.intent = new Intent("android.settings.APP_OPS_SETTINGS");
+		}
+
+		return header;
 	}
 }

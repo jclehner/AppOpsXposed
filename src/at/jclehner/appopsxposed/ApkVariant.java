@@ -22,11 +22,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.preference.PreferenceActivity.Header;
 import at.jclehner.appopsxposed.Util.XC_MethodHookRecursive;
 import at.jclehner.appopsxposed.variants.Samsung;
+import at.jclehner.appopsxposed.variants.Sony;
 import at.jclehner.appopsxposed.variants.StockAndroid;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XposedBridge;
@@ -52,6 +54,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 
 	private static final ApkVariant[] VARIANTS = {
 		new Samsung(),
+		new Sony(),
 		new StockAndroid()
 	};
 
@@ -119,14 +122,6 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 	}
 
 	/**
-	 * HACK! DO NOT USE!
-	 */
-	public boolean useAppOpsIntent() {
-		return false;
-	}
-
-
-	/**
 	 * Check if the variant is complete.
 	 * <p>
 	 * Return <code>true</code> here if the variant installs all hooks required for "App ops" functionality. That way, no other
@@ -168,15 +163,8 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 				"loadHeadersFromResource", int.class, List.class, hook);
 	}
 
-	protected final void addAppOpsHeader(List<Header> headers, int addAfterHeaderId)
+	protected Header onCreateAppOpsHeader()
 	{
-		if(headers == null || headers.isEmpty())
-		{
-			debug("addAppOpsHeader: list is empty or null");
-			return;
-		}
-
-		//final int personalHeaderId = Util.getSettingsIdentifier("id/personal_section");
 		final int appOpsIcon = Util.getSettingsIdentifier("drawable/ic_settings_applications");
 		final int appOpsTitleId = Util.getSettingsIdentifier("string/app_ops_setting");
 
@@ -191,13 +179,18 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		appOpsHeader.id = R.id.app_ops_settings;
 		appOpsHeader.iconRes = appOpsIcon;
 
-		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT && useAppOpsIntent())
+		appOpsHeader.fragment = AppOpsXposed.APP_OPS_FRAGMENT;
+
+		return appOpsHeader;
+	}
+
+	protected final void addAppOpsHeader(List<Header> headers, int addAfterHeaderId)
+	{
+		if(headers == null || headers.isEmpty())
 		{
-			appOpsHeader.intent = new Intent("android.settings.APP_OPS_SETTINGS");
-			appOpsHeader.intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+			debug("addAppOpsHeader: list is empty or null");
+			return;
 		}
-		else
-			appOpsHeader.fragment = AppOpsXposed.APP_OPS_FRAGMENT;
 
 		int addAfterHeaderIndex = -1;
 
@@ -211,6 +204,8 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 				return;
 			}
 		}
+
+		final Header appOpsHeader = onCreateAppOpsHeader();
 
 		if(addAfterHeaderIndex != -1)
 			headers.add(addAfterHeaderIndex + 1, appOpsHeader);
