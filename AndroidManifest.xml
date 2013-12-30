@@ -1,18 +1,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="at.jclehner.appopsxposed"
-    android:versionCode="10699"
-    android:versionName="1.7-BETA3" >
+    android:versionCode="10700"
+    android:versionName="1.7" >
 
     <uses-sdk
         android:minSdkVersion="18"
         android:targetSdkVersion="19" />
 
-    <application android:label="AppOpsXposed">
+    <application android:label="AppOpsXposed"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher">
         <meta-data android:name="xposedmodule" android:value="true" />
         <meta-data android:name="xposedminversion" android:value="2.0*" />
         <meta-data android:name="xposeddescription" android:value="@string/description" />
 
-        <!--  -->
+        <!--  ->
         <activity
             android:name="at.jclehner.appopsxposed.DebugActivity"
             android:label="AppOpsXposed">
@@ -21,7 +23,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--  -->
+        <!-  -->
+
+        <activity
+            android:name=".LauncherActivity"
+            android:label="AppOpsXposed">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
