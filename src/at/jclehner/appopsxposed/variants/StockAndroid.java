@@ -37,6 +37,8 @@ public class StockAndroid extends ApkVariant
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
+		hookIsValidFragment(lpparam);
+
 		final int settingsHeadersId = Util.getSettingsIdentifier("xml/settings_headers");
 		final int personalSectionId = Util.getSettingsIdentifier("id/personal_section");
 

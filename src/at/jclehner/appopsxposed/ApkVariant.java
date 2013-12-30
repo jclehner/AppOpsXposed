@@ -18,19 +18,21 @@
 
 package at.jclehner.appopsxposed;
 
+import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.preference.PreferenceActivity.Header;
 import at.jclehner.appopsxposed.Util.XC_MethodHookRecursive;
+import at.jclehner.appopsxposed.variants.HTC;
 import at.jclehner.appopsxposed.variants.Samsung;
 import at.jclehner.appopsxposed.variants.Sony;
 import at.jclehner.appopsxposed.variants.StockAndroid;
 import de.robv.android.xposed.IXposedHookLoadPackage;
+import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
@@ -53,6 +55,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 	private String mLogTag = null;
 
 	private static final ApkVariant[] VARIANTS = {
+		new HTC(),
 		new Samsung(),
 		new Sony(),
 		new StockAndroid()
@@ -139,7 +142,8 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 				@Override
 				protected void onAfterHookedMethod(MethodHookParam param) throws Throwable
 				{
-					int xmlResId = (Integer) param.args[0];
+					final int xmlResId = (Integer) param.args[0];
+					debug("hookLoadHeadersFromResource: xmlResId=" + xmlResId);
 
 					for(int hookResId : hookResIds)
 					{
@@ -163,27 +167,72 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 				"loadHeadersFromResource", int.class, List.class, hook);
 	}
 
-	protected Header onCreateAppOpsHeader()
+	private static final String[] VALID_FRAGMENTS = {
+		AppOpsXposed.APP_OPS_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT
+	};
+
+	protected final void hookIsValidFragment(LoadPackageParam lpparam)
 	{
-		final int appOpsIcon = Util.getSettingsIdentifier("drawable/ic_settings_applications");
-		final int appOpsTitleId = Util.getSettingsIdentifier("string/app_ops_setting");
+		try
+		{
+			findAndHookMethod("com.android.settings.Settings", lpparam.classLoader,
+					"isValidFragment", String.class, new XC_MethodHook() {
 
-		final String appOpsTitle;
-		if(appOpsTitleId != 0)
-			appOpsTitle = Util.getSettingsString(appOpsTitleId);
-		else
-			appOpsTitle = Util.getModString(R.string.app_ops_title);
+					@Override
+					protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+					{
+						for(String name : VALID_FRAGMENTS)
+						{
+							if(name.equals(param.args[0]))
+							{
+								param.setResult(true);
+								return;
+							}
+						}
+					}
+			});
 
+		}
+		catch(NoSuchMethodError e)
+		{
+			// Apps before KitKat didn't need to override PreferenceActivity.isValidFragment,
+			// so we ignore a NoSuchMethodError in that case.
+
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+				XposedBridge.log(e);
+		}
+	}
+
+	protected Object onCreateAppOpsHeader()
+	{
 		final Header appOpsHeader = new Header();
-		appOpsHeader.title = appOpsTitle;
+		appOpsHeader.title = getAppOpsTitle();
 		appOpsHeader.id = R.id.app_ops_settings;
-		appOpsHeader.iconRes = appOpsIcon;
+		appOpsHeader.iconRes = getAppOpsIcon();
 		appOpsHeader.fragment = AppOpsXposed.APP_OPS_FRAGMENT;
 
 		return appOpsHeader;
 	}
 
-	protected final void addAppOpsHeader(List<Header> headers, int addAfterHeaderId)
+	protected int getAppOpsIcon() {
+		return Util.getSettingsIdentifier("drawable/ic_settings_applications");
+	}
+
+	protected String getAppOpsTitle()
+	{
+		final int appOpsTitleId = Util.getSettingsIdentifier("string/app_ops_setting");
+		if(appOpsTitleId != 0)
+			return Util.getSettingsString(appOpsTitleId);
+
+		return Util.getModString(R.string.app_ops_title);
+	}
+
+	protected long getIdFromHeader(Object header) {
+		return ((Header) header).id;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	protected final void addAppOpsHeader(List headers, int addAfterHeaderId)
 	{
 		if(headers == null || headers.isEmpty())
 		{
@@ -195,16 +244,16 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 
 		for(int i = 0; i != headers.size(); ++i)
 		{
-			if(headers.get(i).id == addAfterHeaderId)
+			if(getIdFromHeader(headers.get(i)) == addAfterHeaderId)
 				addAfterHeaderIndex = i;
-			else if(headers.get(i).id == R.id.app_ops_settings)
+			else if(getIdFromHeader(headers.get(i)) == R.id.app_ops_settings)
 			{
 				debug("addAppOpsHeader: header was already added");
 				return;
 			}
 		}
 
-		final Header appOpsHeader = onCreateAppOpsHeader();
+		final Object appOpsHeader = onCreateAppOpsHeader();
 
 		if(addAfterHeaderIndex != -1)
 			headers.add(addAfterHeaderIndex + 1, appOpsHeader);

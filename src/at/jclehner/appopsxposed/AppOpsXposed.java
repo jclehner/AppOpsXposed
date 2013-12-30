@@ -19,12 +19,9 @@
 package at.jclehner.appopsxposed;
 
 import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import android.content.res.XModuleResources;
-import android.os.Build;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
@@ -34,10 +31,6 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	public static final String SETTINGS_PACKAGE = "com.android.settings";
 	public static final String APP_OPS_FRAGMENT = "com.android.settings.applications.AppOpsSummary";
 	public static final String APP_OPS_DETAILS_FRAGMENT = "com.android.settings.applications.AppOpsDetails";
-
-	private static final String[] VALID_FRAGMENTS = {
-		AppOpsXposed.APP_OPS_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT
-	};
 
 	@Override
 	public void initZygote(StartupParam startupParam) throws Throwable
@@ -52,6 +45,8 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		if(!lpparam.packageName.equals("com.android.settings"))
 			return;
 
+		log("AppOpsXposed initializing...");
+
 		try
 		{
 			lpparam.classLoader.loadClass(APP_OPS_FRAGMENT);
@@ -61,9 +56,6 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 			log(APP_OPS_FRAGMENT + " class not found; bailing out!");
 			return;
 		}
-
-		// Do this here as it's not dependent on a specific APK version.
-		hookIsValidFragment(lpparam);
 
 		Util.settingsRes = XModuleResources.createInstance(lpparam.appInfo.sourceDir, null);
 
@@ -91,35 +83,5 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		}
 	}
 
-	private static void hookIsValidFragment(LoadPackageParam lpparam)
-	{
-		try
-		{
-			findAndHookMethod("com.android.settings.Settings", lpparam.classLoader,
-					"isValidFragment", String.class, new XC_MethodHook() {
 
-					@Override
-					protected void beforeHookedMethod(MethodHookParam param) throws Throwable
-					{
-						for(String name : VALID_FRAGMENTS)
-						{
-							if(name.equals(param.args[0]))
-							{
-								param.setResult(true);
-								return;
-							}
-						}
-					}
-			});
-
-		}
-		catch(NoSuchMethodError e)
-		{
-			// Apps before KitKat didn't need to override PreferenceActivity.isValidFragment,
-			// so we ignore a NoSuchMethodError in that case.
-
-			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-				throw e;
-		}
-	}
 }
