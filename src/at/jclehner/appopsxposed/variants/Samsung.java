@@ -45,6 +45,15 @@ public class Samsung extends ApkVariant
 	@Override
 	public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable
 	{
+		if(!lpparam.appInfo.sourceDir.toLowerCase().endsWith("SecSettings.apk".toLowerCase()))
+		{
+			log("Unexpected APK name; maybe AOSP-based ROM?");
+			log("  sourceDir=" + lpparam.appInfo.sourceDir);
+			return;
+		}
+
+		hookIsValidFragment(lpparam);
+
 		// Adding the fragment to both arrays should pose no problem. No idea why they used
 		// UpperCamelCase for a private member...
 		hookConstuctorAddFragmentNameToTab(lpparam, "SettingsInMoreTab");
