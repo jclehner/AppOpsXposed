@@ -18,28 +18,68 @@
 
 package at.jclehner.appopsxposed.variants;
 
-import android.content.Intent;
-import android.os.Build;
-import android.preference.PreferenceActivity.Header;
+import android.os.Bundle;
+import at.jclehner.appopsxposed.AppOpsXposed;
+import at.jclehner.appopsxposed.Util;
+import at.jclehner.appopsxposed.Util.XC_MethodHookRecursive;
+import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedHelpers;
+import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class Sony extends StockAndroid
 {
+	private static boolean sSkipNextWindowRebuildCall = false;
+
 	@Override
 	public String manufacturer() {
 		return "Sony";
 	}
 
 	@Override
-	protected Header onCreateAppOpsHeader()
+	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
-		final Header header = super.onCreateAppOpsHeader();
-		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
-		{
-			log("Using Intent instead of Fragment in header");
-			header.fragment = null;
-			header.intent = new Intent("android.settings.APP_OPS_SETTINGS");
-		}
+		super.handleLoadPackage(lpparam);
+		hookSwitchToHeader(lpparam);
+		hookWindowManagerService(lpparam);
+	}
 
-		return header;
+	private void hookSwitchToHeader(LoadPackageParam lpparam) throws Throwable
+	{
+		Util.findAndHookMethodRecursive("com.android.settings.Settings", lpparam.classLoader,
+				"switchToHeader", String.class, Bundle.class, new XC_MethodHookRecursive() {
+					@Override
+					protected void onBeforeHookedMethod(MethodHookParam param) throws Throwable
+					{
+						if(AppOpsXposed.APP_OPS_FRAGMENT.equals(param.args[0]))
+						{
+							log("Next call to rebuildAppWindowListLocked will be blocked!");
+							sSkipNextWindowRebuildCall = true;
+						}
+					}
+		});
+	}
+
+	private void hookWindowManagerService(LoadPackageParam lpparam) throws Throwable
+	{
+		// TODO consider WindowManagerService.addWindow (mTokenMap.get() returns null apparently?)
+
+		final Class<?> displayContentClass = lpparam.classLoader.loadClass("com.android.server.wm.DisplayContent");
+
+		XposedHelpers.findAndHookMethod("com.android.server.wm.WindowManagerService", lpparam.classLoader,
+				"rebuildAppWindowListLocked", displayContentClass, new XC_MethodHook() {
+					@Override
+					protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+					{
+						if(sSkipNextWindowRebuildCall)
+						{
+							log("Blocked call to rebuildAppWindowListLocked!");
+							sSkipNextWindowRebuildCall = false;
+							param.setResult(null);
+							return;
+						}
+						else
+							debug("Will call rebuildAppWindowListLocked");
+					}
+		});
 	}
 }
