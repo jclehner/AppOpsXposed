@@ -18,6 +18,7 @@
 
 package at.jclehner.appopsxposed;
 
+/*
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -27,13 +28,21 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 
 public class DebugActivity extends Activity
 {
 	private TextView mText;
+
+	private static final String[] MODES = { "Action", "Activity", "Fragment" };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -52,6 +61,11 @@ public class DebugActivity extends Activity
 		ll.setGravity(Gravity.CENTER);
 		ll.setOrientation(LinearLayout.VERTICAL);
 
+		TextView tv = new TextView(this);
+		tv.setText("Pressing these buttons should launch AppOps...");
+
+		ll.addView(tv);
+
 		Button b = new Button(this);
 		b.setText("Fragment");
 		b.setOnClickListener(new OnClickListener() {
@@ -60,6 +74,7 @@ public class DebugActivity extends Activity
 			public void onClick(View v)
 			{
 				Intent intent = new Intent("android.settings.SETTINGS");
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 				intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_FRAGMENT);
 				startActivity(intent);
 			}
@@ -75,6 +90,7 @@ public class DebugActivity extends Activity
 			{
 				Intent intent = new Intent();
 				intent.setClassName("com.android.settings", "com.android.settings.Settings$AppOpsSummaryActivity");
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(intent);
 			}
 		});
@@ -109,6 +125,7 @@ public class DebugActivity extends Activity
 		try
 		{
 			super.startActivity(intent);
+			Toast.makeText(this, "Starting activity...", Toast.LENGTH_SHORT).show();
 			mText.setText("");
 		}
 		catch(RuntimeException e)
@@ -117,3 +134,4 @@ public class DebugActivity extends Activity
 		}
 	}
 }
+*/
