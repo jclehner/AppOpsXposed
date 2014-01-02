@@ -39,8 +39,8 @@ public class Sony extends StockAndroid
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
 		super.handleLoadPackage(lpparam);
-		hookSwitchToHeader(lpparam);
-		hookWindowManagerService(lpparam);
+		//hookSwitchToHeader(lpparam);
+		//hookWindowManagerService(lpparam);
 	}
 
 	private void hookSwitchToHeader(LoadPackageParam lpparam) throws Throwable
