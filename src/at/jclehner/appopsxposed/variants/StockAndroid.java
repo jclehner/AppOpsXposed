@@ -20,9 +20,17 @@ package at.jclehner.appopsxposed.variants;
 
 import java.util.List;
 
+import android.app.Fragment;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceActivity.Header;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import at.jclehner.appopsxposed.ApkVariant;
+import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.Util;
+import at.jclehner.appopsxposed.Util.XC_MethodHookRecursive;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
@@ -38,6 +46,7 @@ public class StockAndroid extends ApkVariant
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
 		hookIsValidFragment(lpparam);
+		addAppOpsToAppInfo(lpparam);
 
 		final int settingsHeadersId = Util.getSettingsIdentifier("xml/settings_headers");
 		final int personalSectionId = Util.getSettingsIdentifier("id/personal_section");
@@ -67,6 +76,38 @@ public class StockAndroid extends ApkVariant
 					protected void afterHookedMethod(MethodHookParam param) throws Throwable
 					{
 						addAppOpsHeader((List<Header>) param.args[0], personalSectionId);
+					}
+		});
+	}
+
+	protected void addAppOpsToAppInfo(LoadPackageParam lpparam)
+	{
+		XposedHelpers.findAndHookMethod("com.android.settings.applications.InstalledAppDetails", lpparam.classLoader,
+				"onCreateOptionsMenu", Menu.class, MenuInflater.class, new XC_MethodHookRecursive() {
+
+					@Override
+					protected void onAfterHookedMethod(MethodHookParam param) 	throws Throwable
+					{
+						final Fragment fragment = (Fragment) param.thisObject;
+
+						final Menu menu = (Menu) param.args[0];
+						final MenuItem item = menu.add(getAppOpsTitle());
+						item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+						item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+							@Override
+							public boolean onMenuItemClick(MenuItem item)
+							{
+								final PreferenceActivity pa = (PreferenceActivity) fragment.getActivity();
+								// We can reuse InstalledAppDetails' arguments, since both use a string-Extra with
+								// a key of "package".
+								pa.startPreferencePanel(AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, fragment.getArguments(),
+										Util.getSettingsIdentifier("string/app_ops_settings"), null, fragment, 1);
+								return true;
+							}
+						});
+
+						param.setResult(true);
 					}
 		});
 	}
