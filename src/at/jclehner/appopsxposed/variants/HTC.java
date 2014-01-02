@@ -22,6 +22,7 @@ package at.jclehner.appopsxposed.variants;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import android.content.Context;
 import at.jclehner.appopsxposed.ApkVariant;
 import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.R;
@@ -100,7 +101,7 @@ public class HTC extends ApkVariant
 	}
 
 	@Override
-	protected Object onCreateAppOpsHeader() {
+	protected Object onCreateAppOpsHeader(Context context) {
 		return onCreateHtcHeader();
 	}
 
