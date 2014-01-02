@@ -21,12 +21,14 @@ package at.jclehner.appopsxposed.variants;
 import java.util.List;
 
 import android.app.Fragment;
+import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceActivity.Header;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.widget.Toast;
 import at.jclehner.appopsxposed.ApkVariant;
 import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.Util;
@@ -89,6 +91,20 @@ public class StockAndroid extends ApkVariant
 					protected void onAfterHookedMethod(MethodHookParam param) 	throws Throwable
 					{
 						final Fragment fragment = (Fragment) param.thisObject;
+						final Bundle arguments = getArguments(fragment);
+						if(!arguments.containsKey("package"))
+						{
+							final String pkg = fragment.getActivity().getIntent().getData().getSchemeSpecificPart();
+							if(pkg == null || pkg.isEmpty())
+							{
+								log("Failed to determine package name; cannot display AppOps");
+								return;
+							}
+
+							arguments.putString("package", pkg);
+						}
+
+						debug("addAppOpsToAppInfo: arguments=" + arguments);
 
 						final Menu menu = (Menu) param.args[0];
 						final MenuItem item = menu.add(getAppOpsTitle());
@@ -99,9 +115,7 @@ public class StockAndroid extends ApkVariant
 							public boolean onMenuItemClick(MenuItem item)
 							{
 								final PreferenceActivity pa = (PreferenceActivity) fragment.getActivity();
-								// We can reuse InstalledAppDetails' arguments, since both use a string-Extra with
-								// a key of "package".
-								pa.startPreferencePanel(AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, fragment.getArguments(),
+								pa.startPreferencePanel(AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, arguments,
 										Util.getSettingsIdentifier("string/app_ops_settings"), null, fragment, 1);
 								return true;
 							}
@@ -110,5 +124,11 @@ public class StockAndroid extends ApkVariant
 						param.setResult(true);
 					}
 		});
+	}
+
+	private static Bundle getArguments(Fragment fragment)
+	{
+		final Bundle args = fragment.getArguments();
+		return args != null ? args : new Bundle();
 	}
 }
