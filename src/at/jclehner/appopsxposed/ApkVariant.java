@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
 import android.os.Build;
 import android.preference.PreferenceActivity.Header;
 import at.jclehner.appopsxposed.Util.XC_MethodHookRecursive;
@@ -149,7 +150,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 					{
 						if(xmlResId == hookResId)
 						{
-							addAppOpsHeader((List<Header>) param.args[1], addAfterHeaderId);
+							addAppOpsHeader((List<Header>) param.args[1], addAfterHeaderId, (Context) param.thisObject);
 							break;
 						}
 					}
@@ -203,7 +204,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		}
 	}
 
-	protected Object onCreateAppOpsHeader()
+	protected Object onCreateAppOpsHeader(Context context)
 	{
 		final Header appOpsHeader = new Header();
 		appOpsHeader.title = getAppOpsTitle();
@@ -231,8 +232,13 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		return ((Header) header).id;
 	}
 
+	@SuppressWarnings("rawtypes")
+	protected final void addAppOpsHeader(List headers, int addAfterHeaderId) {
+		addAppOpsHeader(headers, addAfterHeaderId, null);
+	}
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected final void addAppOpsHeader(List headers, int addAfterHeaderId)
+	protected final void addAppOpsHeader(List headers, int addAfterHeaderId, Context context)
 	{
 		if(headers == null || headers.isEmpty())
 		{
@@ -253,7 +259,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 			}
 		}
 
-		final Object appOpsHeader = onCreateAppOpsHeader();
+		final Object appOpsHeader = onCreateAppOpsHeader(context);
 
 		if(addAfterHeaderIndex != -1)
 			headers.add(addAfterHeaderIndex + 1, appOpsHeader);
