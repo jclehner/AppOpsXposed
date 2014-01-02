@@ -20,23 +20,41 @@ package at.jclehner.appopsxposed;
 
 import static de.robv.android.xposed.XposedBridge.log;
 import android.content.res.XModuleResources;
+import android.content.res.XResources;
+import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XSharedPreferences;
+import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
-public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPackage
+public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPackage, IXposedHookInitPackageResources
 {
 	public static final String MODULE_PACKAGE = AppOpsXposed.class.getPackage().getName();
 	public static final String SETTINGS_PACKAGE = "com.android.settings";
 	public static final String APP_OPS_FRAGMENT = "com.android.settings.applications.AppOpsSummary";
 	public static final String APP_OPS_DETAILS_FRAGMENT = "com.android.settings.applications.AppOpsDetails";
 
+	private XResources mOrigRes;
+	private String mModPath;
+
 	@Override
 	public void initZygote(StartupParam startupParam) throws Throwable
 	{
-		Util.modRes = XModuleResources.createInstance(startupParam.modulePath, null);
+		mModPath = startupParam.modulePath;
+
+		//Util.modRes = XModuleResources.createInstance(startupParam.modulePath, null);
 		Util.modPrefs = new XSharedPreferences(MODULE_PACKAGE);
+	}
+
+	@Override
+	public void handleInitPackageResources(InitPackageResourcesParam resparam) throws Throwable
+	{
+		if(!resparam.packageName.equals("com.android.settings"))
+			return;
+
+		Util.modRes = XModuleResources.createInstance(mModPath, mOrigRes);
+		//mOrigRes = resparam.res;
 	}
 
 	@Override
