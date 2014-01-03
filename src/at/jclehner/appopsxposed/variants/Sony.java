@@ -30,7 +30,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
-public class Sony extends StockAndroid
+public class Sony extends AOSP
 {
 	public static final String SLAVE_ACTIVITY_NAME = "com.android.settings.applications.InstalledAppDetailsTop";
 

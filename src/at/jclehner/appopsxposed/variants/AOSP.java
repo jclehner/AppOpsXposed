@@ -20,24 +20,14 @@ package at.jclehner.appopsxposed.variants;
 
 import java.util.List;
 
-import android.app.Fragment;
-import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceActivity.Header;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
-import android.widget.Toast;
 import at.jclehner.appopsxposed.ApkVariant;
-import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.Util;
-import at.jclehner.appopsxposed.Util.XC_MethodHookRecursive;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
-public class StockAndroid extends ApkVariant
+public class AOSP extends ApkVariant
 {
 	@Override
 	public boolean isComplete() {

@@ -36,10 +36,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import at.jclehner.appopsxposed.Util.XC_MethodHookRecursive;
+import at.jclehner.appopsxposed.variants.AOSP;
 import at.jclehner.appopsxposed.variants.HTC;
 import at.jclehner.appopsxposed.variants.Samsung;
 import at.jclehner.appopsxposed.variants.Sony;
-import at.jclehner.appopsxposed.variants.StockAndroid;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -67,7 +67,7 @@ public abstract class ApkVariant
 		new HTC(),
 		new Samsung(),
 		new Sony(),
-		new StockAndroid()
+		new AOSP()
 	};
 
 	public static List<ApkVariant> getAllMatching(LoadPackageParam lpparam)
