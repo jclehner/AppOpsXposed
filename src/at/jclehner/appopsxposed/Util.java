@@ -75,36 +75,33 @@ public final class Util
 	}
 
 	public static void findAndHookMethodRecursive(String className, ClassLoader classLoader,
-			String methodName, Object... parameterTypesAndCallback)
+			String methodName, Object... parameterTypesAndCallback) throws Throwable
+	{
+		findAndHookMethodRecursive(classLoader.loadClass(className), methodName, parameterTypesAndCallback);
+	}
+
+	public static void findAndHookMethodRecursive(Class<?> clazz,
+			String methodName, Object... parameterTypesAndCallback) throws Throwable
 	{
 		final Object callback = parameterTypesAndCallback[parameterTypesAndCallback.length - 1];
 		if(callback instanceof XC_MethodHookRecursive)
 		{
 			XC_MethodHookRecursive hook = (XC_MethodHookRecursive) callback;
 			if(!hook.hasClass())
-				hook.setClass(className, classLoader);
+				hook.setClass(clazz);
 		}
 		else
 			throw new IllegalArgumentException("Callback must extend XC_MethodHookRecursive");
 
 		try
 		{
-			findAndHookMethod(className, classLoader, methodName, parameterTypesAndCallback);
+			findAndHookMethod(clazz, methodName, parameterTypesAndCallback);
 		}
 		catch(NoSuchMethodError e)
 		{
-			final Class<?> superClass;
-			try
-			{
-				superClass = classLoader.loadClass(className).getSuperclass();
-			}
-			catch(ClassNotFoundException e1)
-			{
-				throw new IllegalStateException(e1);
-			}
-
+			final Class<?> superClass = clazz.getSuperclass();
 			debug("findAndHookMethodRecursive: trying " + superClass);
-			findAndHookMethodRecursive(superClass.getName(), classLoader, methodName, parameterTypesAndCallback);
+			findAndHookMethodRecursive(superClass, methodName, parameterTypesAndCallback);
 		}
 	}
 
