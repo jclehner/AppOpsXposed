@@ -98,6 +98,35 @@ public class HTC extends ApkVariant
 				debug("loadHeadersFromResource: xmlResId=" + param.args[0]);
 			}
 		});
+
+		addAppOpsToAppInfo(lpparam);
+	}
+
+	@Override
+	protected boolean onMatch(LoadPackageParam lpparam)
+	{
+		final String[] classes = {
+				"com.htc.preference.HtcPreferenceActivity",
+				"com.htc.preference.HtcPreferenceActivity$Header",
+				"com.android.settings.framework.activity.HtcWrapHeader",
+				"com.android.settings.framework.activity.HtcWrapHeaderList",
+				"com.android.settings.framework.activity.HtcGenericEntryProvider"
+		};
+
+		for(String className : classes)
+		{
+			try
+			{
+				lpparam.classLoader.loadClass(className);
+				return true;
+			}
+			catch(ClassNotFoundException e)
+			{
+				// ignore
+			}
+		}
+
+		return false;
 	}
 
 	@Override
