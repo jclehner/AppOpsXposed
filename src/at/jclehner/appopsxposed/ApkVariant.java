@@ -24,9 +24,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceActivity.Header;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import at.jclehner.appopsxposed.Util.XC_MethodHookRecursive;
 import at.jclehner.appopsxposed.variants.HTC;
 import at.jclehner.appopsxposed.variants.Samsung;
@@ -49,7 +57,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
  * When extending this class, note that you <em>must</em> return the wildcard value
  * {@link #ANY} for a string property that should be ignored.
  */
-public abstract class ApkVariant implements IXposedHookLoadPackage
+public abstract class ApkVariant
 {
 	protected final String ANY = "";
 
@@ -135,7 +143,9 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 	 */
 	public abstract boolean isComplete();
 
-	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, final int[] hookResIds, final int addAfterHeaderId)
+	public abstract void handleLoadPackage(LoadPackageParam lpparam) throws Throwable;
+
+	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, final int[] hookResIds, final int addAfterHeaderId) throws Throwable
 	{
 		hookLoadHeadersFromResource(lpparam, new XC_MethodHookRecursive() {
 
@@ -158,11 +168,11 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		});
 	}
 
-	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, final int hookResId, final int addAfterHeaderId) {
+	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, final int hookResId, final int addAfterHeaderId) throws Throwable {
 		hookLoadHeadersFromResource(lpparam, new int[] { hookResId }, addAfterHeaderId);
 	}
 
-	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, XC_MethodHookRecursive hook)
+	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, XC_MethodHookRecursive hook) throws Throwable
 	{
 		Util.findAndHookMethodRecursive("com.android.settings.Settings", lpparam.classLoader,
 				"loadHeadersFromResource", int.class, List.class, hook);
@@ -204,6 +214,48 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		}
 	}
 
+	protected void addAppOpsToAppInfo(LoadPackageParam lpparam)
+	{
+		XposedHelpers.findAndHookMethod("com.android.settings.applications.InstalledAppDetails", lpparam.classLoader,
+				"onCreateOptionsMenu", Menu.class, MenuInflater.class, new XC_MethodHookRecursive() {
+
+					@Override
+					protected void onAfterHookedMethod(MethodHookParam param) 	throws Throwable
+					{
+						final Fragment f = (Fragment) param.thisObject;
+						final Bundle args = f.getArguments() == null ? new Bundle() : f.getArguments();
+						if(!args.containsKey("package"))
+						{
+							final String pkg = f.getActivity().getIntent().getData().getSchemeSpecificPart();
+							if(pkg == null || pkg.isEmpty())
+							{
+								log("Failed to determine package name; cannot display AppOps");
+								return;
+							}
+
+							args.putString("package", pkg);
+						}
+
+						final Menu menu = (Menu) param.args[0];
+						final MenuItem item = menu.add(getAppOpsTitle());
+						item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+						item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+							@Override
+							public boolean onMenuItemClick(MenuItem item)
+							{
+								final PreferenceActivity pa = (PreferenceActivity) f.getActivity();
+								pa.startPreferencePanel(AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, args,
+										Util.getSettingsIdentifier("string/app_ops_settings"), null, f, 1);
+								return true;
+							}
+						});
+
+						param.setResult(true);
+					}
+		});
+	}
+
 	protected Object onCreateAppOpsHeader(Context context)
 	{
 		final Header appOpsHeader = new Header();
@@ -230,6 +282,16 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 
 	protected long getIdFromHeader(Object header) {
 		return ((Header) header).id;
+	}
+
+	/**
+	 * Checks if the {@link ApkVariant} matches the current configuration.
+	 * <p>
+	 * This method is only called if all other property checks ({@link #manufacturer()},
+	 * {@link #apiLevel()}, etc.) succeeded.
+	 */
+	protected boolean onMatch(LoadPackageParam lpparam) {
+		return true;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -286,7 +348,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		Util.debug(t);
 	}
 
-	private boolean isMatching(LoadPackageParam lpparam)
+	protected boolean isMatching(LoadPackageParam lpparam)
 	{
 		if(manufacturer() != ANY)
 		{
@@ -315,7 +377,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		if(apiLevel() != 0 && Build.VERSION.SDK_INT != apiLevel())
 			return false;
 
-		return true;
+		return onMatch(lpparam);
 	}
 
 	private String getLogPrefix()
