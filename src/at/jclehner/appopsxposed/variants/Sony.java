@@ -1,6 +1,6 @@
 /*
  * AppOpsXposed - AppOps for Android 4.3+
- * Copyright (C) 2013 Joseph C. Lehner
+ * Copyright (C) 2013, 2014 Joseph C. Lehner
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -18,7 +18,11 @@
 
 package at.jclehner.appopsxposed.variants;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceActivity.Header;
 import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.Util;
 import at.jclehner.appopsxposed.Util.XC_MethodHookRecursive;
@@ -28,7 +32,12 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class Sony extends StockAndroid
 {
-	private static boolean sSkipNextWindowRebuildCall = false;
+	public static final String SLAVE_ACTIVITY_NAME = "com.android.settings.applications.InstalledAppDetailsTop";
+
+	public static final String EXTRA_LAUNCH_APP_OPS = "at.jclehner.appopsxposed.LAUNCH_APP_OPS";
+	public static final String EXTRA_LAUNCH_APP_OPS_DETAILS = "at.jclehner.appopsxposed.LAUNCH_APP_OPS_DETAILS";
+
+	private Class<?> mSlaveActivityClass;
 
 	@Override
 	public String manufacturer() {
@@ -38,48 +47,127 @@ public class Sony extends StockAndroid
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
-		super.handleLoadPackage(lpparam);
-		//hookSwitchToHeader(lpparam);
-		//hookWindowManagerService(lpparam);
-	}
+		/* For some obscure reason, launching AppOps on Sony Xperia devices
+		 * fails silently. The intent is delivered, but the AppOps screen is never
+		 * displayed. The reason behind this is not clear to me, but it appears to
+		 * have something to do with the activity which hosts the AppOpsSummary Fragment.
+		 *
+		 * To work around this limitation, I'm hooking an arbitrary Activity, in this
+		 * case the activity that hosts the "App info" page, and make it host the AppOps
+		 * Fragments.
+		 *
+		 * The following extras are used EXTRA_LAUNCH_APP_OPS forces the Activity to load
+		 * the AppOps overview, while EXTRA_LAUNCH_APP_OPS_DETAILS loads the AppOps details.
+		 */
 
-	private void hookSwitchToHeader(LoadPackageParam lpparam) throws Throwable
-	{
-		Util.findAndHookMethodRecursive("com.android.settings.Settings", lpparam.classLoader,
-				"switchToHeader", String.class, Bundle.class, new XC_MethodHookRecursive() {
+		mSlaveActivityClass = lpparam.classLoader.loadClass(SLAVE_ACTIVITY_NAME);
+
+		Util.findAndHookMethodRecursive(mSlaveActivityClass,
+				"isValidFragment", String.class, new XC_MethodHookRecursive() {
+
 					@Override
 					protected void onBeforeHookedMethod(MethodHookParam param) throws Throwable
 					{
-						if(AppOpsXposed.APP_OPS_FRAGMENT.equals(param.args[0]))
-						{
-							log("Next call to rebuildAppWindowListLocked will be blocked!");
-							sSkipNextWindowRebuildCall = true;
+						if(AppOpsXposed.APP_OPS_FRAGMENT.equals(param.args[0])
+								|| AppOpsXposed.APP_OPS_DETAILS_FRAGMENT.equals(param.args[0])) {
+							param.setResult(true);
 						}
 					}
 		});
+
+		XposedHelpers.findAndHookMethod(mSlaveActivityClass, "getIntent", new XC_MethodHook() {
+			@Override
+			protected void afterHookedMethod(MethodHookParam param) throws Throwable
+			{
+				final Intent intent = (Intent) param.getResult();
+				if(intent.getBooleanExtra(EXTRA_LAUNCH_APP_OPS, false))
+					intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_FRAGMENT);
+				else if(intent.getBooleanExtra(EXTRA_LAUNCH_APP_OPS_DETAILS, false))
+					intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT);
+			}
+		});
+
+		Util.findAndHookMethodRecursive(mSlaveActivityClass,
+				"onBuildStartFragmentIntent", String.class, Bundle.class,
+				int.class, int.class, new XC_MethodHookRecursive() {
+
+					@Override
+					protected void onAfterHookedMethod(MethodHookParam param) throws Throwable
+					{
+						if(!AppOpsXposed.APP_OPS_DETAILS_FRAGMENT.equals(param.args[0]))
+							return;
+
+						debug("onBuildStartFragment: name=" + param.args[0]);
+
+						final Intent intent = (Intent) param.getResult();
+						intent.putExtra(EXTRA_LAUNCH_APP_OPS_DETAILS, true);
+					}
+		});
+
+		try
+		{
+			Util.findAndHookMethodRecursive(mSlaveActivityClass,
+					"onCreate", Bundle.class, new XC_MethodHookRecursive() {
+
+						@Override
+						protected void onAfterHookedMethod(MethodHookParam param) throws Throwable
+						{
+							final PreferenceActivity pa = (PreferenceActivity) param.thisObject;
+							final Intent intent = pa.getIntent();
+							if(intent != null)
+							{
+								if(intent.getBooleanExtra(EXTRA_LAUNCH_APP_OPS_DETAILS, false))
+									pa.setTitle(Util.getSettingsIdentifier("string/app_ops_settings"));
+								else if(intent.getBooleanExtra(EXTRA_LAUNCH_APP_OPS, false))
+									pa.setTitle(Util.getSettingsIdentifier("string/app_ops_settings"));
+							}
+						}
+			});
+		}
+		catch(Throwable t)
+		{
+			log(t);
+		}
+
+		super.handleLoadPackage(lpparam);
 	}
 
-	private void hookWindowManagerService(LoadPackageParam lpparam) throws Throwable
+	@Override
+	protected boolean onMatch(LoadPackageParam lpparam)
 	{
-		// TODO consider WindowManagerService.addWindow (mTokenMap.get() returns null apparently?)
+		// The existence of any one of these classes hints that we're not dealing
+		// with an AOSP ROM...
 
-		final Class<?> displayContentClass = lpparam.classLoader.loadClass("com.android.server.wm.DisplayContent");
+		final String[] classes = {
+				"com.sonymobile.settings.SomcSettingsHeader",
+				"com.sonymobile.settings.preference.util.SomcPreferenceActivity",
+				"com.sonymobile.settings.preference.util.SomcSettingsPreferenceFragment"
+		};
 
-		XposedHelpers.findAndHookMethod("com.android.server.wm.WindowManagerService", lpparam.classLoader,
-				"rebuildAppWindowListLocked", displayContentClass, new XC_MethodHook() {
-					@Override
-					protected void beforeHookedMethod(MethodHookParam param) throws Throwable
-					{
-						if(sSkipNextWindowRebuildCall)
-						{
-							log("Blocked call to rebuildAppWindowListLocked!");
-							sSkipNextWindowRebuildCall = false;
-							param.setResult(null);
-							return;
-						}
-						else
-							debug("Will call rebuildAppWindowListLocked");
-					}
-		});
+		for(String className : classes)
+		{
+			try
+			{
+				lpparam.classLoader.loadClass(className);
+				return true;
+			}
+			catch(ClassNotFoundException e)
+			{
+				// ignore
+			}
+		}
+
+		return false;
+	}
+
+	@Override
+	protected Object onCreateAppOpsHeader(Context context)
+	{
+		final Header header = (Header) super.onCreateAppOpsHeader(context);
+		header.fragment = null;
+		header.intent = new Intent(context, mSlaveActivityClass);
+		header.intent.putExtra(EXTRA_LAUNCH_APP_OPS, true);
+
+		return header;
 	}
 }
