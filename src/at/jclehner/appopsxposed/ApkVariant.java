@@ -226,7 +226,18 @@ public abstract class ApkVariant
 						final Bundle args = f.getArguments() == null ? new Bundle() : f.getArguments();
 						if(!args.containsKey("package"))
 						{
-							final String pkg = f.getActivity().getIntent().getData().getSchemeSpecificPart();
+							String pkg;
+
+							try
+							{
+								pkg = f.getActivity().getIntent().getData().getSchemeSpecificPart();
+							}
+							catch(NullPointerException e)
+							{
+								log(e);
+								pkg = null;
+							}
+
 							if(pkg == null || pkg.isEmpty())
 							{
 								log("Failed to determine package name; cannot display AppOps");
