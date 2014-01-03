@@ -42,7 +42,7 @@ public class HTC extends ApkVariant
 	private Method mAddWrapHeaderMethod;
 
 	@Override
-	public String manufacturer() {
+	protected String manufacturer() {
 		return "HTC";
 	}
 

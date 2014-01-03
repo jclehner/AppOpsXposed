@@ -33,7 +33,7 @@ public class Samsung extends ApkVariant
 	private boolean mIsComplete = false;
 
 	@Override
-	public String manufacturer() {
+	protected String manufacturer() {
 		return "Samsung";
 	}
 

@@ -40,7 +40,7 @@ public class Sony extends AOSP
 	private Class<?> mSlaveActivityClass;
 
 	@Override
-	public String manufacturer() {
+	protected String manufacturer() {
 		return "Sony";
 	}
 

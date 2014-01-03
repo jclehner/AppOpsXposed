@@ -85,12 +85,44 @@ public abstract class ApkVariant
 		return variants;
 	}
 
+	public abstract void handleLoadPackage(LoadPackageParam lpparam) throws Throwable;
+
+
+
+	protected Object onCreateAppOpsHeader(Context context)
+	{
+		final Header appOpsHeader = new Header();
+		appOpsHeader.title = getAppOpsTitle();
+		appOpsHeader.id = R.id.app_ops_settings;
+		appOpsHeader.iconRes = getAppOpsIcon();
+		appOpsHeader.fragment = AppOpsXposed.APP_OPS_FRAGMENT;
+
+		return appOpsHeader;
+	}
+
+	protected int getAppOpsIcon() {
+		return Util.getSettingsIdentifier("drawable/ic_settings_applications");
+	}
+
+	protected String getAppOpsTitle()
+	{
+		final int appOpsTitleId = Util.getSettingsIdentifier("string/app_ops_setting");
+		if(appOpsTitleId != 0)
+			return Util.getSettingsString(appOpsTitleId);
+
+		return Util.getModString(R.string.app_ops_title);
+	}
+
+	protected long getIdFromHeader(Object header) {
+		return ((Header) header).id;
+	}
+
 	/**
 	 * Get the version name of this variant (as specified by <code>android:versionName</code>).
 	 * <p>
 	 * This function is not used at the moment!
 	 */
-	public String versionName() {
+	protected String versionName() {
 		return ANY;
 	}
 
@@ -99,28 +131,28 @@ public abstract class ApkVariant
 	 * <p>
 	 * The strings are converted to lower case and matched using {@link String#contains(CharSequence)}
 	 */
-	public String manufacturer() {
+	protected String manufacturer() {
 		return ANY;
 	}
 
 	/**
 	 * Get the matching release of this variant (as specified in {@link Build.VERSION.RELEASE}).
 	 */
-	public String release() {
+	protected String release() {
 		return ANY;
 	}
 
 	/**
 	 * Get the matching build id of this variant (as specified in {@link Build.VERSION.ID}).
 	 */
-	public String buildId() {
+	protected String buildId() {
 		return ANY;
 	}
 
 	/**
 	 * Get the matching MD5 hash of this variant's APK file.
 	 */
-	public String md5Sum() {
+	protected String md5Sum() {
 		return ANY;
 	}
 
@@ -129,7 +161,7 @@ public abstract class ApkVariant
 	 * <p>
 	 * A return value of <code>0</code> means any API level.
 	 */
-	public int apiLevel() {
+	protected int apiLevel() {
 		return 0;
 	}
 
@@ -141,9 +173,17 @@ public abstract class ApkVariant
 	 * <p>
 	 * Note: The return value need not be constant and is only checked after a call to {@link #handleLoadPackage(LoadPackageParam)}
 	 */
-	public abstract boolean isComplete();
+	protected abstract boolean isComplete();
 
-	public abstract void handleLoadPackage(LoadPackageParam lpparam) throws Throwable;
+	/**
+	 * Checks if the {@link ApkVariant} matches the current configuration.
+	 * <p>
+	 * This method is only called if all other property checks ({@link #manufacturer()},
+	 * {@link #apiLevel()}, etc.) succeeded.
+	 */
+	protected boolean onMatch(LoadPackageParam lpparam) {
+		return true;
+	}
 
 	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, final int[] hookResIds, final int addAfterHeaderId) throws Throwable
 	{
@@ -265,44 +305,6 @@ public abstract class ApkVariant
 						param.setResult(true);
 					}
 		});
-	}
-
-	protected Object onCreateAppOpsHeader(Context context)
-	{
-		final Header appOpsHeader = new Header();
-		appOpsHeader.title = getAppOpsTitle();
-		appOpsHeader.id = R.id.app_ops_settings;
-		appOpsHeader.iconRes = getAppOpsIcon();
-		appOpsHeader.fragment = AppOpsXposed.APP_OPS_FRAGMENT;
-
-		return appOpsHeader;
-	}
-
-	protected int getAppOpsIcon() {
-		return Util.getSettingsIdentifier("drawable/ic_settings_applications");
-	}
-
-	protected String getAppOpsTitle()
-	{
-		final int appOpsTitleId = Util.getSettingsIdentifier("string/app_ops_setting");
-		if(appOpsTitleId != 0)
-			return Util.getSettingsString(appOpsTitleId);
-
-		return Util.getModString(R.string.app_ops_title);
-	}
-
-	protected long getIdFromHeader(Object header) {
-		return ((Header) header).id;
-	}
-
-	/**
-	 * Checks if the {@link ApkVariant} matches the current configuration.
-	 * <p>
-	 * This method is only called if all other property checks ({@link #manufacturer()},
-	 * {@link #apiLevel()}, etc.) succeeded.
-	 */
-	protected boolean onMatch(LoadPackageParam lpparam) {
-		return true;
 	}
 
 	@SuppressWarnings("rawtypes")
