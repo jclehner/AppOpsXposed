@@ -87,8 +87,8 @@ public final class Util
 		if(callback instanceof XC_MethodHookRecursive)
 		{
 			XC_MethodHookRecursive hook = (XC_MethodHookRecursive) callback;
-			if(!hook.hasClass())
-				hook.setClass(clazz);
+			if(!hook.hasTargetClass())
+				hook.setTargetClass(clazz);
 		}
 		else
 			throw new IllegalArgumentException("Callback must extend XC_MethodHookRecursive");
@@ -100,7 +100,15 @@ public final class Util
 		catch(NoSuchMethodError e)
 		{
 			final Class<?> superClass = clazz.getSuperclass();
-			debug("findAndHookMethodRecursive: trying " + superClass);
+			if(superClass == null)
+			{
+				// We can't just rethrow the caught exception since the message would not be
+				// meaningful (clazz is Object.class at this point).
+				final Class<?> targetClass = ((XC_MethodHookRecursive) callback).getTargetClass();
+				throw new NoSuchMethodError(targetClass.getName() + "." + methodName);
+			}
+
+			debug("findAndHookMethodRecursive: trying " + superClass + "." + methodName);
 			findAndHookMethodRecursive(superClass, methodName, parameterTypesAndCallback);
 		}
 	}
@@ -125,11 +133,11 @@ public final class Util
 			mClass = clazz;
 		}*/
 
-		/* package */ void setClass(Class<?> clazz) {
+		/* package */ void setTargetClass(Class<?> clazz) {
 			mClass = clazz;
 		}
 
-		/* package */ void setClass(String className, ClassLoader classLoader)
+		/* package */ void setTargetClass(String className, ClassLoader classLoader)
 		{
 			try
 			{
@@ -141,7 +149,11 @@ public final class Util
 			}
 		}
 
-		/* package */ boolean hasClass() {
+		/* package */ Class<?> getTargetClass() {
+			return mClass;
+		}
+
+		/* package */ boolean hasTargetClass() {
 			return mClass != null;
 		}
 
