@@ -32,6 +32,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.widget.Toast;
 import at.jclehner.appopsxposed.Util.XC_MethodHookRecursive;
 import at.jclehner.appopsxposed.variants.AOSP;
 import at.jclehner.appopsxposed.variants.HTC;
@@ -83,8 +84,6 @@ public abstract class ApkVariant
 	}
 
 	public abstract void handleLoadPackage(LoadPackageParam lpparam) throws Throwable;
-
-
 
 	protected Object onCreateAppOpsHeader(Context context)
 	{
@@ -274,33 +273,8 @@ public abstract class ApkVariant
 				"onCreateOptionsMenu", Menu.class, MenuInflater.class, new XC_MethodHookRecursive() {
 
 					@Override
-					protected void onAfterHookedMethod(MethodHookParam param) 	throws Throwable
+					protected void onAfterHookedMethod(final MethodHookParam param) throws Throwable
 					{
-						final Fragment f = (Fragment) param.thisObject;
-						final Bundle args = f.getArguments() == null ? new Bundle() : f.getArguments();
-						if(!args.containsKey("package"))
-						{
-							String pkg;
-
-							try
-							{
-								pkg = f.getActivity().getIntent().getData().getSchemeSpecificPart();
-							}
-							catch(NullPointerException e)
-							{
-								log(e);
-								pkg = null;
-							}
-
-							if(pkg == null || pkg.isEmpty())
-							{
-								log("Failed to determine package name; cannot display AppOps");
-								return;
-							}
-
-							args.putString("package", pkg);
-						}
-
 						final Menu menu = (Menu) param.args[0];
 						final MenuItem item = menu.add(getAppOpsTitle());
 						item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
@@ -309,7 +283,40 @@ public abstract class ApkVariant
 							@Override
 							public boolean onMenuItemClick(MenuItem item)
 							{
+								final Fragment f = (Fragment) param.thisObject;
 								final PreferenceActivity pa = (PreferenceActivity) f.getActivity();
+
+								debug("onMenuItemClick:" + "\n  intent=" + pa.getIntent() +
+										"\n  extras=" + pa.getIntent().getExtras());
+
+								final Bundle args = f.getArguments() == null ? new Bundle() : f.getArguments();
+								if(!args.containsKey("package"))
+								{
+									String pkg;
+
+									try
+									{
+										pkg = pa.getIntent().getData().getSchemeSpecificPart();
+										log("Package obtained from Intent: " + pkg);
+									}
+									catch(NullPointerException e)
+									{
+										log(e);
+										pkg = null;
+									}
+
+									if(pkg == null || pkg.isEmpty())
+									{
+										Toast.makeText(f.getActivity(), "Error!", Toast.LENGTH_SHORT).show();
+										return true;
+									}
+
+									args.putString("package", pkg);
+								}
+								else
+									log("Package obtained from Fragment args: " + args.getString("package"));
+
+
 								pa.startPreferencePanel(AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, args,
 										Util.getSettingsIdentifier("string/app_ops_settings"), null, f, 1);
 								return true;
