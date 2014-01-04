@@ -62,6 +62,8 @@ public class Sony extends AOSP
 
 		mSlaveActivityClass = lpparam.classLoader.loadClass(SLAVE_ACTIVITY_NAME);
 
+		log("Enslaving " + SLAVE_ACTIVITY_NAME);
+
 		hookIsValidFragment(mSlaveActivityClass);
 
 		XposedHelpers.findAndHookMethod(mSlaveActivityClass, "getIntent", new XC_MethodHook() {
@@ -69,10 +71,17 @@ public class Sony extends AOSP
 			protected void afterHookedMethod(MethodHookParam param) throws Throwable
 			{
 				final Intent intent = (Intent) param.getResult();
+				// XXX only for debugging purposes - prevents multiple calls to getIntent from
+				// spamming the logs
+				final Intent origIntent = new Intent(intent);
+
 				if(intent.getBooleanExtra(EXTRA_LAUNCH_APP_OPS, false))
 					intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_FRAGMENT);
 				else if(intent.getBooleanExtra(EXTRA_LAUNCH_APP_OPS_DETAILS, false))
 					intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT);
+
+				if(!intent.equals(origIntent))
+					debug("getIntent:" + "\n  intent=" + intent + "\n  extras=" + intent.getExtras());
 			}
 		});
 
@@ -83,13 +92,14 @@ public class Sony extends AOSP
 					@Override
 					protected void onAfterHookedMethod(MethodHookParam param) throws Throwable
 					{
-						if(!AppOpsXposed.APP_OPS_DETAILS_FRAGMENT.equals(param.args[0]))
-							return;
+						final Intent intent = (Intent) param.getResult();
+
+						if(AppOpsXposed.APP_OPS_DETAILS_FRAGMENT.equals(param.args[0]))
+							intent.putExtra(EXTRA_LAUNCH_APP_OPS_DETAILS, true);
+						else if(AppOpsXposed.APP_OPS_FRAGMENT.equals(param.args[0]))
+							intent.putExtra(EXTRA_LAUNCH_APP_OPS, true);
 
 						debug("onBuildStartFragment: name=" + param.args[0]);
-
-						final Intent intent = (Intent) param.getResult();
-						intent.putExtra(EXTRA_LAUNCH_APP_OPS_DETAILS, true);
 					}
 		});
 
@@ -109,6 +119,8 @@ public class Sony extends AOSP
 									pa.setTitle(Util.getSettingsIdentifier("string/app_ops_settings"));
 								else if(intent.getBooleanExtra(EXTRA_LAUNCH_APP_OPS, false))
 									pa.setTitle(Util.getSettingsIdentifier("string/app_ops_settings"));
+
+								debug("onCreate:" + "\n  intent=" + intent + "\n  extras=" + intent.getExtras());
 							}
 						}
 			});
