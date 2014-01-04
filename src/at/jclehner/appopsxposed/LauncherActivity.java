@@ -1,10 +1,16 @@
 package at.jclehner.appopsxposed;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.TextView;
 import at.jclehner.appopsxposed.variants.Sony;
 
 public class LauncherActivity extends Activity
@@ -15,6 +21,17 @@ public class LauncherActivity extends Activity
 		super.onCreate(savedInstanceState);
 
 		final Intent intent = new Intent();
+
+		if(Build.MANUFACTURER.toLowerCase().contains("sony"))
+		{
+			final TextView tv = new TextView(this);
+			tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+			tv.setGravity(Gravity.CENTER);
+			tv.setText("You are using a Sony device. Please try to launch AppOps from the Settings app!");
+			tv.setTextAppearance(this, android.R.attr.textAppearanceMedium);
+			setContentView(tv);
+			return;
+		}
 
 		if(false)
 		{
