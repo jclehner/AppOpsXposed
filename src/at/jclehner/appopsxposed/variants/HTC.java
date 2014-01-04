@@ -102,8 +102,9 @@ public class HTC extends ApkVariant
 		addAppOpsToAppInfo(lpparam);
 	}
 
+
 	@Override
-	protected boolean onMatch(LoadPackageParam lpparam)
+	protected String[] indicatorClasses()
 	{
 		final String[] classes = {
 				"com.htc.preference.HtcPreferenceActivity",
@@ -113,20 +114,7 @@ public class HTC extends ApkVariant
 				"com.android.settings.framework.activity.HtcGenericEntryProvider"
 		};
 
-		for(String className : classes)
-		{
-			try
-			{
-				lpparam.classLoader.loadClass(className);
-				return true;
-			}
-			catch(ClassNotFoundException e)
-			{
-				// ignore
-			}
-		}
-
-		return false;
+		return classes;
 	}
 
 	@Override

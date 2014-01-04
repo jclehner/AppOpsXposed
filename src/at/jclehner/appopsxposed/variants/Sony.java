@@ -62,18 +62,7 @@ public class Sony extends AOSP
 
 		mSlaveActivityClass = lpparam.classLoader.loadClass(SLAVE_ACTIVITY_NAME);
 
-		Util.findAndHookMethodRecursive(mSlaveActivityClass,
-				"isValidFragment", String.class, new XC_MethodHookRecursive() {
-
-					@Override
-					protected void onBeforeHookedMethod(MethodHookParam param) throws Throwable
-					{
-						if(AppOpsXposed.APP_OPS_FRAGMENT.equals(param.args[0])
-								|| AppOpsXposed.APP_OPS_DETAILS_FRAGMENT.equals(param.args[0])) {
-							param.setResult(true);
-						}
-					}
-		});
+		hookIsValidFragment(mSlaveActivityClass);
 
 		XposedHelpers.findAndHookMethod(mSlaveActivityClass, "getIntent", new XC_MethodHook() {
 			@Override
@@ -133,31 +122,15 @@ public class Sony extends AOSP
 	}
 
 	@Override
-	protected boolean onMatch(LoadPackageParam lpparam)
+	protected String[] indicatorClasses()
 	{
-		// The existence of any one of these classes hints that we're not dealing
-		// with an AOSP ROM...
-
 		final String[] classes = {
 				"com.sonymobile.settings.SomcSettingsHeader",
 				"com.sonymobile.settings.preference.util.SomcPreferenceActivity",
 				"com.sonymobile.settings.preference.util.SomcSettingsPreferenceFragment"
 		};
 
-		for(String className : classes)
-		{
-			try
-			{
-				lpparam.classLoader.loadClass(className);
-				return true;
-			}
-			catch(ClassNotFoundException e)
-			{
-				// ignore
-			}
-		}
-
-		return false;
+		return classes;
 	}
 
 	@Override
