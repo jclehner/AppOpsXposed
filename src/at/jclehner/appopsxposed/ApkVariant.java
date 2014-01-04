@@ -18,15 +18,12 @@
 
 package at.jclehner.appopsxposed;
 
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -40,8 +37,6 @@ import at.jclehner.appopsxposed.variants.AOSP;
 import at.jclehner.appopsxposed.variants.HTC;
 import at.jclehner.appopsxposed.variants.Samsung;
 import at.jclehner.appopsxposed.variants.Sony;
-import de.robv.android.xposed.IXposedHookLoadPackage;
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
@@ -59,6 +54,8 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
  */
 public abstract class ApkVariant
 {
+	private static final boolean USE_INDICATOR_CLASSES = false;
+
 	protected final String ANY = "";
 
 	private String mLogTag = null;
@@ -166,6 +163,17 @@ public abstract class ApkVariant
 	}
 
 	/**
+	 * Get the names of classes of which at least one is required
+	 * to be present in the APK for this variant to match.
+	 * <p>
+	 * Returning <code>null</code> here will skip the check.
+	 */
+	protected String[] indicatorClasses() {
+		return null;
+	}
+
+
+	/**
 	 * Check if the variant is complete.
 	 * <p>
 	 * Return <code>true</code> here if the variant installs all hooks required for "App ops" functionality. That way, no other
@@ -222,27 +230,29 @@ public abstract class ApkVariant
 		AppOpsXposed.APP_OPS_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT
 	};
 
-	protected final void hookIsValidFragment(LoadPackageParam lpparam)
+	protected final void hookIsValidFragment(Class<?> clazz) throws Throwable
 	{
 		try
 		{
-			findAndHookMethod("com.android.settings.Settings", lpparam.classLoader,
-					"isValidFragment", String.class, new XC_MethodHook() {
+			Util.findAndHookMethodRecursive(clazz, "isValidFragment",
+					String.class, new XC_MethodHookRecursive() {
 
-					@Override
-					protected void beforeHookedMethod(MethodHookParam param) throws Throwable
-					{
-						for(String name : VALID_FRAGMENTS)
+						@Override
+						protected void onAfterHookedMethod(MethodHookParam param) throws Throwable
 						{
-							if(name.equals(param.args[0]))
-							{
-								param.setResult(true);
+							if((Boolean) param.getResult())
 								return;
+
+							for(String name : VALID_FRAGMENTS)
+							{
+								if(name.equals(param.args[0]))
+								{
+									param.setResult(true);
+									return;
+								}
 							}
 						}
-					}
 			});
-
 		}
 		catch(NoSuchMethodError e)
 		{
@@ -252,6 +262,10 @@ public abstract class ApkVariant
 			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
 				XposedBridge.log(e);
 		}
+	}
+
+	protected final void hookIsValidFragment(LoadPackageParam lpparam) throws Throwable {
+		hookIsValidFragment(lpparam.classLoader.loadClass("com.android.settings.Settings"));
 	}
 
 	protected void addAppOpsToAppInfo(LoadPackageParam lpparam)
@@ -390,7 +404,37 @@ public abstract class ApkVariant
 		if(apiLevel() != 0 && Build.VERSION.SDK_INT != apiLevel())
 			return false;
 
-		return onMatch(lpparam);
+		if(!onMatch(lpparam))
+			return false;
+
+		final String[] classes = indicatorClasses();
+		if(classes == null || classes.length == 0)
+			return true;
+
+		debug("Checking " + classes.length + " indicator classes");
+
+		for(String className : classes)
+		{
+			try
+			{
+				lpparam.classLoader.loadClass(className);
+				debug("  OK: " + className);
+				return true;
+			}
+			catch(ClassNotFoundException e)
+			{
+				debug("  N/A: " + className);
+				// continue
+			}
+		}
+
+		if(USE_INDICATOR_CLASSES)
+		{
+			debug("Ignoring indicator class presence");
+			return true;
+		}
+
+		return false;
 	}
 
 	private String getLogPrefix()
