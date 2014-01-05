@@ -29,7 +29,6 @@ import at.jclehner.appopsxposed.Util.XC_MethodHookRecursive;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
-import de.robv.android.xposed.callbacks.XCallback;
 
 public class Sony extends AOSP
 {
@@ -47,7 +46,7 @@ public class Sony extends AOSP
 
 		XposedHelpers.findAndHookMethod(AppOpsXposed.APP_OPS_FRAGMENT, lpparam.classLoader,
 				"onCreateView", LayoutInflater.class, ViewGroup.class, Bundle.class,
-				new XC_MethodHook(XCallback.PRIORITY_HIGHEST) {
+				new XC_MethodHook() {
 
 					@Override
 					protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
