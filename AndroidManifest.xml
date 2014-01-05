@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="at.jclehner.appopsxposed"
-    android:versionCode="10800"
-    android:versionName="1.8" >
+    android:versionCode="10856"
+    android:versionName="1.9BETA6" >
 
     <uses-sdk
         android:minSdkVersion="18"
