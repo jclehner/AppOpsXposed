@@ -1,8 +1,6 @@
 package at.jclehner.appopsxposed;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,7 +25,7 @@ public class LauncherActivity extends Activity
 			final TextView tv = new TextView(this);
 			tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 			tv.setGravity(Gravity.CENTER);
-			tv.setText("You are using a Sony device. Please try to launch AppOps from the Settings app!");
+			tv.setText("You are using a Sony device. Please launch AppOps from the Settings app!");
 			tv.setTextAppearance(this, android.R.attr.textAppearanceMedium);
 			setContentView(tv);
 			return;

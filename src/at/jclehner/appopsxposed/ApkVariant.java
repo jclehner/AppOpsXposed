@@ -201,7 +201,7 @@ public abstract class ApkVariant
 				protected void onAfterHookedMethod(MethodHookParam param) throws Throwable
 				{
 					final int xmlResId = (Integer) param.args[0];
-					debug("hookLoadHeadersFromResource: xmlResId=" + xmlResId);
+					debug("loadHeadersFromResource: xmlResId=" + xmlResId);
 
 					for(int hookResId : hookResIds)
 					{
