@@ -437,7 +437,7 @@ public abstract class ApkVariant
 
 		if(!USE_INDICATOR_CLASSES)
 		{
-			debug("Ignoring indicator class presence");
+			debug("No indicator classes present; continuing anyways");
 			return true;
 		}
 
