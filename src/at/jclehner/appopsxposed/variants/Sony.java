@@ -18,12 +18,14 @@
 
 package at.jclehner.appopsxposed.variants;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceActivity.Header;
 import at.jclehner.appopsxposed.AppOpsXposed;
+import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.Util;
 import at.jclehner.appopsxposed.Util.XC_MethodHookRecursive;
 import de.robv.android.xposed.XC_MethodHook;
@@ -36,6 +38,8 @@ public class Sony extends AOSP
 
 	public static final String EXTRA_LAUNCH_APP_OPS = "at.jclehner.appopsxposed.LAUNCH_APP_OPS";
 	public static final String EXTRA_LAUNCH_APP_OPS_DETAILS = "at.jclehner.appopsxposed.LAUNCH_APP_OPS_DETAILS";
+
+	private static final boolean SKIP_ON_HEADER_CLICK = true;
 
 	private Class<?> mSlaveActivityClass;
 
@@ -71,17 +75,13 @@ public class Sony extends AOSP
 			protected void afterHookedMethod(MethodHookParam param) throws Throwable
 			{
 				final Intent intent = (Intent) param.getResult();
-				// XXX only for debugging purposes - prevents multiple calls to getIntent from
-				// spamming the logs
-				final Intent origIntent = new Intent(intent);
 
 				if(intent.getBooleanExtra(EXTRA_LAUNCH_APP_OPS, false))
 					intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_FRAGMENT);
 				else if(intent.getBooleanExtra(EXTRA_LAUNCH_APP_OPS_DETAILS, false))
 					intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT);
 
-				if(!intent.equals(origIntent))
-					debug("getIntent:" + "\n  intent=" + intent + "\n  extras=" + intent.getExtras());
+				debug("getIntent:" + "\n  intent=" + intent + "\n  extras=" + intent.getExtras());
 			}
 		});
 
@@ -129,6 +129,27 @@ public class Sony extends AOSP
 		{
 			log(t);
 		}
+
+		Util.findAndHookMethodRecursive("com.android.settings.Settings", lpparam.classLoader,
+				"onHeaderClick", Header.class, int.class, new XC_MethodHookRecursive() {
+
+					protected void onBeforeHookedMethod(MethodHookParam param) throws Throwable
+					{
+						final Header header = (Header) param.args[0];
+
+						if(header.id == R.id.app_ops_settings)
+						{
+							log("Clicked AppOps header at pos " + param.args[1]);
+							if(!SKIP_ON_HEADER_CLICK)
+								return;
+
+							log("Calling startActivity and skipping onHeaderClick");
+							((Activity) param.thisObject).startActivity(header.intent);
+							param.setResult(null);
+						}
+					}
+		});
+
 
 		super.handleLoadPackage(lpparam);
 	}
