@@ -415,7 +415,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		Util.debug(t);
 	}
 
-	protected boolean isMatching(LoadPackageParam lpparam)
+	private boolean isMatching(LoadPackageParam lpparam)
 	{
 		if(manufacturer() != ANY && !Util.containsManufacturer(manufacturer()))
 			return false;

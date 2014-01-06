@@ -33,9 +33,7 @@ public class LauncherActivity extends Activity implements OnClickListener
 				if(isSonyStockRom())
 				{
 					Log.i(TAG, "Running Sony stock ROM");
-					final AppListFragment f = new AppListFragment();
-					getFragmentManager().beginTransaction().add(android.R.id.content, f).commit();
-					// don't call launchAppOpsSummary() as it won't work
+					addAppListFragment();
 					return;
 				}
 			}
@@ -77,6 +75,12 @@ public class LauncherActivity extends Activity implements OnClickListener
 
 		startActivity(intent);
 		finish();
+	}
+
+	private void addAppListFragment()
+	{
+		final AppListFragment f = new AppListFragment();
+		getFragmentManager().beginTransaction().add(android.R.id.content, f).commit();
 	}
 
 	private boolean isSonyStockRom()

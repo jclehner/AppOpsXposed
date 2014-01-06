@@ -20,6 +20,7 @@ package at.jclehner.appopsxposed.variants;
 
 import java.util.List;
 
+import android.content.Context;
 import android.preference.PreferenceActivity.Header;
 import at.jclehner.appopsxposed.ApkVariant;
 import at.jclehner.appopsxposed.Util;
@@ -67,7 +68,7 @@ public class AOSP extends ApkVariant
 					@Override
 					protected void afterHookedMethod(MethodHookParam param) throws Throwable
 					{
-						addAppOpsHeader((List<Header>) param.args[0], personalSectionId);
+						addAppOpsHeader((List<Header>) param.args[0], personalSectionId, (Context) param.thisObject);
 					}
 		});
 	}
