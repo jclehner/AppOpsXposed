@@ -19,7 +19,6 @@
 package at.jclehner.appopsxposed.variants;
 
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -43,6 +42,15 @@ public class Sony extends AOSP
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
 		super.handleLoadPackage(lpparam);
+
+		/**
+		 * The Settings app on Sony devices (Xperia ROMs at least) is surprisingly
+		 * vanilla, meaning we can use AOSP.handleLoadPackage().
+		 *
+		 * Sony decided to disable AppOps by calling getActivity().finish() in
+		 * AppOpSummary.onCreateView(), so we block all calls to finish() that happen
+		 * in onCreateView.
+		 */
 
 		XposedHelpers.findAndHookMethod(AppOpsXposed.APP_OPS_FRAGMENT, lpparam.classLoader,
 				"onCreateView", LayoutInflater.class, ViewGroup.class, Bundle.class,
