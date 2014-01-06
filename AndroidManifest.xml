@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="at.jclehner.appopsxposed"
-    android:versionCode="10900"
-    android:versionName="1.9" >
+    android:versionCode="10901"
+    android:versionName="1.9.1" >
 
     <uses-sdk
         android:minSdkVersion="18"
@@ -27,7 +27,8 @@
 
         <activity
             android:name=".LauncherActivity"
-            android:label="AppOpsXposed">
+            android:label="AppOpsXposed"
+            android:process=":launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
