@@ -330,6 +330,8 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 
 								if("android.settings.APPLICATION_DETAILS_SETTINGS".equals(pa.getIntent().getAction()))
 								{
+									debug("Launching AppOps using startActivities()");
+
 									final Intent intent = new Intent("android.settings.SETTINGS");
 									intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT);
 									intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS, args);
@@ -342,6 +344,8 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 								}
 								else
 								{
+									debug("Launching AppOps using startPreferencePanel()");
+
 									// This method only works when "App info" was opened from "Apps". When the launcher icon
 									// onto "App info", the method above is used.
 									pa.startPreferencePanel(AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, args, 0,
