@@ -201,6 +201,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 		final Intent intent = new Intent("android.settings.SETTINGS");
 		intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT);
 		intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS, args);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
 		startActivity(intent);
