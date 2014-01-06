@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
+    <string name="description">Aktiviert AppOps unter Android 4.3+ und fügt es zur \"Einstellungen\"-App hinzu.</string>
+    <string name="btn_launch">Starten</string>
+    <string name="btn_help">Hilfe</string>
+    <string name="xposed_not_installed">Der Xposed Installer ist nicht installiert und Du verwendest Android 4.4+. \"%1$s\"
+        ist wahrscheinlich deaktiviert, aber Du kannst versuchen es durch den \"%2$s\"-Button zu starten. Bitte beachte dass
+        Dein Gerät gerootet sein muss, um das Xposed Framework zu verwenden.</string>
+</resources>

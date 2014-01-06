@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <string tools:ignore="MissingTranslation" name="description">Restores AppOps on Android 4.4.2 and adds an option to launch it from the 
-        native Settings app.</string>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
+    <string name="description">Enables AppOps on Android 4.3+ and adds it to the native settings app.</string>
+    <string name="btn_launch">Launch</string>
+    <string name="btn_help">Help</string>
+    <string name="xposed_not_installed">The Xposed Installer is not installed on your system and you are running Android 4.4+. \"%1$s\"
+        is likely disabled, but you may try to launch it using the \"%2$s\" button below. Please note that your device must be rooted to install the
+        Xposed Framework.</string>
 </resources>
