@@ -24,6 +24,7 @@ import java.util.List;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -38,11 +39,9 @@ import at.jclehner.appopsxposed.variants.AOSP;
 import at.jclehner.appopsxposed.variants.HTC;
 import at.jclehner.appopsxposed.variants.Samsung;
 import at.jclehner.appopsxposed.variants.Sony;
-import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 /**
@@ -58,7 +57,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
  */
 public abstract class ApkVariant implements IXposedHookLoadPackage
 {
-	private static final boolean USE_INDICATOR_CLASSES = false;
+	private static final boolean USE_INDICATOR_CLASSES = true;
 
 	protected final String ANY = "";
 
@@ -291,10 +290,8 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 								final Fragment f = (Fragment) param.thisObject;
 								final PreferenceActivity pa = (PreferenceActivity) f.getActivity();
 
-								debug("onMenuItemClick:" + "\n  intent=" + pa.getIntent() +
-										"\n  extras=" + pa.getIntent().getExtras());
-
 								final Bundle args = f.getArguments() == null ? new Bundle() : f.getArguments();
+
 								if(!args.containsKey("package"))
 								{
 									String pkg;
@@ -312,6 +309,10 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 
 									if(pkg == null || pkg.isEmpty())
 									{
+										log("No package in intent or args:\n" +
+												"  intent=" + pa.getIntent() + "\n" +
+												"  extras=" + pa.getIntent().getExtras() + "\n" +
+												"  args=" + args);
 										Toast.makeText(f.getActivity(), "Error!", Toast.LENGTH_SHORT).show();
 										return true;
 									}
@@ -321,9 +322,11 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 								else
 									log("Package obtained from Fragment args: " + args.getString("package"));
 
+								final Intent intent = new Intent("android.settings.SETTINGS");
+								intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT);
+								intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS, args);
 
-								pa.startPreferencePanel(AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, args,
-										Util.getSettingsIdentifier("string/app_ops_settings"), null, f, 1);
+								pa.startActivity(intent);
 								return true;
 							}
 						});
