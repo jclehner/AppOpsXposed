@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Fragment;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -290,6 +291,11 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 								final Fragment f = (Fragment) param.thisObject;
 								final PreferenceActivity pa = (PreferenceActivity) f.getActivity();
 
+								debug("onMenuItemClick:\n" +
+										"  intent=" + pa.getIntent() + "\n" +
+										"  extras=" + pa.getIntent().getExtras() + "\n" +
+										"  args=" + f.getArguments());
+
 								final Bundle args = f.getArguments() == null ? new Bundle() : f.getArguments();
 
 								if(!args.containsKey("package"))
@@ -322,14 +328,26 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 								else
 									log("Package obtained from Fragment args: " + args.getString("package"));
 
-								final Intent intent = new Intent("android.settings.SETTINGS");
-								intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT);
-								intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS, args);
-								intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_TITLE, pa.getString(R.string.app_ops_settings));
-								intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-								intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+								if("android.settings.APPLICATION_DETAILS_SETTINGS".equals(pa.getIntent().getAction()))
+								{
+									final Intent intent = new Intent("android.settings.SETTINGS");
+									intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT);
+									intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS, args);
+									intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_TITLE, Util.getModString(R.string.app_ops_settings));
 
-								pa.startActivity(intent);
+									final TaskStackBuilder tsb = TaskStackBuilder.create(pa);
+									tsb.addNextIntent(intent);
+
+									tsb.startActivities();
+								}
+								else
+								{
+									// This method only works when "App info" was opened from "Apps". When the launcher icon
+									// onto "App info", the method above is used.
+									pa.startPreferencePanel(AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, args, 0,
+											Util.getModString(R.string.app_ops_settings), f, 0);
+								}
+
 								return true;
 							}
 						});
@@ -395,7 +413,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 
 	protected boolean isMatching(LoadPackageParam lpparam)
 	{
-		if(manufacturer() != ANY && Util.containsManufacturer(manufacturer()))
+		if(manufacturer() != ANY && !Util.containsManufacturer(manufacturer()))
 			return false;
 
 		if(release() != ANY && !Build.VERSION.RELEASE.equals(release()))
