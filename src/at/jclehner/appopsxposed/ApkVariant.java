@@ -38,8 +38,11 @@ import at.jclehner.appopsxposed.variants.AOSP;
 import at.jclehner.appopsxposed.variants.HTC;
 import at.jclehner.appopsxposed.variants.Samsung;
 import at.jclehner.appopsxposed.variants.Sony;
+import de.robv.android.xposed.IXposedHookInitPackageResources;
+import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
+import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 /**
@@ -53,7 +56,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
  * When extending this class, note that you <em>must</em> return the wildcard value
  * {@link #ANY} for a string property that should be ignored.
  */
-public abstract class ApkVariant
+public abstract class ApkVariant implements IXposedHookLoadPackage
 {
 	private static final boolean USE_INDICATOR_CLASSES = false;
 
@@ -83,6 +86,7 @@ public abstract class ApkVariant
 		return variants;
 	}
 
+	@Override
 	public abstract void handleLoadPackage(LoadPackageParam lpparam) throws Throwable;
 
 	protected Object onCreateAppOpsHeader(Context context)
@@ -278,6 +282,7 @@ public abstract class ApkVariant
 						final Menu menu = (Menu) param.args[0];
 						final MenuItem item = menu.add(getAppOpsTitle());
 						item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+						//item.setIcon(Util.modRes.getDrawable(R.mipmap.ic_launcher2));
 						item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
 							@Override
