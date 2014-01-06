@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import android.content.res.XModuleResources;
+import android.os.Build;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XSharedPreferences;
@@ -63,6 +64,10 @@ public final class Util
 			return;
 
 		XposedBridge.log(t);
+	}
+
+	public static boolean containsManufacturer(String str) {
+		return Build.MANUFACTURER.toLowerCase().contains(str.toLowerCase());
 	}
 
 	public static String[] appendToStringArray(String[] array, String str)
