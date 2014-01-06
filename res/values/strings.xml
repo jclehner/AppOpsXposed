@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="description">Restores AppOps on Android 4.4.2 and adds an option to launch it from the 
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string tools:ignore="MissingTranslation" name="description">Restores AppOps on Android 4.4.2 and adds an option to launch it from the 
         native Settings app.</string>
-
-    <string name="app_ops_title">App ops</string>
 </resources>

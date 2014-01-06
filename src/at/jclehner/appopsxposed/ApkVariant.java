@@ -109,7 +109,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		if(appOpsTitleId != 0)
 			return Util.getSettingsString(appOpsTitleId);
 
-		return Util.getModString(R.string.app_ops_title);
+		return Util.getModString(R.string.app_ops_settings);
 	}
 
 	protected long getIdFromHeader(Object header) {
