@@ -109,9 +109,6 @@ public class LauncherActivity extends Activity implements OnClickListener
 
 	private boolean isXposedInstalled()
 	{
-		if(true)
-			return false;
-
 		try
 		{
 			getPackageManager().getApplicationInfo("de.robv.android.xposed.installer", 0);
