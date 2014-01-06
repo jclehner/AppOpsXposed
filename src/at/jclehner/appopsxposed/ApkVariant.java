@@ -313,7 +313,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 												"  intent=" + pa.getIntent() + "\n" +
 												"  extras=" + pa.getIntent().getExtras() + "\n" +
 												"  args=" + args);
-										Toast.makeText(f.getActivity(), "Error!", Toast.LENGTH_SHORT).show();
+										Toast.makeText(pa, "Error!", Toast.LENGTH_SHORT).show();
 										return true;
 									}
 
@@ -325,6 +325,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 								final Intent intent = new Intent("android.settings.SETTINGS");
 								intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT);
 								intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS, args);
+								intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_TITLE, pa.getString(R.string.app_ops_settings));
 								intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 								intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
