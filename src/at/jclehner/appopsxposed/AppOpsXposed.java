@@ -51,8 +51,11 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 		//XModuleResources mixRes = XModuleResources.createInstance(mModPath, resparam.res);
 
-		resparam.res.setReplacement("com.android.settings", "layout", "app_ops_details_item",
-				Util.modRes.fwd(R.layout.app_ops_details_item));
+		if(!Util.containsManufacturer("Sony"))
+		{
+			resparam.res.setReplacement("com.android.settings", "layout", "app_ops_details_item",
+					Util.modRes.fwd(R.layout.app_ops_details_item));
+		}
 		//mOrigRes = resparam.res;
 	}
 
