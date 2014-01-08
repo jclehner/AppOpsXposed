@@ -55,9 +55,18 @@ public class Sony extends AOSP
 		 * The Settings app on Sony devices (Xperia ROMs at least) is surprisingly
 		 * vanilla, meaning we can use AOSP.handleLoadPackage().
 		 *
-		 * Sony decided to disable AppOps by calling getActivity().finish() in
-		 * AppOpSummary.onCreateView(), so we block all calls to finish() that happen
-		 * in onCreateView.
+		 * However, Sony decided to make the following modifications:
+		 *
+		 * 1) AppOpsSummary can't be launched using the PreferenceActivity.SHOW_FRAGMENT
+		 *    extra since the hosting Activity is finish()'ed in AppOpsSummary.onCreateView()
+		 *
+		 * 2) In layout/app_ops_details_item, the Switch has been replaced by a Spinner
+		 *    offering three (!) choices, one of them being "Ask always".
+		 *
+		 * The first issue is dealt with by hooking Activity.finish() for the duration of the
+		 * call to AppOpsSummary.onCreateView(). The second issue is addressed by hooking into
+		 * LayoutInflater.inflate() in AppOpsDetails.refreshUi, where we can hide the Switch
+		 * and show the Spinner.
 		 */
 
 		XposedHelpers.findAndHookMethod(AppOpsXposed.APP_OPS_FRAGMENT, lpparam.classLoader,

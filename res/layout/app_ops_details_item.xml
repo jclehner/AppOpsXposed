@@ -83,6 +83,7 @@ was especially long.
             android:clickable="true"
             android:visibility="visible" />
 
+        <!-- Sony uses a Spinner instead of a Switch *sigh* -->
         <Spinner
             android:id="@+id/spinnerWidget"
             android:tag="spinnerWidget"
