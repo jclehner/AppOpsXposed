@@ -24,6 +24,7 @@ import at.jclehner.appopsxposed.variants.Sony;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
+import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
@@ -52,6 +53,8 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 		resparam.res.setReplacement("com.android.settings", "layout", "app_ops_details_item",
 				Util.modRes.fwd(R.layout.app_ops_details_item));
+
+		Util.modRes = XModuleResources.createInstance(mModPath, null);
 	}
 
 	@Override
