@@ -20,6 +20,7 @@ package at.jclehner.appopsxposed;
 
 import static de.robv.android.xposed.XposedBridge.log;
 import android.content.res.XModuleResources;
+import at.jclehner.appopsxposed.variants.Sony;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
@@ -47,12 +48,18 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		if(!resparam.packageName.equals("com.android.settings"))
 			return;
 
+		log("AppOpsXposed: handleInitPackageResources");
+
 		Util.modRes = XModuleResources.createInstance(mModPath, resparam.res);
 
 		//XModuleResources mixRes = XModuleResources.createInstance(mModPath, resparam.res);
 
-		resparam.res.setReplacement("com.android.settings", "layout", "app_ops_details_item",
-				Util.modRes.fwd(R.layout.app_ops_details_item));
+		if(!Util.containsManufacturer("Sony"))
+		{
+			resparam.res.setReplacement("com.android.settings", "layout", "app_ops_details_item",
+					Util.modRes.fwd(R.layout.app_ops_details_item));
+		}
+
 		//mOrigRes = resparam.res;
 	}
 
@@ -62,7 +69,7 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		if(!lpparam.packageName.equals("com.android.settings"))
 			return;
 
-		log("AppOpsXposed initializing...");
+		log("AppOpsXposed: handleLoadPackage");
 
 		try
 		{
@@ -76,27 +83,34 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 		Util.settingsRes = XModuleResources.createInstance(lpparam.appInfo.sourceDir, null);
 
-		log("Trying variants...");
-
-		for(ApkVariant variant : ApkVariant.getAllMatching(lpparam))
+		if(true)
 		{
-			final String variantName = "  " + variant.getClass().getSimpleName();
+			log("Trying variants...");
 
-			try
+			for(ApkVariant variant : ApkVariant.getAllMatching(lpparam))
 			{
-				variant.handleLoadPackage(lpparam);
-				if(variant.isComplete())
+				final String variantName = "  " + variant.getClass().getSimpleName();
+
+				try
 				{
-					log(variantName + ": [OK+]");
-					break;
+					variant.handleLoadPackage(lpparam);
+					if(variant.isComplete())
+					{
+						log(variantName + ": [OK+]");
+						break;
+					}
+					log(variantName + ": [OK]");
 				}
-				log(variantName + ": [OK]");
+				catch(Throwable t)
+				{
+					log(variantName + ": [!!]");
+					log(t);
+				}
 			}
-			catch(Throwable t)
-			{
-				log(variantName + ": [!!]");
-				log(t);
-			}
+		}
+		else
+		{
+			new Sony().handleLoadPackage(lpparam);
 		}
 	}
 

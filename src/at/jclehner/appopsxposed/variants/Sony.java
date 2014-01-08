@@ -19,20 +19,28 @@
 package at.jclehner.appopsxposed.variants;
 
 
+import java.util.Arrays;
+
+import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import at.jclehner.appopsxposed.AppOpsXposed;
+import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.Util;
 import at.jclehner.appopsxposed.Util.XC_MethodHookRecursive;
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
 import de.robv.android.xposed.XposedHelpers;
+import de.robv.android.xposed.XC_MethodHook.Unhook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class Sony extends AOSP
 {
-	private static boolean sIgnoreActivityFinish = false;
-
 	@Override
 	protected String manufacturer() {
 		return "Sony";
@@ -56,29 +64,33 @@ public class Sony extends AOSP
 				"onCreateView", LayoutInflater.class, ViewGroup.class, Bundle.class,
 				new XC_MethodHook() {
 
+					private Unhook mUnhook;
+
 					@Override
 					protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-						sIgnoreActivityFinish = true;
+						mUnhook = hookActivityFinish(param);
 					}
 
 					@Override
 					protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-						sIgnoreActivityFinish = false;
+						mUnhook.unhook();
 					}
 		});
 
-		Util.findAndHookMethodRecursive("com.android.settings.Settings", lpparam.classLoader,
-				"finish", new XC_MethodHookRecursive() {
+		XposedHelpers.findAndHookMethod(AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, lpparam.classLoader,
+				"refreshUi", new XC_MethodHook() {
 
-				@Override
-				protected void onBeforeHookedMethod(MethodHookParam param) throws Throwable
-				{
-					if(sIgnoreActivityFinish)
-					{
-						log("Blocked " + param.thisObject.getClass().getName() + ".finish()");
-						param.setResult(null);
+					private Unhook mUnhook;
+
+					@Override
+					protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+						mUnhook = hookLayoutInflater();
 					}
-				}
+
+					@Override
+					protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+						mUnhook.unhook();
+					}
 		});
 	}
 
@@ -93,7 +105,73 @@ public class Sony extends AOSP
 
 		return classes;
 	}
+
+	protected Unhook hookActivityFinish(MethodHookParam param) throws Throwable
+	{
+		final Fragment f = (Fragment) param.thisObject;
+
+		return Util.findAndHookMethodRecursive(	f.getActivity().getClass(),
+				"finish", new XC_MethodHookRecursive() {
+
+					@Override
+					protected void onBeforeHookedMethod(MethodHookParam param) throws Throwable
+					{
+						log("Blocked " + param.thisObject.getClass().getName() + ".finish()");
+						param.setResult(null);
+					}
+		});
+	}
+
+	protected XC_MethodHook.Unhook hookLayoutInflater() throws Throwable
+	{
+		return Util.findAndHookMethodRecursive(LayoutInflater.class, "inflate",
+				int.class, ViewGroup.class, boolean.class, new XC_MethodHookRecursive() {
+					@Override
+					protected void onAfterHookedMethod(MethodHookParam param) throws Throwable
+					{
+						final int layoutResId = (Integer) param.args[0];
+						if(layoutResId != Util.getSettingsIdentifier("layout/app_ops_details_item"))
+							return;
+
+						debug("In LayoutInflater hook");
+
+						final View view = (View) param.getResult();
+						final Spinner spinner = (Spinner) view.findViewWithTag("spinnerWidget");
+						if(spinner != null)
+						{
+							view.findViewWithTag("switchWidget").setVisibility(View.GONE);
+							spinner.setVisibility(View.VISIBLE);
+
+							if(spinner.getCount() == 0)
+							{
+								debug("No items in spinnerWidget");
+
+								final Context context = ((LayoutInflater) param.thisObject).getContext();
+								final int arrayResId = Util.getSettingsIdentifier("array/app_ops_permissions");
+								final String[] options;
+
+								if(arrayResId != 0)
+									options = Util.settingsRes.getStringArray(arrayResId);
+								else
+									options = Util.modRes.getStringArray(R.array.app_ops_permissions);
+
+								debug("arrayResId=" + arrayResId);
+								debug("options=" + Arrays.toString(options));
+
+								final ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
+										android.R.layout.simple_spinner_item, options);
+								adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+								spinner.setAdapter(adapter);
+							}
+							else
+								debug("spinnerWidget has " + spinner.getCount() + " items");
+						}
+						else
+							log("No spinnerWidget in layout?");
+
+						Util.dumpViewHierarchy(view);
+					}
+		});
+	}
 }
-
-
-

@@ -25,8 +25,10 @@ import java.util.Arrays;
 
 import android.content.res.XModuleResources;
 import android.os.Build;
-
+import android.view.View;
+import android.view.ViewGroup;
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XC_MethodHook.Unhook;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
 
@@ -79,13 +81,40 @@ public final class Util
 		return list.toArray(newArray);
 	}
 
+	public static void dumpViewHierarchy(View v)
+	{
+		debug("dumpViewHierarchy: ");
+		dumpViewHierarchyInternal(v, 0);
+	}
+
+	private static void dumpViewHierarchyInternal(View view, int level)
+	{
+		debug(pad(2 * level) + view);
+
+		if(view instanceof ViewGroup)
+		{
+			final ViewGroup vg = (ViewGroup) view;
+			for(int i = 0; i != vg.getChildCount(); ++i)
+				dumpViewHierarchyInternal(vg.getChildAt(i), level + 1);
+		}
+	}
+
+	private static String pad(int length)
+	{
+		final StringBuilder sb = new StringBuilder(length);
+		for(int i = 0; i != length; ++i)
+			sb.append(' ');
+
+		return sb.toString();
+	}
+
 	public static void findAndHookMethodRecursive(String className, ClassLoader classLoader,
 			String methodName, Object... parameterTypesAndCallback) throws Throwable
 	{
 		findAndHookMethodRecursive(classLoader.loadClass(className), methodName, parameterTypesAndCallback);
 	}
 
-	public static void findAndHookMethodRecursive(Class<?> clazz,
+	public static Unhook findAndHookMethodRecursive(Class<?> clazz,
 			String methodName, Object... parameterTypesAndCallback) throws Throwable
 	{
 		final Object callback = parameterTypesAndCallback[parameterTypesAndCallback.length - 1];
@@ -100,7 +129,7 @@ public final class Util
 
 		try
 		{
-			findAndHookMethod(clazz, methodName, parameterTypesAndCallback);
+			return findAndHookMethod(clazz, methodName, parameterTypesAndCallback);
 		}
 		catch(NoSuchMethodError e)
 		{
@@ -114,29 +143,13 @@ public final class Util
 			}
 
 			debug("findAndHookMethodRecursive: trying " + superClass + "." + methodName);
-			findAndHookMethodRecursive(superClass, methodName, parameterTypesAndCallback);
+			return findAndHookMethodRecursive(superClass, methodName, parameterTypesAndCallback);
 		}
 	}
 
 	public static class XC_MethodHookRecursive extends XC_MethodHook
 	{
 		private Class<?> mClass = null;
-
-		/*public XC_MethodHookRecursive(String className, ClassLoader classLoader)
-		{
-			try
-			{
-				mClass = classLoader.loadClass(className);
-			}
-			catch(ClassNotFoundException e)
-			{
-				throw new IllegalArgumentException(e);
-			}
-		}
-
-		public XC_MethodHookRecursive(Class<?> clazz) {
-			mClass = clazz;
-		}*/
 
 		/* package */ void setTargetClass(Class<?> clazz) {
 			mClass = clazz;

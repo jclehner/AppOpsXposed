@@ -45,7 +45,7 @@ was especially long.
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/op_icon"
-        android:layout_toStartOf="@+id/switchWidget"
+        android:layout_toStartOf="@+id/op_widget"
         android:layout_alignParentTop="true"
         android:layout_gravity="fill_horizontal"
         android:layout_marginTop="2dip"
@@ -65,14 +65,35 @@ was especially long.
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textAlignment="viewStart" />
 
-    <Switch android:id="@id/switchWidget"
+    <FrameLayout
+        android:id="@id/op_widget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="8dip"
-        android:padding="8dip"
-        android:focusable="false"
-        android:clickable="true" />
+    >
+        <Switch
+            android:id="@+id/switchWidget"
+            android:tag="switchWidget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dip"
+            android:padding="8dip"
+            android:focusable="false"
+            android:clickable="true"
+            android:visibility="visible" />
 
+        <Spinner
+            android:id="@+id/spinnerWidget"
+            android:tag="spinnerWidget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="8dip"
+            android:padding="8dip"
+            android:focusable="false"
+            android:clickable="true"
+            android:visibility="gone"
+            android:entries="@array/app_ops_permissions" />
+    </FrameLayout>
 </RelativeLayout>
