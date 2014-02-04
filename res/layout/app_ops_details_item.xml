@@ -71,14 +71,14 @@ was especially long.
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
+        android:layout_marginStart="8dip"
+        android:padding="8dip"
     >
         <Switch
             android:id="@+id/switchWidget"
             android:tag="switchWidget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dip"
-            android:padding="8dip"
             android:focusable="false"
             android:clickable="true"
             android:visibility="visible" />
@@ -89,9 +89,6 @@ was especially long.
             android:tag="spinnerWidget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="8dip"
-            android:padding="8dip"
             android:focusable="false"
             android:clickable="true"
             android:visibility="gone"
