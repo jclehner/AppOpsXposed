@@ -51,10 +51,10 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 		log("AppOpsXposed: handleInitPackageResources");
 
+		Util.modRes = XModuleResources.createInstance(mModPath, null);
+
 		resparam.res.setReplacement("com.android.settings", "layout", "app_ops_details_item",
 				Util.modRes.fwd(R.layout.app_ops_details_item));
-
-		Util.modRes = XModuleResources.createInstance(mModPath, null);
 	}
 
 	@Override
