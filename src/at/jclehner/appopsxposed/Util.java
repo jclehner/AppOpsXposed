@@ -114,7 +114,9 @@ public final class Util
 		findAndHookMethodRecursive(classLoader.loadClass(className), methodName, parameterTypesAndCallback);
 	}
 
-	public static Unhook findAndHookMethodRecursive(Class<?> clazz,
+	// Returning Object here as the XC_MethodHook.Unhook in the method signature
+	// *may* be the cause for VerifyErrors on some ROMs...
+	public static Object findAndHookMethodRecursive(Class<?> clazz,
 			String methodName, Object... parameterTypesAndCallback) throws Throwable
 	{
 		final Object callback = parameterTypesAndCallback[parameterTypesAndCallback.length - 1];

@@ -119,7 +119,7 @@ public class Sony extends AOSP
 	{
 		final Fragment f = (Fragment) param.thisObject;
 
-		return Util.findAndHookMethodRecursive(	f.getActivity().getClass(),
+		return (Unhook) Util.findAndHookMethodRecursive(	f.getActivity().getClass(),
 				"finish", new XC_MethodHookRecursive() {
 
 					@Override
@@ -133,7 +133,7 @@ public class Sony extends AOSP
 
 	protected XC_MethodHook.Unhook hookLayoutInflater() throws Throwable
 	{
-		return Util.findAndHookMethodRecursive(LayoutInflater.class, "inflate",
+		return (Unhook) Util.findAndHookMethodRecursive(LayoutInflater.class, "inflate",
 				int.class, ViewGroup.class, boolean.class, new XC_MethodHookRecursive() {
 					@Override
 					protected void onAfterHookedMethod(MethodHookParam param) throws Throwable
