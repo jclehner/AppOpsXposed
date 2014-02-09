@@ -20,11 +20,10 @@ package at.jclehner.appopsxposed;
 
 import static de.robv.android.xposed.XposedBridge.log;
 import android.content.res.XModuleResources;
-import at.jclehner.appopsxposed.variants.Sony;
+import at.jclehner.appopsxposed.variants.CyanogenMod11;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
-import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
@@ -104,7 +103,7 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		}
 		else
 		{
-			new Sony().handleLoadPackage(lpparam);
+			new CyanogenMod11().handleLoadPackage(lpparam);
 		}
 	}
 
