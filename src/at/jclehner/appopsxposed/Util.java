@@ -20,14 +20,11 @@ package at.jclehner.appopsxposed;
 
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import android.content.res.XModuleResources;
 import android.os.Build;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import de.robv.android.xposed.XC_MethodHook;
@@ -109,25 +106,6 @@ public final class Util
 			sb.append(' ');
 
 		return sb.toString();
-	}
-
-
-	public static Object getStaticObjectField(Class<?> clazz, String fieldName)
-	{
-		try
-		{
-			final Field f = clazz.getDeclaredField(fieldName);
-			f.setAccessible(true);
-
-			if(!Modifier.isStatic(f.getModifiers()))
-				throw new IllegalArgumentException("Not a static field: " + clazz.getName() + "." + fieldName);
-
-			return f.get(null);
-		}
-		catch(ReflectiveOperationException e)
-		{
-			throw new RuntimeException(e);
-		}
 	}
 
 	public static void findAndHookMethodRecursive(String className, ClassLoader classLoader,

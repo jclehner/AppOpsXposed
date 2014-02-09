@@ -1,5 +1,6 @@
 package at.jclehner.appopsxposed;
 
+import java.lang.reflect.Field;
 import java.text.Collator;
 import java.util.Arrays;
 import java.util.Collections;
@@ -165,8 +166,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 
 	static class AppListLoader extends AsyncTaskLoader<List<PackageInfo>>
 	{
-		private static String[] sOpPerms = (String[])
-				Util.getStaticObjectField(AppOpsManager.class, "sOpPerms");
+		private static String[] sOpPerms;
 
 		private final PackageManager mPm;
 		private List<PackageInfo> mData;
@@ -175,7 +175,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 		{
 			super(context);
 			mPm = context.getPackageManager();
-			Log.d(TAG, "sOpPerms=" + Arrays.toString(sOpPerms));
+			sOpPerms = getOpPermissions();
 		}
 
 		@Override
@@ -259,6 +259,20 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 			}
 
 			return false;
+		}
+
+		private static String[] getOpPermissions()
+		{
+			try
+			{
+				final Field f = AppOpsManager.class.getField("sOpPerms");
+				return (String[]) f.get(null);
+			}
+			catch(ReflectiveOperationException e)
+			{
+				Log.w(TAG, e);
+				return null;
+			}
 		}
 	}
 
