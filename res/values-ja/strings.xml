@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
+    <string name="description">Android 4.3以降でアプリの操作状況を有効化し設定アプリに追加します。</string>
+    <string name="btn_launch">起動</string>
+    <string name="btn_help">ヘルプ</string>
+    <string name="xposed_not_installed">現在のシステムはXposedインストーラがインストールされておらずAndroid 4.4以降です。\"%1$s\"
+        は無効化されているようですが、下の\"%2$s\ボタンを押して起動できるか確認してください。Xposedフレームワークのインストールにはroot化が必要です。</string>
+</resources>
