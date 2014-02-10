@@ -21,6 +21,7 @@ package at.jclehner.appopsxposed;
 import static de.robv.android.xposed.XposedBridge.log;
 import android.content.res.XModuleResources;
 import at.jclehner.appopsxposed.variants.CyanogenMod11;
+import at.jclehner.appopsxposed.R;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
@@ -52,8 +53,11 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 		Util.modRes = XModuleResources.createInstance(mModPath, null);
 
-		resparam.res.setReplacement("com.android.settings", "layout", "app_ops_details_item",
-				Util.modRes.fwd(R.layout.app_ops_details_item));
+		if(!CyanogenMod11.isCm11NightlyAfter20140128())
+		{
+			resparam.res.setReplacement("com.android.settings", "layout", "app_ops_details_item",
+					Util.modRes.fwd(R.layout.app_ops_details_item));
+		}
 	}
 
 	@Override
