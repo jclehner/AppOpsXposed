@@ -14,7 +14,7 @@ public class CyanogenMod extends AOSP
 
 	@Override
 	protected boolean onMatch(LoadPackageParam lpparam) {
-		return CM_VERSION != null;
+		return CM_VERSION.length() != 0;
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class CyanogenMod extends AOSP
 
 	public static boolean isCm11NightlyAfter20140128()
 	{
-		if(CM_VERSION == null)
+		if(CM_VERSION.length() == 0)
 			return false;
 
 		final Matcher m = Pattern.compile("([0-9]+)-([0-9]{8})-NIGHTLY-.*").matcher(CM_VERSION);
@@ -49,6 +49,6 @@ public class CyanogenMod extends AOSP
 	}
 
 	private static String getCmVersion() {
-		return Util.getSystemProperty("ro.cm.version", null);
+		return Util.getSystemProperty("ro.cm.version", "");
 	}
 }
