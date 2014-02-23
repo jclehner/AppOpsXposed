@@ -20,6 +20,7 @@ package at.jclehner.appopsxposed;
 
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -28,7 +29,6 @@ import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XC_MethodHook.Unhook;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
 
@@ -79,6 +79,22 @@ public final class Util
 
 		final String[] newArray = new String[list.size()];
 		return list.toArray(newArray);
+	}
+
+	public static String getSystemProperty(String key, String defValue)
+	{
+		try
+		{
+			final Method m = Class.forName("android.os.SystemProperties").
+					getMethod("get", String.class, String.class);
+
+			return (String) m.invoke(null, key, defValue);
+		}
+		catch(ReflectiveOperationException e)
+		{
+			e.printStackTrace();
+			return defValue;
+		}
 	}
 
 	public static void dumpViewHierarchy(View v)

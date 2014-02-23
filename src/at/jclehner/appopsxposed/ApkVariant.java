@@ -37,7 +37,7 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.Toast;
 import at.jclehner.appopsxposed.Util.XC_MethodHookRecursive;
 import at.jclehner.appopsxposed.variants.AOSP;
-import at.jclehner.appopsxposed.variants.CyanogenMod11;
+import at.jclehner.appopsxposed.variants.CyanogenMod;
 import at.jclehner.appopsxposed.variants.HTC;
 import at.jclehner.appopsxposed.variants.Samsung;
 import at.jclehner.appopsxposed.variants.Sony;
@@ -61,7 +61,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 {
 	private static final boolean USE_INDICATOR_CLASSES = true;
 
-	protected final String ANY = "";
+	protected static final String ANY = "";
 
 	private String mLogTag = null;
 
@@ -69,7 +69,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		new HTC(),
 		new Samsung(),
 		new Sony(),
-		new CyanogenMod11(),
+		new CyanogenMod(),
 		new AOSP()
 	};
 
