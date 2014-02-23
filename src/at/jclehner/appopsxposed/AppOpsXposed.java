@@ -21,7 +21,6 @@ package at.jclehner.appopsxposed;
 import static de.robv.android.xposed.XposedBridge.log;
 import android.content.res.XModuleResources;
 import at.jclehner.appopsxposed.variants.CyanogenMod;
-import at.jclehner.appopsxposed.variants.CyanogenMod11;
 import at.jclehner.appopsxposed.R;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -81,36 +80,27 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 		Util.settingsRes = XModuleResources.createInstance(lpparam.appInfo.sourceDir, null);
 
-		if(true)
+		log("Trying variants...");
+
+		for(ApkVariant variant : ApkVariant.getAllMatching(lpparam))
 		{
-			log("Trying variants...");
+			final String variantName = "  " + variant.getClass().getSimpleName();
 
-			for(ApkVariant variant : ApkVariant.getAllMatching(lpparam))
+			try
 			{
-				final String variantName = "  " + variant.getClass().getSimpleName();
-
-				try
+				variant.handleLoadPackage(lpparam);
+				if(variant.isComplete())
 				{
-					variant.handleLoadPackage(lpparam);
-					if(variant.isComplete())
-					{
-						log(variantName + ": [OK+]");
-						break;
-					}
-					log(variantName + ": [OK]");
+					log(variantName + ": [OK+]");
+					break;
 				}
-				catch(Throwable t)
-				{
-					log(variantName + ": [!!]");
-					log(t);
-				}
+				log(variantName + ": [OK]");
+			}
+			catch(Throwable t)
+			{
+				log(variantName + ": [!!]");
+				log(t);
 			}
 		}
-		else
-		{
-			new CyanogenMod11().handleLoadPackage(lpparam);
-		}
 	}
-
-
 }
