@@ -19,10 +19,13 @@
 
 package at.jclehner.appopsxposed.variants;
 
+import static de.robv.android.xposed.XposedHelpers.getObjectField;
+
 import java.lang.reflect.Method;
 import java.util.List;
 
 import android.content.Context;
+import android.os.Bundle;
 import at.jclehner.appopsxposed.ApkVariant;
 import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.R;
@@ -32,6 +35,18 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
+
+/*
+ * The HTC Sense framework means trouble, as many classes are heavily modified (and often
+ * use new names, prefixed with Htc*). HTC also made changes to AppOpsDetails, which
+ * interestingly are located in another class - which extends AppOpsDetails - called
+ * "com.android.settings.framework.activity.application.appops.HtcAppOpsDetails".
+ *
+ * HtcAppOpsDetails uses HtcCheckBox instead of the switch found on AOSP, but the state
+ * is apparently lost when scrolling off-screen (which usually isn't an issue when an
+ * app has only few permissions).
+ *
+ */
 public class HTC extends ApkVariant
 {
 	private Class<?> mHtcHeaderClass;
@@ -53,6 +68,85 @@ public class HTC extends ApkVariant
 
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
+	{
+		addAppOpsToAppInfo(lpparam);
+
+		try
+		{
+			if(Util.modPrefs.getBoolean("htc_use_google_app_ops_category", false))
+				hookStartPreferencePanel();
+
+			addHtcAppOpsHeader(lpparam);
+		}
+		catch(Throwable t)
+		{
+			log(t);
+		}
+	}
+
+	@Override
+	protected String[] indicatorClasses()
+	{
+		final String[] classes = {
+				"com.htc.preference.HtcPreferenceActivity",
+				"com.htc.preference.HtcPreferenceActivity$Header",
+				"com.android.settings.framework.activity.HtcWrapHeader",
+				"com.android.settings.framework.activity.HtcWrapHeaderList",
+				"com.android.settings.framework.activity.HtcGenericEntryProvider"
+		};
+
+		return classes;
+	}
+
+	@Override
+	protected Object onCreateAppOpsHeader(Context context) {
+		return onCreateHtcHeader();
+	}
+
+	@Override
+	protected long getIdFromHeader(Object header) {
+		return XposedHelpers.getLongField(header, "id");
+	}
+
+	private Object onCreateHtcHeader()
+	{
+		final Object header = XposedHelpers.newInstance(mHtcHeaderClass);
+		XposedHelpers.setObjectField(header, "fragment", AppOpsXposed.APP_OPS_FRAGMENT);
+		XposedHelpers.setObjectField(header, "title", getAppOpsTitle());
+		XposedHelpers.setIntField(header, "iconRes", getAppOpsIcon());
+		XposedHelpers.setLongField(header, "id", R.id.app_ops_settings);
+
+		return header;
+	}
+
+	private Object onCreateHtcWrapHeader()
+	{
+		final Object wrapHeader = XposedHelpers.newInstance(mHtcWrapHeaderClass);
+		XposedHelpers.setObjectField(wrapHeader, "info", onCreateHtcHeader());
+		XposedHelpers.setBooleanField(wrapHeader, "hide", false);
+
+		return wrapHeader;
+	}
+
+	private void hookStartPreferencePanel() throws Throwable
+	{
+		XposedHelpers.findAndHookMethod(Class.forName("com.htc.preference.HtcPreferenceActivity"),
+				"startPreferencePanel", String.class, Bundle.class, CharSequence.class, int.class,
+				new XC_MethodHook() {
+
+					@Override
+					protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+					{
+						if(((String) param.args[0]).endsWith(".HtcAppOpsDetails"))
+						{
+							debug("Rewriting fragment name for HtcPreferenceActivity.startPreferencePanel");
+							param.args[0] = AppOpsXposed.APP_OPS_DETAILS_FRAGMENT;
+						}
+					}
+		});
+	}
+
+	private void addHtcAppOpsHeader(LoadPackageParam lpparam) throws Throwable
 	{
 		final Class<?> htcGenericEntryProviderClass = lpparam.classLoader.loadClass(
 				"com.android.settings.framework.activity.HtcGenericEntryProvider");
@@ -98,52 +192,5 @@ public class HTC extends ApkVariant
 				debug("loadHeadersFromResource: xmlResId=" + param.args[0]);
 			}
 		});
-
-		addAppOpsToAppInfo(lpparam);
-	}
-
-
-	@Override
-	protected String[] indicatorClasses()
-	{
-		final String[] classes = {
-				"com.htc.preference.HtcPreferenceActivity",
-				"com.htc.preference.HtcPreferenceActivity$Header",
-				"com.android.settings.framework.activity.HtcWrapHeader",
-				"com.android.settings.framework.activity.HtcWrapHeaderList",
-				"com.android.settings.framework.activity.HtcGenericEntryProvider"
-		};
-
-		return classes;
-	}
-
-	@Override
-	protected Object onCreateAppOpsHeader(Context context) {
-		return onCreateHtcHeader();
-	}
-
-	@Override
-	protected long getIdFromHeader(Object header) {
-		return XposedHelpers.getLongField(header, "id");
-	}
-
-	private Object onCreateHtcHeader()
-	{
-		final Object header = XposedHelpers.newInstance(mHtcHeaderClass);
-		XposedHelpers.setObjectField(header, "fragment", AppOpsXposed.APP_OPS_FRAGMENT);
-		XposedHelpers.setObjectField(header, "title", getAppOpsTitle());
-		XposedHelpers.setIntField(header, "iconRes", getAppOpsIcon());
-		XposedHelpers.setLongField(header, "id", R.id.app_ops_settings);
-
-		return header;
-	}
-
-	private Object onCreateHtcWrapHeader()
-	{
-		final Object wrapHeader = XposedHelpers.newInstance(mHtcWrapHeaderClass);
-		XposedHelpers.setObjectField(wrapHeader, "info", onCreateHtcHeader());
-		XposedHelpers.setBooleanField(wrapHeader, "hide", false);
-
-		return wrapHeader;
 	}
 }
