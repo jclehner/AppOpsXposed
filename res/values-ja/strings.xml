@@ -6,4 +6,7 @@
     <string name="btn_help">ヘルプ</string>
     <string name="xposed_not_installed">現在のシステムはXposedインストーラがインストールされておらずAndroid 4.4以降です。\"%1$s\"
         は無効化されているようですが、下の\"%2$s\ボタンを押して起動できるか確認してください。Xposedフレームワークのインストールにはroot化が必要です。</string>
+	<string name="xperia_allowed">許可</string>
+	<string name="xperia_ignored">拒否</string>
+	<string name="xperia_always_ask">確認する</string>
 </resources>

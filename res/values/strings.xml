@@ -7,4 +7,19 @@
     <string name="xposed_not_installed">The Xposed Installer is not installed on your system and you are running Android 4.4+. \"%1$s\"
         is likely disabled, but you may try to launch it using the \"%2$s\" button below. Please note that your device must be rooted to install the
         Xposed Framework.</string>
+	<string name="xperia_allowed">Allowed</string>
+	<string name="xperia_ignored">Ignored</string>
+	<string name="xperia_always_ask">Always ask</string>
+    <string name="advanced_settings_summary">Changing these settings may break AppOpsXposed. Use with care!</string>
+    <string name="advanced_settings_title">Advanced</string>
+    <string name="show_launcher_icon_title">Launcher icon</string>
+    <string name="show_launcher_icon_summary">Show a launcher icon. This is required only if \"App ops\" cannot be launched
+        from your ROM\'s \"Settings\" app.</string>
+    <string name="title_force_variant">Force variant</string>
+    <string name="use_layout_fix_title">Layout fix</string>
+    <string name="use_layout_fix_summary">Use a fix that alleviates layout issues in the per-app \"App ops\" screen.</string>
+    <string name="automatic">(Automatic)</string>
+	<string name="failsafe_mode_title">Failsafe mode</string>
+	<string name="failsafe_mode_summary">Use only the minimum patches required for \"App ops\" to work; in this case, a launcher icon
+	    must be used. Use this if you experience crashes.</string>
 </resources>

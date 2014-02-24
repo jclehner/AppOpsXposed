@@ -2,8 +2,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="MissingTranslation">
     <string-array name="app_ops_permissions">
-        <item>Allowed</item>
-        <item>Ignored</item>
-        <item>Always ask</item>
+        <item>@string/xperia_allowed</item>
+        <item>@string/xperia_ignored</item>
+        <item>@string/xperia_always_ask</item>
+    </string-array>
+
+    <string-array name="variants">
+        <item>@string/automatic</item>
+        <item>AOSP</item>
+        <item>CyanogenMod</item>
+        <item>HTC</item>
+        <item>Samsung</item>
+        <item>Sony</item>
     </string-array>
 </resources>

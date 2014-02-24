@@ -7,4 +7,19 @@
     <string name="xposed_not_installed">Der Xposed Installer ist nicht installiert und Du verwendest Android 4.4+. \"%1$s\"
         ist wahrscheinlich deaktiviert, aber Du kannst versuchen es durch den \"%2$s\"-Button zu starten. Bitte beachte dass
         Dein Gerät gerootet sein muss, um das Xposed Framework zu verwenden.</string>
+	<string name="xperia_allowed">Erlaubt</string>
+	<string name="xperia_ignored">Ignoriert</string>
+	<string name="xperia_always_ask">Immer fragen</string>
+    <string name="advanced_settings_title">Das Ändern dieser Einstellungen kann zu Abstürzen führen. Mit Vorsicht verwenden!</string>
+    <string name="advanced_settings_summary">Erweitert</string>
+    <string name="show_launcher_icon_title">Icon</string>
+    <string name="show_launcher_icon_summary">Ein Icon im Launcher anzeigen. Dies ist nur dann notwendig, wenn \"App Vorgänge\" nicht in der
+        \"Einstellungen\"-App Deiner ROM zu finden ist.</string>
+    <string name="title_force_variant">Variante Erzwingen</string>
+    <string name="use_layout_fix_title">Layout-Fix</string>
+    <string name="use_layout_fix_summary">Aktiviert einen Patch der Layoutfehler im \"App Vorgänge\"-Bildschirm einer App verursacht.</string>
+    <string name="automatic">(Automatisch)</string>
+	<string name="failsafe_mode_title">Failsafe-Modus</string>
+	<string name="failsafe_mode_summary">Verwendet nur minimale Patches um \"App Vorgänge\" zu aktivieren; die Verwendung eines
+	    Launcher-Icons ist dann zwingend notwendig. Verwende diese Option wenn Abstürze auftreten. </string>   
 </resources>
