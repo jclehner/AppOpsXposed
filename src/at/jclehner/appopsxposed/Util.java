@@ -52,6 +52,14 @@ public final class Util
 		return modRes.getString(resId);
 	}
 
+	public static void log(String message) {
+		XposedBridge.log("AOX: " + message);
+	}
+
+	public static void log(Throwable t) {
+		XposedBridge.log(t);
+	}
+
 	public static void debug(String message)
 	{
 		if(!DEBUG)

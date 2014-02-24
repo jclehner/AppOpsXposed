@@ -1,7 +1,9 @@
 package at.jclehner.appopsxposed;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference;
@@ -29,9 +31,10 @@ public class SettingsActivity extends Activity
 		public void onCreate(Bundle savedInstanceState)
 		{
 			super.onCreate(savedInstanceState);
+			getPreferenceManager().setSharedPreferencesMode(MODE_WORLD_READABLE);
 			addPreferencesFromResource(R.xml.settings);
 
-			setupVariants();
+			setupPreferences();
 		}
 
 		@Override
@@ -45,14 +48,21 @@ public class SettingsActivity extends Activity
 				else
 					preference.setSummary(variant);
 			}
+			else if("failsafe_mode".equals(preference.getKey()))
+			{
+				final boolean failsafe = (Boolean) newValue;
+
+				findPreference("force_variant").setEnabled(!failsafe);
+				findPreference("use_layout_fix").setEnabled(!failsafe);
+			}
 
 			return true;
 		}
 
-		private void setupVariants()
+		private void setupPreferences()
 		{
 			final ListPreference lp = (ListPreference) findPreference("force_variant");
-			onPreferenceChange(lp, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("force_variant", ""));
+			callOnChangeListenerWithCurrentValue(lp);
 
 			final CharSequence[] entries = lp.getEntries();
 			final CharSequence[] values = new CharSequence[entries.length];
@@ -60,6 +70,25 @@ public class SettingsActivity extends Activity
 			values[0] = "";
 			lp.setEntryValues(values);
 			lp.setOnPreferenceChangeListener(this);
+
+			Preference p = findPreference("failsafe_mode");
+			callOnChangeListenerWithCurrentValue(p);
+
+			p.setOnPreferenceChangeListener(this);
+		}
+
+		private void callOnChangeListenerWithCurrentValue(Preference p)
+		{
+			final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(
+					getActivity());
+
+			final Object value;
+			if(p instanceof CheckBoxPreference)
+				value = sp.getBoolean(p.getKey(), false);
+			else
+				value = sp.getString(p.getKey(), null);
+
+			onPreferenceChange(p, value);
 		}
 	}
 }

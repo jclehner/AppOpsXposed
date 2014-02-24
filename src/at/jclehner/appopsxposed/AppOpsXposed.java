@@ -18,13 +18,14 @@
 
 package at.jclehner.appopsxposed;
 
-import static de.robv.android.xposed.XposedBridge.log;
+import static at.jclehner.appopsxposed.Util.log;
 import android.content.res.XModuleResources;
 import at.jclehner.appopsxposed.variants.CyanogenMod;
 import at.jclehner.appopsxposed.R;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
+import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
@@ -41,6 +42,9 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	public void initZygote(StartupParam startupParam) throws Throwable
 	{
 		mModPath = startupParam.modulePath;
+		Util.modPrefs = new XSharedPreferences(AppOpsXposed.class.getPackage().getName());
+		if(!Util.modPrefs.makeWorldReadable())
+			log("Failed to make preference file world-readable");
 	}
 
 	@Override
@@ -49,15 +53,20 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		if(!resparam.packageName.equals("com.android.settings"))
 			return;
 
-		log("AppOpsXposed: handleInitPackageResources");
-
 		Util.modRes = XModuleResources.createInstance(mModPath, null);
 
-		if(!CyanogenMod.isCm11NightlyAfter20140128())
+		if(Util.modPrefs.getBoolean("use_layout_fix", true))
 		{
-			resparam.res.setReplacement("com.android.settings", "layout", "app_ops_details_item",
-					Util.modRes.fwd(R.layout.app_ops_details_item));
+			if(!CyanogenMod.isCm11NightlyAfter20140128())
+			{
+				resparam.res.setReplacement("com.android.settings", "layout", "app_ops_details_item",
+						Util.modRes.fwd(R.layout.app_ops_details_item));
+			}
+			else
+				log("Detected cm11 nightly >= 20140128; not using layout fix despite setting");
 		}
+		else
+			log("Not using layout fix");
 	}
 
 	@Override
@@ -65,8 +74,6 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	{
 		if(!lpparam.packageName.equals("com.android.settings"))
 			return;
-
-		log("AppOpsXposed: handleLoadPackage");
 
 		try
 		{
@@ -80,26 +87,50 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 		Util.settingsRes = XModuleResources.createInstance(lpparam.appInfo.sourceDir, null);
 
-		log("Trying variants...");
-
-		for(ApkVariant variant : ApkVariant.getAllMatching(lpparam))
+		if(Util.modPrefs.getBoolean("failsafe_mode", false))
 		{
-			final String variantName = "  " + variant.getClass().getSimpleName();
+			log("Running in failsafe mode");
+			ApkVariant.hookIsValidFragment(lpparam);
+			return;
+		}
 
+		final String forceVariant = Util.modPrefs.getString("force_variant", "");
+		if(forceVariant.length() == 0)
+		{
+			log("Trying variants...");
+
+			for(ApkVariant variant : ApkVariant.getAllMatching(lpparam))
+			{
+				final String variantName = "  " + variant.getClass().getSimpleName();
+
+				try
+				{
+					variant.handleLoadPackage(lpparam);
+					if(variant.isComplete())
+					{
+						log(variantName + ": [OK+]");
+						break;
+					}
+					log(variantName + ": [OK]");
+				}
+				catch(Throwable t)
+				{
+					log(variantName + ": [!!]");
+					log(t);
+				}
+			}
+		}
+		else
+		{
+			log("Using forced variant " + forceVariant);
 			try
 			{
-				variant.handleLoadPackage(lpparam);
-				if(variant.isComplete())
-				{
-					log(variantName + ": [OK+]");
-					break;
-				}
-				log(variantName + ": [OK]");
+				final Class<?> variantClazz = Class.forName("at.jclehner.appopsxposed.variants." + forceVariant);
+				((ApkVariant) variantClazz.newInstance()).handleLoadPackage(lpparam);
 			}
-			catch(Throwable t)
+			catch(ReflectiveOperationException e)
 			{
-				log(variantName + ": [!!]");
-				log(t);
+				log(e);
 			}
 		}
 	}

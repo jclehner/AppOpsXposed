@@ -82,7 +82,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 			if(variant.isMatching(lpparam))
 				variants.add(variant);
 			else
-				Util.debug(variant.getClass().getName() + ": no match!");
+				Util.log(variant.getClass().getSimpleName() + ": [NO]");
 		}
 
 		return variants;
@@ -235,7 +235,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		AppOpsXposed.APP_OPS_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT
 	};
 
-	protected final void hookIsValidFragment(Class<?> clazz) throws Throwable
+	protected static void hookIsValidFragment(Class<?> clazz) throws Throwable
 	{
 		try
 		{
@@ -269,7 +269,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		}
 	}
 
-	protected final void hookIsValidFragment(LoadPackageParam lpparam) throws Throwable {
+	public static void hookIsValidFragment(LoadPackageParam lpparam) throws Throwable {
 		hookIsValidFragment(lpparam.classLoader.loadClass("com.android.settings.Settings"));
 	}
 
@@ -396,7 +396,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 			headers.add(addAfterHeaderIndex + 1, appOpsHeader);
 		else
 		{
-			debug("Appending appOpsHeader to header list!");
+			debug("addAppOpsHeader: appending to header list!");
 			headers.add(appOpsHeader);
 		}
 	}
@@ -479,7 +479,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 	private String getLogPrefix()
 	{
 		if(mLogTag == null)
-			mLogTag = getClass().getSimpleName() + ": ";
+			mLogTag = "AOX:" + getClass().getSimpleName() + ": ";
 
 		return mLogTag;
 	}

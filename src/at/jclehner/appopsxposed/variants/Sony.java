@@ -86,21 +86,25 @@ public class Sony extends AOSP
 					}
 		});
 
-		XposedHelpers.findAndHookMethod(AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, lpparam.classLoader,
-				"refreshUi", new XC_MethodHook() {
 
-					private Unhook mUnhook;
+		if(Util.modPrefs.getBoolean("use_layout_fix", true))
+		{
+			XposedHelpers.findAndHookMethod(AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, lpparam.classLoader,
+					"refreshUi", new XC_MethodHook() {
 
-					@Override
-					protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-						mUnhook = hookLayoutInflater();
-					}
+						private Unhook mUnhook;
 
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-						mUnhook.unhook();
-					}
-		});
+						@Override
+						protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+							mUnhook = hookLayoutInflater();
+						}
+
+						@Override
+						protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+							mUnhook.unhook();
+						}
+			});
+		}
 	}
 
 	@Override
@@ -119,7 +123,7 @@ public class Sony extends AOSP
 	{
 		final Fragment f = (Fragment) param.thisObject;
 
-		return (Unhook) Util.findAndHookMethodRecursive(	f.getActivity().getClass(),
+		return (Unhook) Util.findAndHookMethodRecursive(f.getActivity().getClass(),
 				"finish", new XC_MethodHookRecursive() {
 
 					@Override
