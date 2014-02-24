@@ -74,7 +74,7 @@ public class HTC extends ApkVariant
 		try
 		{
 			if(Util.modPrefs.getBoolean("htc_use_google_app_ops_category", false))
-				hookStartPreferencePanel();
+				hookStartPreferencePanel(lpparam);
 
 			addHtcAppOpsHeader(lpparam);
 		}
@@ -88,8 +88,8 @@ public class HTC extends ApkVariant
 	protected String[] indicatorClasses()
 	{
 		final String[] classes = {
-				"com.htc.preference.HtcPreferenceActivity",
-				"com.htc.preference.HtcPreferenceActivity$Header",
+				/*"com.htc.preference.HtcPreferenceActivity",
+				"com.htc.preference.HtcPreferenceActivity$Header",*/
 				"com.android.settings.framework.activity.HtcWrapHeader",
 				"com.android.settings.framework.activity.HtcWrapHeaderList",
 				"com.android.settings.framework.activity.HtcGenericEntryProvider"
@@ -128,9 +128,9 @@ public class HTC extends ApkVariant
 		return wrapHeader;
 	}
 
-	private void hookStartPreferencePanel() throws Throwable
+	private void hookStartPreferencePanel(LoadPackageParam lpparam) throws Throwable
 	{
-		XposedHelpers.findAndHookMethod(Class.forName("com.htc.preference.HtcPreferenceActivity"),
+		XposedHelpers.findAndHookMethod("com.htc.preference.HtcPreferenceActivity", lpparam.classLoader,
 				"startPreferencePanel", String.class, Bundle.class, CharSequence.class, int.class,
 				new XC_MethodHook() {
 
