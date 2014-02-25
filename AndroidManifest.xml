@@ -27,22 +27,27 @@
 
         <activity
             android:name=".LauncherActivity"
-            android:label="AppOpsXposed"
-            android:process=":launcher">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:label="AppOpsXposed" />
 
         <activity
             android:name=".SettingsActivity"
-            android:label="AppOpsXposed"
-            android:process=":launcher">
+            android:label="AppOpsXposed">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="de.robv.android.xposed.category.MODULE_SETTINGS" />
             </intent-filter>
         </activity>
+
+        <activity-alias
+            android:enabled="true"
+            android:name=".LauncherActivity-Icon"
+            android:icon="@mipmap/ic_launcher2"
+            android:label="@string/app_ops_settings"
+            android:targetActivity=".LauncherActivity">
+           <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
     </application>
 </manifest>

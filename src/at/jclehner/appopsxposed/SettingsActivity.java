@@ -1,7 +1,9 @@
 package at.jclehner.appopsxposed;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -27,12 +29,15 @@ public class SettingsActivity extends Activity
 
 	static class SettingsFragment extends PreferenceFragment implements OnPreferenceChangeListener
 	{
+		private SharedPreferences mPrefs;
+
 		@Override
 		public void onCreate(Bundle savedInstanceState)
 		{
+			mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.settings);
-
 			setupPreferences();
 		}
 
@@ -51,8 +56,23 @@ public class SettingsActivity extends Activity
 			{
 				final boolean failsafe = (Boolean) newValue;
 
+				if(failsafe && !mPrefs.getBoolean("show_launcher_icon", true))
+				{
+					final CheckBoxPreference p = (CheckBoxPreference) findPreference("show_launcher_icon");
+					p.setChecked(true);
+				}
+
+				findPreference("show_launcher_icon").setEnabled(!failsafe);
 				findPreference("force_variant").setEnabled(!failsafe);
 				findPreference("use_layout_fix").setEnabled(!failsafe);
+			}
+			else if("show_launcher_icon".equals(preference.getKey()))
+			{
+				final boolean show = (Boolean) newValue;
+				final PackageManager pm = getActivity().getPackageManager();
+				pm.setComponentEnabledSetting(new ComponentName(getActivity(), "at.jclehner.appopsxposed.LauncherActivity-Icon"),
+						show ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+						PackageManager.DONT_KILL_APP);
 			}
 
 			return true;
@@ -72,20 +92,18 @@ public class SettingsActivity extends Activity
 
 			Preference p = findPreference("failsafe_mode");
 			callOnChangeListenerWithCurrentValue(p);
-
 			p.setOnPreferenceChangeListener(this);
+
+			findPreference("show_launcher_icon").setOnPreferenceChangeListener(this);
 		}
 
 		private void callOnChangeListenerWithCurrentValue(Preference p)
 		{
-			final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(
-					getActivity());
-
 			final Object value;
 			if(p instanceof CheckBoxPreference)
-				value = sp.getBoolean(p.getKey(), false);
+				value = mPrefs.getBoolean(p.getKey(), false);
 			else
-				value = sp.getString(p.getKey(), null);
+				value = mPrefs.getString(p.getKey(), null);
 
 			onPreferenceChange(p, value);
 		}
