@@ -115,6 +115,10 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		return Util.getModString(R.string.app_ops_settings);
 	}
 
+	protected String getAppOpsDetailsFragmentName() {
+		return AppOpsXposed.APP_OPS_DETAILS_FRAGMENT;
+	}
+
 	protected long getIdFromHeader(Object header) {
 		return ((Header) header).id;
 	}
@@ -232,7 +236,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 	}
 
 	private static final String[] VALID_FRAGMENTS = {
-		AppOpsXposed.APP_OPS_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT
+		AppOpsXposed.APP_OPS_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, HTC.APP_OPS_DETAILS_FRAGMENT
 	};
 
 	protected static void hookIsValidFragment(Class<?> clazz) throws Throwable
@@ -335,7 +339,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 									debug("Launching AppOps using startActivities()");
 
 									final Intent intent = new Intent("android.settings.SETTINGS");
-									intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT);
+									intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, getAppOpsDetailsFragmentName());
 									intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS, args);
 									intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_TITLE, Util.getModString(R.string.app_ops_settings));
 
@@ -350,7 +354,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 
 									// This method only works when "App info" was opened from "Apps". When the launcher icon
 									// onto "App info", the method above is used.
-									pa.startPreferencePanel(AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, args, 0,
+									pa.startPreferencePanel(getAppOpsDetailsFragmentName(), args, 0,
 											Util.getModString(R.string.app_ops_settings), f, 0);
 								}
 

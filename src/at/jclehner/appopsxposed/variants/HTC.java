@@ -49,6 +49,9 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
  */
 public class HTC extends ApkVariant
 {
+	public static final String APP_OPS_DETAILS_FRAGMENT =
+			"com.android.settings.framework.activity.application.appops.HtcAppOpsDetails";
+
 	private Class<?> mHtcHeaderClass;
 	private Class<?> mHtcWrapHeaderClass;
 	private Class<?> mHtcWrapHeaderListClass;
@@ -73,6 +76,15 @@ public class HTC extends ApkVariant
 
 		try
 		{
+			lpparam.classLoader.loadClass(APP_OPS_DETAILS_FRAGMENT);
+		}
+		catch(ClassNotFoundException e)
+		{
+			log(e);
+		}
+
+		try
+		{
 			if(Util.modPrefs.getBoolean("htc_use_google_app_ops_category", false))
 				hookStartPreferencePanel(lpparam);
 
@@ -88,8 +100,8 @@ public class HTC extends ApkVariant
 	protected String[] indicatorClasses()
 	{
 		final String[] classes = {
-				/*"com.htc.preference.HtcPreferenceActivity",
-				"com.htc.preference.HtcPreferenceActivity$Header",*/
+				"com.htc.preference.HtcPreferenceActivity",
+				"com.htc.preference.HtcPreferenceActivity$Header",
 				"com.android.settings.framework.activity.HtcWrapHeader",
 				"com.android.settings.framework.activity.HtcWrapHeaderList",
 				"com.android.settings.framework.activity.HtcGenericEntryProvider"
@@ -106,6 +118,11 @@ public class HTC extends ApkVariant
 	@Override
 	protected long getIdFromHeader(Object header) {
 		return XposedHelpers.getLongField(header, "id");
+	}
+
+	@Override
+	protected String getAppOpsDetailsFragmentName() {
+		return APP_OPS_DETAILS_FRAGMENT;
 	}
 
 	private Object onCreateHtcHeader()
@@ -156,11 +173,11 @@ public class HTC extends ApkVariant
 		mHtcWrapHeaderListClass = lpparam.classLoader.loadClass("com.android.settings.framework.activity.HtcWrapHeaderList");
 
 		mWrapHeaderListSizeMethod = mHtcWrapHeaderListClass.getMethod("size");
-		mAddWrapHeaderMethod = XposedHelpers.findMethodBestMatch(htcGenericEntryProviderClass, "addWrapHeader",
+		mAddWrapHeaderMethod = XposedHelpers.findMethodExact(htcGenericEntryProviderClass, "addWrapHeader",
 				mHtcWrapHeaderClass, int.class, mHtcWrapHeaderListClass, boolean.class);
 
-		XposedHelpers.findAndHookMethod("com.android.settings.framework.activity.HtcGenericEntryProvider",
-				lpparam.classLoader, "onLoadEntryList", mHtcWrapHeaderListClass, new XC_MethodHook() {
+		XposedHelpers.findAndHookMethod(htcGenericEntryProviderClass,
+				"onLoadEntryList", mHtcWrapHeaderListClass, new XC_MethodHook() {
 					@Override
 					protected void afterHookedMethod(MethodHookParam param) throws Throwable
 					{
@@ -169,20 +186,8 @@ public class HTC extends ApkVariant
 
 						debug("onLoadEntryList: size=" + size);
 
-						mAddWrapHeaderMethod.invoke(param.args[0], header, size + 1, true);
+						mAddWrapHeaderMethod.invoke(param.thisObject, param.args[0], header, size + 1, true);
 					}
-		});
-
-		XposedHelpers.findAndHookMethod("com.android.settings.Settings", lpparam.classLoader, "onBuildHeaders",
-				mHtcHeaderClass, new XC_MethodHook() {
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) throws Throwable
-					{
-						List<?> headers = (List<?>) param.args[0];
-						debug("onBuildHeaders: size=" + headers.size());
-						addAppOpsHeader(headers, Util.getSettingsIdentifier("id/personal_section"));
-					}
-
 		});
 
 		hookLoadHeadersFromResource(lpparam, new XC_MethodHookRecursive() {
