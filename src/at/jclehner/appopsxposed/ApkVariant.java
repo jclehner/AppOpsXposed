@@ -82,7 +82,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 			if(variant.isMatching(lpparam))
 				variants.add(variant);
 			else
-				Util.log(variant.getClass().getSimpleName() + ": [NO]");
+				Util.log(variant.getClass().getName() + ": no match!");
 		}
 
 		return variants;
