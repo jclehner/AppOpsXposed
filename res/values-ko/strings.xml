@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
+    <string name="description">안드로이드 4.3 이상에서 앱 운영을 다시 활성화하고 시스템 설정에서 앱 운영을 추가합니다.</string>
+    <string name="btn_launch">열기</string>
+    <string name="btn_help">도움말</string>
+    <string name="xposed_not_installed">Xposed 설치 도구가 설치되어 있지 않고 안드로이드 4.4 이상에서 이 모듈을 실행하고 있습니다. \"%1$s\"
+        는 비활성화를 의미하지만, \"%2$s\" 버튼을 이용해서 여는 것을 시도하실 수 있습니다. 기기가 루팅되어 있고 Xposed 설치 도구 및 프레임워크가 설치되어 있는지 확인하세요!</string>
+	<string name="xperia_allowed">허용됨</string>
+	<string name="xperia_ignored">무시됨</string>
+	<string name="xperia_always_ask">항상 묻기</string>
+    <string name="advanced_settings_summary">이 설정들을 수정하면 AppOpsXposed가 원활하게 작동되지 않을 수 있습니다. 주의해서 사용하세요!</string>
+    <string name="advanced_settings_title">고급 설정</string>
+    <string name="show_launcher_icon_title">런처 아이콘</string>
+    <string name="show_launcher_icon_summary">런처 아이콘을 보일지 설정합니다. ROM에서 앱 운영을 설정 앱에서 보여지지 않는다면 숨기지 말아야 합니다.</string>
+    <string name="title_force_variant">강제 변형</string>
+    <string name="use_layout_fix_title">레이아웃 수정</string>
+    <string name="use_layout_fix_summary">\"앱 운영\" 화면에서 레이아웃이 제대로 작동하지 않으면 이 설정을 사용하세요.</string>
+    <string name="automatic">(자동)</string>
+	<string name="failsafe_mode_title">안전 모드</string>
+	<string name="failsafe_mode_summary">\"앱 운영\"을 활성화만 할 수 있을 정도의 적은 패치만 작동시킵니다. 이 경우에는 런처 아이콘을 통해서만 앱 운영을 들어가야 합니다.</string>
+</resources>
+
