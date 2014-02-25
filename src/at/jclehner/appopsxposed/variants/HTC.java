@@ -19,13 +19,14 @@
 
 package at.jclehner.appopsxposed.variants;
 
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
 import at.jclehner.appopsxposed.ApkVariant;
 import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.R;
@@ -72,16 +73,102 @@ public class HTC extends ApkVariant
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
-		addAppOpsToAppInfo(lpparam);
+		if(true)
+		{
+			try
+			{
+				final Class<?> fragmentClass = lpparam.classLoader.loadClass(
+						APP_OPS_DETAILS_FRAGMENT);
 
-		try
-		{
-			lpparam.classLoader.loadClass(APP_OPS_DETAILS_FRAGMENT);
+				findAndHookMethod(fragmentClass, "onItemClick",
+						lpparam.classLoader.loadClass("com.htc.widget.HtcAdapterView"), View.class,
+						int.class, long.class, new XC_MethodHook() {
+
+							@Override
+							protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+							{
+								debug(">> HtcAppOpsDetails.onItemClick()\n" +
+									"  view     = " + param.args[1] + "\n" +
+									"  position = " + param.args[2]);
+							}
+				});
+
+				final Class<?> adapterClass = lpparam.classLoader.loadClass(
+						APP_OPS_DETAILS_FRAGMENT + "$AppOpsDetailItemListAdapter");
+
+				findAndHookMethod(adapterClass, "getView", int.class, View.class, ViewGroup.class,
+						new XC_MethodHook() {
+
+							@Override
+							protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+							{
+								debug(">> AppOpsDetailItemListAdapter.getView()\n" +
+										"  position   = " + param.args[0] + "\n" +
+										"  convertView= " + param.args[1] + "\n" +
+										"  parent     = " + param.args[2]);
+							}
+
+							@Override
+							protected void afterHookedMethod(MethodHookParam param) throws Throwable
+							{
+								debug("  return " + param.getResult() + "\n" +
+										"<< AppOpsDetailItemListAdapter.getView()");
+							}
+				});
+
+				findAndHookMethod(adapterClass, "newView", ViewGroup.class,
+						new XC_MethodHook() {
+
+							@Override
+							protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+							{
+								debug(">> AppOpsDetailItemListAdapter.newView()\n" +
+										"  parent     = " + param.args[0]);
+							}
+
+							@Override
+							protected void afterHookedMethod(MethodHookParam param) throws Throwable
+							{
+								debug("  return " + param.getResult() + "\n" +
+										"<< AppOpsDetailItemListAdapter.newView()");
+							}
+				});
+
+				findAndHookMethod(adapterClass, "bindView", View.class,
+						new XC_MethodHook() {
+
+							@Override
+							protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+							{
+								debug(">> AppOpsDetailItemListAdapter.bindView()\n" +
+										"  view     = " + param.args[0]);
+							}
+				});
+
+				final Class<?> listenerClass = lpparam.classLoader.loadClass(
+						APP_OPS_DETAILS_FRAGMENT + "$AppOpsDetailItemListAdapter$1");
+
+				findAndHookMethod(listenerClass, "onCheckedChanged", lpparam.classLoader.loadClass("com.htc.widget.HtcCompoundButton"),
+						boolean.class, new XC_MethodHook() {
+							@Override
+							protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+							{
+								debug(">> AppOpsDetailItemListAdapter$1.onCheckedChanged()\n" +
+										"  checked=" + param.args[1]);
+							}
+				});
+
+				lpparam.classLoader.loadClass(APP_OPS_DETAILS_FRAGMENT);
+				debug(APP_OPS_DETAILS_FRAGMENT + " exists");
+			}
+			catch(Throwable t)
+			{
+				debug(t);
+			}
+
 		}
-		catch(ClassNotFoundException e)
-		{
-			log(e);
-		}
+
+		addAppOpsToAppInfo(lpparam);
 
 		try
 		{
