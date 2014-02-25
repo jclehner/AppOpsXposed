@@ -66,6 +66,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 			return position;
 		}
 
+		@SuppressWarnings("unused")
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent)
 		{
@@ -88,8 +89,6 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 
 			holder.appIcon.setImageDrawable(null);
 			holder.appName.setText(appInfo.packageName);
-			//holder.appPackage.setText(appInfo.packageName);
-			//holder.appPackage.setVisibility(View.VISIBLE);
 
 			if(true)
 			{
