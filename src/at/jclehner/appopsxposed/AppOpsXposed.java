@@ -53,6 +53,9 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		if(!resparam.packageName.equals("com.android.settings"))
 			return;
 
+		if(Util.modPrefs.getBoolean("failsafe_mode", false))
+			return;
+
 		Util.modRes = XModuleResources.createInstance(mModPath, null);
 
 		if(Util.modPrefs.getBoolean("use_layout_fix", true))
