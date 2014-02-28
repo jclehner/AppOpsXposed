@@ -103,7 +103,7 @@ public class SettingsActivity extends Activity
 			if(p instanceof CheckBoxPreference)
 				value = mPrefs.getBoolean(p.getKey(), false);
 			else
-				value = mPrefs.getString(p.getKey(), null);
+				value = mPrefs.getString(p.getKey(), "");
 
 			onPreferenceChange(p, value);
 		}
