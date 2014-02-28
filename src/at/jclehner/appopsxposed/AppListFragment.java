@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import de.robv.android.xposed.XposedHelpers;
+
 import android.app.AppOpsManager;
 import android.app.ListFragment;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -261,16 +263,8 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 
 		private static String[] getOpPermissions()
 		{
-			try
-			{
-				final Field f = AppOpsManager.class.getField("sOpPerms");
-				return (String[]) f.get(null);
-			}
-			catch(ReflectiveOperationException e)
-			{
-				Log.w(TAG, e);
-				return null;
-			}
+			return (String[]) XposedHelpers.getStaticObjectField(
+					AppOpsManager.class, "sOpPerms");
 		}
 	}
 

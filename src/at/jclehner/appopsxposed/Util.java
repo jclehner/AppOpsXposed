@@ -98,7 +98,7 @@ public final class Util
 
 			return (String) m.invoke(null, key, defValue);
 		}
-		catch(ReflectiveOperationException e)
+		catch(Exception e)
 		{
 			e.printStackTrace();
 			return defValue;

@@ -125,16 +125,8 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		}
 		else
 		{
-			log("Using forced variant " + forceVariant);
-			try
-			{
-				final Class<?> variantClazz = Class.forName("at.jclehner.appopsxposed.variants." + forceVariant);
-				((ApkVariant) variantClazz.newInstance()).handleLoadPackage(lpparam);
-			}
-			catch(ReflectiveOperationException e)
-			{
-				log(e);
-			}
+			final Class<?> variantClazz = Class.forName("at.jclehner.appopsxposed.variants." + forceVariant);
+			((ApkVariant) variantClazz.newInstance()).handleLoadPackage(lpparam);
 		}
 	}
 }
