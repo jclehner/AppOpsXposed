@@ -20,6 +20,7 @@ package at.jclehner.appopsxposed.variants;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Locale;
 
 import at.jclehner.appopsxposed.ApkVariant;
 import at.jclehner.appopsxposed.Util;
@@ -85,7 +86,7 @@ public class Samsung extends ApkVariant
 
 	@Override
 	protected boolean onMatch(LoadPackageParam lpparam) {
-		return lpparam.appInfo.sourceDir.toLowerCase().endsWith("SecSettings.apk".toLowerCase());
+		return lpparam.appInfo.sourceDir.toLowerCase(Locale.US).endsWith("SecSettings.apk".toLowerCase());
 	}
 
 	protected final boolean hookConstuctorAddFragmentNameToTab(LoadPackageParam lpparam, final String tabsFieldName)
