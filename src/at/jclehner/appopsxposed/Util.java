@@ -23,6 +23,7 @@ import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 import android.content.res.XModuleResources;
 import android.os.Build;
@@ -77,7 +78,7 @@ public final class Util
 	}
 
 	public static boolean containsManufacturer(String str) {
-		return Build.MANUFACTURER.toLowerCase().contains(str.toLowerCase());
+		return Build.MANUFACTURER.toLowerCase(Locale.US).contains(str.toLowerCase());
 	}
 
 	public static String[] appendToStringArray(String[] array, String str)

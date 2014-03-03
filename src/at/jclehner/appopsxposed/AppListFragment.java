@@ -8,6 +8,7 @@ import java.util.List;
 
 import de.robv.android.xposed.XposedHelpers;
 
+import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.app.ListFragment;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -20,6 +21,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.util.Log;
@@ -261,6 +263,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 			return false;
 		}
 
+		@TargetApi(19)
 		private static String[] getOpPermissions()
 		{
 			return (String[]) XposedHelpers.getStaticObjectField(
