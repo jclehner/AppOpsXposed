@@ -25,12 +25,12 @@ public class CyanogenMod extends AOSP
 		log("ro.cm.version=" + CM_VERSION);
 	}
 
-	public static boolean isCm11NightlyAfter20140128()
+	public static boolean isCm11After20140128()
 	{
 		if(CM_VERSION.length() == 0)
 			return false;
 
-		final Matcher m = Pattern.compile("([0-9]+)-([0-9]{8})-NIGHTLY-.*").matcher(CM_VERSION);
+		final Matcher m = Pattern.compile("([0-9]+)-([0-9]{8})-(NIGHTLY|SNAPSHOT)-.*").matcher(CM_VERSION);
 		if(!m.matches())
 		{
 			if(Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT)

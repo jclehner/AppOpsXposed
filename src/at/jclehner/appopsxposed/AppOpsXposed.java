@@ -60,7 +60,7 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 		if(Util.modPrefs.getBoolean("use_layout_fix", true))
 		{
-			if(!CyanogenMod.isCm11NightlyAfter20140128())
+			if(!CyanogenMod.isCm11After20140128())
 			{
 				resparam.res.setReplacement("com.android.settings", "layout", "app_ops_details_item",
 						Util.modRes.fwd(R.layout.app_ops_details_item));
