@@ -1,6 +1,5 @@
 package at.jclehner.appopsxposed;
 
-import java.lang.reflect.Field;
 import java.text.Collator;
 import java.util.Collections;
 import java.util.Comparator;
@@ -21,7 +20,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.util.Log;
