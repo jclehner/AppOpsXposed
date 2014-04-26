@@ -12,7 +12,9 @@
         <item>AOSP</item>
         <item>CyanogenMod</item>
         <item>HTC</item>
+        <item>OmniROM</item>
         <item>Samsung</item>
-        <item>Sony</item>
+        <item>Sony.JellyBean</item>
+        <item>Sony.KitKat</item>
     </string-array>
 </resources>

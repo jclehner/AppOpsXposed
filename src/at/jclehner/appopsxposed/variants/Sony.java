@@ -49,16 +49,60 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
  * 1) AppOpsSummary can't be launched using the PreferenceActivity.SHOW_FRAGMENT
  *    extra since the hosting Activity is finish()'ed in AppOpsSummary.onCreateView()
  *
- * 2) In layout/app_ops_details_item, the Switch has been replaced by a Spinner
- *    offering three (!) choices, one of them being "Ask always".
+ * 2) On JellyBean, in layout/app_ops_details_item, the Switch has been replaced by a
+ *    Spinner offering three (!) choices, one of them being "Ask always".
  *
  * The first issue is dealt with by hooking Activity.finish() for the duration of the
  * call to AppOpsSummary.onCreateView(). The second issue is addressed by hooking into
  * LayoutInflater.inflate() in AppOpsDetails.refreshUi, where we can hide the Switch
  * and show the Spinner.
  */
-public class Sony extends AOSP
+public abstract class Sony extends AOSP
 {
+	public static class JellyBean extends Sony
+	{
+		@Override
+		protected int apiLevel() {
+			return 18;
+		}
+
+		@Override
+		public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
+		{
+			super.handleLoadPackage(lpparam);
+
+			if(Util.modPrefs.getBoolean("use_layout_fix", true))
+			{
+				XposedHelpers.findAndHookMethod(AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, lpparam.classLoader,
+						"refreshUi", new XC_MethodHook() {
+
+							private Unhook mUnhook;
+
+							@Override
+							protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+								mUnhook = hookLayoutInflater();
+							}
+
+							@Override
+							protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+								mUnhook.unhook();
+							}
+				});
+			}
+		}
+	}
+
+	public static class KitKat extends Sony
+	{
+		@Override
+		protected int apiLevel() {
+			return 0;
+		}
+	}
+
+	@Override
+	protected abstract int apiLevel();
+
 	@Override
 	protected String manufacturer() {
 		return "Sony";
@@ -85,26 +129,6 @@ public class Sony extends AOSP
 						mUnhook.unhook();
 					}
 		});
-
-
-		if(Util.modPrefs.getBoolean("use_layout_fix", true))
-		{
-			XposedHelpers.findAndHookMethod(AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, lpparam.classLoader,
-					"refreshUi", new XC_MethodHook() {
-
-						private Unhook mUnhook;
-
-						@Override
-						protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-							mUnhook = hookLayoutInflater();
-						}
-
-						@Override
-						protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-							mUnhook.unhook();
-						}
-			});
-		}
 	}
 
 	@Override
