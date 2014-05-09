@@ -486,7 +486,15 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 	private String getLogPrefix()
 	{
 		if(mLogTag == null)
-			mLogTag = "AOX:" + getClass().getSimpleName() + ": ";
+		{
+			final String name = getClass().getName().replace('$', '.');
+			final String pkgName = getClass().getPackage().getName();
+
+			if(name.startsWith(pkgName))
+				mLogTag = "AOX:" + name.substring(pkgName.length() + 1) + ": ";
+			else
+				mLogTag = "AOX:" + name + ": ";
+		}
 
 		return mLogTag;
 	}
