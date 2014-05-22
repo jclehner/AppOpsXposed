@@ -94,7 +94,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 	@Override
 	public abstract void handleLoadPackage(LoadPackageParam lpparam) throws Throwable;
 
-	protected Object onCreateAppOpsHeader(Context context)
+	protected Object onCreateAppOpsHeader(Context context, int addAfterHeaderId)
 	{
 		final Header appOpsHeader = new Header();
 		appOpsHeader.title = getAppOpsTitle();
@@ -205,7 +205,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		return true;
 	}
 
-	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, final int[] hookResIds, final int addAfterHeaderId) throws Throwable
+	protected void hookLoadHeadersFromResource(LoadPackageParam lpparam, final int[] hookResIds, final int addAfterHeaderId) throws Throwable
 	{
 		hookLoadHeadersFromResource(lpparam, new XC_MethodHookRecursive() {
 
@@ -228,13 +228,17 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		});
 	}
 
-	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, final int hookResId, final int addAfterHeaderId) throws Throwable {
+	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, int hookResId, int addAfterHeaderId) throws Throwable {
 		hookLoadHeadersFromResource(lpparam, new int[] { hookResId }, addAfterHeaderId);
 	}
 
-	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, XC_MethodHookRecursive hook) throws Throwable
+	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, XC_MethodHookRecursive hook) throws Throwable {
+		hookLoadHeadersFromResource(lpparam, "com.android.settings.Settings", hook);
+	}
+
+	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, String className, XC_MethodHookRecursive hook) throws Throwable
 	{
-		Util.findAndHookMethodRecursive("com.android.settings.Settings", lpparam.classLoader,
+		Util.findAndHookMethodRecursive(className, lpparam.classLoader,
 				"loadHeadersFromResource", int.class, List.class, hook);
 	}
 
@@ -277,7 +281,11 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 	}
 
 	public static void hookIsValidFragment(LoadPackageParam lpparam) throws Throwable {
-		hookIsValidFragment(lpparam.classLoader.loadClass("com.android.settings.Settings"));
+		hookIsValidFragment(lpparam, "com.android.settings.Settings");
+	}
+
+	public static void hookIsValidFragment(LoadPackageParam lpparam, String className) throws Throwable {
+		hookIsValidFragment(lpparam.classLoader.loadClass(className));
 	}
 
 	protected void addAppOpsToAppInfo(LoadPackageParam lpparam)
@@ -397,7 +405,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 			}
 		}
 
-		final Object appOpsHeader = onCreateAppOpsHeader(context);
+		final Object appOpsHeader = onCreateAppOpsHeader(context, addAfterHeaderId);
 
 		if(addAfterHeaderIndex != -1)
 			headers.add(addAfterHeaderIndex + 1, appOpsHeader);

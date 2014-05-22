@@ -22,6 +22,9 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Locale;
 
+import android.content.Context;
+import android.content.res.Resources.NotFoundException;
+import android.preference.PreferenceActivity.Header;
 import at.jclehner.appopsxposed.ApkVariant;
 import at.jclehner.appopsxposed.Util;
 import de.robv.android.xposed.XC_MethodHook;
@@ -73,8 +76,15 @@ public class Samsung extends ApkVariant
 		final int[] xmlHookResIds = {
 				Util.getSettingsIdentifier("xml/settings_headers"),
 				Util.getSettingsIdentifier("xml/general_headers"),
-				Util.getSettingsIdentifier("xml/management_headers")
+				Util.getSettingsIdentifier("xml/management_headers"),
+				Util.getSettingsIdentifier("xml/grid_settings_headers")
 		};
+
+		if(isUsingGridLayout())
+		{
+			debug("@bool/settings_grid=true");
+			hookIsValidFragment(lpparam, "com.android.settings.GridSettings");
+		}
 
 		debug("xmlHookResIds=" + Arrays.toString(xmlHookResIds));
 
@@ -85,8 +95,18 @@ public class Samsung extends ApkVariant
 	}
 
 	@Override
+	protected Object onCreateAppOpsHeader(Context context, int addAfterHeaderId)
+	{
+		final Header header = (Header) super.onCreateAppOpsHeader(context, addAfterHeaderId);
+		if(addAfterHeaderId == Util.getSettingsIdentifier("xml/grid_settings_headers"))
+			header.iconRes = Util.getSettingsIdentifier("drawable/ic_setting_grid_applicationpermissions");
+
+		return header;
+	}
+
+	@Override
 	protected boolean onMatch(LoadPackageParam lpparam) {
-		return lpparam.appInfo.sourceDir.toLowerCase(Locale.US).endsWith("SecSettings.apk".toLowerCase());
+		return lpparam.appInfo.sourceDir.toLowerCase(Locale.US).endsWith("SecSettings.apk".toLowerCase(Locale.US));
 	}
 
 	protected final boolean hookConstuctorAddFragmentNameToTab(LoadPackageParam lpparam, final String tabsFieldName)
@@ -122,6 +142,24 @@ public class Samsung extends ApkVariant
 			debug(t);
 			return false;
 		}
+	}
+
+	private boolean isUsingGridLayout()
+	{
+		final int id = Util.getSettingsIdentifier("bool/settings_grid");
+		if(id != 0)
+		{
+			try
+			{
+				return Util.settingsRes.getBoolean(id);
+			}
+			catch(NotFoundException e)
+			{
+				// ignore
+			}
+		}
+
+		return false;
 	}
 
 }
