@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.res.Resources.NotFoundException;
 import android.preference.PreferenceActivity.Header;
 import at.jclehner.appopsxposed.ApkVariant;
+import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.Util;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -34,6 +35,8 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class Samsung extends ApkVariant
 {
+	public static final String GRID_SETTINGS = "com.android.settings.GridSettings";
+
 	private boolean mIsComplete = false;
 
 	@Override
@@ -79,17 +82,31 @@ public class Samsung extends ApkVariant
 				Util.getSettingsIdentifier("xml/management_headers"),
 				Util.getSettingsIdentifier("xml/grid_settings_headers")
 		};
-
-		if(isUsingGridLayout())
-		{
-			debug("@bool/settings_grid=true");
-			hookIsValidFragment(lpparam, "com.android.settings.GridSettings");
-		}
+		final int manageAppsHeaderId = Util.getSettingsIdentifier("id/application_settings");
 
 		debug("xmlHookResIds=" + Arrays.toString(xmlHookResIds));
 
-		final int manageAppsHeaderId = Util.getSettingsIdentifier("id/application_settings");
-		hookLoadHeadersFromResource(lpparam, xmlHookResIds, manageAppsHeaderId);
+		if(hasGridSettings(lpparam))
+		{
+			log("APK has " + GRID_SETTINGS);
+
+			final int gridId = Util.getSettingsIdentifier("bool/settings_grid");
+			debug("bool/settings_grid=" + gridId);
+
+			final boolean dontHookNormalSettings = gridId != 0 && Util.settingsRes.getBoolean(gridId);
+
+			hookIsValidFragment(lpparam, GRID_SETTINGS);
+			hookLoadHeadersFromResource(lpparam, GRID_SETTINGS, xmlHookResIds, manageAppsHeaderId);
+
+			if(dontHookNormalSettings)
+			{
+				debug(GRID_SETTINGS + " is enabled; not hooking " + AppOpsXposed.SETTINGS_MAIN_ACTIVITY);
+				mIsComplete = true;
+				return;
+			}
+		}
+
+		hookLoadHeadersFromResource(lpparam, AppOpsXposed.SETTINGS_MAIN_ACTIVITY, xmlHookResIds, manageAppsHeaderId);
 
 		mIsComplete = true;
 	}
@@ -113,7 +130,7 @@ public class Samsung extends ApkVariant
 	{
 		try
 		{
-			final Class<?> settingsClazz = lpparam.classLoader.loadClass("com.android.settings.Settings");
+			final Class<?> settingsClazz = lpparam.classLoader.loadClass(AppOpsXposed.SETTINGS_MAIN_ACTIVITY);
 			final Field f = XposedHelpers.findField(settingsClazz, tabsFieldName);
 			if(f.getType() != String[].class)
 			{
@@ -144,22 +161,16 @@ public class Samsung extends ApkVariant
 		}
 	}
 
-	private boolean isUsingGridLayout()
+	private boolean hasGridSettings(LoadPackageParam lpparam)
 	{
-		final int id = Util.getSettingsIdentifier("bool/settings_grid");
-		if(id != 0)
+		try
 		{
-			try
-			{
-				return Util.settingsRes.getBoolean(id);
-			}
-			catch(NotFoundException e)
-			{
-				// ignore
-			}
+			lpparam.classLoader.loadClass(GRID_SETTINGS);
+			return true;
 		}
-
-		return false;
+		catch(ClassNotFoundException e)
+		{
+			return false;
+		}
 	}
-
 }

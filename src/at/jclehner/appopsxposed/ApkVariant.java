@@ -205,9 +205,9 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		return true;
 	}
 
-	protected void hookLoadHeadersFromResource(LoadPackageParam lpparam, final int[] hookResIds, final int addAfterHeaderId) throws Throwable
+	protected void hookLoadHeadersFromResource(LoadPackageParam lpparam, String className, final int[] hookResIds, final int addAfterHeaderId) throws Throwable
 	{
-		hookLoadHeadersFromResource(lpparam, new XC_MethodHookRecursive() {
+		hookLoadHeadersFromResource(lpparam, className, new XC_MethodHookRecursive() {
 
 				@SuppressWarnings("unchecked")
 				@Override
@@ -229,11 +229,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 	}
 
 	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, int hookResId, int addAfterHeaderId) throws Throwable {
-		hookLoadHeadersFromResource(lpparam, new int[] { hookResId }, addAfterHeaderId);
-	}
-
-	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, XC_MethodHookRecursive hook) throws Throwable {
-		hookLoadHeadersFromResource(lpparam, "com.android.settings.Settings", hook);
+		hookLoadHeadersFromResource(lpparam, "com.android.settings.Settings", new int[] { hookResId }, addAfterHeaderId);
 	}
 
 	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, String className, XC_MethodHookRecursive hook) throws Throwable

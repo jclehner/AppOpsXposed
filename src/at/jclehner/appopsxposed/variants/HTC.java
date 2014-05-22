@@ -198,7 +198,7 @@ public class HTC extends ApkVariant
 	}
 
 	@Override
-	protected Object onCreateAppOpsHeader(Context context) {
+	protected Object onCreateAppOpsHeader(Context context, int addAfterHeaderId) {
 		return onCreateHtcHeader();
 	}
 
@@ -277,7 +277,7 @@ public class HTC extends ApkVariant
 					}
 		});
 
-		hookLoadHeadersFromResource(lpparam, new XC_MethodHookRecursive() {
+		hookLoadHeadersFromResource(lpparam, "com.android.settings.Settings", new XC_MethodHookRecursive() {
 
 			protected void onAfterHookedMethod(MethodHookParam param) throws Throwable
 			{
