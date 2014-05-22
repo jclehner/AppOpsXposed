@@ -19,6 +19,7 @@
 package at.jclehner.appopsxposed.variants;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import android.app.Fragment;
@@ -112,6 +113,8 @@ public abstract class Sony extends AOSP
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
 		super.handleLoadPackage(lpparam);
+
+		fixGetCombinedText(lpparam);
 
 		XposedHelpers.findAndHookMethod(AppOpsXposed.APP_OPS_FRAGMENT, lpparam.classLoader,
 				"onCreateView", LayoutInflater.class, ViewGroup.class, Bundle.class,
@@ -208,6 +211,62 @@ public abstract class Sony extends AOSP
 							log("No spinnerWidget in layout?");
 
 						Util.dumpViewHierarchy(view);
+					}
+		});
+	}
+
+	protected void fixGetCombinedText(LoadPackageParam lpparam)
+	{
+		XposedHelpers.findAndHookMethod("com.android.settings.applications.AppOpsState$AppOpEntry",
+				lpparam.classLoader, "getCombinedText", ArrayList.class, CharSequence[].class, new XC_MethodHook() {
+
+					@Override
+					protected void afterHookedMethod(MethodHookParam param) throws Throwable
+					{
+						if(param.hasThrowable())
+						{
+							final Throwable t = param.getThrowable();
+							if(t instanceof ArrayIndexOutOfBoundsException)
+							{
+								debug(t);
+								param.setResult(getCombinedText((ArrayList<?>) param.args[0], (CharSequence[]) param.args[1]));
+							}
+						}
+					}
+
+					private CharSequence getCombinedText(ArrayList<?> ops, CharSequence[] items)
+					{
+						final int length = Math.max(ops.size(), items.length);
+						if(length == 1)
+							return items[getOp(ops.get(0))];
+
+						final StringBuilder sb = new StringBuilder();
+						for(int i = 0; i != length; ++i)
+						{
+							if(i != 0)
+								sb.append(", ");
+
+							if(i >= ops.size())
+							{
+								debug("index " + i + " out of bounds for 'ops'");
+								sb.append("?????");
+								break;
+							}
+
+							final int op = getOp(ops.get(i));
+							if(op >= items.length)
+							{
+								debug("op " + op + " out of bounds for 'items'");
+								sb.append("?????");
+								break;
+							}
+						}
+
+						return sb.toString();
+					}
+
+					private int getOp(Object o) {
+						return (Integer) XposedHelpers.callMethod(o, "getOp");
 					}
 		});
 	}
