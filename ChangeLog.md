@@ -1,3 +1,9 @@
+### 1.17:
+* Fixed compatibility with Galaxy S5 settings app
+  (grid layout)
+* Fixed crash on Xperia KitKat ROMs
+
+
 ### 1.16:
 * Added OmniROM variant (no header in settings, only
   icon in "App info")
