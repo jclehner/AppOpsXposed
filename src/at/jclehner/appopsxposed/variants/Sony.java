@@ -22,6 +22,8 @@ package at.jclehner.appopsxposed.variants;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import android.annotation.TargetApi;
+import android.app.AppOpsManager;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -236,37 +238,38 @@ public abstract class Sony extends AOSP
 
 					private CharSequence getCombinedText(ArrayList<?> ops, CharSequence[] items)
 					{
-						final int length = Math.max(ops.size(), items.length);
-						if(length == 1)
-							return items[getOp(ops.get(0))];
+						if(ops.size() == 1)
+							return getOpString(items, ops.get(0));
 
 						final StringBuilder sb = new StringBuilder();
-						for(int i = 0; i != length; ++i)
+						for(int i = 0; i != ops.size(); ++i)
 						{
 							if(i != 0)
 								sb.append(", ");
 
-							if(i >= ops.size())
-							{
-								debug("index " + i + " out of bounds for 'ops'");
-								sb.append("?????");
-								break;
-							}
-
-							final int op = getOp(ops.get(i));
-							if(op >= items.length)
-							{
-								debug("op " + op + " out of bounds for 'items'");
-								sb.append("?????");
-								break;
-							}
+							sb.append(getOpString(items, ops.get(i)));
 						}
 
 						return sb.toString();
 					}
 
-					private int getOp(Object o) {
-						return (Integer) XposedHelpers.callMethod(o, "getOp");
+					@TargetApi(19)
+					private CharSequence getOpString(CharSequence[] items, Object opObj)
+					{
+						try
+						{
+							final int op = (Integer) XposedHelpers.callMethod(opObj, "getOp");
+							if(op < items.length)
+								return items[op];
+
+							return (String) XposedHelpers.callStaticMethod(
+									AppOpsManager.class, "opToName", op);
+						}
+						catch(Throwable t)
+						{
+							log(t);
+							return "?????";
+						}
 					}
 		});
 	}
