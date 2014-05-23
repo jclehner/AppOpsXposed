@@ -1,3 +1,7 @@
+### 1.17.2
+* Xperia only: more human readable info
+  (e.g. "Run at start-up" vs "BOOT_COMPLETED")
+
 ### 1.17:
 * Fixed compatibility with Galaxy S5 settings app
   (grid layout)

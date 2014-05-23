@@ -19,6 +19,7 @@
 package at.jclehner.appopsxposed.variants;
 
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -26,6 +27,9 @@ import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.PermissionInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,6 +106,9 @@ public abstract class Sony extends AOSP
 			return 0;
 		}
 	}
+
+	// only used by fixGetCombinedText at the moment
+	private WeakReference<Context> mContextRef = null;
 
 	@Override
 	protected abstract int apiLevel();
@@ -219,6 +226,16 @@ public abstract class Sony extends AOSP
 
 	protected void fixGetCombinedText(LoadPackageParam lpparam)
 	{
+		XposedHelpers.findAndHookMethod(AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, lpparam.classLoader,
+						"refreshUi", new XC_MethodHook(XC_MethodHook.PRIORITY_HIGHEST) {
+							@Override
+							protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+							{
+								mContextRef = new WeakReference<Context>(
+										((Fragment) param.thisObject).getActivity().getApplicationContext());
+							}
+		});
+
 		XposedHelpers.findAndHookMethod("com.android.settings.applications.AppOpsState$AppOpEntry",
 				lpparam.classLoader, "getCombinedText", ArrayList.class, CharSequence[].class, new XC_MethodHook() {
 
@@ -262,6 +279,10 @@ public abstract class Sony extends AOSP
 							if(op < items.length)
 								return items[op];
 
+							final CharSequence opStr = getOpStringFromPermission(op);
+							if(opStr != null)
+								return opStr;
+
 							return (String) XposedHelpers.callStaticMethod(
 									AppOpsManager.class, "opToName", op);
 						}
@@ -270,6 +291,38 @@ public abstract class Sony extends AOSP
 							log(t);
 							return "?????";
 						}
+					}
+
+					private CharSequence getOpStringFromPermission(int op)
+					{
+						try
+						{
+							final String permission = (String) XposedHelpers.callStaticMethod(
+									AppOpsManager.class, "opToPermission", op);
+
+							if(permission != null)
+							{
+								final PackageManager pm = mContextRef.get().getPackageManager();
+								return capitalizeFirst(pm.getPermissionInfo(permission, 0).loadLabel(pm));
+							}
+						}
+						catch(Throwable t)
+						{
+							debug(t);
+						}
+
+						return null;
+					}
+
+					private String capitalizeFirst(CharSequence text)
+					{
+						if(text == null)
+							return null;
+
+						if(text.length() == 0 || !Character.isLowerCase(text.charAt(0)))
+							return text.toString();
+
+						return Character.toUpperCase(text.charAt(0)) + text.subSequence(1, text.length()).toString();
 					}
 		});
 	}
