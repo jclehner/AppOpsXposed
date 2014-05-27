@@ -58,6 +58,7 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 			return;
 
 		Util.modRes = XModuleResources.createInstance(mModPath, null);
+		Util.appOpsIcon = resparam.res.addResource(Util.modRes, R.drawable.ic_appops);
 
 		if(Util.modPrefs.getBoolean("use_layout_fix", true))
 		{

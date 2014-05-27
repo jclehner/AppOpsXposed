@@ -105,7 +105,14 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		return appOpsHeader;
 	}
 
-	protected int getAppOpsIcon() {
+	protected int getAppOpsIcon()
+	{
+		if(Util.modPrefs.getBoolean("use_custom_icon", true))
+		{
+			if(Util.appOpsIcon != 0)
+				return Util.appOpsIcon;
+		}
+
 		return Util.getSettingsIdentifier("drawable/ic_settings_applications");
 	}
 

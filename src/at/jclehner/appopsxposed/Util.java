@@ -41,6 +41,8 @@ public final class Util
 	public static XModuleResources modRes;
 	public static XSharedPreferences modPrefs;
 
+	public static int appOpsIcon = 0;
+
 	public static int getSettingsIdentifier(String name) {
 		return settingsRes.getIdentifier(name, null, AppOpsXposed.SETTINGS_PACKAGE);
 	}
