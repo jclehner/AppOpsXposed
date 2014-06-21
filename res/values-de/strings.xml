@@ -21,5 +21,15 @@
     <string name="automatic">(Automatisch)</string>
 	<string name="failsafe_mode_title">Failsafe-Modus</string>
 	<string name="failsafe_mode_summary">Verwendet nur minimale Patches um \"App Vorgänge\" zu aktivieren; die Verwendung eines
-	    Launcher-Icons ist dann zwingend notwendig. Verwende diese Option wenn Abstürze auftreten. </string>   
+	    Launcher-Icons ist dann zwingend notwendig. Verwende diese Option wenn Abstürze auftreten. </string>
+	<string name="hacks">Hacks</string>
+	<string name="warning">Warnung</string>
+	<string name="hacks_warning_summary">Die folgenden Optionen sind höchst experimentell und können
+	    Dein Gerät zum Absturz oder in einen Boot-Loop bringen. Verwende sie nur, wenn Du weißt, wie
+	    man Xposed über eine Shell oder den Recovery-Modus deaktivieren kann!</string>	    
+	<string name="use_boot_completed_hack_title">OP_BOOT_COMPLETED</string>
+	<string name="use_boot_completed_hack_summary">Ermöglicht zu steuern, ob eine App nach dem Hochfahren
+	    starten darf. Dies ersetzt die \"%1$s\"-Option (die mit der \"%2$s\"-Option zusammengelegt wurde);
+	    wenn die \"%1$s\"-Option derzeit für eine App deaktiviert ist, wird sie nach dem Hochfahren
+	    nicht starten, wenn Du diese Einstellung aktivierst und dein Gerät neu startest!</string>	  
 </resources>

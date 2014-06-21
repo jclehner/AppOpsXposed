@@ -27,7 +27,7 @@ public class SettingsActivity extends Activity
 		}
 	}
 
-	static class SettingsFragment extends PreferenceFragment implements OnPreferenceChangeListener
+	public static class SettingsFragment extends PreferenceFragment implements OnPreferenceChangeListener
 	{
 		private SharedPreferences mPrefs;
 
@@ -65,6 +65,7 @@ public class SettingsActivity extends Activity
 				findPreference("show_launcher_icon").setEnabled(!failsafe);
 				findPreference("force_variant").setEnabled(!failsafe);
 				findPreference("use_layout_fix").setEnabled(!failsafe);
+				findPreference("use_boot_completed_hack").setEnabled(!failsafe);
 			}
 			else if("show_launcher_icon".equals(preference.getKey()))
 			{
@@ -95,6 +96,9 @@ public class SettingsActivity extends Activity
 			p.setOnPreferenceChangeListener(this);
 
 			findPreference("show_launcher_icon").setOnPreferenceChangeListener(this);
+			
+			p = findPreference("use_boot_completed_hack");
+			p.setSummary(getString(R.string.use_boot_completed_hack_summary, "OP_POST_NOTIFICATION", "OP_VIBRATE"));						
 		}
 
 		private void callOnChangeListenerWithCurrentValue(Preference p)

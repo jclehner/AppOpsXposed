@@ -20,8 +20,8 @@ package at.jclehner.appopsxposed;
 
 import static at.jclehner.appopsxposed.Util.log;
 import android.content.res.XModuleResources;
+import at.jclehner.appopsxposed.hacks.BootCompletedHack;
 import at.jclehner.appopsxposed.variants.CyanogenMod;
-import at.jclehner.appopsxposed.R;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
@@ -46,6 +46,12 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		Util.modPrefs = new XSharedPreferences(AppOpsXposed.class.getPackage().getName());
 		if(!Util.modPrefs.makeWorldReadable())
 			log("Failed to make preference file world-readable");
+		
+		if(Util.modPrefs.getBoolean("use_boot_completed_hack", false))
+		{
+			//log("Applying BootCompletedHack in initZygote");
+			//BootCompletedHack.INSTANCE.initZygote(startupParam);
+		}
 	}
 
 	@Override
@@ -77,9 +83,17 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
+		final boolean useBootCompletedHack = !Util.modPrefs.getBoolean("failsafe_mode", false)
+				&& Util.modPrefs.getBoolean("use_boot_completed_hack", false);
+		
 		if(!lpparam.packageName.equals("com.android.settings"))
+		{
+			if("android".equals(lpparam.packageName) && useBootCompletedHack)
+				BootCompletedHack.INSTANCE.handleLoadPackage(lpparam);
+			
 			return;
-
+		}
+		
 		try
 		{
 			lpparam.classLoader.loadClass(APP_OPS_FRAGMENT);
@@ -98,6 +112,8 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 			ApkVariant.hookIsValidFragment(lpparam);
 			return;
 		}
+		else if(useBootCompletedHack)
+			BootCompletedHack.INSTANCE.handleLoadPackage(lpparam);
 
 		final String forceVariant = Util.modPrefs.getString("force_variant", "");
 		if(forceVariant.length() == 0)

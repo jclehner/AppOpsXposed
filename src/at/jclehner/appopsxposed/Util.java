@@ -25,6 +25,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
+import android.annotation.TargetApi;
+import android.app.AppOpsManager;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.XModuleResources;
 import android.os.Build;
 import android.view.View;
@@ -32,6 +36,7 @@ import android.view.ViewGroup;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
 
 public final class Util
 {
@@ -174,6 +179,39 @@ public final class Util
 			debug("findAndHookMethodRecursive: trying " + superClass + "." + methodName);
 			return findAndHookMethodRecursive(superClass, methodName, parameterTypesAndCallback);
 		}
+	}
+	
+	@TargetApi(19)
+	public static CharSequence getOpStringFromPermission(Context context, int op)
+	{
+		try
+		{
+			final String permission = (String) XposedHelpers.callStaticMethod(
+					AppOpsManager.class, "opToPermission", op);
+
+			if(permission != null)
+			{
+				final PackageManager pm = context.getPackageManager();
+				return pm.getPermissionInfo(permission, 0).loadLabel(pm);
+			}
+		}
+		catch(Throwable t)
+		{
+			debug(t);
+		}
+
+		return null;
+	}
+
+	public static String capitalizeFirst(CharSequence text)
+	{
+		if(text == null)
+			return null;
+
+		if(text.length() == 0 || !Character.isLowerCase(text.charAt(0)))
+			return text.toString();
+
+		return Character.toUpperCase(text.charAt(0)) + text.subSequence(1, text.length()).toString();
 	}
 
 	public static class XC_MethodHookRecursive extends XC_MethodHook

@@ -279,7 +279,8 @@ public abstract class Sony extends AOSP
 							if(op < items.length)
 								return items[op];
 
-							final CharSequence opStr = getOpStringFromPermission(op);
+							final CharSequence opStr = Util.capitalizeFirst(
+									Util.getOpStringFromPermission(mContextRef.get(), op));
 							if(opStr != null)
 								return opStr;
 
@@ -293,37 +294,7 @@ public abstract class Sony extends AOSP
 						}
 					}
 
-					private CharSequence getOpStringFromPermission(int op)
-					{
-						try
-						{
-							final String permission = (String) XposedHelpers.callStaticMethod(
-									AppOpsManager.class, "opToPermission", op);
-
-							if(permission != null)
-							{
-								final PackageManager pm = mContextRef.get().getPackageManager();
-								return capitalizeFirst(pm.getPermissionInfo(permission, 0).loadLabel(pm));
-							}
-						}
-						catch(Throwable t)
-						{
-							debug(t);
-						}
-
-						return null;
-					}
-
-					private String capitalizeFirst(CharSequence text)
-					{
-						if(text == null)
-							return null;
-
-						if(text.length() == 0 || !Character.isLowerCase(text.charAt(0)))
-							return text.toString();
-
-						return Character.toUpperCase(text.charAt(0)) + text.subSequence(1, text.length()).toString();
-					}
+					
 		});
 	}
 }

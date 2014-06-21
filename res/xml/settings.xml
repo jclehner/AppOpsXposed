@@ -26,5 +26,20 @@
             android:defaultValue="" />
    
     </PreferenceCategory>
-
+    
+    <PreferenceCategory
+        android:title="@string/hacks">
+        
+        <Preference
+            android:title="@string/warning"
+            android:summary="@string/hacks_warning_summary"
+            android:enabled="false"
+        />
+        
+        <CheckBoxPreference android:key="use_boot_completed_hack"
+            android:title="@string/use_boot_completed_hack_title"
+            android:summary="@string/use_boot_completed_hack_summary"
+            android:defaultValue="false" />      
+        
+    </PreferenceCategory>
 </PreferenceScreen>
