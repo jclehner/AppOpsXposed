@@ -40,79 +40,15 @@ public class BootCompletedHack extends Hack
 	@Override
 	public void handleLoadSettingsPackage(LoadPackageParam lpparam) throws Throwable
 	{
-		final Class<?> appOpsStateClazz = lpparam.classLoader.loadClass(
-				"com.android.settings.applications.AppOpsState");
-
-		XposedBridge.hookAllConstructors(appOpsStateClazz, new XC_MethodHook() {
-
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) throws Throwable
-					{
-						final CharSequence summary = Util.getOpStringFromPermission((Context) param.args[0],
-								OP_BOOT_COMPLETED);
-
-						Object array = XposedHelpers.getObjectField(param.thisObject, "mOpSummaries");
-						Array.set(array, OP_VIBRATE, Array.get(array, OP_VIBRATE) + " / "
-								 + Array.get(array, OP_BOOT_COMPLETED));
-						Array.set(array, OP_BOOT_COMPLETED, summary);
-
-						array = XposedHelpers.getObjectField(param.thisObject, "mOpLabels");
-						Array.set(array, OP_VIBRATE, Array.get(array, OP_VIBRATE) + " / "
-								 + Array.get(array, OP_BOOT_COMPLETED));
-						Array.set(array, OP_BOOT_COMPLETED, Util.capitalizeFirst(summary));
-					}
-		});
-
-		final Class<?> appOpsSummaryClazz = lpparam.classLoader.loadClass(
-				"com.android.settings.applications.AppOpsSummary");
-
-		final Class<?> pagerAdapterClazz = lpparam.classLoader.loadClass(
-				"com.android.settings.applications.AppOpsSummary$MyPagerAdapter");
-
-		final Class<?> opsTemplateClazz = lpparam.classLoader.loadClass(
-				"com.android.settings.applications.AppOpsState$OpsTemplate");
-
-		XposedBridge.hookAllConstructors(pagerAdapterClazz, new XC_MethodHook() {
-
-			@Override
-			protected void beforeHookedMethod(MethodHookParam param) throws Throwable
-			{
-				final Object opsTemplatesOld =
-						XposedHelpers.getStaticObjectField(appOpsSummaryClazz, "sPageTemplates");
-				final int oldLength = Array.getLength(opsTemplatesOld);
-				final Object opsTemplatesNew = Array.newInstance(opsTemplateClazz,
-						oldLength + 1);
-
-				System.arraycopy(opsTemplatesOld, 0, opsTemplatesNew, 0, oldLength);
-
-				final Constructor<?> ctor = opsTemplateClazz.getConstructor(int[].class, boolean[].class);
-				Array.set(opsTemplatesNew, oldLength, ctor.newInstance(
-						new int[] { OP_BOOT_COMPLETED }, new boolean[] { true }));
-			}
-
-		});
-
-		XposedHelpers.findAndHookMethod(pagerAdapterClazz, "getPageTitle", int.class, new XC_MethodHook() {
-
-			@Override
-			protected void beforeHookedMethod(MethodHookParam param) throws Throwable
-			{
-				final int page = (Integer) param.args[0];
-				if(page == (Integer) XposedHelpers.callMethod(param.thisObject, "getCount"))
-					param.setResult("Startup");
-			}
-		});
+		injectLabelAndSummary(lpparam);
+		addBootupTemplate(lpparam);
 	}
 
 	private void patchFrameworkPart(ClassLoader classLoader)
 	{
 		try
 		{
-			if(OP_BOOT_COMPLETED == OP_VIBRATE)
-				patchVibratorService(classLoader);
-			else //if(OP_BOOT_COMPLETED == OP_POST_NOTIFICATION)
-				patchNotificationManagerService(classLoader);
-
+			patchNotificationManagerService(classLoader);
 			patchActivityManagerService(classLoader);
 			patchAppOpsManager(classLoader);
 		}
@@ -122,7 +58,6 @@ public class BootCompletedHack extends Hack
 		}
 	}
 
-	@TargetApi(19)
 	private void patchAppOpsManager(ClassLoader classLoader)
 	{
 		final XC_MethodHook hook = new XC_MethodHook() {
@@ -282,6 +217,92 @@ public class BootCompletedHack extends Hack
 		});
 	}
 
+	private void injectLabelAndSummary(LoadPackageParam lpparam) throws Throwable
+	{
+		final Class<?> appOpsStateClazz = lpparam.classLoader.loadClass(
+				"com.android.settings.applications.AppOpsState");
+
+		XposedBridge.hookAllConstructors(appOpsStateClazz, new XC_MethodHook() {
+
+					@Override
+					protected void afterHookedMethod(MethodHookParam param) throws Throwable
+					{
+						final CharSequence summary = Util.getOpStringFromPermission((Context) param.args[0],
+								OP_BOOT_COMPLETED);
+
+						Object array = XposedHelpers.getObjectField(param.thisObject, "mOpSummaries");
+						Array.set(array, OP_VIBRATE, Array.get(array, OP_VIBRATE) + " / "
+								 + Array.get(array, OP_BOOT_COMPLETED));
+						Array.set(array, OP_BOOT_COMPLETED, summary);
+
+						array = XposedHelpers.getObjectField(param.thisObject, "mOpLabels");
+						Array.set(array, OP_VIBRATE, Array.get(array, OP_VIBRATE) + " / "
+								 + Array.get(array, OP_BOOT_COMPLETED));
+						Array.set(array, OP_BOOT_COMPLETED, Util.capitalizeFirst(summary));
+					}
+		});
+	}
+
+	private void addBootupTemplate(LoadPackageParam lpparam)
+	{
+		try
+		{
+			final Class<?> pagerAdapterClazz = lpparam.classLoader.loadClass(
+					"com.android.settings.applications.AppOpsSummary$MyPagerAdapter");
+
+			final Class<?> opsTemplateClazz = lpparam.classLoader.loadClass(
+					"com.android.settings.applications.AppOpsState$OpsTemplate");
+
+			final Class<?> appOpsCategoryClazz = lpparam.classLoader.loadClass(
+					"com.android.settings.applications.AppOpsCategory");
+
+			XposedHelpers.findAndHookMethod(pagerAdapterClazz, "getCount",
+					new XC_MethodHook() {
+						@Override
+						protected void afterHookedMethod(MethodHookParam param) throws Throwable
+						{
+							param.setResult(1 + (Integer) param.getResult());
+						}
+			});
+
+			final Object bootupTemplate = XposedHelpers.newInstance(opsTemplateClazz,
+					new int[] { OP_BOOT_COMPLETED }, new boolean[] { true });
+
+			final Object bootupCategoryFragment =
+					XposedHelpers.newInstance(appOpsCategoryClazz, bootupTemplate);
+
+			final Object[][] hookReturnValues = {
+					{ "getPageTitle", "Startup" }, // FIXME
+					{ "getItem", bootupCategoryFragment }
+
+			};
+
+			for(final Object[] hookReturnValue : hookReturnValues)
+			{
+				XposedHelpers.findAndHookMethod(pagerAdapterClazz, (String) hookReturnValue[0],
+						int.class, new XC_MethodHook() {
+
+							@Override
+							protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+							{
+								final int position = (Integer) param.args[0];
+								final int bootupPos = ((Integer)
+										XposedHelpers.callMethod(param.thisObject, "getCount")) - 1;
+
+								if(position == bootupPos)
+									param.setResult(hookReturnValue[1]);
+							}
+				});
+			}
+		}
+		catch(Throwable t)
+		{
+			log(t);
+		}
+	}
+
+
+	/*
 	private void patchVibratorService(ClassLoader classLoader) throws Throwable
 	{
 		final Class<?> vibServiceClazz =
@@ -349,11 +370,7 @@ public class BootCompletedHack extends Hack
 					}
 		});
 	}
-
-	private void log(String str)
-	{
-		XposedBridge.log("AOX:BootCompletedHack: " + str);
-	}
+	*/
 
 	static class AppOpsManagerReturnValues
 	{
@@ -362,7 +379,6 @@ public class BootCompletedHack extends Hack
 		static final int opToDefaultMode = AppOpsManager.MODE_ALLOWED;
 		static final boolean opAllowsReset = false;
 	}
-
 }
 
 
