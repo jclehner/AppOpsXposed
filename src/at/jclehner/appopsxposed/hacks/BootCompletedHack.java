@@ -1,6 +1,7 @@
 package at.jclehner.appopsxposed.hacks;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
 import android.Manifest;
@@ -60,6 +61,46 @@ public class BootCompletedHack extends Hack
 								 + Array.get(array, OP_BOOT_COMPLETED));
 						Array.set(array, OP_BOOT_COMPLETED, Util.capitalizeFirst(summary));
 					}
+		});
+
+		final Class<?> appOpsSummaryClazz = lpparam.classLoader.loadClass(
+				"com.android.settings.applications.AppOpsSummary");
+
+		final Class<?> pagerAdapterClazz = lpparam.classLoader.loadClass(
+				"com.android.settings.applications.AppOpsSummary$MyPagerAdapter");
+
+		final Class<?> opsTemplateClazz = lpparam.classLoader.loadClass(
+				"com.android.settings.applications.AppOpsState$OpsTemplate");
+
+		XposedBridge.hookAllConstructors(pagerAdapterClazz, new XC_MethodHook() {
+
+			@Override
+			protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+			{
+				final Object opsTemplatesOld =
+						XposedHelpers.getStaticObjectField(appOpsSummaryClazz, "sPageTemplates");
+				final int oldLength = Array.getLength(opsTemplatesOld);
+				final Object opsTemplatesNew = Array.newInstance(opsTemplateClazz,
+						oldLength + 1);
+
+				System.arraycopy(opsTemplatesOld, 0, opsTemplatesNew, 0, oldLength);
+
+				final Constructor<?> ctor = opsTemplateClazz.getConstructor(int[].class, boolean[].class);
+				Array.set(opsTemplatesNew, oldLength, ctor.newInstance(
+						new int[] { OP_BOOT_COMPLETED }, new boolean[] { true }));
+			}
+
+		});
+
+		XposedHelpers.findAndHookMethod(pagerAdapterClazz, "getPageTitle", int.class, new XC_MethodHook() {
+
+			@Override
+			protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+			{
+				final int page = (Integer) param.args[0];
+				if(page == (Integer) XposedHelpers.callMethod(param.thisObject, "getCount"))
+					param.setResult("Startup");
+			}
 		});
 	}
 
