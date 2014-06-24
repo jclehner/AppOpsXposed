@@ -46,7 +46,7 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		Util.modPrefs = new XSharedPreferences(AppOpsXposed.class.getPackage().getName());
 		if(!Util.modPrefs.makeWorldReadable())
 			log("Failed to make preference file world-readable");
-		
+
 		if(Util.modPrefs.getBoolean("use_boot_completed_hack", false))
 		{
 			//log("Applying BootCompletedHack in initZygote");
@@ -85,15 +85,15 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	{
 		final boolean useBootCompletedHack = !Util.modPrefs.getBoolean("failsafe_mode", false)
 				&& Util.modPrefs.getBoolean("use_boot_completed_hack", false);
-		
+
 		if(!lpparam.packageName.equals("com.android.settings"))
 		{
 			if("android".equals(lpparam.packageName) && useBootCompletedHack)
 				BootCompletedHack.INSTANCE.handleLoadPackage(lpparam);
-						
+
 			return;
 		}
-		
+
 		try
 		{
 			lpparam.classLoader.loadClass(APP_OPS_FRAGMENT);
