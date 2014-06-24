@@ -35,6 +35,31 @@ import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
+/*
+ * A very crude hack to get something similar to OP_BOOT_COMPLETED,
+ * available on recent CyanogenMod builds and (interestingly) some
+ * Sony ROMs.
+ *
+ * Truly adding a OP_BOOT_COMPLETED is not at all easy, as it would require
+ * the modification of 'public static final' primitive fields (e.g.
+ * AppOpsXposed._NUM_OP), which may or may not work - most often it doesn't.
+ * Instead, the operations OP_VIBRATE and OP_POST_NOTIFICATION were merged
+ * into one single operation controlling both. More precisely, the numeric
+ * value of OP_POST_NOTIFICATION becomes our OP_BOOT_COMPLETED, while
+ * OP_VIBRATE remains unchanged, but behaves as if it were
+ * OP_POST_NOTIFICATION.
+ *
+ * These two operations were chosen because:
+ *     1) They are at least somewhat related (notifications often including
+ *        vibration)
+ *     2) Neither are important for privacy-conscious users
+ *     3) OP_POST_NOTIFICATION was chosen as OP_BOOST_COMPLETED since the
+ *        former can be found under the 'Device' section in AppOps, rather
+ *        than the 'Media' option for OP_VIBRATE (in case creation of the
+ *        'Bootup' section fails for some reason.
+ *
+ */
+
 @TargetApi(19)
 public class BootCompletedHack extends Hack
 {
@@ -287,26 +312,25 @@ public class BootCompletedHack extends Hack
 			final Object bootupCategoryFragment =
 					XposedHelpers.newInstance(appOpsCategoryClazz, bootupTemplate);
 
-			final Object[][] hookReturnValues = {
+			final Object[][] adapterReturnValueInfos = {
 					{ "getPageTitle", Util.getModString(R.string.app_ops_categories_bootup) },
 					{ "getItem", bootupCategoryFragment }
 
 			};
 
-			for(final Object[] hookReturnValue : hookReturnValues)
+			for(final Object[] adapterReturnValueInfo : adapterReturnValueInfos)
 			{
-				XposedHelpers.findAndHookMethod(pagerAdapterClazz, (String) hookReturnValue[0],
+				XposedHelpers.findAndHookMethod(pagerAdapterClazz, (String) adapterReturnValueInfo[0],
 						int.class, new XC_MethodHook() {
 
 							@Override
 							protected void beforeHookedMethod(MethodHookParam param) throws Throwable
 							{
-								final int position = (Integer) param.args[0];
 								final int bootupPos = ((Integer)
 										XposedHelpers.callMethod(param.thisObject, "getCount")) - 1;
 
-								if(position == bootupPos)
-									param.setResult(hookReturnValue[1]);
+								if((Integer) param.args[0] == bootupPos)
+									param.setResult(adapterReturnValueInfo[1]);
 							}
 				});
 			}
@@ -390,6 +414,7 @@ public class BootCompletedHack extends Hack
 
 	static class AppOpsManagerReturnValues
 	{
+		static final int opToSwitch = OP_BOOT_COMPLETED;
 		static final String opToName = "BOOT_COMPLETED";
 		static final String opToPermission = Manifest.permission.RECEIVE_BOOT_COMPLETED;
 		static final int opToDefaultMode = AppOpsManager.MODE_ALLOWED;
