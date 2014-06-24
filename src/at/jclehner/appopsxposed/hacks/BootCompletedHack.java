@@ -76,6 +76,7 @@ public class BootCompletedHack extends Hack
 	@Override
 	public void handleLoadSettingsPackage(LoadPackageParam lpparam) throws Throwable
 	{
+		patchFrameworkPart(lpparam.classLoader);
 		injectLabelAndSummary(lpparam);
 		addBootupTemplate(lpparam);
 	}
@@ -306,7 +307,6 @@ public class BootCompletedHack extends Hack
 			final Object[][] adapterReturnValueInfos = {
 					{ "getPageTitle", Util.getModString(R.string.app_ops_categories_bootup) },
 					{ "getItem", bootupCategoryFragment }
-
 			};
 
 			for(final Object[] adapterReturnValueInfo : adapterReturnValueInfos)
@@ -415,7 +415,7 @@ public class BootCompletedHack extends Hack
 
 	static class AppOpsManagerReturnValues
 	{
-		//static final int opToSwitch = OP_BOOT_COMPLETED;
+		static final int opToSwitch = OP_BOOT_COMPLETED;
 		static final String opToName = "BOOT_COMPLETED";
 		static final String opToPermission = Manifest.permission.RECEIVE_BOOT_COMPLETED;
 		static final int opToDefaultMode = AppOpsManager.MODE_ALLOWED;
