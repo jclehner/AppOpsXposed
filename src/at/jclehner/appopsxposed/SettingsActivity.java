@@ -123,7 +123,7 @@ public class SettingsActivity extends Activity
 				@Override
 				public boolean onPreferenceClick(Preference preference)
 				{
-					if(true || mPrefs.getBoolean("show_hacks_warning_dialog", true))
+					if(mPrefs.getBoolean("show_hacks_warning_dialog", true))
 						showHacksWarningDialog(preference);
 
 					return true;

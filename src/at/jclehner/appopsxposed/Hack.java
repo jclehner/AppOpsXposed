@@ -26,8 +26,6 @@ public class Hack implements IXposedHookLoadPackage, IXposedHookZygoteInit
 			handleLoadFrameworkPackage(lpparam);
 		else if(AppOpsXposed.SETTINGS_PACKAGE.equals(lpparam.packageName))
 			handleLoadSettingsPackage(lpparam);
-
-		handleLoadAnyPackage(lpparam);
 	}
 
 	protected void handleLoadFrameworkPackage(LoadPackageParam lpparam) throws Throwable {
@@ -35,10 +33,6 @@ public class Hack implements IXposedHookLoadPackage, IXposedHookZygoteInit
 	}
 
 	protected void handleLoadSettingsPackage(LoadPackageParam lpparam) throws Throwable {
-
-	}
-
-	protected void handleLoadAnyPackage(LoadPackageParam lpparam) throws Throwable {
 
 	}
 

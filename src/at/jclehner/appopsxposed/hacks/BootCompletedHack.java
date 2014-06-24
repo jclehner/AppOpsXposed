@@ -34,15 +34,15 @@ public class BootCompletedHack extends Hack
 	private static final int OP_BOOT_COMPLETED = OP_POST_NOTIFICATION;
 
 	@Override
-	public void handleLoadAnyPackage(LoadPackageParam lpparam) throws Throwable {
-		patchFrameworkPart(lpparam.classLoader);
-	}
-
-	@Override
 	public void handleLoadSettingsPackage(LoadPackageParam lpparam) throws Throwable
 	{
 		injectLabelAndSummary(lpparam);
 		addBootupTemplate(lpparam);
+	}
+
+	@Override
+	protected void handleLoadFrameworkPackage(LoadPackageParam lpparam) throws Throwable {
+		patchFrameworkPart(lpparam.classLoader);
 	}
 
 	private void patchFrameworkPart(ClassLoader classLoader)
