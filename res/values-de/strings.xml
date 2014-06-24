@@ -10,8 +10,8 @@
 	<string name="xperia_allowed">Erlaubt</string>
 	<string name="xperia_ignored">Ignoriert</string>
 	<string name="xperia_always_ask">Immer fragen</string>
-    <string name="advanced_settings_title">Das Ändern dieser Einstellungen kann zu Abstürzen führen. Mit Vorsicht verwenden!</string>
-    <string name="advanced_settings_summary">Erweitert</string>
+    <string name="advanced_settings_summary">Das Ändern dieser Einstellungen kann zu Abstürzen führen. Mit Vorsicht verwenden!</string>
+    <string name="advanced_settings_title">Erweitert</string>
     <string name="show_launcher_icon_title">Icon</string>
     <string name="show_launcher_icon_summary">Ein Icon im Launcher anzeigen. Dies ist nur dann notwendig, wenn \"App Vorgänge\" nicht in der
         \"Einstellungen\"-App Deiner ROM zu finden ist.</string>
@@ -22,14 +22,15 @@
 	<string name="failsafe_mode_title">Failsafe-Modus</string>
 	<string name="failsafe_mode_summary">Verwendet nur minimale Patches um \"App Vorgänge\" zu aktivieren; die Verwendung eines
 	    Launcher-Icons ist dann zwingend notwendig. Verwende diese Option wenn Abstürze auftreten. </string>
-	<string name="hacks">Hacks</string>
-	<string name="warning">Warnung</string>
-	<string name="hacks_warning_summary">Die folgenden Optionen sind höchst experimentell und können
-	    Dein Gerät zum Absturz oder in einen Boot-Loop bringen. Verwende sie nur, wenn Du weißt, wie
-	    man Xposed über eine Shell oder den Recovery-Modus deaktivieren kann!</string>	    
-	<string name="use_boot_completed_hack_title">OP_BOOT_COMPLETED</string>
+	<string name="hacks_title">Hacks</string>
+	<string name="hacks_summary">Experimentelle Features. Benutzung auf eigene Gefahr!</string>
+		<string name="use_boot_completed_hack_title">OP_BOOT_COMPLETED</string>
 	<string name="use_boot_completed_hack_summary">Ermöglicht zu steuern, ob eine App nach dem Hochfahren
 	    starten darf. Dies ersetzt die \"%1$s\"-Option (die mit der \"%2$s\"-Option zusammengelegt wurde);
 	    wenn die \"%1$s\"-Option derzeit für eine App deaktiviert ist, wird sie nach dem Hochfahren
-	    nicht starten, wenn Du diese Einstellung aktivierst und dein Gerät neu startest!</string>	  
+	    nicht starten, wenn Du diese Einstellung aktivierst und dein Gerät neu startest!</string>
+	<string name="hacks_dialog_title">Warnung</string>
+	<string name="hacks_dialog_message">Diese Features sind <strong>höchst experimentell</strong> und können Dein
+	    Gerät in einen Boot-Loop stürzen und somit unbenutzbar machen. <em>Nur</em> verwenden, wenn Du weißt, wie man
+	    Xposed (oder dieses Modul) mittels Recovery-Modus oder einer Shell deaktivieren kann! Du wurdest gewarnt.</string> 
 </resources>

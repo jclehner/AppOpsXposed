@@ -90,7 +90,7 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		{
 			if("android".equals(lpparam.packageName) && useBootCompletedHack)
 				BootCompletedHack.INSTANCE.handleLoadPackage(lpparam);
-			
+						
 			return;
 		}
 		

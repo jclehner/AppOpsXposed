@@ -22,15 +22,17 @@
 	<string name="failsafe_mode_title">Failsafe mode</string>
 	<string name="failsafe_mode_summary">Use only the minimum patches required for \"App ops\" to work; in this case, a launcher icon
 	    must be used. Use this if you experience crashes.</string>
-	<string name="hacks">Hacks</string>
-	<string name="warning">Warning</string>
-	<string name="hacks_warning_summary">The following features are highly experimental and may cause your device
-	    to lock up or get stuck in a boot loop. Use only if you know how to disable Xposed from a shell or recovery
-	    mode!</string>	    
-	<string name="use_boot_completed_hack_title">OP_BOOT_COMPLETED</string>
+	<string name="hacks_title">Hacks</string>
+	<string name="hacks_summary">Experimental features. Use at your own risk!</string>	    
+	<string name="use_boot_completed_hack_title"><tt>OP_BOOT_COMPLETED</tt></string>
 	<string name="use_boot_completed_hack_summary">Allows you to control whether an app is allowed to
 	    start at boot. This replaces the \"%1$s\" option (which has been merged with the \"%2$s\" option);
 	    if \"%1$s\" is currently disabled for an app, it will not boot if you
 	    enable this setting and reboot your device!
 	</string>	
+	
+	<string name="hacks_dialog_title">Warning</string>
+	<string name="hacks_dialog_message">These features are <strong>highly experimental</strong> and may cause your phone to
+	    get stuck in a boot-loop and become unusable. Use <em>only</em> if you know how to disable Xposed (or this module) from
+	    recovery mode or a shell. You have been warned!</string>
 </resources>

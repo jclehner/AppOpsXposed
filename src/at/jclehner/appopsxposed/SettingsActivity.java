@@ -1,16 +1,31 @@
 package at.jclehner.appopsxposed;
 
+import java.lang.reflect.Field;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AppOpsManager;
 import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.DialogInterface.OnShowListener;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
-import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
+import android.text.Html;
+import android.util.Log;
+import android.widget.Button;
 
 public class SettingsActivity extends Activity
 {
@@ -65,7 +80,7 @@ public class SettingsActivity extends Activity
 				findPreference("show_launcher_icon").setEnabled(!failsafe);
 				findPreference("force_variant").setEnabled(!failsafe);
 				findPreference("use_layout_fix").setEnabled(!failsafe);
-				findPreference("use_boot_completed_hack").setEnabled(!failsafe);
+				findPreference("hacks").setEnabled(!failsafe);
 			}
 			else if("show_launcher_icon".equals(preference.getKey()))
 			{
@@ -96,9 +111,24 @@ public class SettingsActivity extends Activity
 			p.setOnPreferenceChangeListener(this);
 
 			findPreference("show_launcher_icon").setOnPreferenceChangeListener(this);
-			
+
 			p = findPreference("use_boot_completed_hack");
-			p.setSummary(getString(R.string.use_boot_completed_hack_summary, "OP_POST_NOTIFICATION", "OP_VIBRATE"));						
+			p.setSummary(getString(R.string.use_boot_completed_hack_summary,
+					OpsResolver.getOpLabel(getActivity(), "OP_POST_NOTIFICATION"),
+					OpsResolver.getOpLabel(getActivity(), "OP_VIBRATE")));
+
+			p = findPreference("hacks");
+			p.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+				@Override
+				public boolean onPreferenceClick(Preference preference)
+				{
+					if(true || mPrefs.getBoolean("show_hacks_warning_dialog", true))
+						showHacksWarningDialog(preference);
+
+					return true;
+				}
+			});
 		}
 
 		private void callOnChangeListenerWithCurrentValue(Preference p)
@@ -111,5 +141,187 @@ public class SettingsActivity extends Activity
 
 			onPreferenceChange(p, value);
 		}
+
+		private void showHacksWarningDialog(final Preference pref)
+		{
+			final AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
+			ab.setCancelable(false);
+			ab.setIcon(android.R.drawable.ic_dialog_alert);
+			ab.setTitle(R.string.hacks_dialog_title);
+			ab.setPositiveButton(android.R.string.ok, new OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					mPrefs.edit().putBoolean("show_hacks_warning_dialog", false).apply();
+				}
+			});
+			ab.setNegativeButton(android.R.string.cancel, new OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					((PreferenceScreen) pref).getDialog().dismiss();
+				}
+			});
+
+			final AlertDialog dialog = ab.create();
+			dialog.setMessage(Html.fromHtml(getString(R.string.hacks_dialog_message)));
+			dialog.setOnShowListener(new OnShowListener() {
+
+				@Override
+				public void onShow(DialogInterface dialogInterface)
+				{
+					final Button b = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+					b.setEnabled(false);
+					final CharSequence origText = b.getText();
+
+					new Thread() {
+						public void run()
+						{
+							for(int i = 9; i > 0; --i)
+							{
+								final String tempText =
+										origText + " (" + i + ")";
+
+								b.post(new Runnable() {
+
+									@Override
+									public void run() {
+										b.setText(tempText);
+									}
+								});
+
+								try
+								{
+									Thread.sleep(1000);
+								}
+								catch (InterruptedException e)
+								{
+									// ignore
+								}
+							}
+
+							b.post(new Runnable() {
+
+								@Override
+								public void run() {
+									b.setText(origText);
+									b.setEnabled(true);
+								}
+							});
+						}
+					}.start();
+				}
+			});
+
+			dialog.show();
+		}
 	}
 }
+
+class OpsResolver
+{
+	private static final String TAG = "AOX:OpsResolver";
+
+	private static boolean sTryLoadOpNames = true;
+	private static String[] sOpLabels;
+	private static String[] sOpSummaries;
+
+	public static String getOpLabel(Context context, String opName) {
+		return getOpLabelOrSummary(context, opName, true);
+	}
+
+	public static String getOpSummary(Context context, String opName) {
+		return getOpLabelOrSummary(context, opName, false);
+	}
+
+	private static String getOpLabelOrSummary(Context context, String opName, boolean getLabel)
+	{
+		String[] array = getLabel ? sOpLabels : sOpSummaries;
+
+		if(array == null && sTryLoadOpNames)
+		{
+			try
+			{
+				final Resources r = context.getPackageManager()
+						.getResourcesForApplication(AppOpsXposed.SETTINGS_PACKAGE);
+
+				final String idName =
+						AppOpsXposed.SETTINGS_PACKAGE + ":array/app_ops_" +
+						(getLabel ? "labels" : "summaries");
+
+				final int id = r.getIdentifier(idName, null, null);
+
+				final int opsCount = getAppOpsManagerIntField("_NUM_OP");
+				sTryLoadOpNames = opsCount != -1;
+
+				if(sTryLoadOpNames)
+				{
+					array = r.getStringArray(id);
+
+					if(array.length != opsCount)
+					{
+						// If the array length doesn't match, it could mean that the known
+						// ops defined in AppOpsManager aren't in sync with the Settings app.
+						// Since the order of ops cannot be guaranteed in that case, ignore
+						// the array.
+
+						Log.w(TAG, "Length mismatch in " + idName + ": "
+								+ array.length + " vs _NUM_OP " + opsCount);
+
+						sTryLoadOpNames = false;
+					}
+					else
+					{
+						if(getLabel)
+							sOpLabels = array;
+						else
+							sOpSummaries = array;
+					}
+				}
+			}
+			catch (NameNotFoundException e)
+			{
+				sTryLoadOpNames = false;
+			}
+			catch(Resources.NotFoundException e)
+			{
+				sTryLoadOpNames = false;
+			}
+		}
+
+		final int op = getAppOpsManagerIntField(opName);
+
+		if(array == null || op == -1 || op >= array.length)
+			return opName;
+
+		return array[op];
+	}
+
+	private static int getAppOpsManagerIntField(String name)
+	{
+		try
+		{
+			final Field f = AppOpsManager.class.getField(name);
+			f.setAccessible(true);
+			return f.getInt(null);
+		}
+		catch (IllegalAccessException e)
+		{
+			// ignore
+		}
+		catch (IllegalArgumentException e)
+		{
+			// ignore
+		}
+		catch (NoSuchFieldException e)
+		{
+			// ignore
+		}
+
+		return -1;
+	}
+}
+
+
+
+

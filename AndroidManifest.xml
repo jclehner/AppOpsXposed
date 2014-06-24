@@ -31,7 +31,8 @@
 
         <activity
             android:name=".SettingsActivity"
-            android:label="AppOpsXposed">
+            android:label="AppOpsXposed"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="de.robv.android.xposed.category.MODULE_SETTINGS" />
