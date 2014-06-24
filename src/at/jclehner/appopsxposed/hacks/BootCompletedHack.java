@@ -77,8 +77,11 @@ public class BootCompletedHack extends Hack
 	public void handleLoadSettingsPackage(LoadPackageParam lpparam) throws Throwable
 	{
 		patchFrameworkPart(lpparam.classLoader);
-		injectLabelAndSummary(lpparam);
+		// Must be called before injectLabelAndSummary; otherwise, AppOpsState's
+		// static intializer may have been run, and we can't hook the OpsTemplate
+		// constructors anymore!
 		addBootupTemplate(lpparam);
+		injectLabelAndSummary(lpparam);
 	}
 
 	@Override
@@ -289,6 +292,8 @@ public class BootCompletedHack extends Hack
 	{
 		try
 		{
+			removeBootCompletedFromTemplates(lpparam);
+
 			final Class<?> pagerAdapterClazz = lpparam.classLoader.loadClass(
 					"com.android.settings.applications.AppOpsSummary$MyPagerAdapter");
 
@@ -301,8 +306,9 @@ public class BootCompletedHack extends Hack
 			final Object bootupTemplate = XposedHelpers.newInstance(opsTemplateClazz,
 					new int[] { OP_BOOT_COMPLETED }, new boolean[] { true });
 
-			final Object bootupCategoryFragment =
-					XposedHelpers.newInstance(appOpsCategoryClazz, bootupTemplate);
+
+			final Object bootupCategoryFragment = XposedHelpers.newInstance(appOpsCategoryClazz,
+					bootupTemplate);
 
 			final Object[][] adapterReturnValueInfos = {
 					{ "getPageTitle", Util.getModString(R.string.app_ops_categories_bootup) },
@@ -333,6 +339,60 @@ public class BootCompletedHack extends Hack
 						protected void afterHookedMethod(MethodHookParam param) throws Throwable
 						{
 							param.setResult(1 + (Integer) param.getResult());
+						}
+			});
+		}
+		catch(Throwable t)
+		{
+			log(t);
+		}
+	}
+
+	private void removeBootCompletedFromTemplates(LoadPackageParam lpparam)
+	{
+		try
+		{
+			final Class<?> opsTemplateClazz = lpparam.classLoader.loadClass(
+					"com.android.settings.applications.AppOpsState$OpsTemplate");
+
+			XposedHelpers.findAndHookConstructor(opsTemplateClazz,
+					int[].class, boolean[].class, new XC_MethodHook() {
+
+						@Override
+						protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+						{
+							try
+							{
+								final int oldLength = Array.getLength(param.args[0]);
+								if(oldLength == 1)
+									return;
+
+								final int[] newOps = new int[oldLength - 1];
+								boolean wasItemRemoved = false;
+								for(int i = 0, k = 0; i != oldLength; ++i, ++k)
+								{
+									final int op = Array.getInt(param.args[0], i);
+									if(op == OP_BOOT_COMPLETED)
+									{
+										wasItemRemoved = true;
+										--k;
+										continue;
+									}
+										if(k < newOps.length)
+										newOps[k] = op;
+									else
+										break;
+								}
+								if(wasItemRemoved)
+								{
+									log("OP_BOOT_COMPLETED removed from " + param.thisObject);
+									param.args[0] = newOps;
+								}
+							}
+							catch(Throwable t)
+							{
+								log(t);
+							}
 						}
 			});
 		}
