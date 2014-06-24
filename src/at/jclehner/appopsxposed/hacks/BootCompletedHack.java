@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import at.jclehner.appopsxposed.Hack;
+import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.Util;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -272,7 +273,7 @@ public class BootCompletedHack extends Hack
 					XposedHelpers.newInstance(appOpsCategoryClazz, bootupTemplate);
 
 			final Object[][] hookReturnValues = {
-					{ "getPageTitle", "Startup" }, // FIXME
+					{ "getPageTitle", Util.getModString(R.string.app_ops_categories_bootup) },
 					{ "getItem", bootupCategoryFragment }
 
 			};

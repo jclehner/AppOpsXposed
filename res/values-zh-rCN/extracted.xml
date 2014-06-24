@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
         <string name="app_ops_settings">应用操作</string>
+        <string name="app_ops_categories_bootup">启动时</string>
 </resources>

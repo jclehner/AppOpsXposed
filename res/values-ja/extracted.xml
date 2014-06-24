@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
         <string name="app_ops_settings">アプリの操作状況</string>
+        <string name="app_ops_categories_bootup">起動時の実行</string>
 </resources>
