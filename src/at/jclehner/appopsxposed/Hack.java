@@ -59,7 +59,7 @@ public class Hack implements IXposedHookLoadPackage, IXposedHookZygoteInit
 	}
 
 	protected final void log(Throwable t) {
-		XposedBridge.log(getLogPrefix() + t);
+		XposedBridge.log(t);
 	}
 
 	private String getLogPrefix()

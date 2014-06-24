@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import android.content.Context;
-import android.content.res.Resources.NotFoundException;
 import android.preference.PreferenceActivity.Header;
 import at.jclehner.appopsxposed.ApkVariant;
 import at.jclehner.appopsxposed.AppOpsXposed;

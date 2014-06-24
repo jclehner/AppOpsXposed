@@ -43,6 +43,7 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	public void initZygote(StartupParam startupParam) throws Throwable
 	{
 		mModPath = startupParam.modulePath;
+		Util.modRes = XModuleResources.createInstance(mModPath, null);
 		Util.modPrefs = new XSharedPreferences(AppOpsXposed.class.getPackage().getName());
 		if(!Util.modPrefs.makeWorldReadable())
 			log("Failed to make preference file world-readable");
@@ -63,7 +64,7 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		if(Util.modPrefs.getBoolean("failsafe_mode", false))
 			return;
 
-		Util.modRes = XModuleResources.createInstance(mModPath, null);
+		//Util.modRes = XModuleResources.createInstance(mModPath, null);
 		Util.appOpsIcon = resparam.res.addResource(Util.modRes, R.drawable.ic_appops);
 
 		if(Util.modPrefs.getBoolean("use_layout_fix", true))
@@ -93,6 +94,8 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 			return;
 		}
+
+		log("Util.modRes=" + Util.modRes);
 
 		try
 		{

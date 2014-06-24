@@ -27,9 +27,6 @@ import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.PermissionInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -280,7 +277,7 @@ public abstract class Sony extends AOSP
 								return items[op];
 
 							final CharSequence opStr = Util.capitalizeFirst(
-									Util.getOpStringFromPermission(mContextRef.get(), op));
+									getOpStringFromPermission(mContextRef.get(), op));
 							if(opStr != null)
 								return opStr;
 
@@ -294,7 +291,26 @@ public abstract class Sony extends AOSP
 						}
 					}
 
-					
+
 		});
+	}
+
+	@TargetApi(19)
+	private CharSequence getOpStringFromPermission(Context context, int op)
+	{
+		try
+		{
+			final String permission = (String) XposedHelpers.callStaticMethod(
+					AppOpsManager.class, "opToPermission", op);
+
+			if(permission != null)
+				return Util.getPermissionLabel(context, permission);
+		}
+		catch(Throwable t)
+		{
+			debug(t);
+		}
+
+		return null;
 	}
 }

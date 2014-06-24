@@ -268,8 +268,8 @@ public class BootCompletedHack extends Hack
 					@Override
 					protected void afterHookedMethod(MethodHookParam param) throws Throwable
 					{
-						final CharSequence summary = Util.getOpStringFromPermission((Context) param.args[0],
-								OP_BOOT_COMPLETED);
+						final CharSequence summary = Util.getPermissionLabel((Context) param.args[0],
+								android.Manifest.permission.RECEIVE_BOOT_COMPLETED);
 
 						Object array = XposedHelpers.getObjectField(param.thisObject, "mOpSummaries");
 						Array.set(array, OP_VIBRATE, Array.get(array, OP_VIBRATE) + " / "
@@ -297,15 +297,6 @@ public class BootCompletedHack extends Hack
 			final Class<?> appOpsCategoryClazz = lpparam.classLoader.loadClass(
 					"com.android.settings.applications.AppOpsCategory");
 
-			XposedHelpers.findAndHookMethod(pagerAdapterClazz, "getCount",
-					new XC_MethodHook() {
-						@Override
-						protected void afterHookedMethod(MethodHookParam param) throws Throwable
-						{
-							param.setResult(1 + (Integer) param.getResult());
-						}
-			});
-
 			final Object bootupTemplate = XposedHelpers.newInstance(opsTemplateClazz,
 					new int[] { OP_BOOT_COMPLETED }, new boolean[] { true });
 
@@ -326,14 +317,24 @@ public class BootCompletedHack extends Hack
 							@Override
 							protected void beforeHookedMethod(MethodHookParam param) throws Throwable
 							{
+								final int pos = (Integer) param.args[0];
 								final int bootupPos = ((Integer)
 										XposedHelpers.callMethod(param.thisObject, "getCount")) - 1;
 
-								if((Integer) param.args[0] == bootupPos)
+								if(pos == bootupPos)
 									param.setResult(adapterReturnValueInfo[1]);
 							}
 				});
 			}
+
+			XposedHelpers.findAndHookMethod(pagerAdapterClazz, "getCount",
+					new XC_MethodHook() {
+						@Override
+						protected void afterHookedMethod(MethodHookParam param) throws Throwable
+						{
+							param.setResult(1 + (Integer) param.getResult());
+						}
+			});
 		}
 		catch(Throwable t)
 		{
@@ -414,7 +415,7 @@ public class BootCompletedHack extends Hack
 
 	static class AppOpsManagerReturnValues
 	{
-		static final int opToSwitch = OP_BOOT_COMPLETED;
+		//static final int opToSwitch = OP_BOOT_COMPLETED;
 		static final String opToName = "BOOT_COMPLETED";
 		static final String opToPermission = Manifest.permission.RECEIVE_BOOT_COMPLETED;
 		static final int opToDefaultMode = AppOpsManager.MODE_ALLOWED;

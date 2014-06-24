@@ -25,10 +25,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
-import android.annotation.TargetApi;
-import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.XModuleResources;
 import android.os.Build;
 import android.view.View;
@@ -36,7 +35,6 @@ import android.view.ViewGroup;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedHelpers;
 
 public final class Util
 {
@@ -180,27 +178,18 @@ public final class Util
 			return findAndHookMethodRecursive(superClass, methodName, parameterTypesAndCallback);
 		}
 	}
-	
-	@TargetApi(19)
-	public static CharSequence getOpStringFromPermission(Context context, int op)
+
+	public static CharSequence getPermissionLabel(Context context, String permission)
 	{
 		try
 		{
-			final String permission = (String) XposedHelpers.callStaticMethod(
-					AppOpsManager.class, "opToPermission", op);
-
-			if(permission != null)
-			{
-				final PackageManager pm = context.getPackageManager();
-				return pm.getPermissionInfo(permission, 0).loadLabel(pm);
-			}
+			final PackageManager pm = context.getPackageManager();
+			return pm.getPermissionInfo(permission, 0).loadLabel(pm);
 		}
-		catch(Throwable t)
+		catch(NameNotFoundException e)
 		{
-			debug(t);
+			return permission;
 		}
-
-		return null;
 	}
 
 	public static String capitalizeFirst(CharSequence text)
