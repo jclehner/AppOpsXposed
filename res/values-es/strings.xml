@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools= "http://schemas.android.com/tools"
+		tools:ignore="MissingTranslation">
+    <string name="description">Permite AppOps en Android 4.3+ y agregalo a la configuración de aplicación nativa.</string>
+    <string name="btn_launch">Iniciar</string>
+    <string name="btn_help">Ayuda</string>
+    <string name="xposed_not_installed">El Instalador Xposed no está instalado en su sistema y necesita ser ejecutando, pero se puede tratar de lanzarlo usando la \"%2$s\" botón de abajo. Tenga en cuenta su Marco Xposed.</string>
+    <string name="xperia_allowed">Permitida</string>
+    <string name="xperia_ignored">Ignorado</string>
+    <string name="xperia_always_ask">Preguntar siempre</string>
+    <string name="advanced_settings_summary">El cambio de estos ajustes puede romper AppOpsXposed. ¡Use con cuidado!</string>
+    <string name="advanced_settings_title">Avanzado</string>
+    <string name="show_launcher_icon_title">Icono del Lanzador</string>
+    <string name="show_launcher_icon_summary">Mostrar icono del lanzador. Esto es necesario sólo si \"App Ops\" no pueden ser
+			de su ROM \'s \ "Opción\" de la aplicación.</string>
+    <string name="title_force_variant">Forzar Variante</string>
+    <string name="use_layout_fix_title">Arreglar disposición</string>
+    <string name="use_layout_fix_summary">Usar una solución que soluciona problemas de diseño en el \"App Ops\" de la pantalla</string>
+    <string name="automatic">(Automático)</string>
+    <string name="failsafe_mode_title">Modo a prueba de fallos</string>
+    <string name="failsafe_mode_summary">Utilice sólo los parches mínimos requeridos para \"App Ops\" para trabajar; en este. 
+				Utilice esta opción si el equipo falla.</string>
+</resources>
