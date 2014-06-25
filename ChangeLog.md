@@ -1,3 +1,7 @@
+### 1.18
+* Added OP_BOOT_COMPLETED hack
+* Added Spanish translation (Jose Artuñedo@XDA)
+
 ### 1.17.2
 * Xperia only: more human readable info
   (e.g. "Run at start-up" vs "BOOT_COMPLETED")

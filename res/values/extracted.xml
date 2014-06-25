@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
         <string name="app_ops_settings">App ops</string>
         <string name="app_ops_categories_bootup">Bootup</string>
 </resources>
