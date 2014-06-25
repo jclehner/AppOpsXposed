@@ -73,6 +73,11 @@ public class BootCompletedHack extends Hack
 
 	private static final int OP_BOOT_COMPLETED = OP_POST_NOTIFICATION;
 
+	// Not neccessary for our cause, but we can fix an error while we're
+	// at it; see patchFramework() for details
+	private static final int OP_WIFI_SCAN =
+			XposedHelpers.getStaticIntField(AppOpsManager.class, "OP_WIFI_SCAN");
+
 	@Override
 	public void handleLoadSettingsPackage(LoadPackageParam lpparam) throws Throwable
 	{
@@ -123,6 +128,27 @@ public class BootCompletedHack extends Hack
 		{
 			XposedHelpers.findAndHookMethod(AppOpsManager.class, f.getName(),
 					int.class, hook);
+		}
+
+		// While we're at it, we can also fix the error where
+		// AppOpsManager.opToPermission(OP_WIFI_SCAN) returns null
+
+		if(false)
+		{
+			XposedHelpers.findAndHookMethod(AppOpsManager.class, "opToPermission",
+					int.class, new XC_MethodHook() {
+
+						@Override
+						protected void afterHookedMethod(MethodHookParam param) throws Throwable
+						{
+							if(param.getResult() != null)
+								return;
+
+							final int op = (Integer) param.args[0];
+							if(op == OP_WIFI_SCAN)
+								param.setResult(Manifest.permission.ACCESS_WIFI_STATE);
+						}
+			});
 		}
 	}
 
@@ -350,6 +376,9 @@ public class BootCompletedHack extends Hack
 
 	private void removeBootCompletedFromTemplates(LoadPackageParam lpparam)
 	{
+		if(true)
+			return;
+
 		try
 		{
 			final Class<?> opsTemplateClazz = lpparam.classLoader.loadClass(
@@ -482,6 +511,3 @@ public class BootCompletedHack extends Hack
 		static final boolean opAllowsReset = false;
 	}
 }
-
-
-
