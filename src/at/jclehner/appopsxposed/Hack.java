@@ -18,14 +18,30 @@
 
 package at.jclehner.appopsxposed;
 
+import android.content.Context;
 import at.jclehner.appopsxposed.hacks.BootCompletedHack;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
-public class Hack implements IXposedHookLoadPackage, IXposedHookZygoteInit
+public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteInit
 {
+	public static class PreferenceInfo
+	{
+		public final boolean defaultValue = false;
+		public final String key;
+		public final String title;
+		public final String summary;
+
+		PreferenceInfo(String keySuffix, String title, String summary)
+		{
+			this.key = "use_hack_" + keySuffix;
+			this.title = title;
+			this.summary = summary;
+		}
+	}
+
 	public static final Hack[] HACKS = {
 		new BootCompletedHack()
 	};
@@ -46,6 +62,10 @@ public class Hack implements IXposedHookLoadPackage, IXposedHookZygoteInit
 			handleLoadSettingsPackage(lpparam);
 	}
 
+	public final PreferenceInfo getPrefernceInfo(Context context) {
+		return new PreferenceInfo(onGetKeySuffix(), onGetPreferenceTitle(context), onGetPreferenceSummary(context));
+	}
+
 	protected void handleLoadFrameworkPackage(LoadPackageParam lpparam) throws Throwable {
 
 	}
@@ -54,12 +74,34 @@ public class Hack implements IXposedHookLoadPackage, IXposedHookZygoteInit
 
 	}
 
+	protected String onGetPreferenceTitle(Context context) {
+		return getPreferenceString(context, "title");
+	}
+
+	protected String onGetPreferenceSummary(Context context) {
+		return getPreferenceString(context, "summary");
+	}
+
+	protected abstract String onGetKeySuffix();
+
 	protected final void log(String message) {
 		XposedBridge.log(getLogPrefix() + message);
 	}
 
 	protected final void log(Throwable t) {
 		XposedBridge.log(t);
+	}
+
+	protected final String getPreferenceString(Context context, String suffix, Object... formatArgs)
+	{
+		final String name = "use_hack_" + onGetKeySuffix() + "_" + suffix;
+		final int resId = context.getResources().getIdentifier(
+				name, "string", AppOpsXposed.MODULE_PACKAGE);
+
+		if(resId != 0)
+			return context.getString(resId, formatArgs);
+
+		return name;
 	}
 
 	private String getLogPrefix()

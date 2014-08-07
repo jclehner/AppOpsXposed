@@ -21,6 +21,7 @@ package at.jclehner.appopsxposed;
 import static at.jclehner.appopsxposed.Util.log;
 import android.content.res.XModuleResources;
 import at.jclehner.appopsxposed.hacks.BootCompletedHack;
+import at.jclehner.appopsxposed.hacks.FixWakeLock;
 import at.jclehner.appopsxposed.variants.CyanogenMod;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -48,10 +49,20 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		if(!Util.modPrefs.makeWorldReadable())
 			log("Failed to make preference file world-readable");
 
-		if(Util.modPrefs.getBoolean("use_boot_completed_hack", false))
+		if(Util.modPrefs.getBoolean("failsafe_mode", false))
+			return;
+
+		if(Util.modPrefs.getBoolean("use_hack_boot_completed", false))
 		{
 			//log("Applying BootCompletedHack in initZygote");
 			//BootCompletedHack.INSTANCE.initZygote(startupParam);
+		}
+
+		if(Util.modPrefs.getBoolean("use_hack_wake_lock", false))
+		{
+			//log("Applying BootCompletedHack in initZygote");
+			//BootCompletedHack.INSTANCE.initZygote(startupParam);
+			FixWakeLock.INSTANCE.initZygote(startupParam);
 		}
 	}
 
@@ -85,7 +96,7 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
 		final boolean useBootCompletedHack = !Util.modPrefs.getBoolean("failsafe_mode", false)
-				&& Util.modPrefs.getBoolean("use_boot_completed_hack", false);
+				&& Util.modPrefs.getBoolean("use_hack_boot_completed", false);
 
 		if(!lpparam.packageName.equals("com.android.settings"))
 		{

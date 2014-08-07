@@ -94,6 +94,11 @@ public class BootCompletedHack extends Hack
 		patchFrameworkPart(lpparam.classLoader);
 	}
 
+	@Override
+	protected String onGetKeySuffix() {
+		return "boot_completed";
+	}
+
 	private void patchFrameworkPart(ClassLoader classLoader)
 	{
 		try

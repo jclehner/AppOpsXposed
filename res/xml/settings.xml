@@ -31,10 +31,15 @@
         android:title="@string/hacks_title"
         android:summary="@string/hacks_summary">
                
-        <CheckBoxPreference android:key="use_boot_completed_hack"
-            android:title="@string/use_boot_completed_hack_title"
-            android:summary="@string/use_boot_completed_hack_summary"
-            android:defaultValue="false" />      
-        
+        <CheckBoxPreference android:key="use_hack_boot_completed"
+            android:title="@string/use_hack_boot_completed_title"
+            android:summary="@string/use_hack_boot_completed_summary"
+            android:defaultValue="false" />
+
+        <CheckBoxPreference android:key="use_hack_wake_lock"
+            android:title="@string/use_hack_wake_lock_title"
+            android:summary="@string/use_hack_wake_lock_summary"
+            android:defaultValue="false" />
+
     </PreferenceScreen>
 </PreferenceScreen>

@@ -7,7 +7,6 @@ import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.os.PowerManager.WakeLock;
 import at.jclehner.appopsxposed.Hack;
 import de.robv.android.xposed.XC_MethodHook;
@@ -19,7 +18,11 @@ import de.robv.android.xposed.XposedHelpers;
 @TargetApi(19)
 public class FixWakeLock extends Hack
 {
-	private static final boolean DEBUG = false;
+	public static final FixWakeLock INSTANCE = new FixWakeLock();
+
+
+	private static final boolean DEBUG = true;
+
 
 	private static final int OP_WAKE_LOCK =
 			XposedHelpers.getStaticIntField(AppOpsManager.class, "OP_WAKE_LOCK");
@@ -37,13 +40,15 @@ public class FixWakeLock extends Hack
 		log("Hooked WakeLock.acquire(): " + mUnhooks.size() + " functions");
 	}
 
+	@Override
+	protected String onGetKeySuffix() {
+		return "wake_lock";
+	}
+
 	private final XC_MethodHook mAcquireHook = new XC_MethodHook() {
 		@Override
 		protected void beforeHookedMethod(MethodHookParam param) throws Throwable
 		{
-			if(DEBUG)
-				log("AOX:FixWakeLock: WakeLock.acquire() called");
-
 			try
 			{
 				final WakeLock lock = (WakeLock) param.thisObject;
@@ -57,17 +62,17 @@ public class FixWakeLock extends Hack
 						context.getSystemService(Context.APP_OPS_SERVICE);
 
 				final ApplicationInfo info = context.getApplicationInfo();
-
-				if(DEBUG)
-					log("  op=" + OP_WAKE_LOCK + ", uid=" + info.uid + ", packageName=" + info.packageName);
-
 				final int status = (Integer) mCheckOpNoThrow.invoke(appOps, OP_WAKE_LOCK, info.uid, info.packageName);
 
-				if(DEBUG)
-					log("  status=" + status);
-
 				if(status == AppOpsManager.MODE_IGNORED)
+				{
+					if(DEBUG)
+						log("Prevented WakeLock acquisition for app " + info.packageName);
+
+					// Otherwise WakeLock.release() might throw an exception
+					lock.setReferenceCounted(false);
 					param.setResult(null);
+				}
 			}
 			catch(Throwable t)
 			{

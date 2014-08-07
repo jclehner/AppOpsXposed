@@ -24,8 +24,8 @@
 	    Launcher-Icons ist dann zwingend notwendig. Verwende diese Option wenn Abstürze auftreten. </string>
 	<string name="hacks_title">Hacks</string>
 	<string name="hacks_summary">Experimentelle Features. Benutzung auf eigene Gefahr!</string>
-		<string name="use_boot_completed_hack_title">OP_BOOT_COMPLETED</string>
-	<string name="use_boot_completed_hack_summary">Ermöglicht zu steuern, ob eine App nach dem Hochfahren
+		<string name="use_hack_boot_completed_title">OP_BOOT_COMPLETED</string>
+	<string name="use_hack_boot_completed_summary">Ermöglicht zu steuern, ob eine App nach dem Hochfahren
 	    starten darf. Dies ersetzt die \"%1$s\"-Option (die mit der \"%2$s\"-Option zusammengelegt wurde);
 	    wenn die \"%1$s\"-Option derzeit für eine App deaktiviert ist, wird sie nach dem Hochfahren
 	    nicht starten, wenn Du diese Einstellung aktivierst und dein Gerät neu startest!</string>

@@ -130,8 +130,8 @@ public class SettingsActivity extends Activity
 
 			findPreference("show_launcher_icon").setOnPreferenceChangeListener(this);
 
-			p = findPreference("use_boot_completed_hack");
-			p.setSummary(getString(R.string.use_boot_completed_hack_summary,
+			p = findPreference("use_hack_boot_completed");
+			p.setSummary(getString(R.string.use_hack_boot_completed_summary,
 					OpsResolver.getOpLabel(getActivity(), "OP_POST_NOTIFICATION"),
 					OpsResolver.getOpLabel(getActivity(), "OP_VIBRATE")));
 
