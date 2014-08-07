@@ -48,12 +48,14 @@ public class FixWakeLock extends Hack
 				final String packageName = (String) XposedHelpers.getObjectField(lock, "mPackageName");
 				final int uid = context.getPackageManager().getApplicationInfo(packageName, 0).uid;
 
-				log("  op=" + op + ", uid=" + uid + ", packageName=" + packageName);
+				if(DEBUG)
+					log("  op=" + op + ", uid=" + uid + ", packageName=" + packageName);
 
 				final Method checkOp = AppOpsManager.class.getMethod("checkOp", int.class, int.class, String.class);
 				final int status = (Integer) checkOp.invoke(appOps, op, uid, packageName);
 
-				log("  status=" + status);
+				if(DEBUG)
+					log("  status=" + status);
 
 				if(status == AppOpsManager.MODE_IGNORED)
 					param.setResult(null);
