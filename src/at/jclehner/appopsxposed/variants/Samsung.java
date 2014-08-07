@@ -120,9 +120,20 @@ public class Samsung extends ApkVariant
 		return header;
 	}
 
-	@Override
+	/*@Override
 	protected boolean onMatch(LoadPackageParam lpparam) {
 		return lpparam.appInfo.sourceDir.toLowerCase(Locale.US).endsWith("SecSettings.apk".toLowerCase(Locale.US));
+	}*/
+
+	@Override
+	protected String[] indicatorClasses() {
+		return new String[] {
+				"com.sec.android.samsungapps.util.ServiceBinder",
+				"com.sec.android.samsungapps.util.PreloadUpdate",
+				"com.sec.android.touchwiz.widget.TwTouchPunchView",
+				"com.android.settings.helpdialog.TwTouchPunchView",
+				GRID_SETTINGS
+		};
 	}
 
 	protected final boolean hookConstuctorAddFragmentNameToTab(LoadPackageParam lpparam, final String tabsFieldName)
