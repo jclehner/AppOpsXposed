@@ -6,6 +6,8 @@ import java.util.Set;
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.PowerManager.WakeLock;
 import at.jclehner.appopsxposed.Hack;
 import de.robv.android.xposed.XC_MethodHook;
@@ -18,7 +20,6 @@ import de.robv.android.xposed.XposedHelpers;
 public class FixWakeLock extends Hack
 {
 	private static final boolean DEBUG = false;
-
 
 	private static final int OP_WAKE_LOCK =
 			XposedHelpers.getStaticIntField(AppOpsManager.class, "OP_WAKE_LOCK");
@@ -47,19 +48,20 @@ public class FixWakeLock extends Hack
 			{
 				final WakeLock lock = (WakeLock) param.thisObject;
 
+				// The surrounding this is android.os.PowerManager, which has its
+				// context stored in mContext
 				final Context context = (Context) XposedHelpers.getObjectField(
 						XposedHelpers.getSurroundingThis(lock), "mContext");
 
 				final AppOpsManager appOps = (AppOpsManager)
 						context.getSystemService(Context.APP_OPS_SERVICE);
 
-				final String packageName = (String) XposedHelpers.getObjectField(lock, "mPackageName");
-				final int uid = context.getPackageManager().getApplicationInfo(packageName, 0).uid;
+				final ApplicationInfo info = context.getApplicationInfo();
 
 				if(DEBUG)
-					log("  op=" + OP_WAKE_LOCK + ", uid=" + uid + ", packageName=" + packageName);
+					log("  op=" + OP_WAKE_LOCK + ", uid=" + info.uid + ", packageName=" + info.packageName);
 
-				final int status = (Integer) mCheckOpNoThrow.invoke(appOps, OP_WAKE_LOCK, uid, packageName);
+				final int status = (Integer) mCheckOpNoThrow.invoke(appOps, OP_WAKE_LOCK, info.uid, info.packageName);
 
 				if(DEBUG)
 					log("  status=" + status);
