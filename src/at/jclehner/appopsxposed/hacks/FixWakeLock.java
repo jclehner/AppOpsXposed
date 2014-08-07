@@ -20,7 +20,8 @@ public class FixWakeLock extends Hack
 {
 	public static final FixWakeLock INSTANCE = new FixWakeLock();
 
-
+	private static final String UNKNOWN_TAG = "(unknown tag)";
+	private static final boolean ENABLE_PER_TAG_FILTERING = false;
 	private static final boolean DEBUG = true;
 
 
@@ -45,6 +46,12 @@ public class FixWakeLock extends Hack
 		return "wake_lock";
 	}
 
+	private boolean canAcquireTag(String tag)
+	{
+		// TODO actually implement this
+		return false;
+	}
+
 	private final XC_MethodHook mAcquireHook = new XC_MethodHook() {
 		@Override
 		protected void beforeHookedMethod(MethodHookParam param) throws Throwable
@@ -66,8 +73,23 @@ public class FixWakeLock extends Hack
 
 				if(status == AppOpsManager.MODE_IGNORED)
 				{
+					final String tag = getWakeLockTag(lock);
+					if(tag != null && canAcquireTag(tag))
+					{
+						if(DEBUG)
+						{
+							log("Allowing acquisition of WakeLock " + tag +
+									" for app " + info.packageName);
+						}
+
+						return;
+					}
+
 					if(DEBUG)
-						log("Prevented WakeLock acquisition for app " + info.packageName);
+					{
+						log("Prevented acquisition of WakeLock " + tag +
+								" for app " + info.packageName);
+					}
 
 					// Otherwise WakeLock.release() might throw an exception
 					lock.setReferenceCounted(false);
@@ -87,5 +109,17 @@ public class FixWakeLock extends Hack
 			}
 		}
 	};
+
+	private static String getWakeLockTag(WakeLock lock)
+	{
+		try
+		{
+			return (String) XposedHelpers.getObjectField(lock, "mTag");
+		}
+		catch(Throwable t)
+		{
+			return null;
+		}
+	}
 }
 
