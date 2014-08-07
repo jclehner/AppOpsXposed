@@ -1,11 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="at.jclehner.appopsxposed"
-    android:versionCode="11752"
-    android:versionName="1.18-BETA2">
+    android:versionCode="11800"
+    android:versionName="1.18">
 
     <uses-sdk
         android:minSdkVersion="18"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="21" />
 
     <application android:label="AppOpsXposed"
         android:allowBackup="true"
