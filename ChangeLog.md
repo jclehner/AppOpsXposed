@@ -1,5 +1,7 @@
 ### 1.18
 * Added OP_BOOT_COMPLETED hack
+* Added WakeLock fix
+* Fixed crashes in CyanogenMod-based ROMs
 * Added Spanish translation (Jose Artuñedo@XDA)
 
 ### 1.17.2
