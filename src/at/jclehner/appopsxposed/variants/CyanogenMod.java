@@ -48,7 +48,7 @@ public class CyanogenMod extends AOSP
 		if(CM_VERSION.length() == 0)
 			return false;
 
-		final Matcher m = Pattern.compile("([0-9]+)-([0-9]{8})-(NIGHTLY|SNAPSHOT)-.*").matcher(CM_VERSION);
+		final Matcher m = Pattern.compile("([0-9]+)-([0-9]{8})-.*").matcher(CM_VERSION);
 		if(!m.matches())
 		{
 			if(Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT)
@@ -56,6 +56,8 @@ public class CyanogenMod extends AOSP
 				XposedBridge.log("Detected CyanogenMod running post-KitKat; assuming it's affected");
 				return true;
 			}
+
+			XposedBridge.log("Failed to match ro.cm.version");
 
 			return false;
 		}
