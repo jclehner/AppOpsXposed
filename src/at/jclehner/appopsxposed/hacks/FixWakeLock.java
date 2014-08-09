@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.PowerManager.WakeLock;
 import at.jclehner.appopsxposed.Hack;
+import at.jclehner.appopsxposed.Util;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodHook.Unhook;
 import de.robv.android.xposed.XposedBridge;
@@ -38,7 +39,6 @@ public class FixWakeLock extends Hack
 {
 	public static final FixWakeLock INSTANCE = new FixWakeLock();
 
-	private static final String UNKNOWN_TAG = "(unknown tag)";
 	private static final boolean ENABLE_PER_TAG_FILTERING = false;
 	private static final boolean DEBUG = true;
 
@@ -64,9 +64,22 @@ public class FixWakeLock extends Hack
 		return "wake_lock";
 	}
 
-	private boolean canAcquireTag(String tag)
+	private boolean canAcquire(String packageName, String tag)
 	{
-		// TODO actually implement this
+		if(ENABLE_PER_TAG_FILTERING)
+		{
+			final String blacklistKey = "wakelock_hack_is_blacklist/" + packageName;
+			if(!Util.modPrefs.contains(blacklistKey))
+				return false;
+
+			final boolean isBlacklist = Util.modPrefs.getBoolean(blacklistKey, true);
+			final Set<String> tags = Util.modPrefs.getStringSet("wakelock_hack_tags/" + packageName, null);
+			if(tags == null || tags.isEmpty() || !tags.contains(tag))
+				return isBlacklist;
+
+			return !isBlacklist;
+		}
+
 		return false;
 	}
 
@@ -92,7 +105,7 @@ public class FixWakeLock extends Hack
 				if(status == AppOpsManager.MODE_IGNORED)
 				{
 					final String tag = getWakeLockTag(lock);
-					if(tag != null && canAcquireTag(tag))
+					if(tag != null && canAcquire(info.packageName, tag))
 					{
 						if(DEBUG)
 						{
