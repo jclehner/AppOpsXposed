@@ -20,6 +20,7 @@ package at.jclehner.appopsxposed;
 
 import static at.jclehner.appopsxposed.Util.log;
 import android.content.res.XModuleResources;
+import at.jclehner.appopsxposed.hacks.PackageManagerCrashHack;
 import at.jclehner.appopsxposed.variants.CyanogenMod;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -52,6 +53,8 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 		for(Hack hack : Hack.getAllEnabled())
 			hack.initZygote(startupParam);
+
+		PackageManagerCrashHack.INSTANCE.initZygote(startupParam);
 	}
 
 	@Override
