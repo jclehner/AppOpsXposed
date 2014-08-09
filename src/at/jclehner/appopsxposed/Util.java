@@ -86,6 +86,19 @@ public final class Util
 		return Build.MANUFACTURER.toLowerCase(Locale.US).contains(str.toLowerCase());
 	}
 
+	public static String getAoxVersion(Context context)
+	{
+		final PackageManager pm = context.getPackageManager();
+		try
+		{
+			return pm.getPackageInfo(context.getPackageName(), 0).versionName;
+		}
+		catch(NameNotFoundException e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+
 	public static String[] appendToStringArray(String[] array, String str)
 	{
 		final ArrayList<String> list = new ArrayList<String>(Arrays.asList(array));
@@ -201,6 +214,10 @@ public final class Util
 			return text.toString();
 
 		return Character.toUpperCase(text.charAt(0)) + text.subSequence(1, text.length()).toString();
+	}
+
+	public static boolean isInFailsafeMode() {
+		return modPrefs.getBoolean("failsafe_mode", false);
 	}
 
 	public static class XC_MethodHookRecursive extends XC_MethodHook

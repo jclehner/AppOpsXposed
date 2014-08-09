@@ -52,18 +52,8 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		if(Util.modPrefs.getBoolean("failsafe_mode", false))
 			return;
 
-		if(Util.modPrefs.getBoolean("use_hack_boot_completed", false))
-		{
-			//log("Applying BootCompletedHack in initZygote");
-			//BootCompletedHack.INSTANCE.initZygote(startupParam);
-		}
-
-		if(Util.modPrefs.getBoolean("use_hack_wake_lock", false))
-		{
-			//log("Applying BootCompletedHack in initZygote");
-			//BootCompletedHack.INSTANCE.initZygote(startupParam);
-			FixWakeLock.INSTANCE.initZygote(startupParam);
-		}
+		for(Hack hack : Hack.getAllEnabled())
+			hack.initZygote(startupParam);
 	}
 
 	@Override
@@ -95,39 +85,33 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
-		final boolean useBootCompletedHack = !Util.modPrefs.getBoolean("failsafe_mode", false)
-				&& Util.modPrefs.getBoolean("use_hack_boot_completed", false);
+		final boolean isFramework;
 
-		if(!lpparam.packageName.equals("com.android.settings"))
-		{
-			if("android".equals(lpparam.packageName) && useBootCompletedHack)
-				BootCompletedHack.INSTANCE.handleLoadPackage(lpparam);
-
+		if(SETTINGS_PACKAGE.equals(lpparam.packageName))
+			isFramework = false;
+		else if("android".equals(lpparam.packageName))
+			isFramework = true;
+		else
 			return;
-		}
 
-		log("Util.modRes=" + Util.modRes);
-
-		try
+		if(!Util.isInFailsafeMode())
 		{
-			lpparam.classLoader.loadClass(APP_OPS_FRAGMENT);
+			for(Hack hack : Hack.getAllEnabled())
+				hack.handleLoadPackage(lpparam);
 		}
-		catch(ClassNotFoundException e)
-		{
-			log(APP_OPS_FRAGMENT + " class not found; bailing out!");
-			return;
-		}
-
-		Util.settingsRes = XModuleResources.createInstance(lpparam.appInfo.sourceDir, null);
-
-		if(Util.modPrefs.getBoolean("failsafe_mode", false))
+		else
 		{
 			log("Running in failsafe mode");
 			ApkVariant.hookIsValidFragment(lpparam);
 			return;
 		}
-		else if(useBootCompletedHack)
-			BootCompletedHack.INSTANCE.handleLoadPackage(lpparam);
+
+		if(isFramework)
+			return;
+
+		log("Util.modRes=" + Util.modRes);
+
+		Util.settingsRes = XModuleResources.createInstance(lpparam.appInfo.sourceDir, null);
 
 		final String forceVariant = Util.modPrefs.getString("force_variant", "");
 		if(forceVariant.length() == 0)

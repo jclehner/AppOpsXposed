@@ -18,8 +18,12 @@
 
 package at.jclehner.appopsxposed;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import at.jclehner.appopsxposed.hacks.BootCompletedHack;
+import at.jclehner.appopsxposed.hacks.FixWakeLock;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XposedBridge;
@@ -34,19 +38,38 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 		public final String title;
 		public final String summary;
 
-		PreferenceInfo(String keySuffix, String title, String summary)
+		PreferenceInfo(String key, String title, String summary)
 		{
-			this.key = "use_hack_" + keySuffix;
+			this.key = key;
 			this.title = title;
 			this.summary = summary;
 		}
 	}
 
 	public static final Hack[] HACKS = {
-		new BootCompletedHack()
+		new BootCompletedHack(),
+		new FixWakeLock()
 	};
 
 	private String mLogTag;
+
+	public static List<Hack> getAllEnabled()
+	{
+		final List<Hack> hacks = new ArrayList<Hack>();
+
+		Util.log("Enabled hacks:");
+
+		for(Hack hack : HACKS)
+		{
+			if(Util.modPrefs.getBoolean(hack.getKey(), false))
+			{
+				hacks.add(hack);
+				Util.log("  " + hack.getClass().getSimpleName());
+			}
+		}
+
+		return hacks;
+	}
 
 	@Override
 	public void initZygote(StartupParam startupParam) throws Throwable {
@@ -63,7 +86,7 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 	}
 
 	public final PreferenceInfo getPrefernceInfo(Context context) {
-		return new PreferenceInfo(onGetKeySuffix(), onGetPreferenceTitle(context), onGetPreferenceSummary(context));
+		return new PreferenceInfo(getKey(), onGetPreferenceTitle(context), onGetPreferenceSummary(context));
 	}
 
 	protected void handleLoadFrameworkPackage(LoadPackageParam lpparam) throws Throwable {
@@ -102,6 +125,10 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 			return context.getString(resId, formatArgs);
 
 		return name;
+	}
+
+	private String getKey() {
+		return "use_hack_" + onGetKeySuffix();
 	}
 
 	private String getLogPrefix()

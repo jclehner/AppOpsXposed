@@ -24,7 +24,7 @@
 	    Launcher-Icons ist dann zwingend notwendig. Verwende diese Option wenn Abstürze auftreten. </string>
 	<string name="hacks_title">Hacks</string>
 	<string name="hacks_summary">Experimentelle Features. Benutzung auf eigene Gefahr!</string>
-		<string name="use_hack_boot_completed_title">OP_BOOT_COMPLETED</string>
+		<string name="use_hack_boot_completed_title">OP_BOOT_COMPLETED hinzufügen</string>
 	<string name="use_hack_boot_completed_summary">Ermöglicht zu steuern, ob eine App nach dem Hochfahren
 	    starten darf. Dies ersetzt die \"%1$s\"-Option (die mit der \"%2$s\"-Option zusammengelegt wurde);
 	    wenn die \"%1$s\"-Option derzeit für eine App deaktiviert ist, wird sie nach dem Hochfahren
@@ -32,5 +32,13 @@
 	<string name="hacks_dialog_title">Warnung</string>
 	<string name="hacks_dialog_message">Diese Features sind <strong>höchst experimentell</strong> und können Dein
 	    Gerät in einen Boot-Loop stürzen und somit unbenutzbar machen. <em>Nur</em> verwenden, wenn Du weißt, wie man
-	    Xposed (oder dieses Modul) mittels Recovery-Modus oder einer Shell deaktivieren kann! Du wurdest gewarnt.</string> 
+	    Xposed (oder dieses Modul) mittels Recovery-Modus oder einer Shell deaktivieren kann! Du wurdest gewarnt.</string>
+
+	<string name="use_hack_wake_lock_title">OP_WAKE_LOCK reparieren</string>
+	<string name="use_hack_wake_lock_summary">Behebt einen Fehler in der \"%1$s\"-Option.</string>
+	<string name="about">Über</string>
+	<string name="build_bugreport_title">Bugreport erstellen</string>
+	<string name="build_bugreport_summary">Mit Email/Dropbox/Google Drive/etc. übermitteln; benötigt
+	    Root-Rechte</string>
+	<string name="building_toast">Erstelle&#8230;</string>
 </resources>

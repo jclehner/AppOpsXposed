@@ -135,6 +135,10 @@ public class SettingsActivity extends Activity
 					OpsResolver.getOpLabel(getActivity(), "OP_POST_NOTIFICATION"),
 					OpsResolver.getOpLabel(getActivity(), "OP_VIBRATE")));
 
+			p = findPreference("use_hack_wake_lock");
+			p.setSummary(getString(R.string.use_hack_wake_lock_summary,
+					OpsResolver.getOpLabel(getActivity(), "OP_WAKE_LOCK")));
+
 			p = findPreference("hacks");
 			p.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
@@ -144,6 +148,22 @@ public class SettingsActivity extends Activity
 					if(mPrefs.getBoolean("show_hacks_warning_dialog", true))
 						showHacksWarningDialog(preference);
 
+					return true;
+				}
+			});
+
+			p = findPreference("version");
+			p.setTitle("AppOpsXposed " + Util.getAoxVersion(getActivity()));
+			p.setSummary("Copyright (C) Joseph C. Lehner 2013, 2014\n"
+					+ "<joseph.c.lehner@gmail.com> / caspase @XDA");
+
+			p = findPreference("build_bugreport");
+			p.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+				@Override
+				public boolean onPreferenceClick(Preference preference)
+				{
+					BugReportBuilder.buildAndSend(getActivity());
 					return true;
 				}
 			});

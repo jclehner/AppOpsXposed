@@ -24,7 +24,7 @@
 	    must be used. Use this if you experience crashes.</string>
 	<string name="hacks_title">Hacks</string>
 	<string name="hacks_summary">Experimental features. Use at your own risk!</string>	    
-	<string name="use_hack_boot_completed_title">OP_BOOT_COMPLETED</string>
+	<string name="use_hack_boot_completed_title">Add OP_BOOT_COMPLETED</string>
 	<string name="use_hack_boot_completed_summary">Allows you to control whether an app is allowed to
 	    start at boot. This replaces the \"%1$s\" option (which has been merged with the \"%2$s\" option);
 	    if \"%1$s\" is currently disabled for an app, it will not boot if you
@@ -36,6 +36,10 @@
 	    get stuck in a boot-loop and become unusable. Use <em>only</em> if you know how to disable Xposed (or this module) from
 	    recovery mode or a shell. You have been warned!</string>
 
-	<string name="use_hack_wake_lock_title">WakeLock fix</string>
-	<string name="use_hack_wake_lock_summary">Fixes the "Keep awake" op.</string>
+	<string name="use_hack_wake_lock_title">Fix OP_WAKE_LOCK</string>
+	<string name="use_hack_wake_lock_summary">Fixes the \"%1$s"\" option.</string>
+	<string name="about">About</string>
+	<string name="build_bugreport_title">Build bug report</string>
+	<string name="build_bugreport_summary">Submit via email/Dropbox/Google Drive/etc.; requires root.</string>
+	<string name="building_toast">Building&#8230;</string>
 </resources>

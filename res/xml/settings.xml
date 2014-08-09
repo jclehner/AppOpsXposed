@@ -24,22 +24,36 @@
             android:summary="@string/automatic"
             android:entries="@array/variants"
             android:defaultValue="" />
+        
+        
+        
+	    <PreferenceScreen android:key="hacks"
+	        android:title="@string/hacks_title"
+	        android:summary="@string/hacks_summary">
+	               
+	        <CheckBoxPreference android:key="use_hack_boot_completed"
+	            android:title="@string/use_hack_boot_completed_title"
+	            android:summary="@string/use_hack_boot_completed_summary"
+	            android:defaultValue="false" />
+	
+	        <CheckBoxPreference android:key="use_hack_wake_lock"
+	            android:title="@string/use_hack_wake_lock_title"
+	            android:summary="@string/use_hack_wake_lock_summary"
+	            android:defaultValue="false" />
+
+    	</PreferenceScreen>
    
     </PreferenceCategory>
+    
+    <PreferenceCategory android:title="@string/about">
         
-    <PreferenceScreen android:key="hacks"
-        android:title="@string/hacks_title"
-        android:summary="@string/hacks_summary">
-               
-        <CheckBoxPreference android:key="use_hack_boot_completed"
-            android:title="@string/use_hack_boot_completed_title"
-            android:summary="@string/use_hack_boot_completed_summary"
-            android:defaultValue="false" />
-
-        <CheckBoxPreference android:key="use_hack_wake_lock"
-            android:title="@string/use_hack_wake_lock_title"
-            android:summary="@string/use_hack_wake_lock_summary"
-            android:defaultValue="false" />
-
-    </PreferenceScreen>
+        <Preference android:key="version"
+            android:enabled="false" />
+        
+        <Preference android:key="build_bugreport"
+            android:title="@string/build_bugreport_title"
+            android:summary="@string/build_bugreport_summary" />
+        
+    </PreferenceCategory>
+    
 </PreferenceScreen>
