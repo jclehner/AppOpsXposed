@@ -1,6 +1,6 @@
 ### 1.18
-* Added OP_BOOT_COMPLETED hack
-* Added WakeLock fix
+* Added OP_BOOT_COMPLETED hack (MUST BE ENABLED MANUALLY)
+* Added WakeLock-fix hack (MUST BE ENABLED MANUALLY)
 * Fixed crashes in CyanogenMod-based ROMs
 * Added Spanish translation (Jose Artuñedo@XDA)
 
