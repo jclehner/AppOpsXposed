@@ -1,5 +1,6 @@
-### 1.18.1
-* More reliable detection of Samsung ROMs
+### 1.19
+* Added ability to submit bug reports more easily
+* Fixed some issues in Samsung ROMs
 * Fixed issue in detection of CyanogenMod-based ROMs
 
 ### 1.18

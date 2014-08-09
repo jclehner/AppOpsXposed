@@ -42,7 +42,6 @@ public class FixWakeLock extends Hack
 	private static final boolean ENABLE_PER_TAG_FILTERING = false;
 	private static final boolean DEBUG = true;
 
-
 	private static final int OP_WAKE_LOCK =
 			XposedHelpers.getStaticIntField(AppOpsManager.class, "OP_WAKE_LOCK");
 

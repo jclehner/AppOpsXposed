@@ -20,8 +20,6 @@ package at.jclehner.appopsxposed;
 
 import static at.jclehner.appopsxposed.Util.log;
 import android.content.res.XModuleResources;
-import at.jclehner.appopsxposed.hacks.BootCompletedHack;
-import at.jclehner.appopsxposed.hacks.FixWakeLock;
 import at.jclehner.appopsxposed.variants.CyanogenMod;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
