@@ -25,9 +25,6 @@ import de.robv.android.xposed.XposedBridge;
 
 public class PackageManagerCrashHack extends Hack
 {
-	public static final PackageManagerCrashHack INSTANCE =
-			new PackageManagerCrashHack();
-
 	@Override
 	public void initZygote(StartupParam param) throws Throwable
 	{
