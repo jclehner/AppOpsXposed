@@ -71,7 +71,17 @@ public class BootCompletedHack extends Hack
 	private static final int OP_POST_NOTIFICATION =
 			XposedHelpers.getStaticIntField(AppOpsManager.class, "OP_POST_NOTIFICATION");
 
-	private static final int OP_BOOT_COMPLETED = OP_POST_NOTIFICATION;
+	private static final int OP_READ_CLIPBOARD =
+			XposedHelpers.getStaticIntField(AppOpsManager.class, "OP_READ_CLIPBOARD");
+
+	private static final int OP_WRITE_CLIPBOARD =
+			XposedHelpers.getStaticIntField(AppOpsManager.class, "OP_READ_CLIPBOARD");
+
+
+	private static final int MERGE_TARGET = OP_VIBRATE;
+	private static final int MERGE_SOURCE = OP_POST_NOTIFICATION;
+
+	private static final int OP_BOOT_COMPLETED = MERGE_SOURCE;
 
 	// Not neccessary for our cause, but we can fix an error while we're
 	// at it; see patchFramework() for details
@@ -307,12 +317,12 @@ public class BootCompletedHack extends Hack
 								android.Manifest.permission.RECEIVE_BOOT_COMPLETED);
 
 						Object array = XposedHelpers.getObjectField(param.thisObject, "mOpSummaries");
-						Array.set(array, OP_VIBRATE, Array.get(array, OP_VIBRATE) + " / "
+						Array.set(array, MERGE_TARGET, Array.get(array, MERGE_TARGET) + " / "
 								 + Array.get(array, OP_BOOT_COMPLETED));
 						Array.set(array, OP_BOOT_COMPLETED, summary);
 
 						array = XposedHelpers.getObjectField(param.thisObject, "mOpLabels");
-						Array.set(array, OP_VIBRATE, Array.get(array, OP_VIBRATE) + " / "
+						Array.set(array, MERGE_TARGET, Array.get(array, MERGE_TARGET) + " / "
 								 + Array.get(array, OP_BOOT_COMPLETED));
 						Array.set(array, OP_BOOT_COMPLETED, Util.capitalizeFirst(summary));
 					}
