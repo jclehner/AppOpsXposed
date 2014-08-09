@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
+import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -218,6 +219,28 @@ public final class Util
 
 	public static boolean isInFailsafeMode() {
 		return modPrefs.getBoolean("failsafe_mode", false);
+	}
+
+	public static int getOpValue(String opName)
+	{
+		try
+		{
+			return AppOpsManager.class.getField(opName).getInt(null);
+		}
+		catch(NoSuchFieldException e)
+		{
+			// ignore
+		}
+		catch(IllegalAccessException e)
+		{
+			// ignore
+		}
+		catch(IllegalArgumentException e)
+		{
+			// ignore
+		}
+
+		return -1;
 	}
 
 	public static class XC_MethodHookRecursive extends XC_MethodHook

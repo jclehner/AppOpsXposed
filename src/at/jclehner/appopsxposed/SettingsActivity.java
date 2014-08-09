@@ -256,6 +256,7 @@ public class SettingsActivity extends Activity
 	}
 }
 
+
 class OpsResolver
 {
 	private static final String TAG = "AOX:OpsResolver";
@@ -289,7 +290,7 @@ class OpsResolver
 
 				final int id = r.getIdentifier(idName, null, null);
 
-				final int opsCount = getAppOpsManagerIntField("_NUM_OP");
+				final int opsCount = getOpValue("_NUM_OP");
 				sTryLoadOpNames = opsCount != -1;
 
 				if(sTryLoadOpNames)
@@ -327,7 +328,7 @@ class OpsResolver
 			}
 		}
 
-		final int op = getAppOpsManagerIntField(opName);
+		final int op = getOpValue(opName);
 
 		if(array == null || op == -1 || op >= array.length)
 			return opName;
@@ -335,7 +336,7 @@ class OpsResolver
 		return array[op];
 	}
 
-	private static int getAppOpsManagerIntField(String name)
+	public static int getOpValue(String name)
 	{
 		try
 		{
@@ -359,6 +360,7 @@ class OpsResolver
 		return -1;
 	}
 }
+
 
 
 

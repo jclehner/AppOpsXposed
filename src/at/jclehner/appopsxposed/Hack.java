@@ -18,15 +18,21 @@
 
 package at.jclehner.appopsxposed;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.TargetApi;
+import android.app.AppOpsManager;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import at.jclehner.appopsxposed.hacks.BootCompletedHack;
 import at.jclehner.appopsxposed.hacks.FixWakeLock;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteInit
@@ -52,6 +58,7 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 	};
 
 	private String mLogTag;
+	private static final Method sCheckOpNoThrow = findCheckOpNoThrow();
 
 	public static List<Hack> getAllEnabled()
 	{
@@ -127,6 +134,40 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 		return name;
 	}
 
+	protected static boolean hasCheckOpNoThrow() {
+		return sCheckOpNoThrow != null;
+	}
+
+	@TargetApi(19)
+	protected static int checkOpNoThrow(int op, Context context)
+	{
+		if(hasCheckOpNoThrow())
+		{
+			final AppOpsManager appOps = (AppOpsManager)
+					context.getSystemService(Context.APP_OPS_SERVICE);
+			final ApplicationInfo info = context.getApplicationInfo();
+
+			try
+			{
+				return (Integer) sCheckOpNoThrow.invoke(appOps, op, info.uid, info.packageName);
+			}
+			catch(IllegalAccessException e)
+			{
+				Util.log(e);
+			}
+			catch(IllegalArgumentException e)
+			{
+				Util.log(e);
+			}
+			catch(InvocationTargetException e)
+			{
+				Util.log(e);
+			}
+		}
+
+		return AppOpsManager.MODE_ALLOWED;
+	}
+
 	private String getKey() {
 		return "use_hack_" + onGetKeySuffix();
 	}
@@ -145,5 +186,19 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 		}
 
 		return mLogTag;
+	}
+
+	private static Method findCheckOpNoThrow()
+	{
+		try
+		{
+			return XposedHelpers.findMethodExact(AppOpsManager.class, "checkOpNoThrow",
+					int.class, int.class, String.class);
+		}
+		catch(Throwable t)
+		{
+			Util.log("checkOpNoThrow not available");
+			return null;
+		}
 	}
 }

@@ -51,8 +51,9 @@ public class FixWakeLock extends Hack
 	@Override
 	public void initZygote(StartupParam param) throws Throwable
 	{
-		mCheckOpNoThrow = XposedHelpers.findMethodExact(AppOpsManager.class, "checkOpNoThrow",
-				int.class, int.class, String.class);
+		if(!hasCheckOpNoThrow())
+			return;
+
 		mUnhooks = XposedBridge.hookAllMethods(WakeLock.class, "acquire", mAcquireHook);
 
 		log("Hooked WakeLock.acquire(): " + mUnhooks.size() + " functions");
