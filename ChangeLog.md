@@ -1,3 +1,7 @@
+### 1.18.1
+* More reliable detection of Samsung ROMs
+* Fixed issue in detection of CyanogenMod-based ROMs
+
 ### 1.18
 * Added OP_BOOT_COMPLETED hack (MUST BE ENABLED MANUALLY)
 * Added WakeLock-fix hack (MUST BE ENABLED MANUALLY)
@@ -12,7 +16,6 @@
 * Fixed compatibility with Galaxy S5 settings app
   (grid layout)
 * Fixed crash on Xperia KitKat ROMs
-
 
 ### 1.16:
 * Added OmniROM variant (no header in settings, only

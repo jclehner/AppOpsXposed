@@ -110,7 +110,7 @@ public class Samsung extends ApkVariant
 		mIsComplete = true;
 	}
 
-	@Override
+	/*@Override
 	protected Object onCreateAppOpsHeader(Context context, int addAfterHeaderId)
 	{
 		final Header header = (Header) super.onCreateAppOpsHeader(context, addAfterHeaderId);
@@ -118,7 +118,7 @@ public class Samsung extends ApkVariant
 			header.iconRes = Util.getSettingsIdentifier("drawable/ic_setting_grid_applicationpermissions");
 
 		return header;
-	}
+	}*/
 
 	/*@Override
 	protected boolean onMatch(LoadPackageParam lpparam) {
