@@ -23,9 +23,11 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -89,10 +91,11 @@ public class BugReportBuilder
 	public BugReportBuilder(Context context)
 	{
 		mContext = context;
-		mDeviceId = generateDeviceId();
-		mReportTime = Long.toString(System.currentTimeMillis());
+		mDeviceId = getDeviceId();
+		mReportTime = getReportTime();
 		mBugReportDir = new File(context.getCacheDir(), "reports");
-		mBugReportFile = new File(mBugReportDir, "report_" + mDeviceId + ".txt");
+		mBugReportFile = new File(mBugReportDir, "report_" + mDeviceId
+				+ "_" + mReportTime + ".txt");
 	}
 
 	public Uri build()
@@ -135,10 +138,16 @@ public class BugReportBuilder
 		return Uri.fromFile(mBugReportFile);
 	}
 
-	private String generateDeviceId()
+	@SuppressLint("SimpleDateFormat")
+	private String getReportTime()
 	{
-		final String raw =
-				Build.FINGERPRINT + Build.SERIAL + Build.TIME;
+		final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		return sdf.format(new Date());
+	}
+
+	private String getDeviceId()
+	{
+		final String raw = Build.SERIAL + Build.FINGERPRINT;
 
 		byte[] bytes;
 
@@ -156,7 +165,7 @@ public class BugReportBuilder
 		for(byte b : bytes)
 			sb.append(Integer.toString((b & 0xff ) + 0x100, 16).substring(1));
 
-		return sb.toString();
+		return sb.substring(0, 12);
 	}
 
 	private void collectDeviceInfo(StringBuilder sb)
