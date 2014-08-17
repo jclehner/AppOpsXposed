@@ -1,14 +1,13 @@
 package at.jclehner.appopsxposed.hacks;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import android.app.AppOpsManager;
 import android.content.Context;
 import at.jclehner.appopsxposed.Hack;
 import at.jclehner.appopsxposed.Util;
+import at.jclehner.appopsxposed.Util.StringList;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
 import de.robv.android.xposed.XposedBridge;
@@ -81,7 +80,8 @@ public class GmsLocationHack extends Hack
 			final String[] functions = {
 					"connect",
 					"requestLocationUpdates",
-					"removeLocationUpdates"
+					"removeLocationUpdates",
+					"getLastLocation"
 			};
 
 			for(String f : functions)
@@ -120,6 +120,8 @@ public class GmsLocationHack extends Hack
 						@Override
 						protected void beforeHookedMethod(MethodHookParam param) throws Throwable
 						{
+							log("addApi called with api=" + param.args[0]);
+
 							if(param.args[0] == locationApi)
 							{
 								final Context c = grabContext(param);
@@ -250,36 +252,6 @@ public class GmsLocationHack extends Hack
 				log("Context is null in hook for " + param.method.getName());
 		}
 	};
-
-	static class StringList
-	{
-		private final List<String> mList = new ArrayList<String>();
-
-		void add(String string) {
-			mList.add(string);
-		}
-
-		boolean isEmpty() {
-			return mList.isEmpty();
-		}
-
-		@Override
-		public String toString()
-		{
-			final StringBuilder sb = new StringBuilder();
-
-			for(int i = 0; i != mList.size(); ++i)
-			{
-				if(i != 0)
-					sb.append(", ");
-
-				sb.append(mList.get(i));
-			}
-
-			return sb.toString();
-		}
-
-	}
 }
 
 class ObfuscationHelper
