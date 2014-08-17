@@ -18,18 +18,18 @@
 
 package at.jclehner.appopsxposed.hacks;
 
-import java.lang.reflect.Method;
 import java.util.Set;
 
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.os.PowerManager.WakeLock;
+import android.os.Binder;
+import android.os.IBinder;
 import at.jclehner.appopsxposed.Hack;
 import at.jclehner.appopsxposed.Util;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodHook.Unhook;
+import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
@@ -46,22 +46,34 @@ public class FixWakeLock extends Hack
 			XposedHelpers.getStaticIntField(AppOpsManager.class, "OP_WAKE_LOCK");
 
 	private Set<Unhook> mUnhooks;
-	private Method mCheckOpNoThrow;
 
 	@Override
 	public void initZygote(StartupParam param) throws Throwable
 	{
-		if(!hasCheckOpNoThrow())
+		if(!hasCheckOp())
 			return;
 
-		mUnhooks = XposedBridge.hookAllMethods(WakeLock.class, "acquire", mAcquireHook);
+		hookMethods(ClassLoader.getSystemClassLoader());
+	}
 
-		log("Hooked WakeLock.acquire(): " + mUnhooks.size() + " functions");
+	@Override
+	protected void handleLoadFrameworkPackage(LoadPackageParam lpparam) throws Throwable
+	{
+		hookMethods(lpparam.classLoader);
 	}
 
 	@Override
 	protected String onGetKeySuffix() {
 		return "wake_lock";
+	}
+
+	private void hookMethods(ClassLoader classLoader) throws Throwable
+	{
+		final Class<?> pwrMgrSvcClazz = classLoader.loadClass(
+				"com.android.server.power.PowerManagerService");
+
+		mUnhooks = XposedBridge.hookAllMethods(pwrMgrSvcClazz, "acquireWakeLock", mAcquireHook);
+		log("Hooked " + mUnhooks.size() + " functions");
 	}
 
 	private boolean canAcquire(String packageName, String tag)
@@ -87,70 +99,48 @@ public class FixWakeLock extends Hack
 		@Override
 		protected void beforeHookedMethod(MethodHookParam param) throws Throwable
 		{
-			try
+			final IBinder lock = (IBinder) param.args[0];
+			final String tag = (String) param.args[2];
+			final String packageName = (String) param.args[3];
+
+			final int uid = Binder.getCallingUid();
+
+			// Since we want this hack to replicate the expected behaviour,
+			// we have to do some sanity checks first. On error we return
+			// and let the hooked function throw an exception.
+
+			if(lock == null || packageName == null)
+				return;
+
+			final Context ctx = (Context)
+					XposedHelpers.getObjectField(param.thisObject, "mContext");
+			if(ctx == null)
+				return;
+
+			ctx.enforceCallingOrSelfPermission(
+					android.Manifest.permission.WAKE_LOCK, null);
+
+			if(checkOp(ctx, OP_WAKE_LOCK, uid, packageName) != AppOpsManager.MODE_ALLOWED)
 			{
-				final WakeLock lock = (WakeLock) param.thisObject;
-
-				// The surrounding this is android.os.PowerManager, which has its
-				// context stored in mContext
-				final Context context = (Context) XposedHelpers.getObjectField(
-						XposedHelpers.getSurroundingThis(lock), "mContext");
-
-				final AppOpsManager appOps = (AppOpsManager)
-						context.getSystemService(Context.APP_OPS_SERVICE);
-
-				final ApplicationInfo info = context.getApplicationInfo();
-				final int status = (Integer) mCheckOpNoThrow.invoke(appOps, OP_WAKE_LOCK, info.uid, info.packageName);
-
-				if(status == AppOpsManager.MODE_IGNORED)
+				if(tag != null && canAcquire(packageName, tag))
 				{
-					final String tag = getWakeLockTag(lock);
-					if(tag != null && canAcquire(info.packageName, tag))
-					{
-						if(DEBUG)
-						{
-							log("Allowing acquisition of WakeLock " + tag +
-									" for app " + info.packageName);
-						}
-
-						return;
-					}
-
 					if(DEBUG)
 					{
-						log("Prevented acquisition of WakeLock " + tag +
-								" for app " + info.packageName);
+						log("Allowing acquisition of WakeLock '" + tag +
+								"' for app " + packageName);
 					}
-
-					// Otherwise WakeLock.release() might throw an exception
-					lock.setReferenceCounted(false);
-					param.setResult(null);
+					return;
 				}
-			}
-			catch(Throwable t)
-			{
-				log("Exception caught - disabling hack");
-				log(t);
 
-				if(mUnhooks != null)
+				if(DEBUG)
 				{
-					for(Unhook u: mUnhooks)
-						u.unhook();
+					log("Prevented acquisition of WakeLock '" + tag +
+							"' for app " + packageName);
 				}
+
+				param.setResult(null);
 			}
 		}
 	};
-
-	private static String getWakeLockTag(WakeLock lock)
-	{
-		try
-		{
-			return (String) XposedHelpers.getObjectField(lock, "mTag");
-		}
-		catch(Throwable t)
-		{
-			return null;
-		}
-	}
 }
 
