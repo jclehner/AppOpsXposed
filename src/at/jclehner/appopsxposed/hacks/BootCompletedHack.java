@@ -255,7 +255,7 @@ public class BootCompletedHack extends Hack
 								protected void beforeHookedMethod(MethodHookParam param)
 										throws Throwable
 								{
-									log("noteOpNoThrow called in noteNotificationOp");
+									//log("noteOpNoThrow called in noteNotificationOp");
 
 									final int op = (Integer) param.args[0];
 									if(op == OP_POST_NOTIFICATION)
