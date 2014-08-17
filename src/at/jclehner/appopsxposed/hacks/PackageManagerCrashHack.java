@@ -47,6 +47,6 @@ public class PackageManagerCrashHack extends Hack
 
 	@Override
 	protected String onGetKeySuffix() {
-		throw new UnsupportedOperationException();
+		return "pm_crash";
 	}
 }

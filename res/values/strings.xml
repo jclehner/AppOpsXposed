@@ -42,4 +42,6 @@
 	<string name="build_bugreport_title">Build bug report</string>
 	<string name="build_bugreport_summary">Submit via email/Dropbox/Google Drive/etc.; requires root.</string>
 	<string name="building_toast">Building&#8230;</string>
+	<string name="use_hack_pm_crash_title">Fix PackageManager</string>
+	<string name="use_hack_pm_crash_summary">Fixes a crash in a system component that prevents \"%1$s\" from loading.</string>
 </resources>

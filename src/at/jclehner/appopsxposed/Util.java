@@ -20,10 +20,15 @@ package at.jclehner.appopsxposed;
 
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import android.app.AppOpsManager;
 import android.content.Context;
@@ -33,9 +38,11 @@ import android.content.res.XModuleResources;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
+import dalvik.system.DexFile;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public final class Util
 {
@@ -129,6 +136,40 @@ public final class Util
 	{
 		debug("dumpViewHierarchy: ");
 		dumpViewHierarchyInternal(v, 0);
+	}
+
+	public static Set<String> getClassList(LoadPackageParam lpparam, String packageName, boolean getSubPackages)
+	{
+		if(lpparam.appInfo == null)
+			return null;
+
+		final DexFile df;
+		try
+		{
+			df = new DexFile(lpparam.appInfo.publicSourceDir);
+		}
+		catch(IOException e)
+		{
+			log(e);
+			return null;
+		}
+
+		final Enumeration<String> entries = df.entries();
+		final Set<String> classes = new HashSet<String>();
+
+		while(entries.hasMoreElements())
+		{
+			final String entry = entries.nextElement();
+			if(packageName != null && !entry.startsWith(packageName))
+				continue;
+
+			if(!getSubPackages && entry.substring(packageName.length() + 1).contains("."))
+				continue;
+
+			classes.add(entry);
+		}
+
+		return classes;
 	}
 
 	private static void dumpViewHierarchyInternal(View view, int level)

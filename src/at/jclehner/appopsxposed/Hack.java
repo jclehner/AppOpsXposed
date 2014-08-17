@@ -29,6 +29,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import at.jclehner.appopsxposed.hacks.BootCompletedHack;
 import at.jclehner.appopsxposed.hacks.FixWakeLock;
+import at.jclehner.appopsxposed.hacks.PackageManagerCrashHack;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XposedBridge;
@@ -54,24 +55,30 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 
 	public static final Hack[] HACKS = {
 		new BootCompletedHack(),
-		new FixWakeLock()
+		new FixWakeLock(),
+		//new GmsLocationHack(),
+		new PackageManagerCrashHack()
 	};
 
 	private String mLogTag;
-	private static final Method sCheckOpNoThrow = findCheckOpNoThrow();
 
-	public static List<Hack> getAllEnabled()
+	private static final Method sCheckOp = findCheckOp();
+	private static final Method sNoteOp = findNoteOp();
+
+	public static List<Hack> getAllEnabled(boolean quiet)
 	{
 		final List<Hack> hacks = new ArrayList<Hack>();
 
-		Util.log("Enabled hacks:");
+		if(!quiet)
+			Util.log("Enabled hacks:");
 
 		for(Hack hack : HACKS)
 		{
 			if(Util.modPrefs.getBoolean(hack.getKey(), false))
 			{
 				hacks.add(hack);
-				Util.log("  " + hack.getClass().getSimpleName());
+				if(!quiet)
+					Util.log("  " + hack.getClass().getSimpleName());
 			}
 		}
 
@@ -90,6 +97,8 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 			handleLoadFrameworkPackage(lpparam);
 		else if(AppOpsXposed.SETTINGS_PACKAGE.equals(lpparam.packageName))
 			handleLoadSettingsPackage(lpparam);
+
+		handleLoadAnyPackage(lpparam);
 	}
 
 	public final PreferenceInfo getPrefernceInfo(Context context) {
@@ -101,6 +110,10 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 	}
 
 	protected void handleLoadSettingsPackage(LoadPackageParam lpparam) throws Throwable {
+
+	}
+
+	protected void handleLoadAnyPackage(LoadPackageParam lpparam) throws Throwable {
 
 	}
 
@@ -134,22 +147,44 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 		return name;
 	}
 
-	protected static boolean hasCheckOpNoThrow() {
-		return sCheckOpNoThrow != null;
+	protected static boolean hasCheckOp() {
+		return sCheckOp != null;
 	}
 
 	@TargetApi(19)
-	protected static int checkOpNoThrow(int op, Context context)
+	protected static void noteOperation(Context context, int op, int uid, String packageName)
 	{
-		if(hasCheckOpNoThrow())
-		{
-			final AppOpsManager appOps = (AppOpsManager)
-					context.getSystemService(Context.APP_OPS_SERVICE);
-			final ApplicationInfo info = context.getApplicationInfo();
+		if(sNoteOp == null)
+			return;
 
+		try
+		{
+			sNoteOp.invoke(context.getSystemService(Context.APP_OPS_SERVICE),
+					op, uid, packageName);
+		}
+		catch(IllegalAccessException e)
+		{
+			Util.log(e);
+		}
+		catch(IllegalArgumentException e)
+		{
+			Util.log(e);
+		}
+		catch(InvocationTargetException e)
+		{
+			Util.log(e);
+		}
+	}
+
+	@TargetApi(19)
+	protected static int checkOp(Context context, int op, int uid, String packageName)
+	{
+		if(hasCheckOp())
+		{
 			try
 			{
-				return (Integer) sCheckOpNoThrow.invoke(appOps, op, info.uid, info.packageName);
+				return (Integer) sCheckOp.invoke(
+						context.getSystemService(Context.APP_OPS_SERVICE), op, uid, packageName);
 			}
 			catch(IllegalAccessException e)
 			{
@@ -166,6 +201,12 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 		}
 
 		return AppOpsManager.MODE_ALLOWED;
+	}
+
+	protected static int checkOp(Context context, int op)
+	{
+		final ApplicationInfo info = context.getApplicationInfo();
+		return checkOp(context, op, info.uid, info.packageName);
 	}
 
 	private String getKey() {
@@ -188,16 +229,30 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 		return mLogTag;
 	}
 
-	private static Method findCheckOpNoThrow()
+	private static Method findCheckOp()
 	{
 		try
 		{
-			return XposedHelpers.findMethodExact(AppOpsManager.class, "checkOpNoThrow",
+			return XposedHelpers.findMethodExact(AppOpsManager.class, "checkOp",
 					int.class, int.class, String.class);
 		}
 		catch(Throwable t)
 		{
-			Util.log("checkOpNoThrow not available");
+			Util.log("AppOpsManager.checkOp not available");
+			return null;
+		}
+	}
+
+	private static Method findNoteOp()
+	{
+		try
+		{
+			return XposedHelpers.findMethodExact(AppOpsManager.class, "noteOp",
+					int.class, int.class, String.class);
+		}
+		catch(Throwable t)
+		{
+			Util.log("AppOpsManager.noteOp not available");
 			return null;
 		}
 	}

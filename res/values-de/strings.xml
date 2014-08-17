@@ -41,4 +41,8 @@
 	<string name="build_bugreport_summary">Mit Email/Dropbox/Google Drive/etc. übermitteln; benötigt
 	    Root-Rechte</string>
 	<string name="building_toast">Erstelle&#8230;</string>
+	
+	<string name="use_hack_pm_crash_title">PackageManager-Fix</string>
+	<string name="use_hack_pm_crash_summary">Behebt einen Fehler in einer Systemkomponente, der
+	    das Laden von \"%1$s\" verhindert.</string>
 </resources>

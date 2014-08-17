@@ -52,14 +52,8 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		if(Util.modPrefs.getBoolean("failsafe_mode", false))
 			return;
 
-		for(Hack hack : Hack.getAllEnabled())
+		for(Hack hack : Hack.getAllEnabled(false))
 			hack.initZygote(startupParam);
-
-		if(true)
-		{
-			new PackageManagerCrashHack().initZygote(startupParam);
-			new GmsLocationHack().initZygote(startupParam);
-		}
 	}
 
 	@Override
@@ -91,30 +85,24 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
-		final boolean isFramework;
-
-		if(SETTINGS_PACKAGE.equals(lpparam.packageName))
-			isFramework = false;
-		else if("android".equals(lpparam.packageName))
-			isFramework = true;
-		else
-			return;
+		final boolean isSettings = SETTINGS_PACKAGE.equals(lpparam.packageName);
 
 		if(!Util.isInFailsafeMode())
 		{
-			for(Hack hack : Hack.getAllEnabled())
+			for(Hack hack : Hack.getAllEnabled(true))
 				hack.handleLoadPackage(lpparam);
+
+			if(!isSettings)
+				return;
 		}
-		else
+		else if(isSettings)
 		{
 			log("Running in failsafe mode");
 			ApkVariant.hookIsValidFragment(lpparam);
 			return;
 		}
 
-		if(isFramework)
-			return;
-
+		log("packageName=" + lpparam.packageName);
 		log("Util.modRes=" + Util.modRes);
 
 		Util.settingsRes = XModuleResources.createInstance(lpparam.appInfo.sourceDir, null);
