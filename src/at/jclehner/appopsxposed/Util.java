@@ -30,8 +30,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.XModuleResources;
@@ -138,15 +140,12 @@ public final class Util
 		dumpViewHierarchyInternal(v, 0);
 	}
 
-	public static Set<String> getClassList(LoadPackageParam lpparam, String packageName, boolean getSubPackages)
+	public static Set<String> getClassList(ApplicationInfo appInfo, String packageName, boolean getSubPackages)
 	{
-		if(lpparam.appInfo == null)
-			return null;
-
 		final DexFile df;
 		try
 		{
-			df = new DexFile(lpparam.appInfo.publicSourceDir);
+			df = new DexFile(appInfo.publicSourceDir);
 		}
 		catch(IOException e)
 		{
@@ -170,6 +169,14 @@ public final class Util
 		}
 
 		return classes;
+	}
+
+	public static Set<String> getClassList(LoadPackageParam lpparam, String packageName, boolean getSubPackages)
+	{
+		if(lpparam.appInfo == null)
+			return null;
+
+		return getClassList(lpparam.appInfo, packageName, getSubPackages);
 	}
 
 	private static void dumpViewHierarchyInternal(View view, int level)
@@ -262,6 +269,7 @@ public final class Util
 		return modPrefs.getBoolean("failsafe_mode", false);
 	}
 
+	@TargetApi(19)
 	public static int getOpValue(String opName)
 	{
 		try
@@ -336,6 +344,36 @@ public final class Util
 		private boolean isValidThisObject(MethodHookParam param) {
 			return mClass == null || mClass.isInstance(param.thisObject);
 		}
+	}
+
+	public static class StringList
+	{
+		private final List<String> mList = new ArrayList<String>();
+
+		public void add(String string) {
+			mList.add(string);
+		}
+
+		public boolean isEmpty() {
+			return mList.isEmpty();
+		}
+
+		@Override
+		public String toString()
+		{
+			final StringBuilder sb = new StringBuilder();
+
+			for(int i = 0; i != mList.size(); ++i)
+			{
+				if(i != 0)
+					sb.append(", ");
+
+				sb.append(mList.get(i));
+			}
+
+			return sb.toString();
+		}
+
 	}
 
 	private Util() {}
