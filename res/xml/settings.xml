@@ -41,6 +41,7 @@
 	            android:summary="@string/use_hack_wake_lock_summary"
 	            android:defaultValue="false" />
 
+	        <!--
 	        <CheckBoxPreference android:key="use_hack_pm_crash"
 	            android:title="@string/use_hack_pm_crash_title"
 	            android:summary="@string/use_hack_pm_crash_summary"
@@ -50,6 +51,7 @@
 	        <CheckBoxPreference android:key="use_hack_gms_location"
 	            android:title="use_hack_gms_location"
 	            android:defaultValue="false" />
+	         -->
 
     	</PreferenceScreen>
    

@@ -56,6 +56,10 @@ public final class Util
 
 	public static int appOpsIcon = 0;
 
+	public static boolean isXposedModuleEnabled() {
+		return false;
+	}
+
 	public static int getSettingsIdentifier(String name) {
 		return settingsRes.getIdentifier(name, null, AppOpsXposed.SETTINGS_PACKAGE);
 	}
@@ -159,16 +163,24 @@ public final class Util
 		while(entries.hasMoreElements())
 		{
 			final String entry = entries.nextElement();
-			if(packageName != null && !entry.startsWith(packageName))
-				continue;
 
-			if(!getSubPackages && entry.substring(packageName.length() + 1).contains("."))
-				continue;
+			if(packageName != null)
+			{
+				if(!entry.startsWith(packageName))
+					continue;
+
+				if(!getSubPackages && entry.substring(packageName.length() + 1).contains("."))
+					continue;
+			}
 
 			classes.add(entry);
 		}
 
 		return classes;
+	}
+
+	public static Set<String> getClassList(LoadPackageParam lpparam) {
+		return getClassList(lpparam, null, true);
 	}
 
 	public static Set<String> getClassList(LoadPackageParam lpparam, String packageName, boolean getSubPackages)

@@ -34,7 +34,7 @@
 	    Gerät in einen Boot-Loop stürzen und somit unbenutzbar machen. <em>Nur</em> verwenden, wenn Du weißt, wie man
 	    Xposed (oder dieses Modul) mittels Recovery-Modus oder einer Shell deaktivieren kann! Du wurdest gewarnt.</string>
 
-	<string name="use_hack_wake_lock_title">OP_WAKE_LOCK reparieren</string>
+	<string name="use_hack_wake_lock_title">OP_WAKE_LOCK-Fix</string>
 	<string name="use_hack_wake_lock_summary">Behebt einen Fehler in der \"%1$s\"-Option.</string>
 	<string name="about">Über</string>
 	<string name="build_bugreport_title">Bugreport erstellen</string>

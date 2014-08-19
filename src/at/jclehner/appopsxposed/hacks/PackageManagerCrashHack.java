@@ -49,4 +49,9 @@ public class PackageManagerCrashHack extends Hack
 	protected String onGetKeySuffix() {
 		return "pm_crash";
 	}
+
+	@Override
+	protected boolean isEnabledByDefault() {
+		return true;
+	}
 }

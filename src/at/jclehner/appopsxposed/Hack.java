@@ -75,7 +75,7 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 
 		for(Hack hack : HACKS)
 		{
-			if(Util.modPrefs.getBoolean(hack.getKey(), false))
+			if(Util.modPrefs.getBoolean(hack.getKey(), hack.isEnabledByDefault()))
 			{
 				hacks.add(hack);
 				if(!quiet)
@@ -124,6 +124,10 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 
 	protected String onGetPreferenceSummary(Context context) {
 		return getPreferenceString(context, "summary");
+	}
+
+	protected boolean isEnabledByDefault() {
+		return false;
 	}
 
 	protected abstract String onGetKeySuffix();

@@ -26,7 +26,10 @@ import at.jclehner.appopsxposed.variants.CyanogenMod;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
+import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XSharedPreferences;
+import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
@@ -65,11 +68,11 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		if(Util.modPrefs.getBoolean("failsafe_mode", false))
 			return;
 
-		//Util.modRes = XModuleResources.createInstance(mModPath, null);
 		Util.appOpsIcon = resparam.res.addResource(Util.modRes, R.drawable.ic_appops);
 
 		if(Util.modPrefs.getBoolean("use_layout_fix", true))
 		{
+			// FIXME
 			if(!CyanogenMod.isCm11After20140128())
 			{
 				resparam.res.setReplacement("com.android.settings", "layout", "app_ops_details_item",
@@ -87,6 +90,12 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	{
 		final boolean isSettings = SETTINGS_PACKAGE.equals(lpparam.packageName);
 
+		if(MODULE_PACKAGE.equals(lpparam.packageName))
+		{
+			XposedHelpers.findAndHookMethod(Util.class, "isXposedModuleEnabled",
+					XC_MethodReplacement.returnConstant(true));
+		}
+
 		if(!Util.isInFailsafeMode())
 		{
 			for(Hack hack : Hack.getAllEnabled(true))
@@ -101,9 +110,6 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 			ApkVariant.hookIsValidFragment(lpparam);
 			return;
 		}
-
-		log("packageName=" + lpparam.packageName);
-		log("Util.modRes=" + Util.modRes);
 
 		Util.settingsRes = XModuleResources.createInstance(lpparam.appInfo.sourceDir, null);
 
