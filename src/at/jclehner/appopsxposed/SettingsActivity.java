@@ -139,6 +139,10 @@ public class SettingsActivity extends Activity
 			p.setSummary(getString(R.string.use_hack_wake_lock_summary,
 					OpsResolver.getOpLabel(getActivity(), "OP_WAKE_LOCK")));
 
+			p = findPreference("use_hack_pm_crash");
+			p.setSummary(getString(R.string.use_hack_pm_crash_summary,
+					getString(R.string.app_ops_settings)));
+
 			p = findPreference("hacks");
 			p.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 

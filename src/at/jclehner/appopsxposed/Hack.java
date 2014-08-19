@@ -29,6 +29,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import at.jclehner.appopsxposed.hacks.BootCompletedHack;
 import at.jclehner.appopsxposed.hacks.FixWakeLock;
+import at.jclehner.appopsxposed.hacks.GmsLocationHack;
 import at.jclehner.appopsxposed.hacks.PackageManagerCrashHack;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
@@ -56,7 +57,7 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 	public static final Hack[] HACKS = {
 		new BootCompletedHack(),
 		new FixWakeLock(),
-		//new GmsLocationHack(),
+		new GmsLocationHack(),
 		new PackageManagerCrashHack()
 	};
 
@@ -229,6 +230,7 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 		return mLogTag;
 	}
 
+	@TargetApi(19)
 	private static Method findCheckOp()
 	{
 		try
@@ -243,6 +245,7 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 		}
 	}
 
+	@TargetApi(19)
 	private static Method findNoteOp()
 	{
 		try
