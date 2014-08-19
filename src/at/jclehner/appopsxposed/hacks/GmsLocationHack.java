@@ -1,6 +1,9 @@
 package at.jclehner.appopsxposed.hacks;
 
 import java.lang.ref.WeakReference;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.Set;
 
 import android.app.AppOpsManager;
@@ -17,6 +20,8 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 public class GmsLocationHack extends Hack
 {
 	private static final boolean DEBUG = true;
+
+	private static final int RESULT_SUCCESS = 0;
 
 	private static final int[] LOCATION_OPS = {
 			Util.getOpValue("OP_COARSE_LOCATION"),
@@ -100,46 +105,51 @@ public class GmsLocationHack extends Hack
 
 	private boolean hackLocationServices(ClassLoader classLoader, String packageName)
 	{
-		final Class<?> apiBuilderClazz;
 		final Class<?> locationSvcClazz;
-		final Object locationApi;
+
 		try
 		{
-			apiBuilderClazz = classLoader.loadClass(
-					"com.google.android.gms.common.api.GoogleApiClient$Builder");
-
 			locationSvcClazz = classLoader.loadClass(
 					"com.google.android.gms.location.LocationServices");
-
-			locationApi = XposedHelpers.getStaticObjectField(locationSvcClazz,
-					"API");
-
-			hookCtorForContextGrab(apiBuilderClazz);
-			XposedBridge.hookAllMethods(apiBuilderClazz, "addApi",
-					new XC_MethodHook() {
-						@Override
-						protected void beforeHookedMethod(MethodHookParam param) throws Throwable
-						{
-							log("addApi called with api=" + param.args[0]);
-
-							if(param.args[0] == locationApi)
-							{
-								final Context c = grabContext(param);
-								if(c != null && isAnyLocationOpDisabled(c))
-								{
-									log("Denying GMS location API to app " + c.getPackageName());
-									param.setResult(null);
-								}
-							}
-						}
-			});
-
-			return true;
 		}
 		catch(Throwable t)
 		{
 			return false;
 		}
+
+		final Class<?> fusedLpClazz;
+		final Class<?> geofencingApiClazz;
+
+		try
+		{
+			fusedLpClazz = locationSvcClazz.getField("FusedLocationProviderApi").getClass();
+			geofencingApiClazz = locationSvcClazz.getField("GeofencingApi").getClass();
+		}
+		catch(Throwable t)
+		{
+			Util.log(t);
+			return false;
+		}
+
+		final String[] fusedLpMethods = {
+				"requestLocationUpdates",
+				"removeLocationUpdates"
+		};
+
+		for(String m : fusedLpMethods)
+			XposedBridge.hookAllMethods(fusedLpClazz, m, mBlockerHookWithStatus);
+
+		XposedBridge.hookAllMethods(fusedLpClazz, "getLastLocation", mBlockerHook);
+
+		final String[] geofencingMethods = {
+				"addGeofences",
+				"removeGeofences"
+		};
+
+		for(String m : geofencingMethods)
+			XposedBridge.hookAllMethods(geofencingApiClazz, m, mBlockerHookWithStatus);
+
+		return true;
 	}
 
 	private boolean hackGeofenceApi(ClassLoader classLoader, String packageName)
@@ -221,6 +231,32 @@ public class GmsLocationHack extends Hack
 		return param.thisObject.getClass().getSimpleName() + "." + param.method.getName();
 	}
 
+	private static Object createPendingResult(final ClassLoader classLoader, final int statusCode)
+	{
+		final Class<?>[] interfaces = {
+				XposedHelpers.findClass("com.google.android.gms.common.api.PendingResult",
+						classLoader)
+		};
+
+		return Proxy.newProxyInstance(classLoader, interfaces, new InvocationHandler() {
+
+			@Override
+			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
+			{
+				if("await".equals(method.getName()))
+				{
+					final Class<?> clazz = XposedHelpers.findClass(
+							"com.google.android.gms.common.api.Status", classLoader);
+					return XposedHelpers.newInstance(clazz, new Class<?>[] { int.class }, statusCode);
+				}
+				else if("isCanceled".equals(method.getName()))
+					return false;
+
+				return null;
+			}
+		});
+	}
+
 	private final XC_MethodHook mBlockerHook = new XC_MethodHook() {
 
 		protected void beforeHookedMethod(MethodHookParam param) throws Throwable
@@ -234,6 +270,20 @@ public class GmsLocationHack extends Hack
 			}
 			else if(DEBUG && c == null)
 				log("Context is null in hook for " + param.method.getName());
+		}
+	};
+
+	private final XC_MethodHook mBlockerHookWithStatus = new XC_MethodHook()
+	{
+		protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+		{
+			if(!isAnyLocationOpDisabled(param))
+				return;
+
+			final ClassLoader cl = param.thisObject.getClass().getClassLoader();
+			param.setResult(createPendingResult(cl, 0));
+			if(DEBUG)
+				log("Blocked " + GmsLocationHack.toString(param) + " for app " + grabContext(param).getPackageName());
 		}
 	};
 
@@ -252,15 +302,6 @@ public class GmsLocationHack extends Hack
 				log("Context is null in hook for " + param.method.getName());
 		}
 	};
-}
-
-class ObfuscationHelper
-{
-
-
-
-
-
 }
 
 
