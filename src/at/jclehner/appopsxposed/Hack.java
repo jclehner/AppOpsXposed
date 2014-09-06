@@ -57,7 +57,7 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 	public static final Hack[] HACKS = {
 		new BootCompletedHack(),
 		new FixWakeLock(),
-		new GmsLocationHack(),
+		//new GmsLocationHack(),
 		new PackageManagerCrashHack()
 	};
 
