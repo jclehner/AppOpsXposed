@@ -36,16 +36,9 @@ public class Samsung extends ApkVariant
 {
 	public static final String GRID_SETTINGS = "com.android.settings.GridSettings";
 
-	private boolean mIsComplete = false;
-
 	@Override
 	protected String manufacturer() {
 		return "Samsung";
-	}
-
-	@Override
-	public boolean isComplete() {
-		return mIsComplete;
 	}
 
 	@Override
@@ -100,14 +93,11 @@ public class Samsung extends ApkVariant
 			if(dontHookNormalSettings)
 			{
 				debug(GRID_SETTINGS + " is enabled; not hooking " + AppOpsXposed.SETTINGS_MAIN_ACTIVITY);
-				mIsComplete = true;
 				return;
 			}
 		}
 
 		hookLoadHeadersFromResource(lpparam, AppOpsXposed.SETTINGS_MAIN_ACTIVITY, xmlHookResIds, manageAppsHeaderId);
-
-		mIsComplete = true;
 	}
 
 	/*@Override

@@ -66,11 +66,6 @@ public class HTC extends ApkVariant
 	}
 
 	@Override
-	public boolean isComplete() {
-		return true;
-	}
-
-	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
 		if(true)

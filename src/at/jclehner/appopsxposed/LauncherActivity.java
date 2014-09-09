@@ -86,6 +86,7 @@ public class LauncherActivity extends Activity implements OnClickListener
 	private void launchAppOpsSummary()
 	{
 		final Intent intent = new Intent();
+		intent.setPackage("com.android.settings");
 		intent.setAction("android.settings.SETTINGS");
 		intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_FRAGMENT);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

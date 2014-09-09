@@ -88,7 +88,7 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
-		final boolean isSettings = SETTINGS_PACKAGE.equals(lpparam.packageName);
+		final boolean isSettings = ApkVariant.isSettingsPackage(lpparam);
 
 		if(MODULE_PACKAGE.equals(lpparam.packageName))
 		{
@@ -125,12 +125,8 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 				try
 				{
 					variant.handleLoadPackage(lpparam);
-					if(variant.isComplete())
-					{
-						log(variantName + ": [OK+]");
-						break;
-					}
 					log(variantName + ": [OK]");
+					break;
 				}
 				catch(Throwable t)
 				{

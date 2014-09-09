@@ -31,11 +31,6 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 public class AOSP extends ApkVariant
 {
 	@Override
-	public boolean isComplete() {
-		return true;
-	}
-
-	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
 		hookIsValidFragment(lpparam);

@@ -39,6 +39,7 @@ import at.jclehner.appopsxposed.Util.XC_MethodHookRecursive;
 import at.jclehner.appopsxposed.variants.AOSP;
 import at.jclehner.appopsxposed.variants.CyanogenMod;
 import at.jclehner.appopsxposed.variants.HTC;
+import at.jclehner.appopsxposed.variants.LG;
 import at.jclehner.appopsxposed.variants.OmniROM;
 import at.jclehner.appopsxposed.variants.Samsung;
 import at.jclehner.appopsxposed.variants.Sony;
@@ -71,10 +72,25 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		new Samsung(),
 		new Sony.JellyBean(),
 		new Sony.KitKat(),
+		new LG(),
 		new CyanogenMod(),
 		new OmniROM(),
-		new AOSP()
+		new AOSP() // must be the last entry!
 	};
+
+	public static boolean isSettingsPackage(LoadPackageParam lpparam)
+	{
+		for(ApkVariant variant : VARIANTS)
+		{
+			for(String pkg : variant.targetPackages())
+			{
+				if(lpparam.packageName.equals(pkg))
+					return true;
+			}
+		}
+
+		return false;
+	}
 
 	public static List<ApkVariant> getAllMatching(LoadPackageParam lpparam)
 	{
@@ -101,6 +117,13 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		appOpsHeader.fragment = AppOpsXposed.APP_OPS_FRAGMENT;
 
 		return appOpsHeader;
+	}
+
+	/**
+	 * The package names of the target APKs.
+	 */
+	protected String[] targetPackages() {
+		return new String[] { "com.android.settings" };
 	}
 
 	protected int getAppOpsIcon()
@@ -188,17 +211,6 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 	protected String[] indicatorClasses() {
 		return null;
 	}
-
-
-	/**
-	 * Check if the variant is complete.
-	 * <p>
-	 * Return <code>true</code> here if the variant installs all hooks required for "App ops" functionality. That way, no other
-	 * variants will be tried, even if they would match.
-	 * <p>
-	 * Note: The return value need not be constant and is only checked after a call to {@link #handleLoadPackage(LoadPackageParam)}
-	 */
-	protected abstract boolean isComplete();
 
 	/**
 	 * Checks if the {@link ApkVariant} matches the current configuration.
@@ -435,6 +447,17 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 
 	private boolean isMatching(LoadPackageParam lpparam)
 	{
+		boolean havePackageMatch = false;
+
+		for(String packageName : targetPackages())
+		{
+			if(lpparam.packageName.equals(packageName))
+				havePackageMatch = true;
+		}
+
+		if(!havePackageMatch)
+			return false;
+
 		if(manufacturer() != ANY && !Util.containsManufacturer(manufacturer()))
 			return false;
 
