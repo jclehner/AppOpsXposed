@@ -38,6 +38,18 @@ public class LG extends AOSP
 	}
 
 	@Override
+	protected String[] indicatorClasses()
+	{
+		return new String[] {
+				// in com.android.settings
+				"com.android.settings.lge.DeviceInfoLge",
+				"com.android.settings.lge.Serial",
+				// in com.lge.settings.easy
+				"com.lge.settings.general.EasyGeneralFragment"
+		};
+	}
+
+	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
 		debug("handleLoadPackage: " + lpparam.packageName);
