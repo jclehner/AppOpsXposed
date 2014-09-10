@@ -5,7 +5,6 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
-import at.jclehner.appopsxposed.ApkVariant;
 import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.Util;
@@ -41,7 +40,9 @@ public class LG extends AOSP
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
-		if(AppOpsXposed.SETTINGS_PACKAGE.equals(lpparam.packageName))
+		debug("handleLoadPackage: " + lpparam.packageName);
+
+		if(!EASY_SETTINGS_PACKAGE.equals(lpparam.packageName))
 		{
 			super.handleLoadPackage(lpparam);
 			return;
@@ -65,7 +66,8 @@ public class LG extends AOSP
 							if(intent != null && "android.settings.APPLICATION_SETTINGS"
 									.equals(intent.getAction()))
 							{
-								order = i;
+								debug("  APPLICATION_SETTINGS at pos " + i);
+								order = i + 1;
 								break;
 							}
 						}
