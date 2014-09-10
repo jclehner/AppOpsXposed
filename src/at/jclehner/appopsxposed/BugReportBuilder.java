@@ -33,12 +33,14 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Parcelable;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.widget.Toast;
 import eu.chainfire.libsuperuser.Shell;
 
@@ -110,6 +112,11 @@ public class BugReportBuilder
 
 		collectDeviceInfo(sb);
 		collectApkInfo(sb);
+
+		Log.d("AOX", "-------------------------");
+		Log.d("AOX", sb.toString());
+		Log.d("AOX", "\n-------------------------");
+
 		collectXposedLogs(sb);
 		collectProps(sb);
 		collectLogcat(sb);
@@ -191,7 +198,8 @@ public class BugReportBuilder
 
 		final HashMap<String, List<String>> appMap = new HashMap<String, List<String>>();
 
-		final List<ResolveInfo> rInfos = mContext.getPackageManager().queryIntentActivities(intent, 0);
+		final List<ResolveInfo> rInfos = mContext.getPackageManager().queryIntentActivities(intent,
+				PackageManager.GET_DISABLED_COMPONENTS);
 		for(ResolveInfo rInfo : rInfos)
 		{
 			final ActivityInfo aInfo = rInfo.activityInfo;
