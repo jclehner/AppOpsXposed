@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
+import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import at.jclehner.appopsxposed.Util;
 
@@ -31,7 +32,7 @@ public class CyanogenMod extends AOSP
 	private static final String CM_VERSION = getCmVersion();
 
 	@Override
-	protected boolean onMatch(LoadPackageParam lpparam) {
+	protected boolean onMatch(ApplicationInfo appInfo, ClassChecker classChecker) {
 		return CM_VERSION.length() != 0;
 	}
 
@@ -43,7 +44,12 @@ public class CyanogenMod extends AOSP
 		log("ro.cm.version=" + CM_VERSION);
 	}
 
-	public static boolean isCm11After20140128()
+	@Override
+	public boolean canUseLayoutFix() {
+		return !isCm11After20140128();
+	}
+
+	private static boolean isCm11After20140128()
 	{
 		if(CM_VERSION.length() == 0)
 			return false;

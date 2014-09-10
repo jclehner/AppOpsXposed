@@ -66,6 +66,11 @@ public class HTC extends ApkVariant
 	}
 
 	@Override
+	public boolean canUseLayoutFix() {
+		return false;
+	}
+
+	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
 		if(true)

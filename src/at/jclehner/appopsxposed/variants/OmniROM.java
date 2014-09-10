@@ -18,13 +18,14 @@
 
 package at.jclehner.appopsxposed.variants;
 
-import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
+import android.content.pm.ApplicationInfo;
 import at.jclehner.appopsxposed.Util;
+import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class OmniROM extends AOSP
 {
 	@Override
-	protected boolean onMatch(LoadPackageParam lpparam) {
+	protected boolean onMatch(ApplicationInfo appInfo, ClassChecker classChecker) {
 		return Util.getSystemProperty("ro.omni.version", "").length() != 0;
 	}
 

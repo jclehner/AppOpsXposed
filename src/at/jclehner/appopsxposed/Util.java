@@ -53,6 +53,7 @@ public final class Util
 	public static XModuleResources settingsRes;
 	public static XModuleResources modRes;
 	public static XSharedPreferences modPrefs;
+	public static Context systemContext;
 
 	public static int appOpsIcon = 0;
 
@@ -149,7 +150,7 @@ public final class Util
 		final DexFile df;
 		try
 		{
-			df = new DexFile(appInfo.publicSourceDir);
+			df = new DexFile(appInfo.sourceDir);
 		}
 		catch(IOException e)
 		{

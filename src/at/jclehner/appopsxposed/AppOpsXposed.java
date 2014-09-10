@@ -19,6 +19,7 @@
 package at.jclehner.appopsxposed;
 
 import static at.jclehner.appopsxposed.Util.log;
+import android.content.Context;
 import android.content.res.XModuleResources;
 import at.jclehner.appopsxposed.hacks.GmsLocationHack;
 import at.jclehner.appopsxposed.hacks.PackageManagerCrashHack;
@@ -26,6 +27,7 @@ import at.jclehner.appopsxposed.variants.CyanogenMod;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
+import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
@@ -46,6 +48,17 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	@Override
 	public void initZygote(StartupParam startupParam) throws Throwable
 	{
+		final Class<?> amSvcClazz = XposedHelpers.findClass(
+				"com.android.server.am.ActivityManagerService", null);
+		XposedBridge.hookAllMethods(amSvcClazz, "main", new XC_MethodHook() {
+			@Override
+			protected void afterHookedMethod(MethodHookParam param) throws Throwable
+			{
+				Util.systemContext = (Context) param.getResult();
+				log("Obtained system context " + Util.systemContext);
+			}
+		});
+
 		mModPath = startupParam.modulePath;
 		Util.modRes = XModuleResources.createInstance(mModPath, null);
 		Util.modPrefs = new XSharedPreferences(AppOpsXposed.class.getPackage().getName());
@@ -62,24 +75,26 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	@Override
 	public void handleInitPackageResources(InitPackageResourcesParam resparam) throws Throwable
 	{
-		if(!resparam.packageName.equals("com.android.settings"))
+		if(Util.modPrefs.getBoolean("failsafe_mode", false))
 			return;
 
-		if(Util.modPrefs.getBoolean("failsafe_mode", false))
+		if(!ApkVariant.isSettingsPackage(resparam.packageName))
 			return;
 
 		Util.appOpsIcon = resparam.res.addResource(Util.modRes, R.drawable.ic_appops);
 
 		if(Util.modPrefs.getBoolean("use_layout_fix", true))
 		{
-			// FIXME
-			if(!CyanogenMod.isCm11After20140128())
+			for(ApkVariant variant : ApkVariant.getAllMatching(resparam.packageName))
 			{
-				resparam.res.setReplacement("com.android.settings", "layout", "app_ops_details_item",
-						Util.modRes.fwd(R.layout.app_ops_details_item));
+				if(variant.canUseLayoutFix())
+				{
+					resparam.res.setReplacement("com.android.settings", "layout", "app_ops_details_item",
+							Util.modRes.fwd(R.layout.app_ops_details_item));
+				}
+
+				break;
 			}
-			else
-				log("Detected cm11 nightly >= 20140128; not using layout fix despite setting");
 		}
 		else
 			log("Not using layout fix");

@@ -20,12 +20,18 @@ package at.jclehner.appopsxposed;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import android.app.Fragment;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -43,6 +49,8 @@ import at.jclehner.appopsxposed.variants.LG;
 import at.jclehner.appopsxposed.variants.OmniROM;
 import at.jclehner.appopsxposed.variants.Samsung;
 import at.jclehner.appopsxposed.variants.Sony;
+import dalvik.system.DexClassLoader;
+import dalvik.system.DexFile;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -61,6 +69,11 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
  */
 public abstract class ApkVariant implements IXposedHookLoadPackage
 {
+	public interface ClassChecker
+	{
+		boolean exists(String className);
+	}
+
 	private static final boolean USE_INDICATOR_CLASSES = true;
 
 	protected static final String ANY = "";
@@ -78,13 +91,13 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		new AOSP() // must be the last entry!
 	};
 
-	public static boolean isSettingsPackage(LoadPackageParam lpparam)
+	public static boolean isSettingsPackage(String packageName)
 	{
 		for(ApkVariant variant : VARIANTS)
 		{
 			for(String pkg : variant.targetPackages())
 			{
-				if(lpparam.packageName.equals(pkg))
+				if(packageName.equals(pkg))
 					return true;
 			}
 		}
@@ -92,13 +105,39 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		return false;
 	}
 
-	public static List<ApkVariant> getAllMatching(LoadPackageParam lpparam)
+	public static boolean isSettingsPackage(LoadPackageParam lpparam) {
+		return isSettingsPackage(lpparam.packageName);
+	}
+
+	public static List<ApkVariant> getAllMatching(LoadPackageParam lpparam) {
+		return getAllMatching(lpparam.appInfo, new ClassCheckerWithLoader(lpparam.classLoader));
+	}
+
+	public static List<ApkVariant> getAllMatching(String packageName)
+	{
+		final ApplicationInfo appInfo;
+
+		try
+		{
+			final PackageManager pm = Util.systemContext.getPackageManager();
+			appInfo = pm.getApplicationInfo(packageName, 0);
+		}
+		catch(PackageManager.NameNotFoundException e)
+		{
+			Util.log(e);
+			return Collections.emptyList();
+		}
+
+		return getAllMatching(appInfo, new ClassCheckerWithApk(appInfo.sourceDir));
+	}
+
+	private static List<ApkVariant> getAllMatching(ApplicationInfo appInfo, ClassChecker classChecker)
 	{
 		List<ApkVariant> variants = new ArrayList<ApkVariant>();
 
 		for(ApkVariant variant : VARIANTS)
 		{
-			if(variant.isMatching(lpparam))
+			if(variant.isMatching(appInfo, classChecker))
 				variants.add(variant);
 		}
 
@@ -107,6 +146,10 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 
 	@Override
 	public abstract void handleLoadPackage(LoadPackageParam lpparam) throws Throwable;
+
+	public boolean canUseLayoutFix() {
+		return true;
+	}
 
 	protected Object onCreateAppOpsHeader(Context context, int addAfterHeaderId)
 	{
@@ -218,7 +261,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 	 * This method is only called if all other property checks ({@link #manufacturer()},
 	 * {@link #apiLevel()}, etc.) succeeded.
 	 */
-	protected boolean onMatch(LoadPackageParam lpparam) {
+	protected boolean onMatch(ApplicationInfo appInfo, ClassChecker classChecker) {
 		return true;
 	}
 
@@ -445,13 +488,13 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		Util.debug(t);
 	}
 
-	private boolean isMatching(LoadPackageParam lpparam)
+	private boolean isMatching(ApplicationInfo appInfo, ClassChecker classChecker)
 	{
 		boolean havePackageMatch = false;
 
 		for(String packageName : targetPackages())
 		{
-			if(lpparam.packageName.equals(packageName))
+			if(appInfo.packageName.equals(packageName))
 				havePackageMatch = true;
 		}
 
@@ -469,12 +512,12 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 
 		try
 		{
-			if(md5Sum() != ANY && !XposedHelpers.getMD5Sum(lpparam.appInfo.sourceDir).equals(md5Sum()))
+			if(md5Sum() != ANY && !XposedHelpers.getMD5Sum(appInfo.sourceDir).equals(md5Sum()))
 				return false;
 		}
 		catch(IOException e)
 		{
-			log("Failed to get MD5 hash of " + lpparam.appInfo.sourceDir);
+			log("Failed to get MD5 hash of " + appInfo.sourceDir);
 			debug(e);
 			return false;
 		}
@@ -482,7 +525,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		if(apiLevel() != 0 && Build.VERSION.SDK_INT != apiLevel())
 			return false;
 
-		if(!onMatch(lpparam))
+		if(!onMatch(appInfo, classChecker))
 			return false;
 
 		final String[] classes = indicatorClasses();
@@ -493,23 +536,16 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 
 		for(String className : classes)
 		{
-			try
+			if(classChecker.exists(className))
 			{
-				lpparam.classLoader.loadClass(className);
 				debug("  OK: " + className);
 				return true;
 			}
-			catch(ClassNotFoundException e)
+			else
 			{
 				debug("  N/A: " + className);
 				// continue
 			}
-		}
-
-		if(!USE_INDICATOR_CLASSES)
-		{
-			debug("No indicator classes present; continuing anyways");
-			return true;
 		}
 
 		return false;
@@ -529,5 +565,55 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 		}
 
 		return mLogTag;
+	}
+}
+
+class ClassCheckerWithApk implements ApkVariant.ClassChecker
+{
+	private final Set<String> mClassSet;
+
+	public ClassCheckerWithApk(String apkFile)
+	{
+		mClassSet = new HashSet<String>();
+
+		try
+		{
+			final Enumeration<String> classes = new DexFile(apkFile).entries();
+			while(classes.hasMoreElements())
+				mClassSet.add(classes.nextElement());
+
+		}
+		catch(IOException e)
+		{
+			Util.log(e);
+		}
+	}
+
+	@Override
+	public boolean exists(String className) {
+		return mClassSet.contains(className);
+	}
+}
+
+class ClassCheckerWithLoader implements ApkVariant.ClassChecker
+{
+	private final ClassLoader mCl;
+
+	ClassCheckerWithLoader(ClassLoader classLoader) {
+		mCl = classLoader;
+	}
+
+	@Override
+	public boolean exists(String className)
+	{
+		try
+		{
+			mCl.loadClass(className);
+			return true;
+		}
+		catch(ClassNotFoundException e)
+		{
+			return false;
+		}
 	}
 }
