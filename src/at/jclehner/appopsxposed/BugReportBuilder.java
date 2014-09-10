@@ -26,11 +26,13 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -107,6 +109,7 @@ public class BugReportBuilder
 		sb.append("\nID  : " + mDeviceId);
 
 		collectDeviceInfo(sb);
+		collectApkInfo(sb);
 		collectXposedLogs(sb);
 		collectProps(sb);
 		collectLogcat(sb);
@@ -176,7 +179,44 @@ public class BugReportBuilder
 		sb.append("\nFingerprint    : " + Build.FINGERPRINT);
 		sb.append("\nDevice name    : " + Build.MANUFACTURER + " " + Build.MODEL
 				+ " (" + Build.PRODUCT + "/" + Build.HARDWARE + ")");
-		sb.append("\nSettings APK   : " + getSettingsAppInfo().publicSourceDir);
+	}
+
+	private void collectApkInfo(StringBuilder sb)
+	{
+		sb.append("\n---------------------------------------------------");
+		sb.append("\n--------------------- APK INFO --------------------");
+
+		final Intent intent = new Intent();
+		intent.setAction("android.settings.SETTINGS");
+
+		final HashMap<String, List<String>> appMap = new HashMap<String, List<String>>();
+
+		final List<ResolveInfo> rInfos = mContext.getPackageManager().queryIntentActivities(intent, 0);
+		for(ResolveInfo rInfo : rInfos)
+		{
+			final ActivityInfo aInfo = rInfo.activityInfo;
+			final String key = aInfo.applicationInfo.sourceDir + " (" + aInfo.packageName + ")"
+					+ toTickedBox(rInfo.activityInfo.applicationInfo.enabled);
+
+			final List<String> activityList;
+
+			if(!appMap.containsKey(key))
+			{
+				activityList = new ArrayList<String>();
+				appMap.put(key, activityList);
+			}
+			else
+				activityList = appMap.get(key);
+
+			activityList.add(aInfo.name + toTickedBox(aInfo.enabled));
+		}
+
+		for(String key : appMap.keySet())
+		{
+			sb.append("\n" + key);
+			for(String activity : appMap.get(key))
+				sb.append("\n  " + activity);
+		}
 	}
 
 	private void collectXposedLogs(StringBuilder sb)
@@ -206,15 +246,7 @@ public class BugReportBuilder
 			sb.append(line + "\n");
 	}
 
-	private ApplicationInfo getSettingsAppInfo()
-	{
-		final Intent intent = new Intent();
-		intent.setAction("android.settings.SETTINGS");
-
-		final List<ResolveInfo> infos = mContext.getPackageManager().queryIntentActivities(intent, 0);
-		if(infos.size() == 0)
-			return null;
-
-		return infos.get(0).activityInfo.applicationInfo;
+	private static String toTickedBox(boolean b) {
+		return b ? " [*]" : " [ ]";
 	}
 }
