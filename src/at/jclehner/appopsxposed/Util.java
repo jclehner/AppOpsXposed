@@ -37,6 +37,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.XModuleResources;
+import android.os.Binder;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ import dalvik.system.DexFile;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public final class Util
@@ -280,6 +282,28 @@ public final class Util
 
 	public static boolean isInFailsafeMode() {
 		return modPrefs.getBoolean("failsafe_mode", false);
+	}
+
+	public static ApplicationInfo getApplicationInfo(String packageName)
+	{
+		final Class<?> atClazz = XposedHelpers.findClass("android.app.ActivityThread", null);
+		final Object pm = XposedHelpers.callStaticMethod(atClazz, "getPackageManager");
+
+		try
+		{
+			final ApplicationInfo ai = (ApplicationInfo) XposedHelpers.callMethod(pm,
+					"getApplicationInfo", new Class<?>[] { String.class, int.class, int.class },
+					packageName, 0, Binder.getCallingUid());
+
+			if(ai != null)
+				return ai;
+		}
+		catch(Exception e)
+		{
+			log(e);
+		}
+
+		return null;
 	}
 
 	@TargetApi(19)

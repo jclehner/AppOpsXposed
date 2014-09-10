@@ -115,18 +115,9 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 
 	public static List<ApkVariant> getAllMatching(String packageName)
 	{
-		final ApplicationInfo appInfo;
-
-		try
-		{
-			final PackageManager pm = Util.systemContext.getPackageManager();
-			appInfo = pm.getApplicationInfo(packageName, 0);
-		}
-		catch(PackageManager.NameNotFoundException e)
-		{
-			Util.log(e);
+		final ApplicationInfo appInfo = Util.getApplicationInfo(packageName);
+		if(appInfo == null)
 			return Collections.emptyList();
-		}
 
 		return getAllMatching(appInfo, new ClassCheckerWithApk(appInfo.sourceDir));
 	}
