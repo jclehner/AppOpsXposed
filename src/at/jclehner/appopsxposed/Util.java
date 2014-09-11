@@ -32,6 +32,7 @@ import java.util.Set;
 
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
+import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -39,6 +40,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.XModuleResources;
 import android.os.Binder;
 import android.os.Build;
+import android.os.UserHandle;
 import android.view.View;
 import android.view.ViewGroup;
 import dalvik.system.DexFile;
@@ -293,7 +295,7 @@ public final class Util
 		{
 			final ApplicationInfo ai = (ApplicationInfo) XposedHelpers.callMethod(pm,
 					"getApplicationInfo", new Class<?>[] { String.class, int.class, int.class },
-					packageName, 0, Binder.getCallingUid());
+					packageName, 0, 0);
 
 			if(ai != null)
 				return ai;
@@ -302,6 +304,8 @@ public final class Util
 		{
 			log(e);
 		}
+
+		log("getApplicationInfo failed for " + packageName);
 
 		return null;
 	}
