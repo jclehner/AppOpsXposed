@@ -51,9 +51,11 @@ import at.jclehner.appopsxposed.variants.Samsung;
 import at.jclehner.appopsxposed.variants.Sony;
 import dalvik.system.DexClassLoader;
 import dalvik.system.DexFile;
+import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
+import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 /**
@@ -67,14 +69,12 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
  * When extending this class, note that you <em>must</em> return the wildcard value
  * {@link #ANY} for a string property that should be ignored.
  */
-public abstract class ApkVariant implements IXposedHookLoadPackage
+public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookInitPackageResources
 {
 	public interface ClassChecker
 	{
 		boolean exists(String className);
 	}
-
-	private static final boolean USE_INDICATOR_CLASSES = true;
 
 	protected static final String ANY = "";
 
@@ -137,6 +137,11 @@ public abstract class ApkVariant implements IXposedHookLoadPackage
 
 	@Override
 	public abstract void handleLoadPackage(LoadPackageParam lpparam) throws Throwable;
+
+	@Override
+	public void handleInitPackageResources(InitPackageResourcesParam resparam) throws Throwable {
+		// empty
+	}
 
 	public boolean canUseLayoutFix() {
 		return true;

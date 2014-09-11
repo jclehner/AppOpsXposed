@@ -48,17 +48,6 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	@Override
 	public void initZygote(StartupParam startupParam) throws Throwable
 	{
-		final Class<?> amSvcClazz = XposedHelpers.findClass(
-				"com.android.server.am.ActivityManagerService", null);
-		XposedBridge.hookAllMethods(amSvcClazz, "main", new XC_MethodHook() {
-			@Override
-			protected void afterHookedMethod(MethodHookParam param) throws Throwable
-			{
-				Util.systemContext = (Context) param.getResult();
-				log("Obtained system context " + Util.systemContext);
-			}
-		});
-
 		mModPath = startupParam.modulePath;
 		Util.modRes = XModuleResources.createInstance(mModPath, null);
 		Util.modPrefs = new XSharedPreferences(AppOpsXposed.class.getPackage().getName());
@@ -83,18 +72,25 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 		Util.appOpsIcon = resparam.res.addResource(Util.modRes, R.drawable.ic_appops);
 
+		final boolean useLayoutFix = Util.modPrefs.getBoolean("use_layout_fix", true);
+
+		for(ApkVariant variant : ApkVariant.getAllMatching(resparam.packageName))
+		{
+			// TODO move this to AOSP.handleInitPackageResources
+			if(useLayoutFix && variant.canUseLayoutFix())
+			{
+				resparam.res.setReplacement("com.android.settings", "layout", "app_ops_details_item",
+						Util.modRes.fwd(R.layout.app_ops_details_item));
+			}
+
+			variant.handleInitPackageResources(resparam);
+
+			break;
+		}
+
 		if(Util.modPrefs.getBoolean("use_layout_fix", true))
 		{
-			for(ApkVariant variant : ApkVariant.getAllMatching(resparam.packageName))
-			{
-				if(variant.canUseLayoutFix())
-				{
-					resparam.res.setReplacement("com.android.settings", "layout", "app_ops_details_item",
-							Util.modRes.fwd(R.layout.app_ops_details_item));
-				}
 
-				break;
-			}
 		}
 		else
 			log("Not using layout fix");

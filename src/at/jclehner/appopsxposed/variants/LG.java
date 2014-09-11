@@ -9,6 +9,7 @@ import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.Util;
 import at.jclehner.appopsxposed.Util.XC_MethodHookRecursive;
+import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 /*
@@ -23,6 +24,8 @@ public class LG extends AOSP
 {
 	private static final String EASY_SETTINGS_PACKAGE =
 			"com.lge.settings.easy";
+
+	private static int sAppOpsIcon = 0;
 
 	@Override
 	protected String manufacturer() {
@@ -98,5 +101,15 @@ public class LG extends AOSP
 						ps.addPreference(p);
 					}
 		});
+	}
+
+	@Override
+	public void handleInitPackageResources(InitPackageResourcesParam resparam) throws Throwable {
+		sAppOpsIcon = resparam.res.addResource(Util.modRes, R.mipmap.ic_launcher2);
+	}
+
+	@Override
+	protected int getAppOpsIcon() {
+		return sAppOpsIcon;
 	}
 }
