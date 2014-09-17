@@ -42,15 +42,19 @@ public class FixWakeLock extends Hack
 	private static final boolean ENABLE_PER_TAG_FILTERING = false;
 	private static final boolean DEBUG = true;
 
-	private static final int OP_WAKE_LOCK =
-			XposedHelpers.getStaticIntField(AppOpsManager.class, "OP_WAKE_LOCK");
+	private static final int OP_WAKE_LOCK = getOpWakeLock();
 
 	private Set<Unhook> mUnhooks;
 
 	@Override
 	public void initZygote(StartupParam param) throws Throwable
 	{
-		if(!hasCheckOp())
+		if(OP_WAKE_LOCK == -1)
+		{
+			log("No OP_WAKE_LOCK; bailing out!");
+			return;
+		}
+		else if(!hasCheckOp())
 			return;
 
 		hookMethods(ClassLoader.getSystemClassLoader());
@@ -93,6 +97,18 @@ public class FixWakeLock extends Hack
 		}
 
 		return false;
+	}
+
+	private static int getOpWakeLock()
+	{
+		try
+		{
+			return XposedHelpers.getStaticIntField(AppOpsManager.class, "OP_WAKE_LOCK");
+		}
+		catch(Throwable t)
+		{
+			return -1;
+		}
 	}
 
 	private final XC_MethodHook mAcquireHook = new XC_MethodHook() {
