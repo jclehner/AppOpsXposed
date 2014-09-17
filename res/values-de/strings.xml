@@ -45,4 +45,5 @@
 	<string name="use_hack_pm_crash_title">PackageManager-Fix</string>
 	<string name="use_hack_pm_crash_summary">Behebt einen Fehler in einer Systemkomponente, der
 	    das Laden von \"%1$s\" verhindert.</string>
+	<string name="toast_needs_root">Dieser Vorgang benötigt Root-Rechte.</string>
 </resources>

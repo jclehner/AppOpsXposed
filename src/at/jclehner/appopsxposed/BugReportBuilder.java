@@ -43,6 +43,7 @@ import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.widget.Toast;
 import eu.chainfire.libsuperuser.Shell;
+import eu.chainfire.libsuperuser.Shell.SU;
 
 public class BugReportBuilder
 {
@@ -54,6 +55,13 @@ public class BugReportBuilder
 
 	public static void buildAndSend(final Context context)
 	{
+		if(!SU.available())
+		{
+			Toast.makeText(context, R.string.toast_needs_root,
+					Toast.LENGTH_SHORT).show();
+			return;
+		}
+
 		Toast.makeText(context, R.string.building_toast,
 				Toast.LENGTH_LONG).show();
 
@@ -186,6 +194,17 @@ public class BugReportBuilder
 		sb.append("\nFingerprint    : " + Build.FINGERPRINT);
 		sb.append("\nDevice name    : " + Build.MANUFACTURER + " " + Build.MODEL
 				+ " (" + Build.PRODUCT + "/" + Build.HARDWARE + ")");
+		sb.append("\nAppOpsManager  : ");
+
+		try
+		{
+			Class.forName("android.app.AppOpsManager");
+			sb.append("YES");
+		}
+		catch(ClassNotFoundException e)
+		{
+			sb.append("NO!");
+		}
 	}
 
 	private void collectApkInfo(StringBuilder sb)
