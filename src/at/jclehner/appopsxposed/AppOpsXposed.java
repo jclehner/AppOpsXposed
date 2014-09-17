@@ -58,7 +58,17 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 			return;
 
 		for(Hack hack : Hack.getAllEnabled(false))
-			hack.initZygote(startupParam);
+		{
+			try
+			{
+				hack.initZygote(startupParam);
+			}
+			catch(Throwable t)
+			{
+				log(hack.getClass().getSimpleName() + ": [!!]");
+				log(t);
+			}
+		}
 	}
 
 	@Override
@@ -83,7 +93,15 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 						Util.modRes.fwd(R.layout.app_ops_details_item));
 			}
 
-			variant.handleInitPackageResources(resparam);
+			try
+			{
+				variant.handleInitPackageResources(resparam);
+			}
+			catch(Throwable t)
+			{
+				log(variant.getClass().getSimpleName() + ": [!!]");
+				log(t);
+			}
 
 			break;
 		}
@@ -110,7 +128,17 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		if(!Util.isInFailsafeMode())
 		{
 			for(Hack hack : Hack.getAllEnabled(true))
-				hack.handleLoadPackage(lpparam);
+			{
+				try
+				{
+					hack.handleLoadPackage(lpparam);
+				}
+				catch(Throwable t)
+				{
+					log(hack.getClass().getSimpleName() + ": [!!]");
+					log(t);
+				}
+			}
 
 			if(!isSettings)
 				return;
@@ -120,6 +148,11 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 			log("Running in failsafe mode");
 			ApkVariant.hookIsValidFragment(lpparam);
 			return;
+		}
+
+		if(lpparam == null || lpparam.appInfo == null)
+		{
+			Util.debug("lpparam=" + lpparam + "\nlpparam.appInfo=" + lpparam.appInfo);
 		}
 
 		Util.settingsRes = XModuleResources.createInstance(lpparam.appInfo.sourceDir, null);
