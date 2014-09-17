@@ -47,6 +47,7 @@ import at.jclehner.appopsxposed.variants.CyanogenMod;
 import at.jclehner.appopsxposed.variants.HTC;
 import at.jclehner.appopsxposed.variants.LG;
 import at.jclehner.appopsxposed.variants.OmniROM;
+import at.jclehner.appopsxposed.variants.Oppo;
 import at.jclehner.appopsxposed.variants.Samsung;
 import at.jclehner.appopsxposed.variants.Sony;
 import dalvik.system.DexClassLoader;
@@ -88,6 +89,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 		new LG(),
 		new CyanogenMod(),
 		new OmniROM(),
+		new Oppo(),
 		new AOSP() // must be the last entry!
 	};
 
