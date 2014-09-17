@@ -217,7 +217,7 @@ public class HTC extends ApkVariant
 		final Object header = XposedHelpers.newInstance(mHtcHeaderClass);
 		XposedHelpers.setObjectField(header, "fragment", AppOpsXposed.APP_OPS_FRAGMENT);
 		XposedHelpers.setObjectField(header, "title", getAppOpsTitle());
-		XposedHelpers.setIntField(header, "iconRes", getAppOpsIcon());
+		XposedHelpers.setIntField(header, "iconRes", getAppOpsHeaderIcon());
 		XposedHelpers.setLongField(header, "id", R.id.app_ops_settings);
 
 		return header;

@@ -154,7 +154,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 		final Header appOpsHeader = new Header();
 		appOpsHeader.title = getAppOpsTitle();
 		appOpsHeader.id = R.id.app_ops_settings;
-		appOpsHeader.iconRes = getAppOpsIcon();
+		appOpsHeader.iconRes = getAppOpsHeaderIcon();
 		appOpsHeader.fragment = AppOpsXposed.APP_OPS_FRAGMENT;
 
 		return appOpsHeader;
@@ -167,15 +167,8 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 		return new String[] { "com.android.settings" };
 	}
 
-	protected int getAppOpsIcon()
-	{
-		if(Util.modPrefs.getBoolean("use_custom_icon", true))
-		{
-			if(Util.appOpsIcon != 0)
-				return Util.appOpsIcon;
-		}
-
-		return Util.getSettingsIdentifier("drawable/ic_settings_applications");
+	protected int getAppOpsHeaderIcon() {
+		return Util.appOpsLauncherIcon;
 	}
 
 	protected String getAppOpsTitle()

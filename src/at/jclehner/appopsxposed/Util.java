@@ -59,7 +59,8 @@ public final class Util
 	public static XSharedPreferences modPrefs;
 	public static Context systemContext;
 
-	public static int appOpsIcon = 0;
+	public static int appOpsLauncherIcon = 0;
+	public static int appOpsPreferenceIcon = 0;
 
 	public static boolean isXposedModuleEnabled() {
 		return false;

@@ -116,6 +116,11 @@ public abstract class Sony extends AOSP
 	}
 
 	@Override
+	protected int getAppOpsHeaderIcon() {
+		return Util.appOpsLauncherIcon;
+	}
+
+	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
 		super.handleLoadPackage(lpparam);

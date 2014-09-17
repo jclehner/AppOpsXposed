@@ -25,8 +25,6 @@ public class LG extends AOSP
 	private static final String EASY_SETTINGS_PACKAGE =
 			"com.lge.settings.easy";
 
-	private static int sAppOpsIcon = 0;
-
 	@Override
 	protected String manufacturer() {
 		return "LGE";
@@ -104,12 +102,7 @@ public class LG extends AOSP
 	}
 
 	@Override
-	public void handleInitPackageResources(InitPackageResourcesParam resparam) throws Throwable {
-		sAppOpsIcon = resparam.res.addResource(Util.modRes, R.mipmap.ic_launcher2);
-	}
-
-	@Override
-	protected int getAppOpsIcon() {
-		return sAppOpsIcon;
+	protected int getAppOpsHeaderIcon() {
+		return Util.appOpsLauncherIcon;
 	}
 }

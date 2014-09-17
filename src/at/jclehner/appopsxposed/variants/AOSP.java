@@ -23,9 +23,11 @@ import java.util.List;
 import android.content.Context;
 import android.preference.PreferenceActivity.Header;
 import at.jclehner.appopsxposed.ApkVariant;
+import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.Util;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
+import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class AOSP extends ApkVariant
@@ -66,5 +68,10 @@ public class AOSP extends ApkVariant
 						addAppOpsHeader((List<Header>) param.args[0], personalSectionId, (Context) param.thisObject);
 					}
 		});
+	}
+
+	@Override
+	protected int getAppOpsHeaderIcon() {
+		return Util.appOpsPreferenceIcon;
 	}
 }
