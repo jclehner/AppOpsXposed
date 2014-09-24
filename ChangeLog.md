@@ -1,3 +1,6 @@
+### 1.20.1
+* Fix settings icon
+
 ### 1.20
 * Fixed compatibility with some LG ROMs
 * Fixed WakeLockFix (JellyBean currently broken)
