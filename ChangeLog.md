@@ -1,3 +1,8 @@
+### 1.20
+* Fixed compatibility with some LG ROMs
+* Fixed WakeLockFix (JellyBean currently broken)
+* Updated icon in settings for non-AOSP ROMs
+
 ### 1.19
 * Fixed some issues in Samsung ROMs
 * Fixed issue in detection of CyanogenMod-based ROMs

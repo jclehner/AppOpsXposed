@@ -20,10 +20,7 @@ package at.jclehner.appopsxposed.variants;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.Locale;
 
-import android.content.Context;
-import android.preference.PreferenceActivity.Header;
 import at.jclehner.appopsxposed.ApkVariant;
 import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.Util;
@@ -54,11 +51,12 @@ public class Samsung extends ApkVariant
 
 		/*
 		 * In SecSettings.apk, the regular "Manage applications" header is referenced in
-		 * three xml resources:
+		 * three (or four) xml resources:
 		 *
 		 * xml/settings_headers (also used in stock Android)
 		 * xml/general_headers
 		 * xml/management_headers
+		 * xml/grid_settings (on S5 ROMs)
 		 *
 		 * To keep things simple and not having to determine which of these is actually used,
 		 * we'll hook any call to loadHeadersFromResource and check if the resource argument
