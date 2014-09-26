@@ -1,3 +1,6 @@
+### 1.20.2
+* Fix version number (updates should work now)
+
 ### 1.20.1
 * Fix settings icon
 
