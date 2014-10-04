@@ -256,8 +256,8 @@ public class BugReportBuilder
 	private void collectProps(StringBuilder sb)
 	{
 		sb.append("\n---------------------------------------------------");
-		sb.append("\n--------------------- SYSPROPS --------------------\n");
-		runAsRoot(sb, "getprop");
+		sb.append("\n-------------------- BUILD.PROP -------------------\n");
+		runAsRoot(sb, "cat /system/build.prop");
 	}
 
 	private void collectLogcat(StringBuilder sb)
