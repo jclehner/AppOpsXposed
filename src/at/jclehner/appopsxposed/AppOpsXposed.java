@@ -19,18 +19,12 @@
 package at.jclehner.appopsxposed;
 
 import static at.jclehner.appopsxposed.Util.log;
-import android.content.Context;
 import android.content.res.XModuleResources;
-import at.jclehner.appopsxposed.hacks.GmsLocationHack;
-import at.jclehner.appopsxposed.hacks.PackageManagerCrashHack;
-import at.jclehner.appopsxposed.variants.CyanogenMod;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XSharedPreferences;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
@@ -82,6 +76,8 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 		Util.appOpsPreferenceIcon = resparam.res.addResource(Util.modRes, R.drawable.ic_appops);
 		Util.appOpsLauncherIcon = resparam.res.addResource(Util.modRes, R.mipmap.ic_launcher2);
+
+		Util.appListItemLayout = resparam.res.addResource(Util.modRes, R.layout.app_list_item);
 
 		final boolean useLayoutFix = Util.modPrefs.getBoolean("use_layout_fix", true);
 

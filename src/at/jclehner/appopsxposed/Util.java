@@ -62,6 +62,8 @@ public final class Util
 	public static int appOpsLauncherIcon = 0;
 	public static int appOpsPreferenceIcon = 0;
 
+	public static int appListItemLayout = R.layout.app_list_item;
+
 	public static boolean isXposedModuleEnabled() {
 		return false;
 	}

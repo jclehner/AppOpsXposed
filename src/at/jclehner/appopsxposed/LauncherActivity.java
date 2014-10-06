@@ -42,6 +42,12 @@ public class LauncherActivity extends Activity implements OnClickListener
 	{
 		super.onCreate(savedInstanceState);
 
+		if(true)
+		{
+			addAppListFragment();
+			return;
+		}
+
 		if(!isXposedInstalled())
 		{
 			if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)

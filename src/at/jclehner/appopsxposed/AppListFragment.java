@@ -18,12 +18,11 @@
 
 package at.jclehner.appopsxposed;
 
+import java.lang.reflect.Field;
 import java.text.Collator;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import de.robv.android.xposed.XposedHelpers;
 
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
@@ -48,10 +47,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import at.jclehner.appopsxposed.AppOpsManagerWrapper.OpEntryWrapper;
+import at.jclehner.appopsxposed.AppOpsManagerWrapper.PackageOpsWrapper;
 
 public class AppListFragment extends ListFragment implements LoaderCallbacks<List<PackageInfo>>
 {
-	private static final String TAG = "AppListFragment";
+	private static final String TAG = "AOX:AppListFragment";
 
 	private AppListAdapter mAdapter;
 	private LayoutInflater mInflater;
@@ -95,12 +96,12 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 
 			if(convertView == null)
 			{
-				convertView = mInflater.inflate(R.layout.app_list_item, parent, false);
+				convertView = mInflater.inflate(Util.appListItemLayout, parent, false);
 
 				holder = new ViewHolder();
-				holder.appIcon = (ImageView) convertView.findViewById(R.id.app_icon);
-				holder.appPackage = (TextView) convertView.findViewById(R.id.app_package);
-				holder.appName = (TextView) convertView.findViewById(R.id.app_name);
+				holder.appIcon = (ImageView) convertView.findViewWithTag("app_icon");
+				holder.appPackage = (TextView) convertView.findViewWithTag("app_package");
+				holder.appName = (TextView) convertView.findViewWithTag("app_name");
 
 				convertView.setTag(holder);
 			}
@@ -199,9 +200,14 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 		@Override
 		public List<PackageInfo> loadInBackground()
 		{
-			List<PackageInfo> data = mPm.getInstalledPackages(PackageManager.GET_PERMISSIONS);
+			final List<PackageInfo> data = mPm.getInstalledPackages(PackageManager.GET_PERMISSIONS);
+
 			if(sOpPerms != null)
 				removeAppsWithoutOps(data);
+
+			if(true)
+				removeAppsWithUnchangedOps(data);
+
 			Collections.sort(data, new PkgInfoComparator(mPm));
 			return data;
 		}
@@ -238,6 +244,34 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 			super.onReset();
 			onStopLoading();
 			mData = null;
+		}
+
+		private void removeAppsWithUnchangedOps(List<PackageInfo> data)
+		{
+			for(int i = 0; i != data.size(); ++i)
+			{
+				if(hasUnchangedOps(data.get(i)))
+				{
+					data.remove(i);
+					--i;
+				}
+			}
+		}
+
+		private boolean hasUnchangedOps(PackageInfo info)
+		{
+			final AppOpsManagerWrapper appOps = AppOpsManagerWrapper.from(getContext());
+			final List<PackageOpsWrapper> pkgOpsList = appOps.getOpsForPackage(info.applicationInfo.uid, info.packageName, null);
+			for(PackageOpsWrapper pkgOps : pkgOpsList)
+			{
+				for(OpEntryWrapper op : pkgOps.getOps())
+				{
+					if(op.getMode() != AppOpsManager.MODE_ALLOWED)
+						return false;
+				}
+			}
+
+			return true;
 		}
 
 		private void removeAppsWithoutOps(List<PackageInfo> data)
@@ -282,8 +316,26 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 		@TargetApi(19)
 		private static String[] getOpPermissions()
 		{
-			return (String[]) XposedHelpers.getStaticObjectField(
-					AppOpsManager.class, "sOpPerms");
+			try
+			{
+				final Field f = AppOpsManager.class.getField("sOpPerms");
+				f.setAccessible(true);
+				return (String[]) f.get(null);
+			}
+			catch(NoSuchFieldException e)
+			{
+				Log.w(TAG, e);
+			}
+			catch(IllegalAccessException e)
+			{
+				Log.w(TAG, e);
+			}
+			catch(IllegalArgumentException e)
+			{
+				Log.w(TAG, e);
+			}
+
+			return null;
 		}
 	}
 
