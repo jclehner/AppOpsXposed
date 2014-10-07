@@ -264,7 +264,7 @@ public class BugReportBuilder
 	{
 		sb.append("\n---------------------------------------------------");
 		sb.append("\n---------------------- LOGCAT ---------------------\n");
-		runAsRoot(sb, "logcat -d -b main -v time");
+		runAsRoot(sb, "logcat -d -v time");
 	}
 
 	private void runAsRoot(StringBuilder sb, String command)
