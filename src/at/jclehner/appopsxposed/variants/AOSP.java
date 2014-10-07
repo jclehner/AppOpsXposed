@@ -37,6 +37,7 @@ public class AOSP extends ApkVariant
 	{
 		hookIsValidFragment(lpparam);
 		addAppOpsToAppInfo(lpparam);
+		addMenuToAppOpsSummary(lpparam);
 
 		final int settingsHeadersId = Util.getSettingsIdentifier("xml/settings_headers");
 		final int personalSectionId = Util.getSettingsIdentifier("id/personal_section");

@@ -32,6 +32,10 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		return packageOps;
 	}
 
+	public String opToName(int op) {
+		return callStatic("opToName", new Class<?>[] { int.class }, op);
+	}
+
 	public static class PackageOpsWrapper extends ObjectWrapper
 	{
 		private PackageOpsWrapper(Object obj) {

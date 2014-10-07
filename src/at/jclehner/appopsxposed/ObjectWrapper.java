@@ -66,12 +66,24 @@ public class ObjectWrapper
 		return call(methodName, getTypes(args), args);
 	}
 
+	public <T> T call(String methodName, Class<?>[] parameterTypes, Object... args) {
+		return callInternal(false, methodName, parameterTypes, args);
+	}
+
+	public <T> T callStatic(String methodName, Object... args) {
+		return callInternal(true, methodName, getTypes(args), args);
+	}
+
+	public <T> T callStatic(String methodName, Class<?>[] parameterTypes, Object... args) {
+		return callInternal(true, methodName, parameterTypes, args);
+	}
+
 	@SuppressWarnings("unchecked")
-	public <T> T call(String methodName, Class<?>[] parameterTypes, Object... args)
+	private <T> T callInternal(boolean isStatic, String methodName, Class<?>[] parameterTypes, Object... args)
 	{
 		try
 		{
-			return (T) mObj.getClass().getMethod(methodName, parameterTypes).invoke(mObj, args);
+			return (T) mObj.getClass().getMethod(methodName, parameterTypes).invoke(isStatic ? null : mObj, args);
 		}
 		catch(NoSuchMethodException e)
 		{

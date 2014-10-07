@@ -185,16 +185,18 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 
 	static class AppListLoader extends AsyncTaskLoader<List<PackageInfo>>
 	{
-		private static String[] sOpPerms;
+		private static String[] sOpPerms = getOpPermissions();
 
 		private final PackageManager mPm;
 		private List<PackageInfo> mData;
 
-		public AppListLoader(Context context)
+		private final boolean mRemoveAppsWithUnchangedOps;
+
+		public AppListLoader(Context context, boolean removeAppsWithUnchangedOps)
 		{
 			super(context);
 			mPm = context.getPackageManager();
-			sOpPerms = getOpPermissions();
+			mRemoveAppsWithUnchangedOps = removeAppsWithUnchangedOps;
 		}
 
 		@Override
@@ -205,7 +207,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 			if(sOpPerms != null)
 				removeAppsWithoutOps(data);
 
-			if(true)
+			if(mRemoveAppsWithUnchangedOps)
 				removeAppsWithUnchangedOps(data);
 
 			Collections.sort(data, new PkgInfoComparator(mPm));
@@ -267,7 +269,10 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 				for(OpEntryWrapper op : pkgOps.getOps())
 				{
 					if(op.getMode() != AppOpsManager.MODE_ALLOWED)
+					{
+						Log.d(TAG, pkgOps.getPackageName() + ": op " + appOps.opToName(op.getOp()) + ": mode " + op.getMode());
 						return false;
+					}
 				}
 			}
 
@@ -318,7 +323,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 		{
 			try
 			{
-				final Field f = AppOpsManager.class.getField("sOpPerms");
+				final Field f = AppOpsManager.class.getDeclaredField("sOpPerms");
 				f.setAccessible(true);
 				return (String[]) f.get(null);
 			}
@@ -339,9 +344,18 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 		}
 	}
 
+	public static AppListFragment newInstance(boolean showAppsWithChangedOpsOnly)
+	{
+		final Bundle args = new Bundle();
+		args.putBoolean("show_changed_ops_only", showAppsWithChangedOpsOnly);
+		final AppListFragment f = new AppListFragment();
+		f.setArguments(args);
+		return f;
+	}
+
 	@Override
 	public Loader<List<PackageInfo>> onCreateLoader(int id, Bundle args) {
-		return new AppListLoader(getActivity());
+		return new AppListLoader(getActivity(), getArguments().getBoolean("show_changed_ops_only"));
 	}
 
 	@Override
@@ -381,12 +395,26 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 		final Bundle args = new Bundle();
 		args.putString("package", ((ViewHolder) v.getTag()).packageName);
 
-		final Intent intent = new Intent("android.settings.SETTINGS");
-		intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT);
-		intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS, args);
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+		if(!isInAppOpsXposedApp())
+		{
+			((PreferenceActivity) getActivity()).startPreferencePanel(
+					AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, args,
+					Util.getSettingsIdentifier("string/app_ops_settings"),
+					null, null, 0);
+		}
+		else
+		{
+			final Intent intent = new Intent("android.settings.SETTINGS");
+			intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT);
+			intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS, args);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-		startActivity(intent);
+			startActivity(intent);
+		}
+	}
+
+	private boolean isInAppOpsXposedApp() {
+		return AppOpsXposed.MODULE_PACKAGE.equals(getActivity().getApplicationInfo().packageName);
 	}
 }

@@ -42,12 +42,6 @@ public class LauncherActivity extends Activity implements OnClickListener
 	{
 		super.onCreate(savedInstanceState);
 
-		if(true)
-		{
-			addAppListFragment();
-			return;
-		}
-
 		if(!isXposedInstalled())
 		{
 			if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
@@ -104,8 +98,8 @@ public class LauncherActivity extends Activity implements OnClickListener
 
 	private void addAppListFragment()
 	{
-		final AppListFragment f = new AppListFragment();
-		getFragmentManager().beginTransaction().add(android.R.id.content, f).commit();
+		final AppListFragment f = AppListFragment.newInstance(false);
+		getFragmentManager().beginTransaction().replace(android.R.id.content, f).commit();
 	}
 
 	private boolean isSonyStockRom()

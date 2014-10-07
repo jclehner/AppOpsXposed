@@ -31,7 +31,6 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -50,7 +49,6 @@ import at.jclehner.appopsxposed.variants.OmniROM;
 import at.jclehner.appopsxposed.variants.Oppo;
 import at.jclehner.appopsxposed.variants.Samsung;
 import at.jclehner.appopsxposed.variants.Sony;
-import dalvik.system.DexClassLoader;
 import dalvik.system.DexFile;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -333,6 +331,41 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 
 	public static void hookIsValidFragment(LoadPackageParam lpparam, String className) throws Throwable {
 		hookIsValidFragment(lpparam.classLoader.loadClass(className));
+	}
+
+	protected void addMenuToAppOpsSummary(LoadPackageParam lpparam) throws Throwable
+	{
+		Util.findAndHookMethodRecursive(AppOpsXposed.APP_OPS_FRAGMENT, lpparam.classLoader,
+				"onCreate", Bundle.class, new XC_MethodHookRecursive() {
+					@Override
+					protected void onAfterHookedMethod(MethodHookParam param) throws Throwable
+					{
+						((Fragment) param.thisObject).setHasOptionsMenu(true);
+					}
+		});
+
+		Util.findAndHookMethodRecursive(AppOpsXposed.APP_OPS_FRAGMENT, lpparam.classLoader,
+				"onCreateOptionsMenu", Menu.class, MenuInflater.class, new XC_MethodHookRecursive() {
+
+					@Override
+					protected void onAfterHookedMethod(final MethodHookParam param) throws Throwable
+					{
+						final Menu menu = (Menu) param.args[0];
+						menu.add(Util.getModString(R.string.show_changed_only_title))
+								.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+									@Override
+									public boolean onMenuItemClick(MenuItem item)
+									{
+										final Fragment f = (Fragment) param.thisObject;
+										((PreferenceActivity) f.getActivity()).startPreferenceFragment(
+												AppListFragment.newInstance(true), true);
+
+										return true;
+									}
+						});
+					}
+		});
 	}
 
 	protected void addAppOpsToAppInfo(LoadPackageParam lpparam)
