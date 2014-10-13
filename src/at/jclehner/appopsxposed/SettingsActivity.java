@@ -18,20 +18,15 @@
 
 package at.jclehner.appopsxposed;
 
-import java.lang.reflect.Field;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AppOpsManager;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnShowListener;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -42,8 +37,9 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.text.Html;
-import android.util.Log;
 import android.widget.Button;
+import at.jclehner.appopsxposed.util.OpsLabelHelper;
+import at.jclehner.appopsxposed.util.Util;
 
 public class SettingsActivity extends Activity
 {
@@ -132,12 +128,12 @@ public class SettingsActivity extends Activity
 
 			p = findPreference("use_hack_boot_completed");
 			p.setSummary(getString(R.string.use_hack_boot_completed_summary,
-					OpsResolver.getOpLabel(getActivity(), "OP_POST_NOTIFICATION"),
-					OpsResolver.getOpLabel(getActivity(), "OP_VIBRATE")));
+					OpsLabelHelper.getOpLabel(getActivity(), "OP_POST_NOTIFICATION"),
+					OpsLabelHelper.getOpLabel(getActivity(), "OP_VIBRATE")));
 
 			p = findPreference("use_hack_wake_lock");
 			p.setSummary(getString(R.string.use_hack_wake_lock_summary,
-					OpsResolver.getOpLabel(getActivity(), "OP_WAKE_LOCK")));
+					OpsLabelHelper.getOpLabel(getActivity(), "OP_WAKE_LOCK")));
 
 			p = findPreference("use_hack_pm_crash");
 			if(p != null)
@@ -260,111 +256,6 @@ public class SettingsActivity extends Activity
 
 			dialog.show();
 		}
-	}
-}
-
-
-class OpsResolver
-{
-	private static final String TAG = "AOX:OpsResolver";
-
-	private static boolean sTryLoadOpNames = true;
-	private static String[] sOpLabels;
-	private static String[] sOpSummaries;
-
-	public static String getOpLabel(Context context, String opName) {
-		return getOpLabelOrSummary(context, opName, true);
-	}
-
-	public static String getOpSummary(Context context, String opName) {
-		return getOpLabelOrSummary(context, opName, false);
-	}
-
-	private static String getOpLabelOrSummary(Context context, String opName, boolean getLabel)
-	{
-		String[] array = getLabel ? sOpLabels : sOpSummaries;
-
-		if(array == null && sTryLoadOpNames)
-		{
-			try
-			{
-				final Resources r = context.getPackageManager()
-						.getResourcesForApplication(AppOpsXposed.SETTINGS_PACKAGE);
-
-				final String idName =
-						AppOpsXposed.SETTINGS_PACKAGE + ":array/app_ops_" +
-						(getLabel ? "labels" : "summaries");
-
-				final int id = r.getIdentifier(idName, null, null);
-
-				final int opsCount = getOpValue("_NUM_OP");
-				sTryLoadOpNames = opsCount != -1;
-
-				if(sTryLoadOpNames)
-				{
-					array = r.getStringArray(id);
-
-					if(array.length != opsCount)
-					{
-						// If the array length doesn't match, it could mean that the known
-						// ops defined in AppOpsManager aren't in sync with the Settings app.
-						// Since the order of ops cannot be guaranteed in that case, ignore
-						// the array.
-
-						Log.w(TAG, "Length mismatch in " + idName + ": "
-								+ array.length + " vs _NUM_OP " + opsCount);
-
-						sTryLoadOpNames = false;
-					}
-					else
-					{
-						if(getLabel)
-							sOpLabels = array;
-						else
-							sOpSummaries = array;
-					}
-				}
-			}
-			catch (NameNotFoundException e)
-			{
-				sTryLoadOpNames = false;
-			}
-			catch(Resources.NotFoundException e)
-			{
-				sTryLoadOpNames = false;
-			}
-		}
-
-		final int op = getOpValue(opName);
-
-		if(array == null || op == -1 || op >= array.length)
-			return opName;
-
-		return array[op];
-	}
-
-	public static int getOpValue(String name)
-	{
-		try
-		{
-			final Field f = AppOpsManager.class.getField(name);
-			f.setAccessible(true);
-			return f.getInt(null);
-		}
-		catch (IllegalAccessException e)
-		{
-			// ignore
-		}
-		catch (IllegalArgumentException e)
-		{
-			// ignore
-		}
-		catch (NoSuchFieldException e)
-		{
-			// ignore
-		}
-
-		return -1;
 	}
 }
 

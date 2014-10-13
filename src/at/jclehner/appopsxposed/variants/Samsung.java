@@ -23,7 +23,8 @@ import java.util.Arrays;
 
 import at.jclehner.appopsxposed.ApkVariant;
 import at.jclehner.appopsxposed.AppOpsXposed;
-import at.jclehner.appopsxposed.Util;
+import at.jclehner.appopsxposed.util.Res;
+import at.jclehner.appopsxposed.util.Util;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -67,12 +68,12 @@ public class Samsung extends ApkVariant
 		 */
 
 		final int[] xmlHookResIds = {
-				Util.getSettingsIdentifier("xml/settings_headers"),
-				Util.getSettingsIdentifier("xml/general_headers"),
-				Util.getSettingsIdentifier("xml/management_headers"),
-				Util.getSettingsIdentifier("xml/grid_settings_headers")
+				Res.getSettingsIdentifier("xml/settings_headers"),
+				Res.getSettingsIdentifier("xml/general_headers"),
+				Res.getSettingsIdentifier("xml/management_headers"),
+				Res.getSettingsIdentifier("xml/grid_settings_headers")
 		};
-		final int manageAppsHeaderId = Util.getSettingsIdentifier("id/application_settings");
+		final int manageAppsHeaderId = Res.getSettingsIdentifier("id/application_settings");
 
 		debug("xmlHookResIds=" + Arrays.toString(xmlHookResIds));
 
@@ -80,10 +81,10 @@ public class Samsung extends ApkVariant
 		{
 			log("APK has " + GRID_SETTINGS);
 
-			final int gridId = Util.getSettingsIdentifier("bool/settings_grid");
+			final int gridId = Res.getSettingsIdentifier("bool/settings_grid");
 			debug("bool/settings_grid=" + gridId);
 
-			final boolean dontHookNormalSettings = gridId != 0 && Util.settingsRes.getBoolean(gridId);
+			final boolean dontHookNormalSettings = gridId != 0 && Res.settingsRes.getBoolean(gridId);
 
 			hookIsValidFragment(lpparam, GRID_SETTINGS);
 			hookLoadHeadersFromResource(lpparam, GRID_SETTINGS, xmlHookResIds, manageAppsHeaderId);

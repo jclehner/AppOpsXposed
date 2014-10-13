@@ -35,12 +35,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.R;
-import at.jclehner.appopsxposed.Util;
-import at.jclehner.appopsxposed.Util.XC_MethodHookRecursive;
+import at.jclehner.appopsxposed.util.OpsLabelHelper;
+import at.jclehner.appopsxposed.util.Res;
+import at.jclehner.appopsxposed.util.Util;
+import at.jclehner.appopsxposed.util.XUtils;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
-import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XC_MethodHook.Unhook;
+import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 
@@ -75,7 +77,7 @@ public abstract class Sony extends AOSP
 		{
 			super.handleLoadPackage(lpparam);
 
-			if(Util.modPrefs.getBoolean("use_layout_fix", true))
+			if(Res.modPrefs.getBoolean("use_layout_fix", true))
 			{
 				XposedHelpers.findAndHookMethod(AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, lpparam.classLoader,
 						"refreshUi", new XC_MethodHook() {
@@ -117,7 +119,7 @@ public abstract class Sony extends AOSP
 
 	@Override
 	protected int getAppOpsHeaderIcon() {
-		return Util.appOpsLauncherIcon;
+		return Res.appOpsLauncherIcon;
 	}
 
 	@Override
@@ -161,11 +163,11 @@ public abstract class Sony extends AOSP
 	{
 		final Fragment f = (Fragment) param.thisObject;
 
-		return (Unhook) Util.findAndHookMethodRecursive(f.getActivity().getClass(),
-				"finish", new XC_MethodHookRecursive() {
+		return XUtils.findAndHookMethodRecursive(f.getActivity().getClass(),
+				"finish", new XC_MethodHook() {
 
 					@Override
-					protected void onBeforeHookedMethod(MethodHookParam param) throws Throwable
+					protected void beforeHookedMethod(MethodHookParam param) throws Throwable
 					{
 						log("Blocked " + param.thisObject.getClass().getName() + ".finish()");
 						param.setResult(null);
@@ -175,13 +177,13 @@ public abstract class Sony extends AOSP
 
 	protected XC_MethodHook.Unhook hookLayoutInflater() throws Throwable
 	{
-		return (Unhook) Util.findAndHookMethodRecursive(LayoutInflater.class, "inflate",
-				int.class, ViewGroup.class, boolean.class, new XC_MethodHookRecursive() {
+		return XUtils.findAndHookMethodRecursive(LayoutInflater.class, "inflate",
+				int.class, ViewGroup.class, boolean.class, new XC_MethodHook() {
 					@Override
-					protected void onAfterHookedMethod(MethodHookParam param) throws Throwable
+					protected void afterHookedMethod(MethodHookParam param) throws Throwable
 					{
 						final int layoutResId = (Integer) param.args[0];
-						if(layoutResId != Util.getSettingsIdentifier("layout/app_ops_details_item"))
+						if(layoutResId != Res.getSettingsIdentifier("layout/app_ops_details_item"))
 							return;
 
 						debug("In LayoutInflater hook");
@@ -198,13 +200,13 @@ public abstract class Sony extends AOSP
 								debug("No items in spinnerWidget");
 
 								final Context context = ((LayoutInflater) param.thisObject).getContext();
-								final int arrayResId = Util.getSettingsIdentifier("array/app_ops_permissions");
+								final int arrayResId = Res.getSettingsIdentifier("array/app_ops_permissions");
 								final String[] options;
 
 								if(arrayResId != 0)
-									options = Util.settingsRes.getStringArray(arrayResId);
+									options = Res.settingsRes.getStringArray(arrayResId);
 								else
-									options = Util.modRes.getStringArray(R.array.app_ops_permissions);
+									options = Res.modRes.getStringArray(R.array.app_ops_permissions);
 
 								debug("arrayResId=" + arrayResId);
 								debug("options=" + Arrays.toString(options));
@@ -309,7 +311,7 @@ public abstract class Sony extends AOSP
 					AppOpsManager.class, "opToPermission", op);
 
 			if(permission != null)
-				return Util.getPermissionLabel(context, permission);
+				return OpsLabelHelper.getPermissionLabel(context, permission);
 		}
 		catch(Throwable t)
 		{

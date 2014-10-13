@@ -32,10 +32,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
+import at.jclehner.appopsxposed.util.Util;
 
 public class LauncherActivity extends Activity implements OnClickListener
 {
-	private static final String TAG = "AppOpsXposed";
+	private static final String TAG = "AOX";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -85,6 +86,8 @@ public class LauncherActivity extends Activity implements OnClickListener
 
 	private void launchAppOpsSummary()
 	{
+		Log.i(TAG, "Launching AppOps from launcher icon");
+
 		final Intent intent = new Intent();
 		intent.setPackage("com.android.settings");
 		intent.setAction("android.settings.SETTINGS");

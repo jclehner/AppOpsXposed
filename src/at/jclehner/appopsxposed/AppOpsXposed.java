@@ -18,8 +18,11 @@
 
 package at.jclehner.appopsxposed;
 
-import static at.jclehner.appopsxposed.Util.log;
+import static at.jclehner.appopsxposed.util.Util.log;
 import android.content.res.XModuleResources;
+import at.jclehner.appopsxposed.util.Res;
+import at.jclehner.appopsxposed.util.Util;
+import at.jclehner.appopsxposed.util.XUtils;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
@@ -43,12 +46,12 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	public void initZygote(StartupParam startupParam) throws Throwable
 	{
 		mModPath = startupParam.modulePath;
-		Util.modRes = XModuleResources.createInstance(mModPath, null);
-		Util.modPrefs = new XSharedPreferences(AppOpsXposed.class.getPackage().getName());
-		if(!Util.modPrefs.makeWorldReadable())
+		Res.modRes = XModuleResources.createInstance(mModPath, null);
+		Res.modPrefs = new XSharedPreferences(AppOpsXposed.class.getPackage().getName());
+		if(!Res.modPrefs.makeWorldReadable())
 			log("Failed to make preference file world-readable");
 
-		if(Util.modPrefs.getBoolean("failsafe_mode", false))
+		if(Res.modPrefs.getBoolean("failsafe_mode", false))
 			return;
 
 		for(Hack hack : Hack.getAllEnabled(false))
@@ -68,18 +71,17 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	@Override
 	public void handleInitPackageResources(InitPackageResourcesParam resparam) throws Throwable
 	{
-		if(Util.modPrefs.getBoolean("failsafe_mode", false))
+		if(Res.modPrefs.getBoolean("failsafe_mode", false))
 			return;
 
 		if(!ApkVariant.isSettingsPackage(resparam.packageName))
 			return;
 
-		Util.appOpsPreferenceIcon = resparam.res.addResource(Util.modRes, R.drawable.ic_appops);
-		Util.appOpsLauncherIcon = resparam.res.addResource(Util.modRes, R.mipmap.ic_launcher2);
+		Res.appOpsPreferenceIcon = resparam.res.addResource(Res.modRes, R.drawable.ic_appops);
+		Res.appOpsLauncherIcon = resparam.res.addResource(Res.modRes, R.mipmap.ic_launcher2);
+		Res.appListItemLayout = resparam.res.addResource(Res.modRes, R.layout.app_list_item);
 
-		Util.appListItemLayout = resparam.res.addResource(Util.modRes, R.layout.app_list_item);
-
-		final boolean useLayoutFix = Util.modPrefs.getBoolean("use_layout_fix", true);
+		final boolean useLayoutFix = Res.modPrefs.getBoolean("use_layout_fix", true);
 
 		for(ApkVariant variant : ApkVariant.getAllMatching(resparam.packageName))
 		{
@@ -87,7 +89,7 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 			if(useLayoutFix && variant.canUseLayoutFix())
 			{
 				resparam.res.setReplacement("com.android.settings", "layout", "app_ops_details_item",
-						Util.modRes.fwd(R.layout.app_ops_details_item));
+						Res.modRes.fwd(R.layout.app_ops_details_item));
 			}
 
 			try
@@ -102,13 +104,6 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 			break;
 		}
-
-		if(Util.modPrefs.getBoolean("use_layout_fix", true))
-		{
-
-		}
-		else
-			log("Not using layout fix");
 	}
 
 	@Override
@@ -122,7 +117,7 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 					XC_MethodReplacement.returnConstant(true));
 		}
 
-		if(!Util.isInFailsafeMode())
+		if(!XUtils.isInFailsafeMode())
 		{
 			for(Hack hack : Hack.getAllEnabled(true))
 			{
@@ -152,9 +147,9 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 			Util.debug("lpparam=" + lpparam + "\nlpparam.appInfo=" + lpparam.appInfo);
 		}
 
-		Util.settingsRes = XModuleResources.createInstance(lpparam.appInfo.sourceDir, null);
+		Res.settingsRes = XModuleResources.createInstance(lpparam.appInfo.sourceDir, null);
 
-		final String forceVariant = Util.modPrefs.getString("force_variant", "");
+		final String forceVariant = Res.modPrefs.getString("force_variant", "");
 		if(forceVariant.length() == 0)
 		{
 			log("Trying variants...");

@@ -26,12 +26,12 @@ import android.content.Context;
 import android.os.Binder;
 import android.os.IBinder;
 import at.jclehner.appopsxposed.Hack;
-import at.jclehner.appopsxposed.Util;
+import at.jclehner.appopsxposed.util.Res;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodHook.Unhook;
-import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
+import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 
 @TargetApi(19)
@@ -85,11 +85,11 @@ public class FixWakeLock extends Hack
 		if(ENABLE_PER_TAG_FILTERING)
 		{
 			final String blacklistKey = "wakelock_hack_is_blacklist/" + packageName;
-			if(!Util.modPrefs.contains(blacklistKey))
+			if(!Res.modPrefs.contains(blacklistKey))
 				return false;
 
-			final boolean isBlacklist = Util.modPrefs.getBoolean(blacklistKey, true);
-			final Set<String> tags = Util.modPrefs.getStringSet("wakelock_hack_tags/" + packageName, null);
+			final boolean isBlacklist = Res.modPrefs.getBoolean(blacklistKey, true);
+			final Set<String> tags = Res.modPrefs.getStringSet("wakelock_hack_tags/" + packageName, null);
 			if(tags == null || tags.isEmpty() || !tags.contains(tag))
 				return isBlacklist;
 

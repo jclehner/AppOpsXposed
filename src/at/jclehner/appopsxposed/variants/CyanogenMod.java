@@ -25,7 +25,7 @@ import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
-import at.jclehner.appopsxposed.Util;
+import at.jclehner.appopsxposed.util.Util;
 
 public class CyanogenMod extends AOSP
 {

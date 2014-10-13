@@ -20,6 +20,7 @@ package at.jclehner.appopsxposed;
 
 import java.lang.reflect.Field;
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -35,10 +36,14 @@ import android.content.Loader;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.StrikethroughSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,10 +52,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import at.jclehner.appopsxposed.AppOpsManagerWrapper.OpEntryWrapper;
-import at.jclehner.appopsxposed.AppOpsManagerWrapper.PackageOpsWrapper;
+import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
+import at.jclehner.appopsxposed.util.OpsLabelHelper;
+import at.jclehner.appopsxposed.util.Res;
+import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.OpEntryWrapper;
+import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.PackageOpsWrapper;
 
-public class AppListFragment extends ListFragment implements LoaderCallbacks<List<PackageInfo>>
+public class AppListFragment extends ListFragment implements LoaderCallbacks<List<AppListFragment.PackageInfoData>>
 {
 	private static final String TAG = "AOX:AppListFragment";
 
@@ -60,13 +68,13 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 	class AppListAdapter extends BaseAdapter
 	{
 		private final PackageManager mPm;
-		private List<PackageInfo> mList;
+		private List<PackageInfoData> mList;
 
 		public AppListAdapter(Context context) {
 			mPm = context.getPackageManager();
 		}
 
-		public void setData(List<PackageInfo> list)
+		public void setData(List<PackageInfoData> list)
 		{
 			mList = list;
 			notifyDataSetChanged();
@@ -78,7 +86,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 		}
 
 		@Override
-		public PackageInfo getItem(int position) {
+		public PackageInfoData getItem(int position) {
 			return mList.get(position);
 		}
 
@@ -92,15 +100,16 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 		public View getView(int position, View convertView, ViewGroup parent)
 		{
 			final ViewHolder holder;
-			final ApplicationInfo appInfo = getItem(position).applicationInfo;
+			final PackageInfoData data = getItem(position);
+			final ApplicationInfo appInfo = data.packageInfo.applicationInfo;
 
 			if(convertView == null)
 			{
-				convertView = mInflater.inflate(Util.appListItemLayout, parent, false);
+				convertView = mInflater.inflate(Res.appListItemLayout, parent, false);
 
 				holder = new ViewHolder();
 				holder.appIcon = (ImageView) convertView.findViewWithTag("app_icon");
-				holder.appPackage = (TextView) convertView.findViewWithTag("app_package");
+				holder.appLine2 = (TextView) convertView.findViewWithTag("app_package");
 				holder.appName = (TextView) convertView.findViewWithTag("app_name");
 
 				convertView.setTag(holder);
@@ -109,7 +118,8 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 				holder = (ViewHolder) convertView.getTag();
 
 			holder.appIcon.setImageDrawable(null);
-			holder.appName.setText(appInfo.packageName);
+			holder.appName.setText(data.label);
+			holder.appLine2.setText(data.line2);
 
 			if(true)
 			{
@@ -122,8 +132,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 					{
 						final Object[] result = new Object[2];
 						result[0] = appInfo.loadIcon(mPm);
-						result[1] = appInfo.loadLabel(mPm);
-
+						//result[1] = appInfo.loadLabel(mPm);
 						return result;
 					}
 
@@ -131,15 +140,15 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 					protected void onPostExecute(Object[] result)
 					{
 						holder.appIcon.setImageDrawable((Drawable) result[0]);
-						holder.appName.setText((CharSequence) result[1]);
+						/*holder.appName.setText((CharSequence) result[1]);
 
 						if(!appInfo.packageName.equals(result[1].toString()))
 						{
-							holder.appPackage.setText(appInfo.packageName);
-							holder.appPackage.setVisibility(View.VISIBLE);
+							holder.appLine2.setText(appInfo.packageName);
+							holder.appLine2.setVisibility(View.VISIBLE);
 						}
 						else
-							holder.appPackage.setVisibility(View.GONE);
+							holder.appLine2.setVisibility(View.GONE);*/
 					}
 
 				}.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -163,32 +172,39 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 
 		ImageView appIcon;
 		TextView appName;
-		TextView appPackage;
+		TextView appLine2;
 	}
 
-	static class PkgInfoComparator implements Comparator<PackageInfo>
+	static class LoaderDataComparator implements Comparator<PackageInfoData>
 	{
 		private static Collator sCollator = Collator.getInstance();
-		private final PackageManager mPm;
-
-		public PkgInfoComparator(PackageManager pm) {
-			mPm = pm;
-		}
 
 		@Override
-		public int compare(PackageInfo lhs, PackageInfo rhs)
-		{
-			return sCollator.compare(lhs.applicationInfo.loadLabel(mPm),
-					rhs.applicationInfo.loadLabel(mPm));
+		public int compare(PackageInfoData lhs, PackageInfoData rhs) {
+			return sCollator.compare(lhs.label, rhs.label);
 		}
 	}
 
-	static class AppListLoader extends AsyncTaskLoader<List<PackageInfo>>
+	static class PackageInfoData
+	{
+		final PackageInfo packageInfo;
+		final CharSequence label;
+		CharSequence line2;
+
+		PackageInfoData(PackageInfo packageInfo, CharSequence label)
+		{
+			this.packageInfo = packageInfo;
+			this.label = label;
+			line2 = packageInfo.packageName;
+		}
+	}
+
+	static class AppListLoader extends AsyncTaskLoader<List<PackageInfoData>>
 	{
 		private static String[] sOpPerms = getOpPermissions();
 
 		private final PackageManager mPm;
-		private List<PackageInfo> mData;
+		private List<PackageInfoData> mData;
 
 		private final boolean mRemoveAppsWithUnchangedOps;
 
@@ -200,22 +216,41 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 		}
 
 		@Override
-		public List<PackageInfo> loadInBackground()
+		public List<PackageInfoData> loadInBackground()
 		{
-			final List<PackageInfo> data = mPm.getInstalledPackages(PackageManager.GET_PERMISSIONS);
+			final List<PackageInfo> packageInfos = mPm.getInstalledPackages(
+					PackageManager.GET_PERMISSIONS | PackageManager.GET_DISABLED_COMPONENTS);
 
 			if(sOpPerms != null)
-				removeAppsWithoutOps(data);
+				removeAppsWithoutOps(packageInfos);
+
+			final List<PackageInfoData> data = new ArrayList<PackageInfoData>();
+
+			for(PackageInfo packageInfo : packageInfos)
+			{
+				CharSequence label;
+				try
+				{
+					label = packageInfo.applicationInfo.loadLabel(mPm);
+				}
+				catch(Resources.NotFoundException e)
+				{
+					label = packageInfo.packageName;
+				}
+
+				data.add(new PackageInfoData(packageInfo, label));
+			}
 
 			if(mRemoveAppsWithUnchangedOps)
 				removeAppsWithUnchangedOps(data);
 
-			Collections.sort(data, new PkgInfoComparator(mPm));
+			Collections.sort(data, new LoaderDataComparator());
+
 			return data;
 		}
 
 		@Override
-		public void deliverResult(List<PackageInfo> data)
+		public void deliverResult(List<PackageInfoData> data)
 		{
 			mData = data;
 
@@ -248,7 +283,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 			mData = null;
 		}
 
-		private void removeAppsWithUnchangedOps(List<PackageInfo> data)
+		private void removeAppsWithUnchangedOps(List<PackageInfoData> data)
 		{
 			for(int i = 0; i != data.size(); ++i)
 			{
@@ -260,23 +295,37 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 			}
 		}
 
-		private boolean hasUnchangedOps(PackageInfo info)
+		private boolean hasUnchangedOps(PackageInfoData info)
 		{
 			final AppOpsManagerWrapper appOps = AppOpsManagerWrapper.from(getContext());
-			final List<PackageOpsWrapper> pkgOpsList = appOps.getOpsForPackage(info.applicationInfo.uid, info.packageName, null);
+			final List<PackageOpsWrapper> pkgOpsList = appOps.getOpsForPackage(info.packageInfo.applicationInfo.uid,
+					info.packageInfo.applicationInfo.packageName, null);
+
+			boolean hasUnchangedOps = true;
+
+			final SpannableStringBuilder ssb = new SpannableStringBuilder();
+
 			for(PackageOpsWrapper pkgOps : pkgOpsList)
 			{
 				for(OpEntryWrapper op : pkgOps.getOps())
 				{
 					if(op.getMode() != AppOpsManager.MODE_ALLOWED)
 					{
-						Log.d(TAG, pkgOps.getPackageName() + ": op " + appOps.opToName(op.getOp()) + ": mode " + op.getMode());
-						return false;
+						if(ssb.length() != 0)
+							ssb.append(", ");
+
+						final SpannableString opSummary = new SpannableString(OpsLabelHelper.getOpSummary(getContext(), op.getOp()));
+						opSummary.setSpan(new StrikethroughSpan(), 0, opSummary.length(), 0);
+						ssb.append(opSummary);
+						hasUnchangedOps = false;
 					}
 				}
 			}
 
-			return true;
+			if(!hasUnchangedOps)
+				info.line2 = ssb;
+
+			return hasUnchangedOps;
 		}
 
 		private void removeAppsWithoutOps(List<PackageInfo> data)
@@ -354,12 +403,12 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 	}
 
 	@Override
-	public Loader<List<PackageInfo>> onCreateLoader(int id, Bundle args) {
+	public Loader<List<PackageInfoData>> onCreateLoader(int id, Bundle args) {
 		return new AppListLoader(getActivity(), getArguments().getBoolean("show_changed_ops_only"));
 	}
 
 	@Override
-	public void onLoadFinished(Loader<List<PackageInfo>> loader, List<PackageInfo> data)
+	public void onLoadFinished(Loader<List<PackageInfoData>> loader, List<PackageInfoData> data)
 	{
 		mAdapter.setData(data);
 
@@ -370,7 +419,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 	}
 
 	@Override
-	public void onLoaderReset(Loader<List<PackageInfo>> data) {
+	public void onLoaderReset(Loader<List<PackageInfoData>> data) {
 		mAdapter.setData(null);
 	}
 
@@ -399,7 +448,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 		{
 			((PreferenceActivity) getActivity()).startPreferencePanel(
 					AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, args,
-					Util.getSettingsIdentifier("string/app_ops_settings"),
+					Res.getSettingsIdentifier("string/app_ops_settings"),
 					null, null, 0);
 		}
 		else

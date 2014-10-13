@@ -1,4 +1,4 @@
-package at.jclehner.appopsxposed;
+package at.jclehner.appopsxposed.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +34,10 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 
 	public String opToName(int op) {
 		return callStatic("opToName", new Class<?>[] { int.class }, op);
+	}
+
+	public String opToPermission(int op) {
+		return callStatic("opToPermission", new Class<?>[] { int.class }, op);
 	}
 
 	public static class PackageOpsWrapper extends ObjectWrapper

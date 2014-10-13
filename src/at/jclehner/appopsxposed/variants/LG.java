@@ -7,9 +7,9 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.R;
-import at.jclehner.appopsxposed.Util;
-import at.jclehner.appopsxposed.Util.XC_MethodHookRecursive;
-import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
+import at.jclehner.appopsxposed.util.Res;
+import at.jclehner.appopsxposed.util.XUtils;
+import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 /*
@@ -61,11 +61,11 @@ public class LG extends AOSP
 			return;
 		}
 
-		Util.findAndHookMethodRecursive("com.lge.settings.general.EasyGeneralFragment", lpparam.classLoader,
-				"addPreferencesFromResource", int.class, new XC_MethodHookRecursive() {
+		XUtils.findAndHookMethodRecursive("com.lge.settings.general.EasyGeneralFragment", lpparam.classLoader,
+				"addPreferencesFromResource", int.class, new XC_MethodHook() {
 
 					@Override
-					protected void onAfterHookedMethod(MethodHookParam param) throws Throwable
+					protected void afterHookedMethod(MethodHookParam param) throws Throwable
 					{
 						debug("addPreferencesFromResource: resId=" + param.args[0]);
 
@@ -91,9 +91,9 @@ public class LG extends AOSP
 						intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_FRAGMENT);
 
 						final Preference p = new Preference(pf.getActivity());
-						p.setTitle(Util.modRes.getString(R.string.app_ops_settings));
+						p.setTitle(Res.modRes.getString(R.string.app_ops_settings));
 						// TODO change to getAppOpsHeaderIcon()
-						p.setIcon(Util.modRes.getDrawable(R.mipmap.ic_launcher2));
+						p.setIcon(Res.modRes.getDrawable(R.mipmap.ic_launcher2));
 						p.setIntent(intent);
 						p.setOrder(order);
 
@@ -104,6 +104,6 @@ public class LG extends AOSP
 
 	@Override
 	protected int getAppOpsHeaderIcon() {
-		return Util.appOpsLauncherIcon;
+		return Res.appOpsLauncherIcon;
 	}
 }

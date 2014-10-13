@@ -42,6 +42,7 @@ import android.os.Parcelable;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.widget.Toast;
+import at.jclehner.appopsxposed.util.Util;
 import eu.chainfire.libsuperuser.Shell;
 import eu.chainfire.libsuperuser.Shell.SU;
 

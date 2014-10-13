@@ -40,7 +40,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.Toast;
-import at.jclehner.appopsxposed.Util.XC_MethodHookRecursive;
+import at.jclehner.appopsxposed.util.Res;
+import at.jclehner.appopsxposed.util.Util;
+import at.jclehner.appopsxposed.util.XUtils;
 import at.jclehner.appopsxposed.variants.AOSP;
 import at.jclehner.appopsxposed.variants.CyanogenMod;
 import at.jclehner.appopsxposed.variants.HTC;
@@ -52,6 +54,7 @@ import at.jclehner.appopsxposed.variants.Sony;
 import dalvik.system.DexFile;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
+import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
@@ -115,7 +118,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 
 	public static List<ApkVariant> getAllMatching(String packageName)
 	{
-		final ApplicationInfo appInfo = Util.getApplicationInfo(packageName);
+		final ApplicationInfo appInfo = XUtils.getApplicationInfo(packageName);
 		if(appInfo == null)
 			return Collections.emptyList();
 
@@ -166,16 +169,16 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 	}
 
 	protected int getAppOpsHeaderIcon() {
-		return Util.appOpsLauncherIcon;
+		return Res.appOpsLauncherIcon;
 	}
 
 	protected String getAppOpsTitle()
 	{
-		final int appOpsTitleId = Util.getSettingsIdentifier("string/app_ops_setting");
+		final int appOpsTitleId = Res.getSettingsIdentifier("string/app_ops_setting");
 		if(appOpsTitleId != 0)
-			return Util.getSettingsString(appOpsTitleId);
+			return Res.getSettingsString(appOpsTitleId);
 
-		return Util.getModString(R.string.app_ops_settings);
+		return Res.getModString(R.string.app_ops_settings);
 	}
 
 	protected String getAppOpsDetailsFragmentName() {
@@ -256,11 +259,11 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 
 	protected void hookLoadHeadersFromResource(LoadPackageParam lpparam, String className, final int[] hookResIds, final int addAfterHeaderId) throws Throwable
 	{
-		hookLoadHeadersFromResource(lpparam, className, new XC_MethodHookRecursive() {
+		hookLoadHeadersFromResource(lpparam, className, new XC_MethodHook() {
 
 				@SuppressWarnings("unchecked")
 				@Override
-				protected void onAfterHookedMethod(MethodHookParam param) throws Throwable
+				protected void afterHookedMethod(MethodHookParam param) throws Throwable
 				{
 					final int xmlResId = (Integer) param.args[0];
 					debug("loadHeadersFromResource: xmlResId=" + xmlResId);
@@ -281,9 +284,9 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 		hookLoadHeadersFromResource(lpparam, "com.android.settings.Settings", new int[] { hookResId }, addAfterHeaderId);
 	}
 
-	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, String className, XC_MethodHookRecursive hook) throws Throwable
+	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, String className, XC_MethodHook hook) throws Throwable
 	{
-		Util.findAndHookMethodRecursive(className, lpparam.classLoader,
+		XUtils.findAndHookMethodRecursive(className, lpparam.classLoader,
 				"loadHeadersFromResource", int.class, List.class, hook);
 	}
 
@@ -295,11 +298,11 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 	{
 		try
 		{
-			Util.findAndHookMethodRecursive(clazz, "isValidFragment",
-					String.class, new XC_MethodHookRecursive() {
+			XUtils.findAndHookMethodRecursive(clazz, "isValidFragment",
+					String.class, new XC_MethodHook() {
 
 						@Override
-						protected void onAfterHookedMethod(MethodHookParam param) throws Throwable
+						protected void afterHookedMethod(MethodHookParam param) throws Throwable
 						{
 							if((Boolean) param.getResult())
 								return;
@@ -335,23 +338,23 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 
 	protected void addMenuToAppOpsSummary(LoadPackageParam lpparam) throws Throwable
 	{
-		Util.findAndHookMethodRecursive(AppOpsXposed.APP_OPS_FRAGMENT, lpparam.classLoader,
-				"onCreate", Bundle.class, new XC_MethodHookRecursive() {
+		XUtils.findAndHookMethodRecursive(AppOpsXposed.APP_OPS_FRAGMENT, lpparam.classLoader,
+				"onCreate", Bundle.class, new XC_MethodHook() {
 					@Override
-					protected void onAfterHookedMethod(MethodHookParam param) throws Throwable
+					protected void afterHookedMethod(MethodHookParam param) throws Throwable
 					{
 						((Fragment) param.thisObject).setHasOptionsMenu(true);
 					}
 		});
 
-		Util.findAndHookMethodRecursive(AppOpsXposed.APP_OPS_FRAGMENT, lpparam.classLoader,
-				"onCreateOptionsMenu", Menu.class, MenuInflater.class, new XC_MethodHookRecursive() {
+		XUtils.findAndHookMethodRecursive(AppOpsXposed.APP_OPS_FRAGMENT, lpparam.classLoader,
+				"onCreateOptionsMenu", Menu.class, MenuInflater.class, new XC_MethodHook() {
 
 					@Override
-					protected void onAfterHookedMethod(final MethodHookParam param) throws Throwable
+					protected void afterHookedMethod(final MethodHookParam param) throws Throwable
 					{
 						final Menu menu = (Menu) param.args[0];
-						menu.add(Util.getModString(R.string.show_changed_only_title))
+						menu.add(Res.getModString(R.string.show_changed_only_title))
 								.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
 									@Override
@@ -360,26 +363,42 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 										final Fragment f = (Fragment) param.thisObject;
 										((PreferenceActivity) f.getActivity()).startPreferenceFragment(
 												AppListFragment.newInstance(true), true);
-
 										return true;
 									}
 						});
 					}
+		});
+
+		// Without this, an orientation change crashes the settings app,
+		// because its class loader fails to find AppListFragment.
+		XposedBridge.hookAllMethods(Fragment.class, "instantiate", new XC_MethodHook() {
+
+			@Override
+			protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+			{
+				if(param.args[1].equals(AppListFragment.class.getName()))
+				{
+					final AppListFragment f = new AppListFragment();
+					if(param.args.length >= 3)
+						f.setArguments((Bundle) param.args[2]);
+					param.setResult(f);
+				}
+			}
 		});
 	}
 
 	protected void addAppOpsToAppInfo(LoadPackageParam lpparam)
 	{
 		XposedHelpers.findAndHookMethod("com.android.settings.applications.InstalledAppDetails", lpparam.classLoader,
-				"onCreateOptionsMenu", Menu.class, MenuInflater.class, new XC_MethodHookRecursive() {
+				"onCreateOptionsMenu", Menu.class, MenuInflater.class, new XC_MethodHook() {
 
 					@Override
-					protected void onAfterHookedMethod(final MethodHookParam param) throws Throwable
+					protected void afterHookedMethod(final MethodHookParam param) throws Throwable
 					{
 						final Menu menu = (Menu) param.args[0];
 						final MenuItem item = menu.add(getAppOpsTitle());
 						item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-						item.setIcon(Util.modRes.getDrawable(R.mipmap.ic_launcher2));
+						item.setIcon(Res.modRes.getDrawable(R.mipmap.ic_launcher2));
 						item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
 							@Override
@@ -432,7 +451,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 									final Intent intent = new Intent("android.settings.SETTINGS");
 									intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, getAppOpsDetailsFragmentName());
 									intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS, args);
-									intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_TITLE, Util.getModString(R.string.app_ops_settings));
+									intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_TITLE, Res.getModString(R.string.app_ops_settings));
 
 									final TaskStackBuilder tsb = TaskStackBuilder.create(pa);
 									tsb.addNextIntent(intent);
@@ -446,7 +465,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 									// This method only works when "App info" was opened from "Apps". When the launcher icon
 									// onto "App info", the method above is used.
 									pa.startPreferencePanel(getAppOpsDetailsFragmentName(), args, 0,
-											Util.getModString(R.string.app_ops_settings), f, 0);
+											Res.getModString(R.string.app_ops_settings), f, 0);
 								}
 
 								return true;
@@ -497,7 +516,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 	}
 
 	protected final void log(String message) {
-		XposedBridge.log(getLogPrefix() + message);
+		Util.log(getLogPrefix() + message);
 	}
 
 	protected final void debug(String message) {
@@ -505,7 +524,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 	}
 
 	protected final void log(Throwable t) {
-		XposedBridge.log(t);
+		Util.log(t);
 	}
 
 	protected final void debug(Throwable t) {

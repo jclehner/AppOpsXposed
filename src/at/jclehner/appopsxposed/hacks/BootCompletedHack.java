@@ -29,7 +29,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import at.jclehner.appopsxposed.Hack;
 import at.jclehner.appopsxposed.R;
-import at.jclehner.appopsxposed.Util;
+import at.jclehner.appopsxposed.util.OpsLabelHelper;
+import at.jclehner.appopsxposed.util.Res;
+import at.jclehner.appopsxposed.util.Util;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -81,7 +83,7 @@ public class BootCompletedHack extends Hack
 	private static final int MERGE_TARGET = OP_VIBRATE;
 	private static final int MERGE_SOURCE = OP_POST_NOTIFICATION;
 
-	private static final int OP_BOOT_COMPLETED = MERGE_SOURCE;
+	public static final int OP_BOOT_COMPLETED = MERGE_SOURCE;
 
 	// Not neccessary for our cause, but we can fix an error while we're
 	// at it; see patchFramework() for details
@@ -313,7 +315,7 @@ public class BootCompletedHack extends Hack
 					@Override
 					protected void afterHookedMethod(MethodHookParam param) throws Throwable
 					{
-						final CharSequence summary = Util.getPermissionLabel((Context) param.args[0],
+						final CharSequence summary = OpsLabelHelper.getPermissionLabel((Context) param.args[0],
 								android.Manifest.permission.RECEIVE_BOOT_COMPLETED);
 
 						Object array = XposedHelpers.getObjectField(param.thisObject, "mOpSummaries");
@@ -352,7 +354,7 @@ public class BootCompletedHack extends Hack
 					bootupTemplate);
 
 			final Object[][] adapterReturnValueInfos = {
-					{ "getPageTitle", Util.getModString(R.string.app_ops_categories_bootup) },
+					{ "getPageTitle", Res.getModString(R.string.app_ops_categories_bootup) },
 					{ "getItem", bootupCategoryFragment }
 			};
 

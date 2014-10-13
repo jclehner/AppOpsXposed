@@ -1,4 +1,4 @@
-package at.jclehner.appopsxposed;
+package at.jclehner.appopsxposed.util;
 
 import java.lang.reflect.InvocationTargetException;
 

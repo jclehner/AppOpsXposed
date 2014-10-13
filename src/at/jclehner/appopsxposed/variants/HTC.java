@@ -30,9 +30,10 @@ import android.view.ViewGroup;
 import at.jclehner.appopsxposed.ApkVariant;
 import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.R;
-import at.jclehner.appopsxposed.Util;
-import at.jclehner.appopsxposed.Util.XC_MethodHookRecursive;
+import at.jclehner.appopsxposed.util.Res;
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
+import de.robv.android.xposed.XC_MethodHookRecursive;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
@@ -172,7 +173,7 @@ public class HTC extends ApkVariant
 
 		try
 		{
-			if(Util.modPrefs.getBoolean("htc_use_google_app_ops_category", false))
+			if(Res.modPrefs.getBoolean("htc_use_google_app_ops_category", false))
 				hookStartPreferencePanel(lpparam);
 
 			addHtcAppOpsHeader(lpparam);
@@ -277,9 +278,9 @@ public class HTC extends ApkVariant
 					}
 		});
 
-		hookLoadHeadersFromResource(lpparam, "com.android.settings.Settings", new XC_MethodHookRecursive() {
+		hookLoadHeadersFromResource(lpparam, "com.android.settings.Settings", new XC_MethodHook() {
 
-			protected void onAfterHookedMethod(MethodHookParam param) throws Throwable
+			protected void afterHookedMethod(MethodHookParam param) throws Throwable
 			{
 				debug("loadHeadersFromResource: xmlResId=" + param.args[0]);
 			}

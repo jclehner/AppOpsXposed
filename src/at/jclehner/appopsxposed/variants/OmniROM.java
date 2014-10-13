@@ -19,7 +19,7 @@
 package at.jclehner.appopsxposed.variants;
 
 import android.content.pm.ApplicationInfo;
-import at.jclehner.appopsxposed.Util;
+import at.jclehner.appopsxposed.util.Util;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class OmniROM extends AOSP
