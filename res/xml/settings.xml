@@ -39,7 +39,8 @@
 	        <CheckBoxPreference android:key="use_hack_wake_lock"
 	            android:title="@string/use_hack_wake_lock_title"
 	            android:summary="@string/use_hack_wake_lock_summary"
-	            android:defaultValue="false" />
+	            android:defaultValue="false"
+	            android:enabled="@bool/is_sdk_ge_19" />
 
 	        <!--
 	        <CheckBoxPreference android:key="use_hack_pm_crash"

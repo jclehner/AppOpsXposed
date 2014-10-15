@@ -23,6 +23,7 @@ import java.util.List;
 import android.content.Context;
 import android.preference.PreferenceActivity.Header;
 import at.jclehner.appopsxposed.ApkVariant;
+import at.jclehner.appopsxposed.BuildConfig;
 import at.jclehner.appopsxposed.util.Res;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
@@ -35,7 +36,9 @@ public class AOSP extends ApkVariant
 	{
 		hookIsValidFragment(lpparam);
 		addAppOpsToAppInfo(lpparam);
-		//addMenuToAppOpsSummary(lpparam);
+
+		if(BuildConfig.DEBUG)
+			addMenuToAppOpsSummary(lpparam);
 
 		final int settingsHeadersId = Res.getSettingsIdentifier("xml/settings_headers");
 		final int personalSectionId = Res.getSettingsIdentifier("id/personal_section");
