@@ -16,17 +16,17 @@
 
 package com.android.settings.applications;
 
-import android.app.AppOpsManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.preference.PreferenceFrameLayout;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import at.jclehner.appopsxposed.R;
+import at.jclehner.appopsxposed.util.Res;
 
 public class AppOpsSummary extends Fragment {
     // layout inflater object used to inflate views
@@ -90,25 +90,26 @@ public class AppOpsSummary extends Fragment {
         // initialize the inflater
         mInflater = inflater;
 
-        View rootView = mInflater.inflate(R.layout.app_ops_summary,
+        View rootView = mInflater.inflate(Res.layout_app_ops_summary,
                 container, false);
         mContentContainer = container;
         mRootView = rootView;
 
-        mPageNames = getResources().getTextArray(R.array.app_ops_categories);
+        //mPageNames = getResources().getTextArray(R.array.app_ops_categories);
+        mPageNames = new String[] { "Location", "Personal", "Messaging", "Media", "Device" };
 
-        mViewPager = (ViewPager) rootView.findViewById(R.id.pager);
+        mViewPager = (ViewPager) rootView.findViewWithTag("pager");
         MyPagerAdapter adapter = new MyPagerAdapter(getChildFragmentManager());
         mViewPager.setAdapter(adapter);
         mViewPager.setOnPageChangeListener(adapter);
-        PagerTabStrip tabs = (PagerTabStrip) rootView.findViewById(R.id.tabs);
+        PagerTabStrip tabs = (PagerTabStrip) rootView.findViewWithTag("tabs");
         tabs.setTabIndicatorColorResource(android.R.color.holo_blue_light);
 
         // We have to do this now because PreferenceFrameLayout looks at it
         // only when the view is added.
-        if (container instanceof PreferenceFrameLayout) {
-            ((PreferenceFrameLayout.LayoutParams) rootView.getLayoutParams()).removeBorders = true;
-        }
+        //if (container instanceof PreferenceFrameLayout) {
+        //    ((PreferenceFrameLayout.LayoutParams) rootView.getLayoutParams()).removeBorders = true;
+        //}
 
         return rootView;
     }

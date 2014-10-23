@@ -27,18 +27,22 @@ import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import at.jclehner.appopsxposed.hacks.AlternateFragmentHack;
 import at.jclehner.appopsxposed.hacks.BootCompletedHack;
 import at.jclehner.appopsxposed.hacks.FixWakeLock;
 import at.jclehner.appopsxposed.hacks.PackageManagerCrashHack;
 import at.jclehner.appopsxposed.util.Res;
 import at.jclehner.appopsxposed.util.Util;
+import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
+import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
-public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteInit
+public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteInit,
+		IXposedHookInitPackageResources
 {
 	public static class PreferenceInfo
 	{
@@ -59,7 +63,8 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 		new BootCompletedHack(),
 		new FixWakeLock(),
 		//new GmsLocationHack(),
-		new PackageManagerCrashHack()
+		new PackageManagerCrashHack(),
+		new AlternateFragmentHack()
 	};
 
 	private String mLogTag;
@@ -116,6 +121,11 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 	}
 
 	protected void handleLoadAnyPackage(LoadPackageParam lpparam) throws Throwable {
+
+	}
+
+	@Override
+	public void handleInitPackageResources(InitPackageResourcesParam resparam) throws Throwable {
 
 	}
 

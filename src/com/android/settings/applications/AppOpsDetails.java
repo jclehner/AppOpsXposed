@@ -19,7 +19,6 @@ package com.android.settings.applications;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.AppOpsManager;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -60,16 +59,16 @@ public class AppOpsDetails extends Fragment {
 
     // Utility method to set application label and icon.
     private void setAppLabelAndIcon(PackageInfo pkgInfo) {
-        final View appSnippet = mRootView.findViewById(R.id.app_snippet);
+        final View appSnippet = mRootView.findViewWithTag("app_snippet");
         appSnippet.setPaddingRelative(0, appSnippet.getPaddingTop(), 0, appSnippet.getPaddingBottom());
 
-        ImageView icon = (ImageView) appSnippet.findViewById(R.id.app_icon);
+        ImageView icon = (ImageView) appSnippet.findViewWithTag("app_icon");
         icon.setImageDrawable(mPm.getApplicationIcon(pkgInfo.applicationInfo));
         // Set application name.
-        TextView label = (TextView) appSnippet.findViewById(R.id.app_name);
+        TextView label = (TextView) appSnippet.findViewWithTag("app_name");
         label.setText(mPm.getApplicationLabel(pkgInfo.applicationInfo));
         // Version number of application
-        mAppVersion = (TextView) appSnippet.findViewById(R.id.app_size);
+        mAppVersion = (TextView) appSnippet.findViewWithTag("app_size");
 
         if (pkgInfo.versionName != null) {
             mAppVersion.setVisibility(View.VISIBLE);
@@ -129,18 +128,18 @@ public class AppOpsDetails extends Fragment {
                             lastPermGroup = pi.group;
                             PermissionGroupInfo pgi = mPm.getPermissionGroupInfo(pi.group, 0);
                             if (pgi.icon != 0) {
-                                ((ImageView)view.findViewById(R.id.op_icon)).setImageDrawable(
+                                ((ImageView)view.findViewWithTag("op_icon")).setImageDrawable(
                                         pgi.loadIcon(mPm));
                             }
                         }
                     } catch (NameNotFoundException e) {
                     }
                 }
-                ((TextView)view.findViewById(R.id.op_name)).setText(
+                ((TextView)view.findViewWithTag("op_name")).setText(
                         entry.getSwitchText(mState));
-                ((TextView)view.findViewById(R.id.op_time)).setText(
+                ((TextView)view.findViewWithTag("op_time")).setText(
                         entry.getTimeText(res, true));
-                Switch sw = (Switch)view.findViewById(R.id.switchWidget);
+                Switch sw = (Switch)view.findViewWithTag("switchWidget");
                 final int switchOp = AppOpsManagerWrapper.opToSwitch(firstOp.getOp());
                 sw.setChecked(mAppOps.checkOp(switchOp, entry.getPackageOps().getUid(),
                         entry.getPackageOps().getPackageName()) == AppOpsManagerWrapper.MODE_ALLOWED);
@@ -160,7 +159,7 @@ public class AppOpsDetails extends Fragment {
 
     private void setIntentAndFinish(boolean finish, boolean appChanged) {
         Intent intent = new Intent();
-        intent.putExtra(ManageApplications.APP_CHG, appChanged);
+        intent.putExtra("chg", appChanged);
         PreferenceActivity pa = (PreferenceActivity)getActivity();
         pa.finishPreferencePanel(this, Activity.RESULT_OK, intent);
     }
@@ -184,10 +183,10 @@ public class AppOpsDetails extends Fragment {
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.app_ops_details, container, false);
-        Utils.prepareCustomPreferencesList(container, view, view, false);
+        //Utils.prepareCustomPreferencesList(container, view, view, false);
 
         mRootView = view;
-        mOperationsSection = (LinearLayout)view.findViewById(R.id.operations_section);
+        mOperationsSection = (LinearLayout)view.findViewWithTag("operations_section");
         return view;
     }
 

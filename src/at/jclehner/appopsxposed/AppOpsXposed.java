@@ -105,6 +105,19 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 			break;
 		}
+
+		for(Hack hack : Hack.getAllEnabled(true))
+		{
+			try
+			{
+				hack.handleInitPackageResources(resparam);
+			}
+			catch(Throwable t)
+			{
+				log(hack.getClass().getSimpleName() + ": [!!]");
+				log(t);
+			}
+		}
 	}
 
 	@Override

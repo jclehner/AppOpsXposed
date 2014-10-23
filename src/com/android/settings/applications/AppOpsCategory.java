@@ -36,6 +36,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import at.jclehner.appopsxposed.R;
 
 import java.util.List;
 
@@ -288,11 +289,11 @@ public class AppOpsCategory extends ListFragment implements
             }
 
             AppOpEntry item = getItem(position);
-            ((ImageView)view.findViewById(R.id.app_icon)).setImageDrawable(
+            ((ImageView)view.findViewWithTag("app_icon")).setImageDrawable(
                     item.getAppEntry().getIcon());
-            ((TextView)view.findViewById(R.id.app_name)).setText(item.getAppEntry().getLabel());
-            ((TextView)view.findViewById(R.id.op_name)).setText(item.getSummaryText(mState));
-            ((TextView)view.findViewById(R.id.op_time)).setText(
+            ((TextView)view.findViewWithTag("app_name")).setText(item.getAppEntry().getLabel());
+            ((TextView)view.findViewWithTag("op_name")).setText(item.getSummaryText(mState));
+            ((TextView)view.findViewWithTag("op_time")).setText(
                     item.getTimeText(mResources, false));
 
             return view;

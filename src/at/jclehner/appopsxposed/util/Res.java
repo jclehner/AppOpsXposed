@@ -11,6 +11,8 @@ public class Res
 	public static int appOpsPreferenceIcon = 0;
 	public static int appListItemLayout = R.layout.app_list_item;
 
+	public static int layout_app_ops_summary = R.layout.app_ops_summary;
+
 	public static XModuleResources settingsRes;
 	public static XModuleResources modRes;
 	public static XSharedPreferences modPrefs;

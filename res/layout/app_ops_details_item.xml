@@ -33,6 +33,7 @@ was especially long.
 
     <ImageView
         android:id="@+id/op_icon"
+        android:tag="op_icon"
         android:layout_width="@android:dimen/app_icon_size"
         android:layout_height="@android:dimen/app_icon_size"
         android:layout_alignParentStart="true"
@@ -42,6 +43,7 @@ was especially long.
 
     <TextView
         android:id="@+id/op_name"
+        android:tag="op_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/op_icon"
@@ -56,6 +58,7 @@ was especially long.
 
     <TextView
         android:id="@+id/op_time"
+        android:tag="op_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignStart="@id/op_name"
@@ -67,6 +70,7 @@ was especially long.
 
     <FrameLayout
         android:id="@id/op_widget"
+        android:tag="op_widget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"

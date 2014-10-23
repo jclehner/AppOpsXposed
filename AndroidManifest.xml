@@ -52,7 +52,7 @@
         </activity-alias>
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="at.jclehner.appopsxposed.util.FileProvider"
             android:authorities="at.jclehner.appopsxposed.files"
             android:exported="false"
             android:grantUriPermissions="true">
