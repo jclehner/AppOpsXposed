@@ -41,12 +41,25 @@ public class ObjectWrapper
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T> T getStatic(String fieldName)
+	public static <T> T getStatic(Class<?> clazz, String fieldName, T defValue)
 	{
 		try
 		{
-			return (T) mObj.getClass().getField(fieldName).get(null);
+			return getStatic(clazz, fieldName);
+		}
+		catch(ReflectiveException e)
+		{
+			e.printStackTrace();
+			return defValue;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T getStatic(Class<?> clazz, String fieldName)
+	{
+		try
+		{
+			return (T) clazz.getField(fieldName).get(null);
 		}
 		catch(IllegalAccessException e)
 		{
@@ -67,23 +80,31 @@ public class ObjectWrapper
 	}
 
 	public <T> T call(String methodName, Class<?>[] parameterTypes, Object... args) {
-		return callInternal(false, methodName, parameterTypes, args);
+		return callInternal(mObj.getClass(), mObj, methodName, parameterTypes, args);
 	}
 
 	public <T> T callStatic(String methodName, Object... args) {
-		return callInternal(true, methodName, getTypes(args), args);
+		return callStatic(methodName, getTypes(args), args);
 	}
 
 	public <T> T callStatic(String methodName, Class<?>[] parameterTypes, Object... args) {
-		return callInternal(true, methodName, parameterTypes, args);
+		return callInternal(mObj.getClass(), null, methodName, parameterTypes, args);
+	}
+
+	public static <T> T callStatic(Class<?> clazz, String methodName, Class<?>[] parameterTypes, Object... args) {
+		return callInternal(clazz, null, methodName, parameterTypes, args);
+	}
+
+	public static <T> T callStatic(Class<?> clazz, String methodName, Object... args) {
+		return callStatic(clazz, methodName, getTypes(args), args);
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T> T callInternal(boolean isStatic, String methodName, Class<?>[] parameterTypes, Object... args)
+	private static <T> T callInternal(Class<?> clazz, Object receiver, String methodName, Class<?>[] parameterTypes, Object... args)
 	{
 		try
 		{
-			return (T) mObj.getClass().getMethod(methodName, parameterTypes).invoke(isStatic ? null : mObj, args);
+			return (T) clazz.getMethod(methodName, parameterTypes).invoke(receiver, args);
 		}
 		catch(NoSuchMethodException e)
 		{
