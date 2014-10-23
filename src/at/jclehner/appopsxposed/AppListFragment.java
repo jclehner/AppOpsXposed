@@ -121,7 +121,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 			holder.appName.setText(data.label);
 			holder.appLine2.setText(data.line2);
 
-			if(true)
+			if(true && !data.packageInfo.packageName.equals(holder.packageName))
 			{
 				if(holder.task != null)
 					holder.task.cancel(true);
