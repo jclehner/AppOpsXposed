@@ -1,3 +1,8 @@
+### 1.21
+* Fix crash on LG ROMs
+* Attempted to fix wrong icon size on some ROMs
+* WakeLockFix disabled on JellyBean for now
+
 ### 1.20.2
 * Fix version number (updates should work now)
 
