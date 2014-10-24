@@ -160,6 +160,22 @@ public class SettingsActivity extends Activity
 			p.setSummary("Copyright (C) Joseph C. Lehner 2013, 2014\n"
 					+ "<joseph.c.lehner@gmail.com> / caspase @XDA");
 
+			if(BuildConfig.DEBUG)
+			{
+				p.setSummary(p.getSummary() + "\n");
+
+				final String[] perms = {
+						"android.permission.UPDATE_APP_OPS_STATS",
+						"android.permission.GET_APP_OPS_STATS"
+				};
+
+				for(String perm : perms)
+				{
+					int status = getActivity().checkCallingOrSelfPermission(perm);
+					p.setSummary(p.getSummary() + "\n" + perm + ": " + status);
+				}
+			}
+
 			p = findPreference("build_bugreport");
 			p.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
