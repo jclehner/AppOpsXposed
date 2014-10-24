@@ -18,15 +18,118 @@
 
 package at.jclehner.appopsxposed.hacks;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import at.jclehner.appopsxposed.AppOpsXposed;
+import at.jclehner.appopsxposed.BuildConfig;
 import at.jclehner.appopsxposed.Hack;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
 
 
 public class PackageManagerCrashHack extends Hack
 {
+	private static final String[] GRANT_PERMISSIONS = {
+			"android.permission.UPDATE_APP_OPS_STATS",
+			"android.permission.GET_APP_OPS_STATS"
+	};
+
 	@Override
 	public void initZygote(StartupParam param) throws Throwable
+	{
+		fixPmCrash();
+
+		if(BuildConfig.DEBUG)
+			grantAppOpsPermissionsToSelf();
+	}
+
+	@Override
+	protected String onGetKeySuffix() {
+		return "pm_crash";
+	}
+
+	@Override
+	protected boolean isEnabledByDefault() {
+		return true;
+	}
+
+	private void grantAppOpsPermissionsToSelf() throws Throwable
+	{
+		final Class<?> pmSvcClazz = Class.forName("com.android.server.pm.PackageManagerService");
+		// For the duration of grantPermissionsLPw, make PackageManagerService believe that
+		// the {UPDATE,GET}_APP_OPS_STATS permissions have a protectionLevel of 0 (normal).
+		XposedBridge.hookAllMethods(pmSvcClazz, "grantPermissionsLPw", new XC_MethodHook() {
+
+			private ThreadLocal<Map<String, Integer>> mRestoreInfo = new ThreadLocal<Map<String, Integer>>() {
+				protected Map<String, Integer> initialValue() { return new HashMap<String, Integer>(); }
+			};
+
+			@Override
+			protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+			{
+				if(!isAoxModulePackage(param))
+					return;
+
+				try
+				{
+					XposedHelpers.setBooleanField(XposedHelpers.getObjectField(param.args[0],
+							"mExtras"), "permissionsFixed", false);
+				}
+				catch(Throwable t)
+				{
+					// If the above fails, simply set the 'replace' argument to true (this also sets
+					// permissionsFixed to false)
+					param.args[1] = true;
+				}
+
+				mRestoreInfo.get().clear();
+
+				final Map<String, ?> perms = getPermissions(param.thisObject);
+				for(String perm : GRANT_PERMISSIONS)
+				{
+					if(perms.containsKey(perm))
+					{
+						final Object basePerm = perms.get(perm);
+
+						mRestoreInfo.get().put(perm, XposedHelpers.getIntField(basePerm, "protectionLevel"));
+						XposedHelpers.setIntField(basePerm, "protectionLevel", 0);
+					}
+				}
+			}
+
+			@Override
+			protected void afterHookedMethod(MethodHookParam param) throws Throwable
+			{
+				if(!isAoxModulePackage(param))
+					return;
+
+				final Map<String, ?> perms = getPermissions(param.thisObject);
+				for(String perm : mRestoreInfo.get().keySet())
+				{
+					XposedHelpers.setIntField(perms.get(perm), "protectionLevel",
+							mRestoreInfo.get().get(perm));
+				}
+			}
+
+			private boolean isAoxModulePackage(MethodHookParam param)
+			{
+				return AppOpsXposed.MODULE_PACKAGE.equals(
+						XposedHelpers.getObjectField(param.args[0], "packageName"));
+			}
+
+			@SuppressWarnings("unchecked")
+			private Map<String, ?> getPermissions(Object pkgMgrSvc)
+			{
+				return (Map<String, ?>) XposedHelpers.getObjectField(
+						XposedHelpers.getObjectField(pkgMgrSvc, "mSettings"),
+						"mPermissions");
+			}
+		});
+	}
+
+	private void fixPmCrash() throws Throwable
 	{
 		final Class<?> pmSvcClazz = Class.forName("com.android.server.pm.PackageManagerService");
 		XposedBridge.hookAllMethods(pmSvcClazz, "addPackageHoldingPermissions",
@@ -43,15 +146,5 @@ public class PackageManagerCrashHack extends Hack
 						}
 					}
 		});
-	}
-
-	@Override
-	protected String onGetKeySuffix() {
-		return "pm_crash";
-	}
-
-	@Override
-	protected boolean isEnabledByDefault() {
-		return true;
 	}
 }
