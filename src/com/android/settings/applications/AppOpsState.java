@@ -82,6 +82,14 @@ public class AppOpsState {
         }
     }
 
+    public CharSequence getOpSummary(int op) {
+        return mOpSummaries[op];
+    }
+
+    public CharSequence getOpLabel(int op) {
+        return mOpLabels[op];
+    }
+
     public static class OpsTemplate implements Parcelable {
         public final int[] ops;
         public final boolean[] showPerms;
@@ -163,8 +171,14 @@ public class AppOpsState {
                     AppOpsManagerWrapper.OP_WRITE_SMS,
                     AppOpsManagerWrapper.OP_SEND_SMS,
                     AppOpsManagerWrapper.OP_READ_ICC_SMS,
-                    AppOpsManagerWrapper.OP_WRITE_ICC_SMS },
+                    AppOpsManagerWrapper.OP_WRITE_ICC_SMS,
+                    AppOpsManagerWrapper.OP_SEND_MMS,
+                    AppOpsManagerWrapper.OP_READ_MMS,
+                    AppOpsManagerWrapper.OP_WRITE_MMS },
             new boolean[] { true,
+                    true,
+                    true,
+                    true,
                     true,
                     true,
                     true,
@@ -210,8 +224,18 @@ public class AppOpsState {
                     AppOpsManagerWrapper.OP_CALL_PHONE,
                     AppOpsManagerWrapper.OP_WRITE_SETTINGS,
                     AppOpsManagerWrapper.OP_SYSTEM_ALERT_WINDOW,
-                    AppOpsManagerWrapper.OP_WAKE_LOCK },
+                    AppOpsManagerWrapper.OP_WAKE_LOCK,
+                    AppOpsManagerWrapper.OP_ALARM_WAKEUP,
+                    AppOpsManagerWrapper.OP_WIFI_CHANGE,
+                    AppOpsManagerWrapper.OP_BLUETOOTH_CHANGE,
+                    AppOpsManagerWrapper.OP_DATA_CONNECT_CHANGE,
+                    AppOpsManagerWrapper.OP_NFC_CHANGE },
             new boolean[] { false,
+                    true,
+                    true,
+                    true,
+                    true,
+                    true,
                     true,
                     true,
                     true,

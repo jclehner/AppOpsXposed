@@ -12,6 +12,7 @@ import android.util.Log;
 @TargetApi(19)
 public class AppOpsManagerWrapper extends ObjectWrapper
 {
+	// These are all ops included in AOSP KitKat
 	public static final int OP_NONE = getOpInt("OP_NONE");
 	public static final int OP_COARSE_LOCATION = getOpInt("OP_COARSE_LOCATION");
 	public static final int OP_FINE_LOCATION = getOpInt("OP_FINE_LOCATION");
@@ -56,6 +57,16 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 	public static final int OP_WAKE_LOCK = getOpInt("OP_WAKE_LOCK");
 	public static final int OP_MONITOR_LOCATION = getOpInt("OP_MONITOR_LOCATION");
 	public static final int OP_MONITOR_HIGH_POWER_LOCATION = getOpInt("OP_MONITOR_HIGH_POWER_LOCATION");
+
+	// CyanogenMod (also seen on some Xperia ROMs!)
+	public static final int OP_WIFI_CHANGE = getOpInt("OP_WIFI_CHANGE");
+	public static final int OP_BLUETOOTH_CHANGE = getOpInt("OP_BLUETOOTH_CHANGE");
+	public static final int OP_DATA_CONNECT_CHANGE = getOpInt("OP_DATA_CONNECT_CHANGE");
+	public static final int OP_SEND_MMS = getOpInt("OP_SEND_MMS");
+	public static final int OP_READ_MMS = getOpInt("OP_READ_MMS");
+	public static final int OP_WRITE_MMS = getOpInt("OP_WRITE_MMS");
+	public static final int OP_ALARM_WAKEUP = getOpInt("OP_ALARM_WAKEUP");
+	public static final int OP_NFC_CHANGE = getOpInt("OP_NFC_CHANGE");
 
 	public static final int OP_BOOT_COMPLETED = getOpWithPermission(Manifest.permission.RECEIVE_BOOT_COMPLETED);
 
