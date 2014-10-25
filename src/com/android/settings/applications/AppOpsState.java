@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.annotation.TargetApi;
-import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -35,7 +34,6 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.format.DateUtils;
@@ -69,7 +67,7 @@ public class AppOpsState {
         mOpSummaries = context.getResources().getTextArray(R.array.app_ops_summaries);
         mOpLabels = context.getResources().getTextArray(R.array.app_ops_labels);
 
-        if (Util.isUsingBootCompletedHack(context)) {
+        if (Util.isUsingBootCompletedHack(context) && AppOpsManagerWrapper.OP_BOOT_COMPLETED != -1) {
             mOpSummaries[AppOpsManagerWrapper.OP_VIBRATE] = mOpSummaries[AppOpsManagerWrapper.OP_VIBRATE]
                     + "/" + mOpSummaries[AppOpsManagerWrapper.OP_POST_NOTIFICATION];
 

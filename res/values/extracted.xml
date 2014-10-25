@@ -13,6 +13,7 @@
         <item>Messaging</item>
         <item>Media</item>
         <item>Device</item>
+        <item>@string/app_ops_categories_bootup</item>
     </string-array>
     <!-- User display names for app ops codes -->
     <string-array name="app_ops_summaries">

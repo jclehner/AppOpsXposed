@@ -70,7 +70,7 @@ public class AppOpsSummary extends Fragment {
         @Override
         public int getCount() {
             int count = sPageTemplates.length;
-            if (!Util.isUsingBootCompletedHack(getActivity()) && AppOpsManagerWrapper.OP_BOOT_COMPLETED != -1) {
+            if (AppOpsManagerWrapper.OP_BOOT_COMPLETED == -1) {
                 --count;
             }
             return count;
