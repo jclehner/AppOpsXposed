@@ -26,7 +26,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import at.jclehner.appopsxposed.R;
-import at.jclehner.appopsxposed.util.Res;
 
 public class AppOpsSummary extends Fragment {
     // layout inflater object used to inflate views
@@ -90,13 +89,12 @@ public class AppOpsSummary extends Fragment {
         // initialize the inflater
         mInflater = inflater;
 
-        View rootView = mInflater.inflate(Res.layout_app_ops_summary,
+        View rootView = mInflater.inflate(R.layout.app_ops_summary,
                 container, false);
         mContentContainer = container;
         mRootView = rootView;
 
-        //mPageNames = getResources().getTextArray(R.array.app_ops_categories);
-        mPageNames = new String[] { "Location", "Personal", "Messaging", "Media", "Device" };
+        mPageNames = getResources().getTextArray(R.array.app_ops_categories);
 
         mViewPager = (ViewPager) rootView.findViewWithTag("pager");
         MyPagerAdapter adapter = new MyPagerAdapter(getChildFragmentManager());

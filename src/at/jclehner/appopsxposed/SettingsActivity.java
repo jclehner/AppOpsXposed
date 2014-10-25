@@ -25,12 +25,14 @@ import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnShowListener;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceActivity;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
@@ -40,6 +42,8 @@ import android.text.Html;
 import android.widget.Button;
 import at.jclehner.appopsxposed.util.OpsLabelHelper;
 import at.jclehner.appopsxposed.util.Util;
+
+import com.android.settings.applications.AppOpsSummary;
 
 public class SettingsActivity extends Activity
 {
@@ -174,6 +178,21 @@ public class SettingsActivity extends Activity
 					int status = getActivity().checkCallingOrSelfPermission(perm);
 					p.setSummary(p.getSummary() + "\n" + perm + ": " + status);
 				}
+
+				p.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+					@Override
+					public boolean onPreferenceClick(Preference preference)
+					{
+						final Intent intent = new Intent(getActivity(), AppOpsActivity.class);
+						intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_FRAGMENT);
+						startActivity(intent);
+
+						return true;
+					}
+				});
+
+				p.setEnabled(true);
 			}
 
 			p = findPreference("build_bugreport");

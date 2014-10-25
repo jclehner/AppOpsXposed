@@ -78,8 +78,8 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 
 	public List<PackageOpsWrapper> getPackagesForOps(int[] ops)
 	{
-		return PackageOpsWrapper.convertList((List<?>) callStatic(AppOpsManager.class,
-				"getPackagesOps", new Class<?>[] { int[].class }, ops));
+		return PackageOpsWrapper.convertList((List<?>) call(
+				"getPackagesForOps", new Class<?>[] { int[].class }, ops));
 	}
 
 	public int checkOp(String op, int uid, String packageName)

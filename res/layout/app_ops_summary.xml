@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+                android:textAppearance="@style/TextAppearance.PagerTabs"
                 android:paddingLeft="0dip"
                 android:paddingRight="0dip">
         </android.support.v4.view.PagerTabStrip>

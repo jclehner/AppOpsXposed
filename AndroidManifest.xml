@@ -33,6 +33,10 @@
             android:label="AppOpsXposed" />
 
         <activity
+            android:name=".AppOpsActivity"
+            android:label="@string/app_ops_settings" />
+
+        <activity
             android:name=".SettingsActivity"
             android:label="AppOpsXposed"
             android:configChanges="orientation|screenSize">

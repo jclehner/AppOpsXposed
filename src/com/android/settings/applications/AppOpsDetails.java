@@ -59,16 +59,16 @@ public class AppOpsDetails extends Fragment {
 
     // Utility method to set application label and icon.
     private void setAppLabelAndIcon(PackageInfo pkgInfo) {
-        final View appSnippet = mRootView.findViewWithTag("app_snippet");
+        final View appSnippet = mRootView.findViewById(R.id.app_snippet);
         appSnippet.setPaddingRelative(0, appSnippet.getPaddingTop(), 0, appSnippet.getPaddingBottom());
 
-        ImageView icon = (ImageView) appSnippet.findViewWithTag("app_icon");
+        ImageView icon = (ImageView) appSnippet.findViewById(R.id.app_icon);
         icon.setImageDrawable(mPm.getApplicationIcon(pkgInfo.applicationInfo));
         // Set application name.
-        TextView label = (TextView) appSnippet.findViewWithTag("app_name");
+        TextView label = (TextView) appSnippet.findViewById(R.id.app_name);
         label.setText(mPm.getApplicationLabel(pkgInfo.applicationInfo));
         // Version number of application
-        mAppVersion = (TextView) appSnippet.findViewWithTag("app_size");
+        mAppVersion = (TextView) appSnippet.findViewById(R.id.app_size);
 
         if (pkgInfo.versionName != null) {
             mAppVersion.setVisibility(View.VISIBLE);
@@ -128,18 +128,18 @@ public class AppOpsDetails extends Fragment {
                             lastPermGroup = pi.group;
                             PermissionGroupInfo pgi = mPm.getPermissionGroupInfo(pi.group, 0);
                             if (pgi.icon != 0) {
-                                ((ImageView)view.findViewWithTag("op_icon")).setImageDrawable(
+                                ((ImageView)view.findViewById(R.id.op_icon)).setImageDrawable(
                                         pgi.loadIcon(mPm));
                             }
                         }
                     } catch (NameNotFoundException e) {
                     }
                 }
-                ((TextView)view.findViewWithTag("op_name")).setText(
+                ((TextView)view.findViewById(R.id.op_name)).setText(
                         entry.getSwitchText(mState));
-                ((TextView)view.findViewWithTag("op_time")).setText(
+                ((TextView)view.findViewById(R.id.op_time)).setText(
                         entry.getTimeText(res, true));
-                Switch sw = (Switch)view.findViewWithTag("switchWidget");
+                Switch sw = (Switch)view.findViewById(R.id.switchWidget);
                 final int switchOp = AppOpsManagerWrapper.opToSwitch(firstOp.getOp());
                 sw.setChecked(mAppOps.checkOp(switchOp, entry.getPackageOps().getUid(),
                         entry.getPackageOps().getPackageName()) == AppOpsManagerWrapper.MODE_ALLOWED);
@@ -186,7 +186,7 @@ public class AppOpsDetails extends Fragment {
         //Utils.prepareCustomPreferencesList(container, view, view, false);
 
         mRootView = view;
-        mOperationsSection = (LinearLayout)view.findViewWithTag("operations_section");
+        mOperationsSection = (LinearLayout)view.findViewById(R.id.operations_section);
         return view;
     }
 

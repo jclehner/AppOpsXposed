@@ -2,6 +2,8 @@ package at.jclehner.appopsxposed.util;
 
 import java.lang.reflect.InvocationTargetException;
 
+import android.util.Log;
+
 
 public class ObjectWrapper
 {

@@ -60,15 +60,8 @@ public class AppOpsState {
         mContext = context;
         mAppOps = AppOpsManagerWrapper.from(context);
         mPm = context.getPackageManager();
-
-        final int appOpsSummaries = context.getResources().getIdentifier(
-        		"app_ops_summaries", "array", context.getPackageName());
-
-        final int appOpsLabels = context.getResources().getIdentifier(
-        		"app_ops_labels", "array", context.getPackageName());
-
-        mOpSummaries = context.getResources().getTextArray(appOpsSummaries);
-        mOpLabels = context.getResources().getTextArray(appOpsLabels);
+        mOpSummaries = context.getResources().getTextArray(R.array.app_ops_summaries);
+        mOpLabels = context.getResources().getTextArray(R.array.app_ops_labels);
     }
 
     public static class OpsTemplate implements Parcelable {
@@ -585,7 +578,7 @@ public class AppOpsState {
 
                         }
                         OpEntryWrapper opEntry = new OpEntryWrapper(
-                                permOps.get(k), AppOpsManager.MODE_ALLOWED, 0, 0, 0);
+                                permOps.get(k), AppOpsManagerWrapper.MODE_ALLOWED, 0, 0, 0);
                         dummyOps.add(opEntry);
                         addOp(entries, pkgOps, appEntry, opEntry, packageName == null,
                                 packageName == null ? 0 : opToOrder[opEntry.getOp()]);
