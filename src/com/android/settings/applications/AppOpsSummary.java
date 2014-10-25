@@ -35,6 +35,7 @@ import at.jclehner.appopsxposed.AppListFragment;
 import at.jclehner.appopsxposed.AppOpsActivity;
 import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
+import at.jclehner.appopsxposed.util.ObjectWrapper;
 import at.jclehner.appopsxposed.util.Util;
 
 public class AppOpsSummary extends Fragment {
@@ -126,9 +127,9 @@ public class AppOpsSummary extends Fragment {
 
         // We have to do this now because PreferenceFrameLayout looks at it
         // only when the view is added.
-        //if (container instanceof PreferenceFrameLayout) {
-        //    ((PreferenceFrameLayout.LayoutParams) rootView.getLayoutParams()).removeBorders = true;
-        //}
+        if ("android.preference.PreferenceFrameLayout".equals(container.getClass().getName())) {
+            new ObjectWrapper(rootView.getLayoutParams()).set("removeBorders", true);
+        }
 
         return rootView;
     }

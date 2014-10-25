@@ -77,6 +77,26 @@ public class ObjectWrapper
 		}
 	}
 
+	public void set(String fieldName, Object value)
+	{
+		try
+		{
+			mObj.getClass().getField(fieldName).set(mObj, value);
+		}
+		catch(NoSuchFieldException e)
+		{
+			throw new ReflectiveException(e);
+		}
+		catch(IllegalAccessException e)
+		{
+			throw new ReflectiveException(e);
+		}
+		catch(IllegalArgumentException e)
+		{
+			throw new ReflectiveException(e);
+		}
+	}
+
 	public <T> T call(String methodName, Object... args) {
 		return call(methodName, getTypes(args), args);
 	}
