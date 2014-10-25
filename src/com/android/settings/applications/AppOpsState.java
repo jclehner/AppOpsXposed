@@ -245,6 +245,7 @@ public class AppOpsState {
         private String mLabel;
         private Drawable mIcon;
         private boolean mMounted;
+        private boolean mHasDisallowedOps = false;
 
         public AppEntry(AppOpsState state, ApplicationInfo info) {
             mState = state;
@@ -254,6 +255,7 @@ public class AppOpsState {
 
         public void addOp(AppOpEntry entry, OpEntryWrapper op) {
             mOps.put(op.getOp(), op);
+            mHasDisallowedOps |= op.getMode() != AppOpsManagerWrapper.MODE_ALLOWED;
             mOpSwitches.put(AppOpsManagerWrapper.opToSwitch(op.getOp()), entry);
         }
 
@@ -383,6 +385,10 @@ public class AppOpsState {
             return mOps.get(pos);
         }
 
+        public boolean hasDisallowedOps() {
+            return mApp.mHasDisallowedOps;
+        }
+
         private CharSequence getCombinedText(Context context, ArrayList<OpEntryWrapper> ops,
                 CharSequence[] items, boolean isSummary) {
             SpannableStringBuilder builder = new SpannableStringBuilder();
@@ -400,7 +406,7 @@ public class AppOpsState {
                     ss = new SpannableString(OpsLabelHelper.getOpLabel(context, ops.get(i).getOp()));
                 }
 
-                if (ops.get(i).getMode() != AppOpsManagerWrapper.MODE_ALLOWED) {
+                if (isSummary && ops.get(i).getMode() != AppOpsManagerWrapper.MODE_ALLOWED) {
                     ss.setSpan(new StrikethroughSpan(), 0, ss.length(), 0);
                 }
 
@@ -465,6 +471,10 @@ public class AppOpsState {
             if (object1.getTime() != object2.getTime()) {
                 // More recent times go first.
                 return object1.getTime() > object2.getTime() ? -1 : 1;
+            }
+            if (object1.hasDisallowedOps() != object2.hasDisallowedOps()) {
+                // Disallowed ops go first.
+                return object1.hasDisallowedOps() ? -1 : 1;
             }
             return sCollator.compare(object1.getAppEntry().getLabel(),
                     object2.getAppEntry().getLabel());
