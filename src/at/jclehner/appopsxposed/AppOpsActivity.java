@@ -20,6 +20,7 @@ public class AppOpsActivity extends PreferenceActivity
 	{
 		return AppOpsSummary.class.getName().equals(fragmentName)
 				|| AppOpsDetails.class.getName().equals(fragmentName)
-				|| AppOpsCategory.class.getName().equals(fragmentName);
+				|| AppOpsCategory.class.getName().equals(fragmentName)
+				|| AppListFragment.class.getName().equals(fragmentName);
 	}
 }

@@ -166,26 +166,13 @@ public class SettingsActivity extends Activity
 
 			if(BuildConfig.DEBUG)
 			{
-				p.setSummary(p.getSummary() + "\n");
-
-				final String[] perms = {
-						"android.permission.UPDATE_APP_OPS_STATS",
-						"android.permission.GET_APP_OPS_STATS"
-				};
-
-				for(String perm : perms)
-				{
-					int status = getActivity().checkCallingOrSelfPermission(perm);
-					p.setSummary(p.getSummary() + "\n" + perm + ": " + status);
-				}
-
 				p.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 					@Override
 					public boolean onPreferenceClick(Preference preference)
 					{
 						final Intent intent = new Intent(getActivity(), AppOpsActivity.class);
-						intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_FRAGMENT);
+						intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsSummary.class.getName());
 						startActivity(intent);
 
 						return true;

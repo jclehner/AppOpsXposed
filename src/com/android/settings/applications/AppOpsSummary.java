@@ -31,6 +31,7 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
+import at.jclehner.appopsxposed.AppListFragment;
 import at.jclehner.appopsxposed.AppOpsActivity;
 import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
@@ -132,22 +133,17 @@ public class AppOpsSummary extends Fragment {
         return rootView;
     }
 
-    /*
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.add(R.string.show_changed_only_title).setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                final Bundle args = new Bundle();
-                args.putParcelable("template", AppOpsState.DUMMY_CHANGED_ONLY_TEMPLATE);
-                final Intent intent = new Intent(getActivity(), AppOpsActivity.class);
-                intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsCategory.class.getName());
-                intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS, args);
-                startActivity(intent);
+                ((PreferenceActivity) getActivity()).startPreferenceFragment(AppListFragment.newInstance(true), true);
                 return true;
             }
         });
     }
-    */
+
 }

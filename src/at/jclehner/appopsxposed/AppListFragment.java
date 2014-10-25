@@ -27,6 +27,7 @@ import java.util.List;
 
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
+import android.app.Fragment;
 import android.app.ListFragment;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.AsyncTaskLoader;
@@ -53,10 +54,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
-import at.jclehner.appopsxposed.util.OpsLabelHelper;
-import at.jclehner.appopsxposed.util.Res;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.OpEntryWrapper;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.PackageOpsWrapper;
+import at.jclehner.appopsxposed.util.Res;
+
+import com.android.settings.applications.AppOpsDetails;
+import com.android.settings.applications.AppOpsState;
 
 public class AppListFragment extends ListFragment implements LoaderCallbacks<List<AppListFragment.PackageInfoData>>
 {
@@ -159,6 +162,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 			{
 				holder.appIcon.setImageDrawable(appInfo.loadIcon(mPm));
 				holder.appName.setText(appInfo.loadLabel(mPm));
+				holder.packageName = appInfo.packageName;
 			}
 
 			return convertView;
@@ -203,6 +207,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 	{
 		private static String[] sOpPerms = getOpPermissions();
 
+		private final AppOpsState mState;
 		private final PackageManager mPm;
 		private List<PackageInfoData> mData;
 
@@ -211,6 +216,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 		public AppListLoader(Context context, boolean removeAppsWithUnchangedOps)
 		{
 			super(context);
+			mState = new AppOpsState(context);
 			mPm = context.getPackageManager();
 			mRemoveAppsWithUnchangedOps = removeAppsWithUnchangedOps;
 		}
@@ -314,7 +320,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 						if(ssb.length() != 0)
 							ssb.append(", ");
 
-						final SpannableString opSummary = new SpannableString(OpsLabelHelper.getOpSummary(getContext(), op.getOp()));
+						final SpannableString opSummary = new SpannableString(mState.getOpSummary(op.getOp()));
 						opSummary.setSpan(new StrikethroughSpan(), 0, opSummary.length(), 0);
 						ssb.append(opSummary);
 						hasUnchangedOps = false;
@@ -442,28 +448,11 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 	public void onListItemClick(ListView l, View v, int position, long id)
 	{
 		final Bundle args = new Bundle();
-		args.putString("package", ((ViewHolder) v.getTag()).packageName);
+		args.putString(AppOpsDetails.ARG_PACKAGE_NAME, ((ViewHolder) v.getTag()).packageName);
 
-		if(!isInAppOpsXposedApp())
-		{
-			((PreferenceActivity) getActivity()).startPreferencePanel(
-					AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, args,
-					Res.getSettingsIdentifier("string/app_ops_settings"),
-					null, null, 0);
-		}
-		else
-		{
-			final Intent intent = new Intent("android.settings.SETTINGS");
-			intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT);
-			intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS, args);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-			intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+		final Fragment f = new AppOpsDetails();
+		f.setArguments(args);
 
-			startActivity(intent);
-		}
-	}
-
-	private boolean isInAppOpsXposedApp() {
-		return AppOpsXposed.MODULE_PACKAGE.equals(getActivity().getApplicationInfo().packageName);
+		((PreferenceActivity) getActivity()).startPreferenceFragment(f, true);
 	}
 }
