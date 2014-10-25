@@ -42,10 +42,10 @@ import android.util.Log;
 import android.util.SparseArray;
 import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
-import at.jclehner.appopsxposed.util.OpsLabelHelper;
-import at.jclehner.appopsxposed.util.Util;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.OpEntryWrapper;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.PackageOpsWrapper;
+import at.jclehner.appopsxposed.util.OpsLabelHelper;
+import at.jclehner.appopsxposed.util.Util;
 
 public class AppOpsState {
     static final String TAG = "AppOpsState";
@@ -552,6 +552,33 @@ public class AppOpsState {
             appEntries.put(packageName, appEntry);
         }
         return appEntry;
+    }
+
+    public List<AppOpEntry> buildStateWithChangedOpsOnly() {
+        final List<PackageOpsWrapper> pkgs = mAppOps.getPackagesForOps(null);
+        final HashMap<String, AppEntry> appEntries = new HashMap<String, AppEntry>();
+        final List<AppOpEntry> entries = new ArrayList<AppOpEntry>();
+        for (PackageOpsWrapper pkg : pkgs) {
+            for (OpEntryWrapper op : pkg.getOps()) {
+                if (op.getMode() != AppOpsManagerWrapper.MODE_ALLOWED) {
+                    final ApplicationInfo appInfo;
+                    try {
+                        appInfo= mContext.getPackageManager().getApplicationInfo(
+                            pkg.getPackageName(), PackageManager.GET_DISABLED_COMPONENTS
+                            | PackageManager.GET_UNINSTALLED_PACKAGES);
+                    } catch (PackageManager.NameNotFoundException e) {
+                        continue;
+                    }
+                    final AppEntry app = getAppEntry(mContext, appEntries, appInfo.packageName, appInfo);
+                    if (app == null) {
+                        continue;
+                    }
+                    addOp(entries, pkg, app, op, true, 0);
+                    //entries.add(new AppOpEntry(pkg, op, new AppEntry(this, appInfo), 0));
+                }
+            }
+        }
+        return entries;
     }
 
     public List<AppOpEntry> buildState(OpsTemplate tpl, int uid, String packageName) {

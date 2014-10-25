@@ -128,6 +128,7 @@ public class AppOpsCategory extends ListFragment implements
         }
 
         @Override public List<AppOpEntry> loadInBackground() {
+            //return mState.buildStateWithChangedOpsOnly();
             return mState.buildState(mTemplate);
         }
 
