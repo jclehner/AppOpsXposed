@@ -98,7 +98,6 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 			return position;
 		}
 
-		@SuppressWarnings("unused")
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent)
 		{
@@ -108,12 +107,13 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 
 			if(convertView == null)
 			{
-				convertView = mInflater.inflate(Res.appListItemLayout, parent, false);
+				convertView = mInflater.inflate(R.layout.app_ops_item, parent, false);
 
 				holder = new ViewHolder();
-				holder.appIcon = (ImageView) convertView.findViewWithTag("app_icon");
-				holder.appLine2 = (TextView) convertView.findViewWithTag("app_package");
-				holder.appName = (TextView) convertView.findViewWithTag("app_name");
+				holder.appIcon = (ImageView) convertView.findViewById(R.id.app_icon);
+				holder.appLine2 = (TextView) convertView.findViewById(R.id.op_name);
+				holder.appName = (TextView) convertView.findViewById(R.id.app_name);
+				convertView.findViewById(R.id.op_time).setVisibility(View.GONE);
 
 				convertView.setTag(holder);
 			}
