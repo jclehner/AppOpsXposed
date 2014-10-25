@@ -35,6 +35,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.format.DateUtils;
@@ -43,6 +44,8 @@ import android.util.Log;
 import android.util.SparseArray;
 import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
+import at.jclehner.appopsxposed.util.OpsLabelHelper;
+import at.jclehner.appopsxposed.util.Util;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.OpEntryWrapper;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.PackageOpsWrapper;
 
@@ -65,6 +68,20 @@ public class AppOpsState {
         mPm = context.getPackageManager();
         mOpSummaries = context.getResources().getTextArray(R.array.app_ops_summaries);
         mOpLabels = context.getResources().getTextArray(R.array.app_ops_labels);
+
+        if (Util.isUsingBootCompletedHack(context)) {
+            mOpSummaries[AppOpsManagerWrapper.OP_VIBRATE] = mOpSummaries[AppOpsManagerWrapper.OP_VIBRATE]
+                    + "/" + mOpSummaries[AppOpsManagerWrapper.OP_POST_NOTIFICATION];
+
+            mOpLabels[AppOpsManagerWrapper.OP_VIBRATE] = mOpLabels[AppOpsManagerWrapper.OP_VIBRATE]
+                    + "/" + mOpLabels[AppOpsManagerWrapper.OP_POST_NOTIFICATION];
+
+            final CharSequence summary = OpsLabelHelper.getPermissionLabel(context,
+                    android.Manifest.permission.RECEIVE_BOOT_COMPLETED);
+
+            mOpSummaries[AppOpsManagerWrapper.OP_POST_NOTIFICATION] = summary;
+            mOpLabels[AppOpsManagerWrapper.OP_POST_NOTIFICATION] = Util.capitalizeFirst(summary);
+        }
     }
 
     public static class OpsTemplate implements Parcelable {
@@ -204,9 +221,14 @@ public class AppOpsState {
                     true,  }
             );
 
+    public static final OpsTemplate BOOTUP_TEMPLATE = new OpsTemplate(
+            new int[] { AppOpsManagerWrapper.OP_BOOT_COMPLETED },
+            new boolean[] { true }
+            );
+
     public static final OpsTemplate[] ALL_TEMPLATES = new OpsTemplate[] {
             LOCATION_TEMPLATE, PERSONAL_TEMPLATE, MESSAGING_TEMPLATE,
-            MEDIA_TEMPLATE, DEVICE_TEMPLATE
+            MEDIA_TEMPLATE, DEVICE_TEMPLATE, BOOTUP_TEMPLATE
     };
 
     /**
@@ -361,15 +383,23 @@ public class AppOpsState {
             return mOps.get(pos);
         }
 
-        private CharSequence getCombinedText(ArrayList<OpEntryWrapper> ops,
-                CharSequence[] items) {
+        private CharSequence getCombinedText(Context context, ArrayList<OpEntryWrapper> ops,
+                CharSequence[] items, boolean isSummary) {
             SpannableStringBuilder builder = new SpannableStringBuilder();
             for (int i=0; i<ops.size(); i++) {
                 if (i > 0) {
                     builder.append(", ");
                 }
 
-                SpannableString ss = new SpannableString(items[ops.get(i).getOp()]);
+                SpannableString ss;
+                if (ops.get(i).getOp() < items.length) {
+                    ss = new SpannableString(items[ops.get(i).getOp()]);
+                } else if (isSummary) {
+                    ss = new SpannableString(OpsLabelHelper.getOpSummary(context, ops.get(i).getOp()));
+                } else {
+                    ss = new SpannableString(OpsLabelHelper.getOpLabel(context, ops.get(i).getOp()));
+                }
+
                 if (ops.get(i).getMode() != AppOpsManagerWrapper.MODE_ALLOWED) {
                     ss.setSpan(new StrikethroughSpan(), 0, ss.length(), 0);
                 }
@@ -380,15 +410,15 @@ public class AppOpsState {
             return builder;
         }
 
-        public CharSequence getSummaryText(AppOpsState state) {
-            return getCombinedText(mOps, state.mOpSummaries);
+        public CharSequence getSummaryText(Context context, AppOpsState state) {
+            return getCombinedText(context, mOps, state.mOpSummaries, true);
         }
 
-        public CharSequence getSwitchText(AppOpsState state) {
+        public CharSequence getSwitchText(Context context, AppOpsState state) {
             if (mSwitchOps.size() > 0) {
-                return getCombinedText(mSwitchOps, state.mOpLabels);
+                return getCombinedText(context, mSwitchOps, state.mOpLabels, false);
             } else {
-                return getCombinedText(mOps, state.mOpLabels);
+                return getCombinedText(context, mOps, state.mOpLabels, false);
             }
         }
 
@@ -502,7 +532,7 @@ public class AppOpsState {
         final ArrayList<Integer> permOps = new ArrayList<Integer>();
         final int[] opToOrder = new int[AppOpsManagerWrapper._NUM_OP];
         for (int i=0; i<tpl.ops.length; i++) {
-            if (tpl.showPerms[i]) {
+            if (tpl.ops[i] != -1 && tpl.showPerms[i]) {
                 String perm = AppOpsManagerWrapper.opToPermission(tpl.ops[i]);
                 if (perm != null && !perms.contains(perm)) {
                     perms.add(perm);
@@ -547,6 +577,7 @@ public class AppOpsState {
             perms.toArray(permsArray);
             apps = mPm.getPackagesHoldingPermissions(permsArray, 0);
         }
+
         for (int i=0; i<apps.size(); i++) {
             PackageInfo appInfo = apps.get(i);
             AppEntry appEntry = getAppEntry(context, appEntries, appInfo.packageName,

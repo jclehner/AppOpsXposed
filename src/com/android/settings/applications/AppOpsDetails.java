@@ -30,6 +30,7 @@ import android.content.pm.PermissionInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -113,6 +114,12 @@ public class AppOpsDetails extends Fragment {
         mOperationsSection.removeAllViews();
         String lastPermGroup = "";
         for (AppOpsState.OpsTemplate tpl : AppOpsState.ALL_TEMPLATES) {
+            if (tpl == AppOpsState.BOOTUP_TEMPLATE && PreferenceManager.getDefaultSharedPreferences(
+                    getActivity()).getBoolean("use_hack_boot_completed", false)) {
+                // This prevents dual entries for OP_BOOT_COMPLETED (one in BOOTUP_TEMPLATE,
+                // the other one in DEVICE_TEMPLATE).
+                continue;
+            }
             List<AppOpsState.AppOpEntry> entries = mState.buildState(tpl,
                     mPackageInfo.applicationInfo.uid, mPackageInfo.packageName);
             for (final AppOpsState.AppOpEntry entry : entries) {
@@ -136,7 +143,7 @@ public class AppOpsDetails extends Fragment {
                     }
                 }
                 ((TextView)view.findViewById(R.id.op_name)).setText(
-                        entry.getSwitchText(mState));
+                        entry.getSwitchText(getActivity(), mState));
                 ((TextView)view.findViewById(R.id.op_time)).setText(
                         entry.getTimeText(res, true));
                 Switch sw = (Switch)view.findViewById(R.id.switchWidget);

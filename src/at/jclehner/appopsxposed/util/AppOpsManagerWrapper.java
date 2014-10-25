@@ -3,9 +3,11 @@ package at.jclehner.appopsxposed.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.Context;
+import android.util.Log;
 
 @TargetApi(19)
 public class AppOpsManagerWrapper extends ObjectWrapper
@@ -54,6 +56,9 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 	public static final int OP_WAKE_LOCK = getOpInt("OP_WAKE_LOCK");
 	public static final int OP_MONITOR_LOCATION = getOpInt("OP_MONITOR_LOCATION");
 	public static final int OP_MONITOR_HIGH_POWER_LOCATION = getOpInt("OP_MONITOR_HIGH_POWER_LOCATION");
+
+	public static final int OP_BOOT_COMPLETED = getOpWithPermission(Manifest.permission.RECEIVE_BOOT_COMPLETED);
+
 	public static final int _NUM_OP = getOpInt("_NUM_OP");
 
 	public static final int MODE_ALLOWED = AppOpsManager.MODE_ALLOWED;
@@ -100,10 +105,6 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 				code, uid, packageName, mode);
 	}
 
-	public static int getOpInt(String opName) {
-		return getStatic(AppOpsManager.class, opName, -1);
-	}
-
 	public static String opToName(int op) {
 		return callStatic(AppOpsManager.class, "opToName", new Class<?>[] { int.class }, op);
 	}
@@ -114,6 +115,27 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 
 	public static int opToSwitch(int op) {
 		return callStatic(AppOpsManager.class, "opToSwitch", new Class<?>[] { int.class }, op);
+	}
+
+	private static int getOpInt(String opName) {
+		return getStatic(AppOpsManager.class, opName, -1);
+	}
+
+	private static int getOpWithPermission(String permission)
+	{
+		final int num = getOpInt("_NUM_OP");
+		for(int op = 0; op < num; ++op)
+		{
+			if(permission.equals(opToPermission(op)))
+			{
+				Log.d("AppOpsManagerWrapper", "Found op #" + op + " with permission " + permission);
+				return op;
+			}
+		}
+
+		Log.d("AppOpsManagerWrapper", "No op found for permission " + permission);
+
+		return -1;
 	}
 
 	public static class PackageOpsWrapper extends ObjectWrapper
@@ -255,6 +277,4 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 			return mDuration == -1 ? (int)(System.currentTimeMillis() - mTime) : mDuration;
 		}
 	}
-
-
 }

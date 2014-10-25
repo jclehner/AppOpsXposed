@@ -247,6 +247,7 @@ public class AppOpsCategory extends ListFragment implements
         private final Resources mResources;
         private final LayoutInflater mInflater;
         private final AppOpsState mState;
+        private final Context mContext;
 
         List<AppOpEntry> mList;
 
@@ -254,6 +255,7 @@ public class AppOpsCategory extends ListFragment implements
             mResources = context.getResources();
             mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mState = state;
+            mContext = context;
         }
 
         public void setData(List<AppOpEntry> data) {
@@ -292,7 +294,7 @@ public class AppOpsCategory extends ListFragment implements
             ((ImageView)view.findViewById(R.id.app_icon)).setImageDrawable(
                     item.getAppEntry().getIcon());
             ((TextView)view.findViewById(R.id.app_name)).setText(item.getAppEntry().getLabel());
-            ((TextView)view.findViewById(R.id.op_name)).setText(item.getSummaryText(mState));
+            ((TextView)view.findViewById(R.id.op_name)).setText(item.getSummaryText(mContext, mState));
             ((TextView)view.findViewById(R.id.op_time)).setText(
                     item.getTimeText(mResources, false));
 

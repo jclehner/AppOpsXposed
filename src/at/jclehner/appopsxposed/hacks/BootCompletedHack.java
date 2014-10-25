@@ -91,6 +91,11 @@ public class BootCompletedHack extends Hack
 			XposedHelpers.getStaticIntField(AppOpsManager.class, "OP_WIFI_SCAN");
 
 	@Override
+	public void initZygote(StartupParam startupParam) throws Throwable {
+		patchAppOpsManager(ClassLoader.getSystemClassLoader());
+	}
+
+	@Override
 	public void handleLoadSettingsPackage(LoadPackageParam lpparam) throws Throwable
 	{
 		patchFrameworkPart(lpparam.classLoader);

@@ -51,7 +51,7 @@ public class ObjectWrapper
 		}
 		catch(ReflectiveException e)
 		{
-			e.printStackTrace();
+			Log.w("ObjectWrapper", e);
 			return defValue;
 		}
 	}

@@ -3,6 +3,8 @@ package at.jclehner.appopsxposed;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
+import com.android.settings.applications.AppOpsCategory;
+import com.android.settings.applications.AppOpsDetails;
 import com.android.settings.applications.AppOpsSummary;
 
 public class AppOpsActivity extends PreferenceActivity
@@ -16,7 +18,8 @@ public class AppOpsActivity extends PreferenceActivity
 
 	protected boolean isValidFragment(String fragmentName)
 	{
-		return AppOpsXposed.APP_OPS_FRAGMENT.equals(fragmentName)
-				|| AppOpsXposed.APP_OPS_DETAILS_FRAGMENT.equals(fragmentName);
+		return AppOpsSummary.class.getName().equals(fragmentName)
+				|| AppOpsDetails.class.getName().equals(fragmentName)
+				|| AppOpsCategory.class.getName().equals(fragmentName);
 	}
 }

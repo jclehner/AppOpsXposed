@@ -52,8 +52,6 @@ public class OpsLabelHelper
 		if(opName == null && op == -1)
 			throw new IllegalArgumentException("Must specify either opName or op");
 
-		final AppOpsManagerWrapper appOps = AppOpsManagerWrapper.from(context);
-
 		if(op == -1)
 		{
 			op = getOpValue(opName);
@@ -61,7 +59,16 @@ public class OpsLabelHelper
 				return opName;
 		}
 		else if(opName == null)
-			opName = "OP_" + appOps.opToName(op);
+		{
+			try
+			{
+				opName = "OP_" + AppOpsManagerWrapper.opToName(op);
+			}
+			catch(RuntimeException e)
+			{
+				opName = "OP_#" + op;
+			}
+		}
 
 		String[] array = getLabel ? sOpLabels : sOpSummaries;
 
@@ -120,7 +127,7 @@ public class OpsLabelHelper
 		{
 			if(op != -1)
 			{
-				final String permission = appOps.opToPermission(op);
+				final String permission = AppOpsManagerWrapper.opToPermission(op);
 				if(permission != null)
 					return getPermissionLabel(context, permission).toString();
 			}

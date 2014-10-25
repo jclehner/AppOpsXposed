@@ -18,14 +18,23 @@ package com.android.settings.applications;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
+import at.jclehner.appopsxposed.AppOpsActivity;
 import at.jclehner.appopsxposed.R;
+import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
+import at.jclehner.appopsxposed.util.Util;
 
 public class AppOpsSummary extends Fragment {
     // layout inflater object used to inflate views
@@ -41,7 +50,8 @@ public class AppOpsSummary extends Fragment {
         AppOpsState.PERSONAL_TEMPLATE,
         AppOpsState.MESSAGING_TEMPLATE,
         AppOpsState.MEDIA_TEMPLATE,
-        AppOpsState.DEVICE_TEMPLATE
+        AppOpsState.DEVICE_TEMPLATE,
+        AppOpsState.BOOTUP_TEMPLATE
     };
 
     int mCurPos;
@@ -59,7 +69,11 @@ public class AppOpsSummary extends Fragment {
 
         @Override
         public int getCount() {
-            return sPageTemplates.length;
+            int count = sPageTemplates.length;
+            if (!Util.isUsingBootCompletedHack(getActivity()) && AppOpsManagerWrapper.OP_BOOT_COMPLETED != -1) {
+                --count;
+            }
+            return count;
         }
 
         @Override
@@ -85,6 +99,12 @@ public class AppOpsSummary extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // initialize the inflater
         mInflater = inflater;
@@ -96,11 +116,11 @@ public class AppOpsSummary extends Fragment {
 
         mPageNames = getResources().getTextArray(R.array.app_ops_categories);
 
-        mViewPager = (ViewPager) rootView.findViewWithTag("pager");
+        mViewPager = (ViewPager) rootView.findViewById(R.id.pager);
         MyPagerAdapter adapter = new MyPagerAdapter(getChildFragmentManager());
         mViewPager.setAdapter(adapter);
         mViewPager.setOnPageChangeListener(adapter);
-        PagerTabStrip tabs = (PagerTabStrip) rootView.findViewWithTag("tabs");
+        PagerTabStrip tabs = (PagerTabStrip) rootView.findViewById(R.id.tabs);
         tabs.setTabIndicatorColorResource(android.R.color.holo_blue_light);
 
         // We have to do this now because PreferenceFrameLayout looks at it
@@ -111,4 +131,23 @@ public class AppOpsSummary extends Fragment {
 
         return rootView;
     }
+
+    /*
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.add(R.string.show_changed_only_title).setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                final Bundle args = new Bundle();
+                args.putParcelable("template", AppOpsState.DUMMY_CHANGED_ONLY_TEMPLATE);
+                final Intent intent = new Intent(getActivity(), AppOpsActivity.class);
+                intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsCategory.class.getName());
+                intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS, args);
+                startActivity(intent);
+                return true;
+            }
+        });
+    }
+    */
 }

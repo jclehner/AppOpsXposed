@@ -35,6 +35,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,6 +89,12 @@ public final class Util
 
 	public static boolean isXposedModuleEnabled() {
 		return false;
+	}
+
+	public static boolean isUsingBootCompletedHack(Context context)
+	{
+		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
+				"use_hack_boot_completed", false);
 	}
 
 	public static boolean containsManufacturer(String str) {
