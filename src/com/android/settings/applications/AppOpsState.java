@@ -35,7 +35,10 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.format.DateUtils;
+import android.text.style.StrikethroughSpan;
 import android.util.Log;
 import android.util.SparseArray;
 import at.jclehner.appopsxposed.R;
@@ -360,18 +363,21 @@ public class AppOpsState {
 
         private CharSequence getCombinedText(ArrayList<OpEntryWrapper> ops,
                 CharSequence[] items) {
-            if (ops.size() == 1) {
-                return items[ops.get(0).getOp()];
-            } else {
-                StringBuilder builder = new StringBuilder();
-                for (int i=0; i<ops.size(); i++) {
-                    if (i > 0) {
-                        builder.append(", ");
-                    }
-                    builder.append(items[ops.get(i).getOp()]);
+            SpannableStringBuilder builder = new SpannableStringBuilder();
+            for (int i=0; i<ops.size(); i++) {
+                if (i > 0) {
+                    builder.append(", ");
                 }
-                return builder.toString();
+
+                SpannableString ss = new SpannableString(items[ops.get(i).getOp()]);
+                if (ops.get(i).getMode() != AppOpsManagerWrapper.MODE_ALLOWED) {
+                    ss.setSpan(new StrikethroughSpan(), 0, ss.length(), 0);
+                }
+
+                builder.append(ss);
             }
+
+            return builder;
         }
 
         public CharSequence getSummaryText(AppOpsState state) {
@@ -577,8 +583,9 @@ public class AppOpsState {
                                     appInfo.packageName, appInfo.applicationInfo.uid, dummyOps);
 
                         }
+                        int mode = mAppOps.checkOp(permOps.get(k), appInfo.applicationInfo.uid, appInfo.packageName);
                         OpEntryWrapper opEntry = new OpEntryWrapper(
-                                permOps.get(k), AppOpsManagerWrapper.MODE_ALLOWED, 0, 0, 0);
+                                permOps.get(k), mode, 0, 0, 0);
                         dummyOps.add(opEntry);
                         addOp(entries, pkgOps, appEntry, opEntry, packageName == null,
                                 packageName == null ? 0 : opToOrder[opEntry.getOp()]);
