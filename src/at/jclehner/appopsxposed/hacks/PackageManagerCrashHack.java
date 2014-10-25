@@ -84,18 +84,25 @@ public class PackageManagerCrashHack extends Hack
 					param.args[1] = true;
 				}
 
-				mRestoreInfo.get().clear();
-
-				final Map<String, ?> perms = getPermissions(param.thisObject);
-				for(String perm : GRANT_PERMISSIONS)
+				try
 				{
-					if(perms.containsKey(perm))
-					{
-						final Object basePerm = perms.get(perm);
+					mRestoreInfo.get().clear();
 
-						mRestoreInfo.get().put(perm, XposedHelpers.getIntField(basePerm, "protectionLevel"));
-						XposedHelpers.setIntField(basePerm, "protectionLevel", 0);
+					final Map<String, ?> perms = getPermissions(param.thisObject);
+					for(String perm : GRANT_PERMISSIONS)
+					{
+						if(perms.containsKey(perm))
+						{
+							final Object basePerm = perms.get(perm);
+
+							mRestoreInfo.get().put(perm, XposedHelpers.getIntField(basePerm, "protectionLevel"));
+							XposedHelpers.setIntField(basePerm, "protectionLevel", 0);
+						}
 					}
+				}
+				catch(Throwable t)
+				{
+					log(t);
 				}
 			}
 
@@ -105,11 +112,18 @@ public class PackageManagerCrashHack extends Hack
 				if(!isAoxModulePackage(param))
 					return;
 
-				final Map<String, ?> perms = getPermissions(param.thisObject);
-				for(String perm : mRestoreInfo.get().keySet())
+				try
 				{
-					XposedHelpers.setIntField(perms.get(perm), "protectionLevel",
-							mRestoreInfo.get().get(perm));
+					final Map<String, ?> perms = getPermissions(param.thisObject);
+					for(String perm : mRestoreInfo.get().keySet())
+					{
+						XposedHelpers.setIntField(perms.get(perm), "protectionLevel",
+								mRestoreInfo.get().get(perm));
+					}
+				}
+				catch(Throwable t)
+				{
+					log(t);
 				}
 			}
 
