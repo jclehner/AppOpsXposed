@@ -29,7 +29,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import at.jclehner.appopsxposed.hacks.BootCompletedHack;
 import at.jclehner.appopsxposed.hacks.FixWakeLock;
-import at.jclehner.appopsxposed.hacks.PackageManagerCrashHack;
+import at.jclehner.appopsxposed.hacks.PackageManagerHacks;
 import at.jclehner.appopsxposed.util.Res;
 import at.jclehner.appopsxposed.util.Util;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
@@ -62,7 +62,7 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 		new BootCompletedHack(),
 		new FixWakeLock(),
 		//new GmsLocationHack(),
-		new PackageManagerCrashHack()
+		new PackageManagerHacks()
 	};
 
 	private String mLogTag;

@@ -29,7 +29,7 @@ import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
 
-public class PackageManagerCrashHack extends Hack
+public class PackageManagerHacks extends Hack
 {
 	private static final String[] GRANT_PERMISSIONS = {
 			"android.permission.UPDATE_APP_OPS_STATS",

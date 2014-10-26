@@ -18,6 +18,7 @@
 
 package at.jclehner.appopsxposed.util;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -147,18 +148,28 @@ public final class Util
 
 	public static Set<String> getClassList(ApplicationInfo appInfo, String packageName, boolean getSubPackages)
 	{
-		final DexFile df;
+		final Enumeration<String> entries;
+		DexFile df = null;
 		try
 		{
 			df = new DexFile(appInfo.sourceDir);
+			entries = df.entries();
 		}
 		catch(IOException e)
 		{
 			log(e);
 			return null;
 		}
+		finally
+		{
+			try {
+				if(df != null)
+					df.close();
+			} catch(IOException e) {
+				// ignore
+			}
+		}
 
-		final Enumeration<String> entries = df.entries();
 		final Set<String> classes = new HashSet<String>();
 
 		while(entries.hasMoreElements())
@@ -275,6 +286,18 @@ public final class Util
 			return sb.toString();
 		}
 
+	}
+
+	private static void closeQuietly(Closeable closeable)
+	{
+		try
+		{
+			closeable.close();
+		}
+		catch(IOException e)
+		{
+			// ignore
+		}
 	}
 
 	private Util() {}
