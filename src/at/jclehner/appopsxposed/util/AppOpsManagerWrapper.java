@@ -72,9 +72,9 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 
 	public static final int _NUM_OP = getOpInt("_NUM_OP");
 
-	public static final int MODE_ALLOWED = AppOpsManager.MODE_ALLOWED;
-	public static final int MODE_IGNORED = AppOpsManager.MODE_IGNORED;
-	public static final int MODE_ERRORED = AppOpsManager.MODE_ERRORED;
+	public static final int MODE_ALLOWED = getOpInt("MODE_ALLOWED");
+	public static final int MODE_IGNORED = getOpInt("MODE_IGNORED");
+	public static final int MODE_ERRORED = getOpInt("MODE_ERRORED");
 
 	public static AppOpsManagerWrapper from(Context context) {
 		return new AppOpsManagerWrapper(context);
@@ -128,8 +128,16 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		return callStatic(AppOpsManager.class, "opToSwitch", new Class<?>[] { int.class }, op);
 	}
 
-	private static int getOpInt(String opName) {
-		return getStatic(AppOpsManager.class, opName, -1);
+	private static int getOpInt(String opName)
+	{
+		try
+		{
+			return getStatic(AppOpsManager.class, opName);
+		}
+		catch(ReflectiveException e)
+		{
+			return -1;
+		}
 	}
 
 	private static int getOpWithPermission(String permission)

@@ -1,6 +1,6 @@
 package at.jclehner.appopsxposed;
 
-import android.os.Bundle;
+import android.content.Intent;
 import android.preference.PreferenceActivity;
 
 import com.android.settings.applications.AppOpsCategory;
@@ -10,10 +10,12 @@ import com.android.settings.applications.AppOpsSummary;
 public class AppOpsActivity extends PreferenceActivity
 {
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
+	public Intent getIntent()
 	{
-		super.onCreate(savedInstanceState);
-		//startPreferenceFragment(new AppOpsSummary(), false);
+		final Intent intent = new Intent(super.getIntent());
+		intent.putExtra(EXTRA_SHOW_FRAGMENT, AppOpsSummary.class.getName());
+		intent.putExtra(EXTRA_NO_HEADERS, true);
+		return intent;
 	}
 
 	protected boolean isValidFragment(String fragmentName)

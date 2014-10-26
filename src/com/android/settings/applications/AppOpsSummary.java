@@ -18,12 +18,12 @@ package com.android.settings.applications;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,11 +32,9 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
 import at.jclehner.appopsxposed.AppListFragment;
-import at.jclehner.appopsxposed.AppOpsActivity;
 import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.ObjectWrapper;
-import at.jclehner.appopsxposed.util.Util;
 
 public class AppOpsSummary extends Fragment {
     // layout inflater object used to inflate views
@@ -127,7 +125,7 @@ public class AppOpsSummary extends Fragment {
 
         // We have to do this now because PreferenceFrameLayout looks at it
         // only when the view is added.
-        if ("android.preference.PreferenceFrameLayout".equals(container.getClass().getName())) {
+        if (container != null && "android.preference.PreferenceFrameLayout".equals(container.getClass().getName())) {
             new ObjectWrapper(rootView.getLayoutParams()).set("removeBorders", true);
         }
 

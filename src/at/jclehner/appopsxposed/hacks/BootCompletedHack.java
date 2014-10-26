@@ -26,6 +26,7 @@ import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import at.jclehner.appopsxposed.Hack;
 import at.jclehner.appopsxposed.R;
@@ -148,8 +149,17 @@ public class BootCompletedHack extends Hack
 
 		for(Field f : AppOpsManagerReturnValues.class.getDeclaredFields())
 		{
-			XposedHelpers.findAndHookMethod(AppOpsManager.class, f.getName(),
-					int.class, hook);
+			try
+			{
+				XposedHelpers.findAndHookMethod(AppOpsManager.class, f.getName(),
+						int.class, hook);
+			}
+			catch(NoSuchMethodError e)
+			{
+				// These functions don't exist on API 18
+				if(!"opAllowsReset".equals(f.getName()) && !"opToDefaultMode".equals(f.getName()))
+					log(e);
+			}
 		}
 
 		// While we're at it, we can also fix the error where

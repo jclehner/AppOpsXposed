@@ -25,7 +25,9 @@ import android.app.AppOpsManager;
 import android.content.Context;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.WorkSource;
 import at.jclehner.appopsxposed.Hack;
+import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.Res;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodHook.Unhook;
@@ -42,14 +44,12 @@ public class FixWakeLock extends Hack
 	private static final boolean ENABLE_PER_TAG_FILTERING = false;
 	private static final boolean DEBUG = true;
 
-	private static final int OP_WAKE_LOCK = getOpWakeLock();
-
 	private Set<Unhook> mUnhooks;
 
 	@Override
 	public void initZygote(StartupParam param) throws Throwable
 	{
-		if(OP_WAKE_LOCK == -1)
+		if(AppOpsManagerWrapper.OP_WAKE_LOCK == -1)
 		{
 			log("No OP_WAKE_LOCK; bailing out!");
 			return;
@@ -99,25 +99,14 @@ public class FixWakeLock extends Hack
 		return false;
 	}
 
-	private static int getOpWakeLock()
-	{
-		try
-		{
-			return XposedHelpers.getStaticIntField(AppOpsManager.class, "OP_WAKE_LOCK");
-		}
-		catch(Throwable t)
-		{
-			return -1;
-		}
-	}
-
 	private final XC_MethodHook mAcquireHook = new XC_MethodHook() {
 		@Override
 		protected void beforeHookedMethod(MethodHookParam param) throws Throwable
 		{
 			final IBinder lock = (IBinder) param.args[0];
 			final String tag = (String) param.args[2];
-			final String packageName = (String) param.args[3];
+			final String packageName = param.args[3] instanceof String ?
+					(String) param.args[3] : null;
 
 			final int uid = Binder.getCallingUid();
 
@@ -136,7 +125,7 @@ public class FixWakeLock extends Hack
 			ctx.enforceCallingOrSelfPermission(
 					android.Manifest.permission.WAKE_LOCK, null);
 
-			if(checkOp(ctx, OP_WAKE_LOCK, uid, packageName) != AppOpsManager.MODE_ALLOWED)
+			if(checkOp(ctx, AppOpsManagerWrapper.OP_WAKE_LOCK, uid, packageName) != AppOpsManager.MODE_ALLOWED)
 			{
 				if(tag != null && canAcquire(packageName, tag))
 				{

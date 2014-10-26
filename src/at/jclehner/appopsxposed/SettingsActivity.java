@@ -172,7 +172,6 @@ public class SettingsActivity extends Activity
 					public boolean onPreferenceClick(Preference preference)
 					{
 						final Intent intent = new Intent(getActivity(), AppOpsActivity.class);
-						intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsSummary.class.getName());
 						startActivity(intent);
 
 						return true;
