@@ -11,6 +11,11 @@
         android:summary="@string/failsafe_mode_summary"
         android:defaultValue="false" />
 
+    <CheckBoxPreference android:key="compatibility_mode"
+        android:title="@string/compatibility_mode_title"
+        android:summary="@string/compatibility_mode_summary"
+        android:defaultValue="false" />
+
     <PreferenceCategory
         android:title="@string/advanced_settings_title">
 
@@ -24,9 +29,7 @@
             android:summary="@string/automatic"
             android:entries="@array/variants"
             android:defaultValue="" />
-        
-        
-        
+
 	    <PreferenceScreen android:key="hacks"
 	        android:title="@string/hacks_title"
 	        android:summary="@string/hacks_summary">

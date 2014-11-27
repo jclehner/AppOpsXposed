@@ -100,6 +100,14 @@ public class SettingsActivity extends Activity
 				findPreference("use_layout_fix").setEnabled(!failsafe);
 				findPreference("hacks").setEnabled(!failsafe);
 			}
+			else if("compatibility_mode".equals(preference.getKey()))
+			{
+				if(((Boolean) newValue) && !mPrefs.getBoolean("show_launcher_icon", true))
+				{
+					final CheckBoxPreference p = (CheckBoxPreference) findPreference("show_launcher_icon");
+					p.setChecked(true);
+				}
+			}
 			else if("show_launcher_icon".equals(preference.getKey()))
 			{
 				final boolean show = (Boolean) newValue;
