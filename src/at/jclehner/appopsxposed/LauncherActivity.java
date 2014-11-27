@@ -22,26 +22,32 @@ import java.io.File;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import at.jclehner.appopsxposed.util.Util;
 
+import com.android.settings.applications.AppOpsSummary;
+
 public class LauncherActivity extends Activity implements OnClickListener
 {
 	private static final String TAG = "AOX";
+	private SharedPreferences mPrefs;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 		if(!isXposedInstalled())
 		{
@@ -89,11 +95,17 @@ public class LauncherActivity extends Activity implements OnClickListener
 		Log.i(TAG, "Launching AppOps from launcher icon");
 
 		final Intent intent = new Intent();
-		intent.setPackage("com.android.settings");
-		intent.setAction("android.settings.SETTINGS");
-		intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_FRAGMENT);
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+		if(!mPrefs.getBoolean("compatibility_mode", false))
+		{
+			intent.setPackage("com.android.settings");
+			intent.setAction("android.settings.SETTINGS");
+			intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_FRAGMENT);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+		}
+		else
+			intent.setClass(this, AppOpsActivity.class);
 
 		startActivity(intent);
 		finish();
