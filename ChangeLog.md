@@ -1,4 +1,5 @@
 ### 1.21
+* Added new compatibility mode (BETA)
 * Fix crash on LG ROMs
 * Attempted to fix wrong icon size on some ROMs
 * WakeLockFix disabled on JellyBean for now
