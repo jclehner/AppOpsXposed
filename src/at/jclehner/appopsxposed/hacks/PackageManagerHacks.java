@@ -40,9 +40,7 @@ public class PackageManagerHacks extends Hack
 	public void initZygote(StartupParam param) throws Throwable
 	{
 		fixPmCrash();
-
-		if(BuildConfig.DEBUG)
-			grantAppOpsPermissionsToSelf();
+		grantAppOpsPermissionsToSelf();
 	}
 
 	@Override

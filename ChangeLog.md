@@ -1,3 +1,6 @@
+### 1.21.1
+* Fix compatibility mode
+
 ### 1.21
 * Added new compatibility mode (BETA)
 * Fix crash on LG ROMs

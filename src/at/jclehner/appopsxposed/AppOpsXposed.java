@@ -155,11 +155,6 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 			return;
 		}
 
-		if(lpparam == null || lpparam.appInfo == null)
-		{
-			Util.debug("lpparam=" + lpparam + "\nlpparam.appInfo=" + lpparam.appInfo);
-		}
-
 		Res.settingsRes = XModuleResources.createInstance(lpparam.appInfo.sourceDir, null);
 
 		final String forceVariant = Res.modPrefs.getString("force_variant", "");
