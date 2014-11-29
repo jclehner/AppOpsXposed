@@ -16,6 +16,9 @@
 
 package com.android.settings.applications;
 
+import java.util.Collections;
+import java.util.List;
+
 import android.app.ListFragment;
 import android.app.LoaderManager;
 import android.content.AsyncTaskLoader;
@@ -28,7 +31,9 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,9 +41,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import at.jclehner.appopsxposed.R;
-
-import java.util.List;
 
 import com.android.settings.applications.AppOpsState.AppOpEntry;
 
@@ -117,6 +121,7 @@ public class AppOpsCategory extends ListFragment implements
         final InterestingConfigChanges mLastConfig = new InterestingConfigChanges();
         final AppOpsState mState;
         final AppOpsState.OpsTemplate mTemplate;
+        final Handler mHandler;
 
         List<AppOpEntry> mApps;
         PackageIntentReceiver mPackageObserver;
@@ -125,11 +130,25 @@ public class AppOpsCategory extends ListFragment implements
             super(context);
             mState = state;
             mTemplate = template;
+            mHandler = new Handler();
         }
 
         @Override public List<AppOpEntry> loadInBackground() {
             //return mState.buildStateWithChangedOpsOnly();
-            return mState.buildState(mTemplate);
+            try {
+                return mState.buildState(mTemplate);
+            } catch (final SecurityException e) {
+                mHandler.post(new Runnable() {
+
+                    @Override
+                    public void run()
+                    {
+                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.w("AOX", e);
+                    }
+                });
+                return Collections.emptyList();
+            }
         }
 
         /**

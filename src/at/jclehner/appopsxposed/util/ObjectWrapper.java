@@ -11,7 +11,7 @@ public class ObjectWrapper
 	{
 		private static final long serialVersionUID = 4913462741847291648L;
 
-		public ReflectiveException(Exception cause) {
+		public ReflectiveException(Throwable cause) {
 			super(cause);
 		}
 	}
@@ -142,6 +142,10 @@ public class ObjectWrapper
 		}
 		catch(InvocationTargetException e)
 		{
+			final Throwable targetException = e.getTargetException();
+			if(targetException instanceof RuntimeException)
+				throw (RuntimeException) targetException;
+
 			throw new ReflectiveException(e);
 		}
 	}
