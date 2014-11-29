@@ -28,6 +28,7 @@ import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XSharedPreferences;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
@@ -45,6 +46,21 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	@Override
 	public void initZygote(StartupParam startupParam) throws Throwable
 	{
+		Util.logger = new Util.Logger() {
+
+			@Override
+			public void log(Throwable t)
+			{
+				XposedBridge.log(t);
+			}
+
+			@Override
+			public void log(String s)
+			{
+				XposedBridge.log(s);
+			}
+		};
+
 		mModPath = startupParam.modulePath;
 		Res.modRes = XModuleResources.createInstance(mModPath, null);
 		Res.modPrefs = new XSharedPreferences(AppOpsXposed.class.getPackage().getName());
@@ -181,6 +197,7 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		}
 		else
 		{
+			log("Using forced variant: " + forceVariant);
 			final Class<?> variantClazz = Class.forName("at.jclehner.appopsxposed.variants." + forceVariant.replace('.', '$'));
 			((ApkVariant) variantClazz.newInstance()).handleLoadPackage(lpparam);
 		}
