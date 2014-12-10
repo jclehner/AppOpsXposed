@@ -26,6 +26,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.android.settings.applications.AppOpsCategory;
+
+import android.app.AppOpsManager;
 import android.app.Fragment;
 import android.app.TaskStackBuilder;
 import android.content.Context;
@@ -156,7 +159,11 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 		appOpsHeader.title = getAppOpsTitle();
 		appOpsHeader.id = R.id.app_ops_settings;
 		appOpsHeader.iconRes = getAppOpsHeaderIcon();
-		appOpsHeader.fragment = AppOpsXposed.APP_OPS_FRAGMENT;
+
+		if(XUtils.isCompatibilityModeEnabled())
+			appOpsHeader.intent = Util.getCompatibilityModeIntent(null);
+		else
+			appOpsHeader.fragment = AppOpsXposed.APP_OPS_FRAGMENT;
 
 		return appOpsHeader;
 	}
@@ -413,11 +420,10 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 										"  args=" + f.getArguments());
 
 								final Bundle args = f.getArguments() == null ? new Bundle() : f.getArguments();
+								String pkg = null;
 
 								if(!args.containsKey("package"))
 								{
-									String pkg;
-
 									try
 									{
 										pkg = pa.getIntent().getData().getSchemeSpecificPart();
@@ -429,44 +435,52 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 										pkg = null;
 									}
 
-									if(pkg == null || pkg.isEmpty())
-									{
-										log("No package in intent or args:\n" +
-												"  intent=" + pa.getIntent() + "\n" +
-												"  extras=" + pa.getIntent().getExtras() + "\n" +
-												"  args=" + args);
-										Toast.makeText(pa, "Error!", Toast.LENGTH_SHORT).show();
-										return true;
-									}
-
 									args.putString("package", pkg);
 								}
 								else
-									log("Package obtained from Fragment args: " + args.getString("package"));
-
-								if("android.settings.APPLICATION_DETAILS_SETTINGS".equals(pa.getIntent().getAction()))
 								{
-									debug("Launching AppOps using startActivities()");
+									pkg = args.getString("package");
+									log("Package obtained from Fragment args: " + pkg);
+								}
 
-									final Intent intent = new Intent("android.settings.SETTINGS");
-									intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, getAppOpsDetailsFragmentName());
-									intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS, args);
-									intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_TITLE, Res.getModString(R.string.app_ops_settings));
+								if(pkg == null || pkg.isEmpty())
+								{
+									log("No package in intent or args:\n" +
+											"  intent=" + pa.getIntent() + "\n" +
+											"  extras=" + pa.getIntent().getExtras() + "\n" +
+											"  args=" + args);
+									Toast.makeText(pa, "Error!", Toast.LENGTH_SHORT).show();
+									return true;
+								}
 
-									final TaskStackBuilder tsb = TaskStackBuilder.create(pa);
-									tsb.addNextIntent(intent);
+								if(!XUtils.isCompatibilityModeEnabled())
+								{
+									if("android.settings.APPLICATION_DETAILS_SETTINGS".equals(pa.getIntent().getAction()))
+									{
+										debug("Launching AppOps using startActivities()");
 
-									tsb.startActivities();
+										final Intent intent = new Intent("android.settings.SETTINGS");
+										intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, getAppOpsDetailsFragmentName());
+										intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS, args);
+										intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_TITLE, Res.getModString(R.string.app_ops_settings));
+
+										final TaskStackBuilder tsb = TaskStackBuilder.create(pa);
+										tsb.addNextIntent(intent);
+
+										tsb.startActivities();
+									}
+									else
+									{
+										debug("Launching AppOps using startPreferencePanel()");
+
+										// This method only works when "App info" was opened from "Apps". When the launcher icon
+										// onto "App info", the method above is used.
+										pa.startPreferencePanel(getAppOpsDetailsFragmentName(), args, 0,
+												Res.getModString(R.string.app_ops_settings), f, 0);
+									}
 								}
 								else
-								{
-									debug("Launching AppOps using startPreferencePanel()");
-
-									// This method only works when "App info" was opened from "Apps". When the launcher icon
-									// onto "App info", the method above is used.
-									pa.startPreferencePanel(getAppOpsDetailsFragmentName(), args, 0,
-											Res.getModString(R.string.app_ops_settings), f, 0);
-								}
+									pa.startActivity(Util.getCompatibilityModeIntent(pkg));
 
 								return true;
 							}

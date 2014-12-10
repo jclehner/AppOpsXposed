@@ -29,22 +29,31 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import com.android.settings.applications.AppOpsDetails;
+
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
+import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import at.jclehner.appopsxposed.AppOpsActivity;
+import at.jclehner.appopsxposed.AppOpsXposed;
 import dalvik.system.DexFile;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public final class Util
 {
+	private static boolean sIsExposedModuleEnabled = false;
+
 	public interface Logger
 	{
 		void log(String s);
@@ -89,7 +98,7 @@ public final class Util
 	}
 
 	public static boolean isXposedModuleEnabled() {
-		return false;
+		return sIsExposedModuleEnabled;
 	}
 
 	public static boolean isUsingBootCompletedHack(Context context)
@@ -138,6 +147,25 @@ public final class Util
 			e.printStackTrace();
 			return defValue;
 		}
+	}
+
+	public static Intent getCompatibilityModeIntent(String packageName)
+	{
+		final Intent intent = new Intent();
+		intent.setClassName(AppOpsActivity.class.getPackage().getName(),
+				AppOpsActivity.class.getName());
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+				| Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+		if(packageName != null)
+		{
+			final Bundle args = new Bundle();
+			args.putString(AppOpsDetails.ARG_PACKAGE_NAME, packageName);
+			intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS, args);
+			intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsDetails.class.getName());
+		}
+
+		return intent;
 	}
 
 	public static void dumpViewHierarchy(View v)

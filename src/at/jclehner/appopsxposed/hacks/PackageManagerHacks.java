@@ -24,6 +24,7 @@ import java.util.Map;
 import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.BuildConfig;
 import at.jclehner.appopsxposed.Hack;
+import at.jclehner.appopsxposed.util.XUtils;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -40,7 +41,9 @@ public class PackageManagerHacks extends Hack
 	public void initZygote(StartupParam param) throws Throwable
 	{
 		fixPmCrash();
-		grantAppOpsPermissionsToSelf();
+
+		if(XUtils.isCompatibilityModeEnabled())
+			grantAppOpsPermissionsToSelf();
 	}
 
 	@Override

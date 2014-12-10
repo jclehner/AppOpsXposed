@@ -142,8 +142,8 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 		if(MODULE_PACKAGE.equals(lpparam.packageName))
 		{
-			XposedHelpers.findAndHookMethod(Util.class, "isXposedModuleEnabled",
-					XC_MethodReplacement.returnConstant(true));
+			XposedHelpers.findAndHookMethod(Util.class.getName(), lpparam.classLoader,
+					"isXposedModuleEnabled", XC_MethodReplacement.returnConstant(true));
 		}
 
 		if(!XUtils.isInFailsafeMode())

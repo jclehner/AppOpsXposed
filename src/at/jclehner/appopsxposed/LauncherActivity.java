@@ -19,24 +19,27 @@
 package at.jclehner.appopsxposed;
 
 import java.io.File;
+import java.util.List;
+
+import eu.chainfire.libsuperuser.Shell.SU;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.TextView;
+import android.widget.Toast;
 import at.jclehner.appopsxposed.util.Util;
-
-import com.android.settings.applications.AppOpsSummary;
 
 public class LauncherActivity extends Activity implements OnClickListener
 {
@@ -49,29 +52,78 @@ public class LauncherActivity extends Activity implements OnClickListener
 		super.onCreate(savedInstanceState);
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-		if(!isXposedInstalled())
+		if(!Util.isXposedModuleEnabled())
 		{
-			if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
+			if(!isSystemApp() && SU.available())
 			{
-				Log.i(TAG, "Xposed Framework not installed, but running pre-KitKat Android");
+				final DialogInterface.OnClickListener l = new DialogInterface.OnClickListener() {
 
-				if(isSonyStockRom())
-				{
-					Log.i(TAG, "Running Sony stock ROM");
-					addAppListFragment();
-					return;
-				}
-			}
-			else
-			{
-				setContentView(R.layout.launcher_info);
-				findViewById(R.id.btn_launch).setOnClickListener(this);
-				findViewById(R.id.btn_help).setOnClickListener(this);
-				((TextView) findViewById(R.id.info_text)).setText(getString(R.string.xposed_not_installed,
-						getString(R.string.app_ops_settings), getString(R.string.btn_launch)));
+					@Override
+					public void onClick(DialogInterface dialog, int which)
+					{
+						if(which == DialogInterface.BUTTON_POSITIVE)
+						{
+							final String[] commands = {
+									"mount -o remount,rw /system",
+									"mv '" + getApplicationInfo().sourceDir.replace("'", "\\'") +
+											"' /system/priv-app/AppOpsXposed.apk",
+									"chmod 770 /system/priv-app/AppOpsXposed.apk",
+									"chown root:root /system/priv-app/AppOpsXposed.apk",
+									"reboot"
+							};
 
+							for(String command : commands)
+							{
+								final List<String> out = SU.run(command);
+								if(!out.isEmpty())
+								{
+									Toast.makeText(LauncherActivity.this, command + "\n" + out.get(0),
+											Toast.LENGTH_LONG).show();
+									break;
+								}
+							}
+						}
+						else
+						{
+
+						}
+					}
+				};
+
+
+				final AlertDialog.Builder ab = new AlertDialog.Builder(this);
+				ab.setMessage("AppOpsXposed is not running as an Xposed module. " +
+						"Install as a system app (requires reboot)?");
+				ab.setNegativeButton(android.R.string.no, l);
+				ab.setPositiveButton(android.R.string.yes, l);
+
+				ab.show();
 				return;
 			}
+			/*else
+			{
+				if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
+				{
+					Log.i(TAG, "Xposed Framework not installed, but running pre-KitKat Android");
+
+					if(isSonyStockRom())
+					{
+						Log.i(TAG, "Running Sony stock ROM");
+						addAppListFragment();
+						return;
+					}
+				}
+				else
+				{
+					setContentView(R.layout.launcher_info);
+					findViewById(R.id.btn_launch).setOnClickListener(this);
+					findViewById(R.id.btn_help).setOnClickListener(this);
+					((TextView) findViewById(R.id.info_text)).setText(getString(R.string.xposed_not_installed,
+							getString(R.string.app_ops_settings), getString(R.string.btn_launch)));
+
+					return;
+				}
+			}*/
 		}
 
 		launchAppOpsSummary();
@@ -94,10 +146,11 @@ public class LauncherActivity extends Activity implements OnClickListener
 	{
 		Log.i(TAG, "Launching AppOps from launcher icon");
 
-		final Intent intent = new Intent();
+		final Intent intent;
 
-		if(!mPrefs.getBoolean("compatibility_mode", false))
+		if(Util.isXposedModuleEnabled() && !mPrefs.getBoolean("compatibility_mode", false))
 		{
+			intent = new Intent();
 			intent.setPackage("com.android.settings");
 			intent.setAction("android.settings.SETTINGS");
 			intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_FRAGMENT);
@@ -105,7 +158,7 @@ public class LauncherActivity extends Activity implements OnClickListener
 			intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 		}
 		else
-			intent.setClass(this, AppOpsActivity.class);
+			intent = Util.getCompatibilityModeIntent(null);
 
 		startActivity(intent);
 		finish();
@@ -115,6 +168,21 @@ public class LauncherActivity extends Activity implements OnClickListener
 	{
 		final AppListFragment f = AppListFragment.newInstance(false);
 		getFragmentManager().beginTransaction().replace(android.R.id.content, f).commit();
+	}
+
+	private boolean isSystemApp()
+	{
+		try
+		{
+			final ApplicationInfo appInfo = getPackageManager().getApplicationInfo(getPackageName(), 0);
+			return 0 != (appInfo.flags & ApplicationInfo.FLAG_SYSTEM);
+		}
+		catch(NameNotFoundException e)
+		{
+			Log.w(TAG, e);
+		}
+
+		return false;
 	}
 
 	private boolean isSonyStockRom()
