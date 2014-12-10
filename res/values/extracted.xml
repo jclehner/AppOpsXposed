@@ -62,7 +62,7 @@
         <item>monitor high power location</item>
         <item>get usage stats</item>
         <item>mute/unmute microphone</item>
-        <item></item>
+        <item>toast window</item>
         <item>project media</item>
         <item>activate VPN</item>
     </string-array>
@@ -113,7 +113,7 @@
         <item>Location</item>
         <item>Get usage stats</item>
         <item>Mute/unmute microphone</item>
-        <item></item>
+        <item>Toast window</item>
         <item>Project media</item>
         <item>Activate VPN</item>
     </string-array>
