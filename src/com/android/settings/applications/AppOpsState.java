@@ -429,13 +429,15 @@ public class AppOpsState {
                     builder.append(", ");
                 }
 
+                int op = ops.get(i).getOp();
+
                 SpannableString ss;
-                if (ops.get(i).getOp() < items.length) {
-                    ss = new SpannableString(items[ops.get(i).getOp()]);
+                if (op < items.length && items[op].length() != 0) {
+                    ss = new SpannableString(items[op]);
                 } else if (isSummary) {
-                    ss = new SpannableString(OpsLabelHelper.getOpSummary(context, ops.get(i).getOp()));
+                    ss = new SpannableString(OpsLabelHelper.getOpSummary(context, op));
                 } else {
-                    ss = new SpannableString(OpsLabelHelper.getOpLabel(context, ops.get(i).getOp()));
+                    ss = new SpannableString(OpsLabelHelper.getOpLabel(context, op));
                 }
 
                 if (isSummary && ops.get(i).getMode() != AppOpsManagerWrapper.MODE_ALLOWED) {

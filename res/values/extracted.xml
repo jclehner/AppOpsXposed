@@ -60,6 +60,11 @@
         <item>keep awake</item>
         <item>monitor location</item>
         <item>monitor high power location</item>
+        <item>get usage stats</item>
+        <item>mute/unmute microphone</item>
+        <item></item>
+        <item>project media</item>
+        <item>activate VPN</item>
     </string-array>
     <!-- User display names for app ops codes -->
     <string-array name="app_ops_labels">
@@ -106,5 +111,10 @@
         <item>Keep awake</item>
         <item>Location</item>
         <item>Location</item>
+        <item>Get usage stats</item>
+        <item>Mute/unmute microphone</item>
+        <item></item>
+        <item>Project media</item>
+        <item>Activate VPN</item>
     </string-array>
 </resources>
