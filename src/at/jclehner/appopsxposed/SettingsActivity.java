@@ -39,6 +39,9 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.text.Html;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import at.jclehner.appopsxposed.util.OpsLabelHelper;
 import at.jclehner.appopsxposed.util.Util;
@@ -72,6 +75,15 @@ public class SettingsActivity extends Activity
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.settings);
 			setupPreferences();
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+		{
+			final View v = inflater.inflate(R.layout.settings, container, false);
+			v.findViewById(R.id.xposed_settings_warning).setVisibility(
+					Util.isXposedModuleEnabled() ? View.GONE : View.VISIBLE);
+			return v;
 		}
 
 		@Override
@@ -110,6 +122,9 @@ public class SettingsActivity extends Activity
 			}
 			else if("show_launcher_icon".equals(preference.getKey()))
 			{
+				if(!Util.isXposedModuleEnabled() && !(Boolean) newValue)
+					return false;
+
 				final boolean show = (Boolean) newValue;
 				final PackageManager pm = getActivity().getPackageManager();
 				pm.setComponentEnabledSetting(new ComponentName(getActivity(), "at.jclehner.appopsxposed.LauncherActivity-Icon"),
@@ -135,6 +150,7 @@ public class SettingsActivity extends Activity
 			Preference p = findPreference("failsafe_mode");
 			callOnChangeListenerWithCurrentValue(p);
 			p.setOnPreferenceChangeListener(this);
+
 
 			findPreference("show_launcher_icon").setOnPreferenceChangeListener(this);
 

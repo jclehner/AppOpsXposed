@@ -52,4 +52,5 @@
 	<string name="no_xposed_no_root">AppOpsXposed läuft nicht als Xposed-Modul und Root-Rechte sind nicht verfügbar.</string>
 	<string name="checking_root">Überprüfe Root-Rechte&#8230;</string>
 	<string name="settings">Einstellungen</string>
+	<string name="xposed_settings_warning">Diese Einstellungen funktionieren nur, wenn Xposed verfügbar und aktiviert ist.</string>
 </resources>
