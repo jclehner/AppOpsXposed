@@ -202,7 +202,8 @@ public class AppOpsState {
                     AppOpsManagerWrapper.OP_AUDIO_MEDIA_VOLUME,
                     AppOpsManagerWrapper.OP_AUDIO_ALARM_VOLUME,
                     AppOpsManagerWrapper.OP_AUDIO_NOTIFICATION_VOLUME,
-                    AppOpsManagerWrapper.OP_AUDIO_BLUETOOTH_VOLUME, },
+                    AppOpsManagerWrapper.OP_AUDIO_BLUETOOTH_VOLUME,
+                    AppOpsManagerWrapper.OP_MUTE_MICROPHONE, },
             new boolean[] { false,
                     true,
                     true,
@@ -215,7 +216,8 @@ public class AppOpsState {
                     false,
                     false,
                     false,
-                    false }
+                    false,
+                    true, }
             );
 
     public static final OpsTemplate DEVICE_TEMPLATE = new OpsTemplate(
@@ -229,8 +231,16 @@ public class AppOpsState {
                     AppOpsManagerWrapper.OP_WIFI_CHANGE,
                     AppOpsManagerWrapper.OP_BLUETOOTH_CHANGE,
                     AppOpsManagerWrapper.OP_DATA_CONNECT_CHANGE,
-                    AppOpsManagerWrapper.OP_NFC_CHANGE },
+                    AppOpsManagerWrapper.OP_NFC_CHANGE,
+                    AppOpsManagerWrapper.OP_PROJECT_MEDIA,
+                    AppOpsManagerWrapper.OP_ACTIVATE_VPN,
+                    AppOpsManagerWrapper.OP_GET_USAGE_STATS,
+                    AppOpsManagerWrapper.OP_TOAST_WINDOW, },
             new boolean[] { false,
+                    true,
+                    true,
+                    true,
+                    true,
                     true,
                     true,
                     true,

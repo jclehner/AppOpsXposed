@@ -57,6 +57,11 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 	public static final int OP_WAKE_LOCK = getOpInt("OP_WAKE_LOCK");
 	public static final int OP_MONITOR_LOCATION = getOpInt("OP_MONITOR_LOCATION");
 	public static final int OP_MONITOR_HIGH_POWER_LOCATION = getOpInt("OP_MONITOR_HIGH_POWER_LOCATION");
+	public static final int OP_GET_USAGE_STATS = getOpInt("OP_GET_USAGE_STATS");
+	public static final int OP_MUTE_MICROPHONE = getOpInt("OP_MUTE_MICROPHONE");
+	public static final int OP_TOAST_WINDOW = getOpInt("OP_TOAST_WINDOW");
+	public static final int OP_PROJECT_MEDIA = getOpInt("OP_PROJECT_MEDIA");
+	public static final int OP_ACTIVATE_VPN = getOpInt("OP_ACTIVATE_VPN");
 
 	// CyanogenMod (also seen on some Xperia ROMs!)
 	public static final int OP_WIFI_CHANGE = getOpInt("OP_WIFI_CHANGE");
