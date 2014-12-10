@@ -49,4 +49,8 @@
 	<string name="compatibility_mode_title">Compatibility mode (BETA)</string>
 	<string name="compatibility_mode_summary">Use an alternate AppOps implementation to improve compatibility on most devices. A launcher icon
 	    must be used. </string>
+	<string name="install_as_system_app">AppOpsXposed is not running as an Xposed module. Install as a system app (requires root)? 
+	    Device will reboot!</string>
+	<string name="no_xposed_no_root">AppOpsXposed is not running as an Xposed module, and root is not available.</string>
+	<string name="checking_root">Checking root&#8230;</string>
 </resources>

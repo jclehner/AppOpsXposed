@@ -21,8 +21,6 @@ package at.jclehner.appopsxposed;
 import java.io.File;
 import java.util.List;
 
-import eu.chainfire.libsuperuser.Shell.SU;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -32,123 +30,125 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Toast;
 import at.jclehner.appopsxposed.util.Util;
+import eu.chainfire.libsuperuser.Shell.SU;
 
-public class LauncherActivity extends Activity implements OnClickListener
+public class LauncherActivity extends Activity implements DialogInterface.OnClickListener
 {
 	private static final String TAG = "AOX";
 	private SharedPreferences mPrefs;
-
+	private Handler mHandler;
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		mHandler = new Handler();
+	}
+
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
 
 		if(!Util.isXposedModuleEnabled())
 		{
-			if(!isSystemApp() && SU.available())
+			if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT && !isSonyStockRom())
 			{
-				final DialogInterface.OnClickListener l = new DialogInterface.OnClickListener() {
+				launchAppOpsSummary();
+				return;
+			}
+			else if(!isSystemApp())
+			{
+				Toast.makeText(this, R.string.checking_root, Toast.LENGTH_SHORT).show();
 
-					@Override
-					public void onClick(DialogInterface dialog, int which)
+				new Thread() {
+					public void run()
 					{
-						if(which == DialogInterface.BUTTON_POSITIVE)
-						{
-							final String[] commands = {
-									"mount -o remount,rw /system",
-									"mv '" + getApplicationInfo().sourceDir.replace("'", "\\'") +
-											"' /system/priv-app/AppOpsXposed.apk",
-									"chmod 770 /system/priv-app/AppOpsXposed.apk",
-									"chown root:root /system/priv-app/AppOpsXposed.apk",
-									"reboot"
-							};
+						final AlertDialog.Builder ab = new AlertDialog.Builder(LauncherActivity.this);
 
-							for(String command : commands)
-							{
-								final List<String> out = SU.run(command);
-								if(!out.isEmpty())
-								{
-									Toast.makeText(LauncherActivity.this, command + "\n" + out.get(0),
-											Toast.LENGTH_LONG).show();
-									break;
-								}
-							}
+						if(SU.available())
+						{
+							ab.setMessage(R.string.install_as_system_app);
+							ab.setNegativeButton(android.R.string.no, LauncherActivity.this);
+							ab.setPositiveButton(android.R.string.yes, LauncherActivity.this);
 						}
 						else
 						{
-
+							ab.setMessage(R.string.no_xposed_no_root);
+							ab.setNegativeButton(android.R.string.ok, LauncherActivity.this);
 						}
+
+						mHandler.post(new Runnable() {
+							@Override
+							public void run()
+							{
+								ab.show();
+							}
+						});
 					}
-				};
-
-
-				final AlertDialog.Builder ab = new AlertDialog.Builder(this);
-				ab.setMessage("AppOpsXposed is not running as an Xposed module. " +
-						"Install as a system app (requires reboot)?");
-				ab.setNegativeButton(android.R.string.no, l);
-				ab.setPositiveButton(android.R.string.yes, l);
-
-				ab.show();
+				}.start();
 				return;
 			}
-			/*else
+			else
 			{
-				if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
-				{
-					Log.i(TAG, "Xposed Framework not installed, but running pre-KitKat Android");
-
-					if(isSonyStockRom())
-					{
-						Log.i(TAG, "Running Sony stock ROM");
-						addAppListFragment();
-						return;
-					}
-				}
-				else
-				{
-					setContentView(R.layout.launcher_info);
-					findViewById(R.id.btn_launch).setOnClickListener(this);
-					findViewById(R.id.btn_help).setOnClickListener(this);
-					((TextView) findViewById(R.id.info_text)).setText(getString(R.string.xposed_not_installed,
-							getString(R.string.app_ops_settings), getString(R.string.btn_launch)));
-
-					return;
-				}
-			}*/
+				launchAppOpsSummary(true);
+				return;
+			}
 		}
 
 		launchAppOpsSummary();
 	}
 
 	@Override
-	public void onClick(View v)
+	public void onClick(DialogInterface dialog, int which)
 	{
-		if(v.getId() == R.id.btn_launch)
-			launchAppOpsSummary();
-		else if(v.getId() == R.id.btn_help)
+		if(which == DialogInterface.BUTTON_POSITIVE)
 		{
-			final Uri uri = Uri.parse("http://repo.xposed.info/module/de.robv.android.xposed.installer");
-			final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-			startActivity(intent);
+			final String[] commands = {
+					"mount -o remount,rw /system",
+					"mv '" + getApplicationInfo().sourceDir.replace("'", "\\'") +
+							"' /system/priv-app/AppOpsXposed.apk",
+					"chmod 777 /system/priv-app/AppOpsXposed.apk",
+					"chown root:root /system/priv-app/AppOpsXposed.apk",
+					"reboot"
+			};
+
+			for(String command : commands)
+			{
+				final List<String> out = SU.run(command);
+				if(!out.isEmpty())
+				{
+					Log.i(TAG, "cmd: " + command + "\n---> " + out.get(0));
+					Toast.makeText(LauncherActivity.this, command + "\n" + out.get(0),
+							Toast.LENGTH_LONG).show();
+					break;
+				}
+			}
 		}
+		else if(which == DialogInterface.BUTTON_NEGATIVE)
+			finish();
 	}
 
-	private void launchAppOpsSummary()
+	private void launchAppOpsSummary() {
+		launchAppOpsSummary(mPrefs.getBoolean("compatibility_mode", false));
+	}
+
+	private void launchAppOpsSummary(boolean useOwnFragments)
 	{
 		Log.i(TAG, "Launching AppOps from launcher icon");
 
 		final Intent intent;
 
-		if(Util.isXposedModuleEnabled() && !mPrefs.getBoolean("compatibility_mode", false))
+		if(!useOwnFragments)
 		{
 			intent = new Intent();
 			intent.setPackage("com.android.settings");
@@ -162,12 +162,6 @@ public class LauncherActivity extends Activity implements OnClickListener
 
 		startActivity(intent);
 		finish();
-	}
-
-	private void addAppListFragment()
-	{
-		final AppListFragment f = AppListFragment.newInstance(false);
-		getFragmentManager().beginTransaction().replace(android.R.id.content, f).commit();
 	}
 
 	private boolean isSystemApp()
@@ -212,18 +206,5 @@ public class LauncherActivity extends Activity implements OnClickListener
 		}
 
 		return false;
-	}
-
-	private boolean isXposedInstalled()
-	{
-		try
-		{
-			getPackageManager().getApplicationInfo("de.robv.android.xposed.installer", 0);
-			return true;
-		}
-		catch(NameNotFoundException e)
-		{
-			return false;
-		}
 	}
 }
