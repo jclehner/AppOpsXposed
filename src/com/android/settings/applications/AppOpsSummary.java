@@ -18,12 +18,12 @@ package com.android.settings.applications;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import at.jclehner.appopsxposed.AppListFragment;
 import at.jclehner.appopsxposed.R;
+import at.jclehner.appopsxposed.SettingsActivity;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.ObjectWrapper;
 
@@ -140,6 +141,14 @@ public class AppOpsSummary extends Fragment {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 ((PreferenceActivity) getActivity()).startPreferenceFragment(AppListFragment.newInstance(true), true);
+                return true;
+            }
+        });
+        menu.add(R.string.settings).setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                getActivity().startActivity(new Intent(getActivity(), SettingsActivity.class));
                 return true;
             }
         });
