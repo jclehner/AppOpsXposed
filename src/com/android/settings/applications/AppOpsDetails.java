@@ -18,6 +18,7 @@ package com.android.settings.applications;
 
 import java.util.List;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -112,23 +113,25 @@ public class AppOpsDetails extends Fragment {
         Resources res = getActivity().getResources();
 
         mOperationsSection.removeAllViews();
+        boolean hasBootupSwitch = false;
         String lastPermGroup = "";
         for (AppOpsState.OpsTemplate tpl : AppOpsState.ALL_TEMPLATES) {
-            if (tpl == AppOpsState.BOOTUP_TEMPLATE && PreferenceManager.getDefaultSharedPreferences(
-                    getActivity()).getBoolean("use_hack_boot_completed", false)) {
-                // This prevents dual entries for OP_BOOT_COMPLETED (one in BOOTUP_TEMPLATE,
-                // the other one in DEVICE_TEMPLATE).
-                continue;
-            }
             List<AppOpsState.AppOpEntry> entries = mState.buildState(tpl,
                     mPackageInfo.applicationInfo.uid, mPackageInfo.packageName);
             for (final AppOpsState.AppOpEntry entry : entries) {
                 final OpEntryWrapper firstOp = entry.getOpEntry(0);
                 final View view = mInflater.inflate(R.layout.app_ops_details_item,
                         mOperationsSection, false);
-                mOperationsSection.addView(view);
                 String perm = AppOpsManagerWrapper.opToPermission(firstOp.getOp());
                 if (perm != null) {
+                    if (Manifest.permission.RECEIVE_BOOT_COMPLETED.equals(perm)) {
+                        if (!hasBootupSwitch) {
+                            hasBootupSwitch = true;
+                        } else {
+                            Log.i(TAG, "Skipping second bootup switch");
+                            continue;
+                        }
+                    }
                     try {
                         PermissionInfo pi = mPm.getPermissionInfo(perm, 0);
                         if (pi.group != null && !lastPermGroup.equals(pi.group)) {
@@ -158,6 +161,7 @@ public class AppOpsDetails extends Fragment {
                                 ? AppOpsManagerWrapper.MODE_ALLOWED : AppOpsManagerWrapper.MODE_IGNORED);
                     }
                 });
+                mOperationsSection.addView(view);
             }
         }
 
