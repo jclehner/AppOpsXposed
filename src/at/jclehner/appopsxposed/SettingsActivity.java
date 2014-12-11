@@ -19,6 +19,7 @@
 package at.jclehner.appopsxposed;
 
 
+import eu.chainfire.libsuperuser.Shell.SU;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
@@ -32,7 +33,6 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
@@ -40,13 +40,15 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.text.Html;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 import at.jclehner.appopsxposed.util.OpsLabelHelper;
 import at.jclehner.appopsxposed.util.Util;
-
-import com.android.settings.applications.AppOpsSummary;
 
 public class SettingsActivity extends Activity
 {
@@ -61,6 +63,43 @@ public class SettingsActivity extends Activity
 			getFragmentManager().beginTransaction().replace(android.R.id.content,
 					new SettingsFragment()).commit();
 		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		if(Util.isSystemApp(this))
+		{
+			menu.add(R.string.uninstall)
+					.setIcon(android.R.drawable.ic_menu_delete)
+					.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+						@Override
+						public boolean onMenuItemClick(MenuItem item)
+						{
+							if(!SU.available())
+							{
+								Toast.makeText(SettingsActivity.this,
+										R.string.toast_needs_root, Toast.LENGTH_SHORT).show();
+							}
+							else
+							{
+								final String[] commands = {
+										"mount -o remount,rw /system",
+										"rm /system/priv-app/AppOpsXposed.apk",
+										"reboot",
+								};
+
+								Util.runAsSu(commands);
+							}
+
+							return true;
+						}
+					})
+					.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		}
+
+		return true;
 	}
 
 	public static class SettingsFragment extends PreferenceFragment implements OnPreferenceChangeListener

@@ -26,9 +26,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -43,7 +41,7 @@ import eu.chainfire.libsuperuser.Shell.SU;
 
 public class LauncherActivity extends Activity implements DialogInterface.OnClickListener
 {
-	private static final String TAG = "AOX";
+	public static final String TAG = "AOX";
 	private SharedPreferences mPrefs;
 	private Handler mHandler;
 	@Override
@@ -66,7 +64,7 @@ public class LauncherActivity extends Activity implements DialogInterface.OnClic
 				launchAppOpsSummary();
 				return;
 			}
-			else if(!isSystemApp())
+			else if(!Util.isSystemApp(this))
 			{
 				Toast.makeText(this, R.string.checking_root, Toast.LENGTH_SHORT).show();
 
@@ -122,17 +120,7 @@ public class LauncherActivity extends Activity implements DialogInterface.OnClic
 					"reboot"
 			};
 
-			for(String command : commands)
-			{
-				final List<String> out = SU.run(command);
-				if(!out.isEmpty())
-				{
-					Log.i(TAG, "cmd: " + command + "\n---> " + out.get(0));
-					Toast.makeText(LauncherActivity.this, command + "\n" + out.get(0),
-							Toast.LENGTH_LONG).show();
-					break;
-				}
-			}
+			Util.runAsSu(commands);
 		}
 		else if(which == DialogInterface.BUTTON_NEGATIVE)
 			finish();
@@ -162,21 +150,6 @@ public class LauncherActivity extends Activity implements DialogInterface.OnClic
 
 		startActivity(intent);
 		finish();
-	}
-
-	private boolean isSystemApp()
-	{
-		try
-		{
-			final ApplicationInfo appInfo = getPackageManager().getApplicationInfo(getPackageName(), 0);
-			return 0 != (appInfo.flags & ApplicationInfo.FLAG_SYSTEM);
-		}
-		catch(NameNotFoundException e)
-		{
-			Log.w(TAG, e);
-		}
-
-		return false;
 	}
 
 	private boolean isSonyStockRom()

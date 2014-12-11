@@ -45,10 +45,13 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import at.jclehner.appopsxposed.AppOpsActivity;
 import at.jclehner.appopsxposed.AppOpsXposed;
+import at.jclehner.appopsxposed.LauncherActivity;
 import dalvik.system.DexFile;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
+import eu.chainfire.libsuperuser.Shell.SU;
 
 public final class Util
 {
@@ -261,6 +264,39 @@ public final class Util
 			return text.toString();
 
 		return Character.toUpperCase(text.charAt(0)) + text.subSequence(1, text.length()).toString();
+	}
+
+	public static boolean isSystemApp(Context context)
+	{
+		try
+		{
+			final ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(), 0);
+			return 0 != (appInfo.flags & ApplicationInfo.FLAG_SYSTEM);
+		}
+		catch(NameNotFoundException e)
+		{
+			Log.w(LauncherActivity.TAG, e);
+		}
+
+		return false;
+	}
+
+	public static boolean runAsSu(String[] commands)
+	{
+		boolean hasOutput = false;
+
+		for(String command : commands)
+		{
+			final List<String> out = SU.run(command);
+			if(!out.isEmpty())
+			{
+				Log.i("AOX", "cmd: " + command + "\n---> " + out.get(0));
+				hasOutput = true;
+				break;
+			}
+		}
+
+		return hasOutput;
 	}
 
 	@TargetApi(19)
