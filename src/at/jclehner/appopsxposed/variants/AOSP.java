@@ -73,7 +73,7 @@ public class AOSP extends ApkVariant
 	}
 
 	@Override
-	protected int getAppOpsHeaderIcon() {
-		return Res.appOpsPreferenceIcon;
+	protected int getDefaultAppOpsHeaderIcon() {
+		return ICON_WHITE;
 	}
 }

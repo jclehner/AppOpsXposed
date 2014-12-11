@@ -97,6 +97,10 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 		new AOSP() // must be the last entry!
 	};
 
+	public static int ICON_LAUNCHER = 0;
+	public static int ICON_WHITE = 1;
+	public static int ICON_BLACK = 2;
+
 	public static boolean isSettingsPackage(String packageName)
 	{
 		for(ApkVariant variant : VARIANTS)
@@ -175,8 +179,23 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 		return new String[] { "com.android.settings" };
 	}
 
-	protected int getAppOpsHeaderIcon() {
-		return Res.appOpsLauncherIcon;
+	protected final int getAppOpsHeaderIcon()
+	{
+		switch(Res.modPrefs.getInt("icon", getDefaultAppOpsHeaderIcon()))
+		{
+			case ICON_WHITE:
+				return Res.appOpsPreferenceIconWhite;
+
+			case ICON_BLACK:
+				return Res.appOpsPreferenceIconBlack;
+
+			default:
+				return Res.appOpsLauncherIcon;
+		}
+	}
+
+	protected int getDefaultAppOpsHeaderIcon() {
+		return ICON_LAUNCHER;
 	}
 
 	protected String getAppOpsTitle()

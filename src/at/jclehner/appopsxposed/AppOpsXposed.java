@@ -93,7 +93,8 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		if(!ApkVariant.isSettingsPackage(resparam.packageName))
 			return;
 
-		Res.appOpsPreferenceIcon = resparam.res.addResource(Res.modRes, R.drawable.ic_appops);
+		Res.appOpsPreferenceIconWhite = resparam.res.addResource(Res.modRes, R.drawable.ic_appops_white);
+		Res.appOpsPreferenceIconBlack = resparam.res.addResource(Res.modRes, R.drawable.ic_appops_black);
 		Res.appOpsLauncherIcon = resparam.res.addResource(Res.modRes, R.drawable.ic_launcher2);
 
 		final boolean useLayoutFix = SETTINGS_PACKAGE.equals(resparam.packageName) &&
