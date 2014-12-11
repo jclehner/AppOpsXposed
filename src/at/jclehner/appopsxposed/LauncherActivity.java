@@ -120,6 +120,7 @@ public class LauncherActivity extends Activity implements DialogInterface.OnClic
 					"reboot"
 			};
 
+			Toast.makeText(this, R.string.will_reboot, Toast.LENGTH_LONG).show();
 			Util.runAsSu(commands);
 		}
 		else if(which == DialogInterface.BUTTON_NEGATIVE)

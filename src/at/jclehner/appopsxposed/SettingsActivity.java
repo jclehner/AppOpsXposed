@@ -98,6 +98,8 @@ public class SettingsActivity extends Activity
 												"reboot",
 										};
 
+										Toast.makeText(SettingsActivity.this, R.string.will_reboot,
+												Toast.LENGTH_LONG).show();
 										Util.runAsSu(commands);
 									}
 								}
