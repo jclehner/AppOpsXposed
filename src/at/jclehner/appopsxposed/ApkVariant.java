@@ -97,9 +97,9 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 		new AOSP() // must be the last entry!
 	};
 
-	public static int ICON_LAUNCHER = 0;
-	public static int ICON_WHITE = 1;
-	public static int ICON_BLACK = 2;
+	public static final int ICON_LAUNCHER = 0;
+	public static final int ICON_WHITE = 1;
+	public static final int ICON_BLACK = 2;
 
 	public static boolean isSettingsPackage(String packageName)
 	{
