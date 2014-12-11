@@ -103,7 +103,7 @@ public class LG extends AOSP
 	}
 
 	@Override
-	protected int getAppOpsHeaderIcon() {
-		return Res.appOpsLauncherIcon;
+	protected int getDefaultAppOpsHeaderIcon() {
+		return ICON_LAUNCHER;
 	}
 }
