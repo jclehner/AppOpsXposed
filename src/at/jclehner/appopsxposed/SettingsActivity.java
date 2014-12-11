@@ -77,21 +77,33 @@ public class SettingsActivity extends Activity
 						@Override
 						public boolean onMenuItemClick(MenuItem item)
 						{
-							if(!SU.available())
-							{
-								Toast.makeText(SettingsActivity.this,
-										R.string.toast_needs_root, Toast.LENGTH_SHORT).show();
-							}
-							else
-							{
-								final String[] commands = {
-										"mount -o remount,rw /system",
-										"rm /system/priv-app/AppOpsXposed.apk",
-										"reboot",
-								};
+							final AlertDialog.Builder ab = new AlertDialog.Builder(SettingsActivity.this);
+							ab.setMessage(getString(R.string.uninstall) + "?");
+							ab.setNegativeButton(android.R.string.cancel, null);
+							ab.setPositiveButton(android.R.string.ok, new OnClickListener() {
 
-								Util.runAsSu(commands);
-							}
+								@Override
+								public void onClick(DialogInterface dialog, int which)
+								{
+									if(!SU.available())
+									{
+										Toast.makeText(SettingsActivity.this,
+												R.string.toast_needs_root, Toast.LENGTH_SHORT).show();
+									}
+									else
+									{
+										final String[] commands = {
+												"mount -o remount,rw /system",
+												"rm /system/priv-app/AppOpsXposed.apk",
+												"reboot",
+										};
+
+										Util.runAsSu(commands);
+									}
+								}
+							});
+
+							ab.show();
 
 							return true;
 						}
