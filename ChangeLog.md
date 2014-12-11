@@ -1,3 +1,10 @@
+### 1.22
+* AppOpsXposed now works without Xposed, by installing
+  as a system-app.
+* Add new ops for Lollipop (compatibility mode)
+* When enabled, use compatibility mode when launching
+  from settings app as well
+
 ### 1.21.1
 * Fix compatibility mode
 
