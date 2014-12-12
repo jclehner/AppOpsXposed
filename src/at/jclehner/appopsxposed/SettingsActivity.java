@@ -78,7 +78,7 @@ public class SettingsActivity extends Activity
 						public boolean onMenuItemClick(MenuItem item)
 						{
 							final AlertDialog.Builder ab = new AlertDialog.Builder(SettingsActivity.this);
-							ab.setMessage(getString(R.string.uninstall) + "?");
+							ab.setMessage(getString(R.string.uninstall) + "? " + getString(R.string.will_reboot));
 							ab.setNegativeButton(android.R.string.cancel, null);
 							ab.setPositiveButton(android.R.string.ok, new OnClickListener() {
 
