@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="at.jclehner.appopsxposed"
-    android:versionCode="12251"
-    android:versionName="1.23-BETA1">
+    android:versionCode="12252"
+    android:versionName="1.23-BETA2">
 
     <uses-sdk
         android:minSdkVersion="18"
@@ -47,18 +47,35 @@
         </activity>
 
         <activity
-            android:name=".LauncherActivity$Htc"
-            android:icon="@drawable/ic_launcher2"
+            android:name=".LauncherActivity$HtcDummy"
+            android:icon="@drawable/ic_appops_sense6"
+            android:label="AppOps (activity)"
             android:excludeFromRecents="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.htc.settings.category.PLUGIN_ENTRY" />
             </intent-filter>
 
-            <meta-data android:name="plugAnchorItem" android:value="personalize"/>
-            <meta-data android:name="plugAnchorShift" android:value="-1.0"/>
+            <meta-data android:name="plugAnchorItem" android:value="apps"/>
+            <meta-data android:name="plugAnchorShift" android:value="0"/>
             <meta-data android:name="plugLaunchType" android:value="activity"/>
-            <meta-data android:name="plugLaunchTarget" android:value="intent:#Intent;component=at.jclehner.appopsxposed/.LauncherActivity$Htc;end"/>
+            <meta-data android:name="plugLaunchTarget" android:value="intent:#Intent;component=at.jclehner.appopsxposed/.LauncherActivity;end"/>
+        </activity>
+
+        <activity
+            android:name=".LauncherActivity$HtcDummy2"
+            android:icon="@drawable/ic_appops_sense6"
+            android:label="AppOps (fragment)"
+            android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.htc.settings.category.PLUGIN_ENTRY" />
+            </intent-filter>
+
+            <meta-data android:name="plugAnchorItem" android:value="apps"/>
+            <meta-data android:name="plugAnchorShift" android:value="0"/>
+            <meta-data android:name="plugLaunchType" android:value="fragment"/>
+            <meta-data android:name="plugLaunchTarget" android:value="com.android.settings.applications.AppOpsSummary"/>
         </activity>
 
         <activity-alias

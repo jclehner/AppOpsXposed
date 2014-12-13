@@ -22,6 +22,7 @@ import java.io.File;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.TaskStackBuilder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,7 +39,8 @@ import eu.chainfire.libsuperuser.Shell.SU;
 
 public class LauncherActivity extends Activity implements DialogInterface.OnClickListener
 {
-	public static class Htc extends LauncherActivity {}
+	public static class HtcDummy {}
+	public static class HtcDummy2 {}
 
 	public static final String TAG = "AOX";
 	private SharedPreferences mPrefs;
@@ -142,19 +144,23 @@ public class LauncherActivity extends Activity implements DialogInterface.OnClic
 	{
 		Log.i(TAG, "Launching AppOps from launcher icon");
 
-		final Intent intent;
+		final TaskStackBuilder tsb = TaskStackBuilder.create(this);
 
 		if(!useOwnFragments)
 		{
-			intent = onCreateSettingsIntent();
+			final Intent intent = onCreateSettingsIntent();
 			intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_FRAGMENT);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+
+			tsb.addNextIntent(onCreateSettingsIntent());
+			tsb.addNextIntent(intent);
 		}
 		else
-			intent = Util.getCompatibilityModeIntent(null);
+			tsb.addNextIntent(Util.getCompatibilityModeIntent(null));
 
-		startActivity(intent);
+		tsb.startActivities();
 		finish();
 	}
 
