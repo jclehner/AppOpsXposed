@@ -46,6 +46,21 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".LauncherActivity$Htc"
+            android:icon="@drawable/ic_launcher2"
+            android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.htc.settings.category.PLUGIN_ENTRY" />
+            </intent-filter>
+
+            <meta-data android:name="plugAnchorItem" android:value="personalize"/>
+            <meta-data android:name="plugAnchorShift" android:value="-1.0"/>
+            <meta-data android:name="plugLaunchType" android:value="activity"/>
+            <meta-data android:name="plugLaunchTarget" android:value="intent:#Intent;component=at.jclehner.appopsxposed/.LauncherActivity$Htc;end"/>
+        </activity>
+
         <activity-alias
             android:enabled="true"
             android:name=".LauncherActivity-Icon"

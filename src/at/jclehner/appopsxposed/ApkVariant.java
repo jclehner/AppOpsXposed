@@ -26,9 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.android.settings.applications.AppOpsCategory;
-
-import android.app.AppOpsManager;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.TaskStackBuilder;
 import android.content.Context;
@@ -317,7 +315,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 	}
 
 	private static final String[] VALID_FRAGMENTS = {
-		AppOpsXposed.APP_OPS_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, HTC.APP_OPS_DETAILS_FRAGMENT
+		AppOpsXposed.APP_OPS_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT
 	};
 
 	protected static void hookIsValidFragment(Class<?> clazz) throws Throwable
@@ -350,7 +348,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 			// so we ignore a NoSuchMethodError in that case.
 
 			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-				XposedBridge.log(e);
+				XposedBridge.log("No isValidFragment in " + clazz.getName());
 		}
 	}
 
@@ -431,11 +429,11 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 							public boolean onMenuItemClick(MenuItem item)
 							{
 								final Fragment f = (Fragment) param.thisObject;
-								final PreferenceActivity pa = (PreferenceActivity) f.getActivity();
+								final Activity activity = f.getActivity();
 
 								debug("onMenuItemClick:\n" +
-										"  intent=" + pa.getIntent() + "\n" +
-										"  extras=" + pa.getIntent().getExtras() + "\n" +
+										"  intent=" + activity.getIntent() + "\n" +
+										"  extras=" + activity.getIntent().getExtras() + "\n" +
 										"  args=" + f.getArguments());
 
 								final Bundle args = f.getArguments() == null ? new Bundle() : f.getArguments();
@@ -445,7 +443,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 								{
 									try
 									{
-										pkg = pa.getIntent().getData().getSchemeSpecificPart();
+										pkg = activity.getIntent().getData().getSchemeSpecificPart();
 										log("Package obtained from Intent: " + pkg);
 									}
 									catch(NullPointerException e)
@@ -465,16 +463,16 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 								if(pkg == null || pkg.isEmpty())
 								{
 									log("No package in intent or args:\n" +
-											"  intent=" + pa.getIntent() + "\n" +
-											"  extras=" + pa.getIntent().getExtras() + "\n" +
+											"  intent=" + activity.getIntent() + "\n" +
+											"  extras=" + activity.getIntent().getExtras() + "\n" +
 											"  args=" + args);
-									Toast.makeText(pa, "Error!", Toast.LENGTH_SHORT).show();
+									Toast.makeText(activity, "Error!", Toast.LENGTH_SHORT).show();
 									return true;
 								}
 
 								if(!XUtils.isCompatibilityModeEnabled())
 								{
-									if("android.settings.APPLICATION_DETAILS_SETTINGS".equals(pa.getIntent().getAction()))
+									if("android.settings.APPLICATION_DETAILS_SETTINGS".equals(activity.getIntent().getAction()))
 									{
 										debug("Launching AppOps using startActivities()");
 
@@ -483,7 +481,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 										intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS, args);
 										intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_TITLE, Res.getModString(R.string.app_ops_settings));
 
-										final TaskStackBuilder tsb = TaskStackBuilder.create(pa);
+										final TaskStackBuilder tsb = TaskStackBuilder.create(activity);
 										tsb.addNextIntent(intent);
 
 										tsb.startActivities();
@@ -492,14 +490,18 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 									{
 										debug("Launching AppOps using startPreferencePanel()");
 
-										// This method only works when "App info" was opened from "Apps". When the launcher icon
-										// onto "App info", the method above is used.
-										pa.startPreferencePanel(getAppOpsDetailsFragmentName(), args, 0,
-												Res.getModString(R.string.app_ops_settings), f, 0);
+										// Using reflection because on HTC Sense ROMs, our Activity is not
+										// a PreferenceActivity, but an HtcPreferenceActivity (which does *not*
+										// inherit from the former).
+
+										XposedHelpers.callMethod(activity, "startPreferencePanel", new Class<?>[] {
+												String.class, Bundle.class, int.class, CharSequence.class,
+												Fragment.class, int.class }, getAppOpsDetailsFragmentName(),
+												args, 0, Res.getModString(R.string.app_ops_settings), f, 0);
 									}
 								}
 								else
-									pa.startActivity(Util.getCompatibilityModeIntent(pkg));
+									activity.startActivity(Util.getCompatibilityModeIntent(pkg));
 
 								return true;
 							}

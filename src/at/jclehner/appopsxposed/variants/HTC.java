@@ -19,47 +19,21 @@
 
 package at.jclehner.appopsxposed.variants;
 
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-
-import java.lang.reflect.Method;
-
 import android.content.Context;
-import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
 import at.jclehner.appopsxposed.ApkVariant;
-import at.jclehner.appopsxposed.AppOpsXposed;
-import at.jclehner.appopsxposed.R;
-import at.jclehner.appopsxposed.util.Res;
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
-import de.robv.android.xposed.XC_MethodHookRecursive;
-import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 
 /*
- * The HTC Sense framework means trouble, as many classes are heavily modified (and often
- * use new names, prefixed with Htc*). HTC also made changes to AppOpsDetails, which
- * interestingly are located in another class - which extends AppOpsDetails - called
- * "com.android.settings.framework.activity.application.appops.HtcAppOpsDetails".
- *
- * HtcAppOpsDetails uses HtcCheckBox instead of the switch found on AOSP, but the state
- * is apparently lost when scrolling off-screen (which usually isn't an issue when an
- * app has only few permissions).
+ * HTC Sense offers a surprisingly easy method to add items to its
+ * "Settings" app (kudos to Mikanoshi@XDA), by using meta-data in
+ * AndroidManifest.xml.
  *
  */
 public class HTC extends ApkVariant
 {
 	public static final String APP_OPS_DETAILS_FRAGMENT =
 			"com.android.settings.framework.activity.application.appops.HtcAppOpsDetails";
-
-	private Class<?> mHtcHeaderClass;
-	private Class<?> mHtcWrapHeaderClass;
-	private Class<?> mHtcWrapHeaderListClass;
-
-	private Method mWrapHeaderListSizeMethod;
-	private Method mAddWrapHeaderMethod;
 
 	@Override
 	protected String manufacturer() {
@@ -72,116 +46,8 @@ public class HTC extends ApkVariant
 	}
 
 	@Override
-	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
-	{
-		if(true)
-		{
-			try
-			{
-				final Class<?> fragmentClass = lpparam.classLoader.loadClass(
-						APP_OPS_DETAILS_FRAGMENT);
-
-				findAndHookMethod(fragmentClass, "onItemClick",
-						lpparam.classLoader.loadClass("com.htc.widget.HtcAdapterView"), View.class,
-						int.class, long.class, new XC_MethodHook() {
-
-							@Override
-							protected void beforeHookedMethod(MethodHookParam param) throws Throwable
-							{
-								debug(">> HtcAppOpsDetails.onItemClick()\n" +
-									"  view     = " + param.args[1] + "\n" +
-									"  position = " + param.args[2]);
-							}
-				});
-
-				final Class<?> adapterClass = lpparam.classLoader.loadClass(
-						APP_OPS_DETAILS_FRAGMENT + "$AppOpsDetailItemListAdapter");
-
-				findAndHookMethod(adapterClass, "getView", int.class, View.class, ViewGroup.class,
-						new XC_MethodHook() {
-
-							@Override
-							protected void beforeHookedMethod(MethodHookParam param) throws Throwable
-							{
-								debug(">> AppOpsDetailItemListAdapter.getView()\n" +
-										"  position   = " + param.args[0] + "\n" +
-										"  convertView= " + param.args[1] + "\n" +
-										"  parent     = " + param.args[2]);
-							}
-
-							@Override
-							protected void afterHookedMethod(MethodHookParam param) throws Throwable
-							{
-								debug("  return " + param.getResult() + "\n" +
-										"<< AppOpsDetailItemListAdapter.getView()");
-							}
-				});
-
-				findAndHookMethod(adapterClass, "newView", ViewGroup.class,
-						new XC_MethodHook() {
-
-							@Override
-							protected void beforeHookedMethod(MethodHookParam param) throws Throwable
-							{
-								debug(">> AppOpsDetailItemListAdapter.newView()\n" +
-										"  parent     = " + param.args[0]);
-							}
-
-							@Override
-							protected void afterHookedMethod(MethodHookParam param) throws Throwable
-							{
-								debug("  return " + param.getResult() + "\n" +
-										"<< AppOpsDetailItemListAdapter.newView()");
-							}
-				});
-
-				findAndHookMethod(adapterClass, "bindView", View.class,
-						new XC_MethodHook() {
-
-							@Override
-							protected void beforeHookedMethod(MethodHookParam param) throws Throwable
-							{
-								debug(">> AppOpsDetailItemListAdapter.bindView()\n" +
-										"  view     = " + param.args[0]);
-							}
-				});
-
-				final Class<?> listenerClass = lpparam.classLoader.loadClass(
-						APP_OPS_DETAILS_FRAGMENT + "$AppOpsDetailItemListAdapter$1");
-
-				findAndHookMethod(listenerClass, "onCheckedChanged", lpparam.classLoader.loadClass("com.htc.widget.HtcCompoundButton"),
-						boolean.class, new XC_MethodHook() {
-							@Override
-							protected void beforeHookedMethod(MethodHookParam param) throws Throwable
-							{
-								debug(">> AppOpsDetailItemListAdapter$1.onCheckedChanged()\n" +
-										"  checked=" + param.args[1]);
-							}
-				});
-
-				lpparam.classLoader.loadClass(APP_OPS_DETAILS_FRAGMENT);
-				debug(APP_OPS_DETAILS_FRAGMENT + " exists");
-			}
-			catch(Throwable t)
-			{
-				debug(t);
-			}
-
-		}
-
+	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable {
 		addAppOpsToAppInfo(lpparam);
-
-		try
-		{
-			if(Res.modPrefs.getBoolean("htc_use_google_app_ops_category", false))
-				hookStartPreferencePanel(lpparam);
-
-			addHtcAppOpsHeader(lpparam);
-		}
-		catch(Throwable t)
-		{
-			log(t);
-		}
 	}
 
 	@Override
@@ -199,91 +65,9 @@ public class HTC extends ApkVariant
 	}
 
 	@Override
-	protected Object onCreateAppOpsHeader(Context context, int addAfterHeaderId) {
-		return onCreateHtcHeader();
-	}
-
-	@Override
-	protected long getIdFromHeader(Object header) {
-		return XposedHelpers.getLongField(header, "id");
-	}
-
-	@Override
-	protected String getAppOpsDetailsFragmentName() {
-		return APP_OPS_DETAILS_FRAGMENT;
-	}
-
-	private Object onCreateHtcHeader()
+	protected String getAppOpsDetailsFragmentName()
 	{
-		final Object header = XposedHelpers.newInstance(mHtcHeaderClass);
-		XposedHelpers.setObjectField(header, "fragment", AppOpsXposed.APP_OPS_FRAGMENT);
-		XposedHelpers.setObjectField(header, "title", getAppOpsTitle());
-		XposedHelpers.setIntField(header, "iconRes", getAppOpsHeaderIcon());
-		XposedHelpers.setLongField(header, "id", R.id.app_ops_settings);
-
-		return header;
-	}
-
-	private Object onCreateHtcWrapHeader()
-	{
-		final Object wrapHeader = XposedHelpers.newInstance(mHtcWrapHeaderClass);
-		XposedHelpers.setObjectField(wrapHeader, "info", onCreateHtcHeader());
-		XposedHelpers.setBooleanField(wrapHeader, "hide", false);
-
-		return wrapHeader;
-	}
-
-	private void hookStartPreferencePanel(LoadPackageParam lpparam) throws Throwable
-	{
-		XposedHelpers.findAndHookMethod("com.htc.preference.HtcPreferenceActivity", lpparam.classLoader,
-				"startPreferencePanel", String.class, Bundle.class, CharSequence.class, int.class,
-				new XC_MethodHook() {
-
-					@Override
-					protected void beforeHookedMethod(MethodHookParam param) throws Throwable
-					{
-						if(((String) param.args[0]).endsWith(".HtcAppOpsDetails"))
-						{
-							debug("Rewriting fragment name for HtcPreferenceActivity.startPreferencePanel");
-							param.args[0] = AppOpsXposed.APP_OPS_DETAILS_FRAGMENT;
-						}
-					}
-		});
-	}
-
-	private void addHtcAppOpsHeader(LoadPackageParam lpparam) throws Throwable
-	{
-		final Class<?> htcGenericEntryProviderClass = lpparam.classLoader.loadClass(
-				"com.android.settings.framework.activity.HtcGenericEntryProvider");
-
-		mHtcHeaderClass = lpparam.classLoader.loadClass("com.htc.preference.HtcPreferenceActivity$Header");
-		mHtcWrapHeaderClass = lpparam.classLoader.loadClass("com.android.settings.framework.activity.HtcWrapHeader");
-		mHtcWrapHeaderListClass = lpparam.classLoader.loadClass("com.android.settings.framework.activity.HtcWrapHeaderList");
-
-		mWrapHeaderListSizeMethod = mHtcWrapHeaderListClass.getMethod("size");
-		mAddWrapHeaderMethod = XposedHelpers.findMethodExact(htcGenericEntryProviderClass, "addWrapHeader",
-				mHtcWrapHeaderClass, int.class, mHtcWrapHeaderListClass, boolean.class);
-
-		XposedHelpers.findAndHookMethod(htcGenericEntryProviderClass,
-				"onLoadEntryList", mHtcWrapHeaderListClass, new XC_MethodHook() {
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) throws Throwable
-					{
-						final int size = (Integer) mWrapHeaderListSizeMethod.invoke(param.args[0]);
-						final Object header = onCreateHtcWrapHeader();
-
-						debug("onLoadEntryList: size=" + size);
-
-						mAddWrapHeaderMethod.invoke(param.thisObject, param.args[0], header, size + 1, true);
-					}
-		});
-
-		hookLoadHeadersFromResource(lpparam, "com.android.settings.Settings", new XC_MethodHook() {
-
-			protected void afterHookedMethod(MethodHookParam param) throws Throwable
-			{
-				debug("loadHeadersFromResource: xmlResId=" + param.args[0]);
-			}
-		});
+		// TODO: use HtcAppOpsDetails if available?
+		return super.getAppOpsDetailsFragmentName();
 	}
 }

@@ -19,7 +19,6 @@
 package at.jclehner.appopsxposed;
 
 import java.io.File;
-import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -27,20 +26,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 import at.jclehner.appopsxposed.util.Util;
 import eu.chainfire.libsuperuser.Shell.SU;
 
 public class LauncherActivity extends Activity implements DialogInterface.OnClickListener
 {
+	public static class Htc extends LauncherActivity {}
+
 	public static final String TAG = "AOX";
 	private SharedPreferences mPrefs;
 	private Handler mHandler;
@@ -127,6 +126,14 @@ public class LauncherActivity extends Activity implements DialogInterface.OnClic
 			finish();
 	}
 
+	protected Intent onCreateSettingsIntent()
+	{
+		final Intent intent = new Intent();
+		intent.setPackage("com.android.settings");
+		intent.setAction("android.settings.SETTINGS");
+		return intent;
+	}
+
 	private void launchAppOpsSummary() {
 		launchAppOpsSummary(mPrefs.getBoolean("compatibility_mode", false));
 	}
@@ -139,9 +146,7 @@ public class LauncherActivity extends Activity implements DialogInterface.OnClic
 
 		if(!useOwnFragments)
 		{
-			intent = new Intent();
-			intent.setPackage("com.android.settings");
-			intent.setAction("android.settings.SETTINGS");
+			intent = onCreateSettingsIntent();
 			intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_FRAGMENT);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
