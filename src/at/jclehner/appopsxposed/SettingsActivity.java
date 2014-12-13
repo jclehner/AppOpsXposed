@@ -167,11 +167,22 @@ public class SettingsActivity extends Activity
 			}
 			else if("compatibility_mode".equals(preference.getKey()))
 			{
-				if(((Boolean) newValue) && !mPrefs.getBoolean("show_launcher_icon", true))
+				final boolean useCompatibilityMode = (Boolean) newValue;
+
+				if(useCompatibilityMode && !mPrefs.getBoolean("show_launcher_icon", true))
 				{
 					final CheckBoxPreference p = (CheckBoxPreference) findPreference("show_launcher_icon");
 					p.setChecked(true);
 				}
+
+				final PackageManager pm = getActivity().getPackageManager();
+				pm.setComponentEnabledSetting(new ComponentName(getActivity(), "at.jclehner.appopsxposed.LauncherActivity$HtcActivity"),
+						useCompatibilityMode ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+						PackageManager.DONT_KILL_APP);
+
+				pm.setComponentEnabledSetting(new ComponentName(getActivity(), "at.jclehner.appopsxposed.LauncherActivity$HtcFragment"),
+						useCompatibilityMode ? PackageManager.COMPONENT_ENABLED_STATE_DISABLED : PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+						PackageManager.DONT_KILL_APP);
 			}
 			else if("show_launcher_icon".equals(preference.getKey()))
 			{

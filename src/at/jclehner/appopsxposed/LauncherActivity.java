@@ -39,8 +39,8 @@ import eu.chainfire.libsuperuser.Shell.SU;
 
 public class LauncherActivity extends Activity implements DialogInterface.OnClickListener
 {
-	public static class HtcDummy {}
-	public static class HtcDummy2 {}
+	public static class HtcActivity {}
+	public static class HtcFragment {}
 
 	public static final String TAG = "AOX";
 	private SharedPreferences mPrefs;
@@ -153,8 +153,7 @@ public class LauncherActivity extends Activity implements DialogInterface.OnClic
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-
-			tsb.addNextIntent(onCreateSettingsIntent());
+			//tsb.addNextIntent(onCreateSettingsIntent());
 			tsb.addNextIntent(intent);
 		}
 		else

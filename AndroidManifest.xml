@@ -47,10 +47,11 @@
         </activity>
 
         <activity
-            android:name=".LauncherActivity$HtcDummy"
-            android:icon="@drawable/ic_appops_sense6"
-            android:label="AppOps (activity)"
-            android:excludeFromRecents="true">
+            android:name=".LauncherActivity$HtcActivity"
+            android:icon="@drawable/ic_appops_sense"
+            android:label="@string/app_ops_settings"
+            android:excludeFromRecents="true"
+            android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.htc.settings.category.PLUGIN_ENTRY" />
@@ -63,10 +64,11 @@
         </activity>
 
         <activity
-            android:name=".LauncherActivity$HtcDummy2"
-            android:icon="@drawable/ic_appops_sense6"
-            android:label="AppOps (fragment)"
-            android:excludeFromRecents="true">
+            android:name=".LauncherActivity$HtcFragment"
+            android:icon="@drawable/ic_appops_sense"
+            android:label="@string/app_ops_settings"
+            android:excludeFromRecents="true"
+            android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.htc.settings.category.PLUGIN_ENTRY" />
