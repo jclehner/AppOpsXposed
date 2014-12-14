@@ -18,7 +18,6 @@
 
 package at.jclehner.appopsxposed.util;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -45,9 +44,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import at.jclehner.appopsxposed.AppOpsActivity;
-import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.LauncherActivity;
 import dalvik.system.DexFile;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
@@ -177,13 +174,13 @@ public final class Util
 		dumpViewHierarchyInternal(v, 0);
 	}
 
-	public static Set<String> getClassList(ApplicationInfo appInfo, String packageName, boolean getSubPackages)
+	public static Set<String> getClassList(String apkFile, String packageName, boolean getSubPackages)
 	{
 		final Enumeration<String> entries;
 		DexFile df = null;
 		try
 		{
-			df = new DexFile(appInfo.sourceDir);
+			df = new DexFile(apkFile);
 			entries = df.entries();
 		}
 		catch(IOException e)
@@ -193,12 +190,7 @@ public final class Util
 		}
 		finally
 		{
-			try {
-				if(df != null)
-					df.close();
-			} catch(IOException e) {
-				// ignore
-			}
+			Util.closeQuietly(df);
 		}
 
 		final Set<String> classes = new HashSet<String>();
@@ -231,7 +223,7 @@ public final class Util
 		if(lpparam.appInfo == null)
 			return null;
 
-		return getClassList(lpparam.appInfo, packageName, getSubPackages);
+		return getClassList(lpparam.appInfo.sourceDir, packageName, getSubPackages);
 	}
 
 	private static void dumpViewHierarchyInternal(View view, int level)
@@ -322,6 +314,19 @@ public final class Util
 		return -1;
 	}
 
+	public static void closeQuietly(DexFile df)
+	{
+		try
+		{
+			if(df != null)
+				df.close();
+		}
+		catch(IOException e)
+		{
+			// ignore
+		}
+	}
+
 	public static class StringList
 	{
 		private final List<CharSequence> mList = new ArrayList<CharSequence>();
@@ -350,18 +355,6 @@ public final class Util
 			return sb.toString();
 		}
 
-	}
-
-	private static void closeQuietly(Closeable closeable)
-	{
-		try
-		{
-			closeable.close();
-		}
-		catch(IOException e)
-		{
-			// ignore
-		}
 	}
 
 	private Util() {}

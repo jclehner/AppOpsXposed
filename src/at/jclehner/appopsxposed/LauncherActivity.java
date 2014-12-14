@@ -153,8 +153,8 @@ public class LauncherActivity extends Activity implements DialogInterface.OnClic
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-			//tsb.addNextIntent(onCreateSettingsIntent());
 			tsb.addNextIntent(intent);
+			//tsb.addNextIntent(onCreateSettingsIntent());
 		}
 		else
 			tsb.addNextIntent(Util.getCompatibilityModeIntent(null));

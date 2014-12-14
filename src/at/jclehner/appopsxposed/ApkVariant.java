@@ -422,7 +422,8 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 						final Menu menu = (Menu) param.args[0];
 						final MenuItem item = menu.add(getAppOpsTitle());
 						item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-						item.setIcon(Res.modRes.getDrawable(R.drawable.ic_launcher2));
+						item.setIcon(getAppOpsHeaderIcon());
+						//item.setIcon(Res.modRes.getDrawable(R.drawable.ic_launcher2));
 						item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
 							@Override
@@ -650,26 +651,13 @@ class ClassCheckerWithApk implements ApkVariant.ClassChecker
 {
 	private final Set<String> mClassSet;
 
-	public ClassCheckerWithApk(String apkFile)
-	{
-		mClassSet = new HashSet<String>();
-
-		try
-		{
-			final Enumeration<String> classes = new DexFile(apkFile).entries();
-			while(classes.hasMoreElements())
-				mClassSet.add(classes.nextElement());
-
-		}
-		catch(IOException e)
-		{
-			Util.log(e);
-		}
+	public ClassCheckerWithApk(String apkFile) {
+		mClassSet = Util.getClassList(apkFile, null, true);
 	}
 
 	@Override
 	public boolean exists(String className) {
-		return mClassSet.contains(className);
+		return mClassSet != null && mClassSet.contains(className);
 	}
 }
 
