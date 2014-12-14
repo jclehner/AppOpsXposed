@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="at.jclehner.appopsxposed"
-    android:versionCode="12252"
-    android:versionName="1.23-BETA2">
+    android:versionCode="12253"
+    android:versionName="1.23-BETA3">
 
     <uses-sdk
         android:minSdkVersion="18"
