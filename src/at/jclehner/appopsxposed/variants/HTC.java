@@ -21,6 +21,10 @@ package at.jclehner.appopsxposed.variants;
 
 import android.content.Context;
 import at.jclehner.appopsxposed.ApkVariant;
+import at.jclehner.appopsxposed.AppOpsXposed;
+import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 
@@ -46,8 +50,10 @@ public class HTC extends ApkVariant
 	}
 
 	@Override
-	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable {
+	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
+	{
 		addAppOpsToAppInfo(lpparam);
+		fixLaunchTarget(lpparam);
 	}
 
 	@Override
@@ -69,5 +75,36 @@ public class HTC extends ApkVariant
 	{
 		// TODO: use HtcAppOpsDetails if available?
 		return super.getAppOpsDetailsFragmentName();
+	}
+
+	private void fixLaunchTarget(LoadPackageParam lpparam) throws ClassNotFoundException
+	{
+		try
+		{
+			XposedBridge.hookAllMethods(lpparam.classLoader.loadClass(
+					"com.android.settings.framework.core.firstpage.plugin.HtcPluginMetadata"),
+					"fillHeaderLaunchTarget", new XC_MethodHook() {
+
+						@Override
+						protected void afterHookedMethod(MethodHookParam param) throws Throwable
+						{
+							try
+							{
+								final Object header = XposedHelpers.getObjectField(param.args[0], "info");
+								if(AppOpsXposed.APP_OPS_FRAGMENT.equals(XposedHelpers.getObjectField(header, "fragment")))
+									XposedHelpers.setObjectField(header, "fragmentArguments", null);
+							}
+							catch(Throwable t)
+							{
+								debug(t);
+							}
+
+						}
+			});
+		}
+		catch(ClassNotFoundException e)
+		{
+			debug(e);
+		}
 	}
 }
