@@ -98,6 +98,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 	public static final int ICON_LAUNCHER = 0;
 	public static final int ICON_WHITE = 1;
 	public static final int ICON_BLACK = 2;
+	public static final int ICON_SENSE = 3;
 
 	public static boolean isSettingsPackage(String packageName)
 	{
@@ -186,6 +187,9 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 
 			case ICON_BLACK:
 				return Res.appOpsPreferenceIconBlack;
+				
+			case ICON_SENSE:
+				return Res.appOpsPreferenceIconSense;
 
 			default:
 				return Res.appOpsLauncherIcon;
