@@ -19,7 +19,13 @@
 
 package at.jclehner.appopsxposed.variants;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import at.jclehner.appopsxposed.ApkVariant;
 import at.jclehner.appopsxposed.AppOpsXposed;
 import de.robv.android.xposed.XC_MethodHook;
@@ -81,30 +87,58 @@ public class HTC extends ApkVariant
 	{
 		try
 		{
-			XposedBridge.hookAllMethods(lpparam.classLoader.loadClass(
-					"com.android.settings.framework.core.firstpage.plugin.HtcPluginMetadata"),
-					"fillHeaderLaunchTarget", new XC_MethodHook() {
+			XposedHelpers.findAndHookMethod("com.android.settings.framework.content.plugin.HtcPluginMetadata", lpparam.classLoader,
+					"fillLaunchTarget", "com.htc.preference.HtcPreferenceActivity.Header", ActivityInfo.class, new XC_MethodHook() {
 
-						@Override
-						protected void afterHookedMethod(MethodHookParam param) throws Throwable
+					@Override
+					protected void afterHookedMethod(MethodHookParam param) throws Throwable
+					{
+						try
 						{
-							try
+							Object header = param.args[0];
+							if(AppOpsXposed.APP_OPS_FRAGMENT.equals(XposedHelpers.getObjectField(header, "fragment")))
 							{
-								final Object header = XposedHelpers.getObjectField(param.args[0], "info");
-								if(AppOpsXposed.APP_OPS_FRAGMENT.equals(XposedHelpers.getObjectField(header, "fragment")))
-									XposedHelpers.setObjectField(header, "fragmentArguments", null);
+								Bundle fragmentArguments = new Bundle();
+								fragmentArguments.putString("android.intent.extra.PACKAGE_NAME", AppOpsXposed.SETTINGS_PACKAGE);
+								XposedHelpers.setObjectField(header, "fragmentArguments", fragmentArguments);
 							}
-							catch(Throwable t)
-							{
-								debug(t);
-							}
-
 						}
+						catch(Throwable t)
+						{
+							debug(t);
+						}
+					}
+			});
+			
+			XposedHelpers.findAndHookMethod(AppOpsXposed.APP_OPS_FRAGMENT, lpparam.classLoader,
+					"onCreateView", LayoutInflater.class, ViewGroup.class, Bundle.class, new XC_MethodHook() {
+
+					@Override
+					protected void afterHookedMethod(MethodHookParam param) throws Throwable
+					{
+						try
+						{
+							Object mHandlerWrapper = XposedHelpers.callMethod(param.thisObject, "getActivityHandlerWrapper");
+							if (mHandlerWrapper != null) {
+								Activity act = ((Fragment) param.thisObject).getActivity();
+								XposedHelpers.callMethod(mHandlerWrapper, "setTitle", act.getResources().getIdentifier("app_ops_settings", "string", AppOpsXposed.SETTINGS_PACKAGE));
+							}
+						}
+						catch(Throwable t)
+						{
+							debug(t);
+						}
+					}
 			});
 		}
-		catch(ClassNotFoundException e)
+		catch(Throwable t)
 		{
-			debug(e);
+			debug(t);
 		}
+	}
+	
+	@Override
+	protected int getDefaultAppOpsHeaderIcon() {
+		return ICON_SENSE;
 	}
 }
