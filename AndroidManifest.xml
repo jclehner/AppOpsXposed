@@ -30,7 +30,8 @@
 
         <activity
             android:name=".LauncherActivity"
-            android:label="AppOpsXposed" />
+            android:label="AppOpsXposed"
+            android:configChanges="orientation|screenSize" />
 
         <activity
             android:name=".AppOpsActivity"

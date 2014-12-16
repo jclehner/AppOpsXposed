@@ -20,42 +20,134 @@ package at.jclehner.appopsxposed;
 
 import java.io.File;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.TaskStackBuilder;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.TextView;
 import android.widget.Toast;
 import at.jclehner.appopsxposed.util.Util;
 import eu.chainfire.libsuperuser.Shell.SU;
 
-public class LauncherActivity extends Activity implements DialogInterface.OnClickListener
+public class LauncherActivity extends Activity
 {
 	public static class HtcActivity {}
 	public static class HtcFragment {}
 
+	public static class ThisIsNotXposedFragment extends DialogFragment implements
+			OnClickListener, OnCheckedChangeListener
+	{
+		static ThisIsNotXposedFragment newInstance(boolean hasRoot, boolean isFirstDisplay)
+		{
+			final ThisIsNotXposedFragment f = new ThisIsNotXposedFragment();
+			final Bundle args = new Bundle();
+			args.putBoolean("has_root", hasRoot);
+			args.putBoolean("is_first_display", isFirstDisplay);
+			f.setArguments(args);
+			return f;
+		}
+
+		private boolean mDontShowAgain = false;
+
+		@SuppressLint("InflateParams")
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState)
+		{
+			final AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
+			if(getArguments().getBoolean("has_root"))
+			{
+				ab.setMessage(R.string.install_as_system_app);
+				ab.setNegativeButton(android.R.string.no, this);
+				ab.setPositiveButton(android.R.string.yes, this);
+			}
+			else
+			{
+				ab.setMessage(R.string.no_xposed_no_root);
+				ab.setNegativeButton(android.R.string.ok, this);
+			}
+
+			if(!getArguments().getBoolean("is_first_display"))
+			{
+				final View v = getActivity().getLayoutInflater().inflate(
+						R.layout.checkable_text, null);
+
+				((TextView) v.findViewById(android.R.id.text1)).setText(R.string.dont_show_again);
+				((CompoundButton) v.findViewById(android.R.id.checkbox)).setOnCheckedChangeListener(this);
+
+				ab.setView(v);
+			}
+
+			return ab.create();
+		}
+
+		@Override
+		public void onClick(DialogInterface dialog, int which)
+		{
+			if(which == DialogInterface.BUTTON_POSITIVE)
+			{
+				final String apk = getActivity().getApplicationInfo().sourceDir.replace("'", "\\'");
+
+				final String[] commands = {
+						"mount -o remount,rw /system",
+						"cat '" + apk + "' > " + SYSTEM_APK,
+						"rm '" + apk + "'",
+						"chmod 644 " + SYSTEM_APK,
+						"chown root:root " + SYSTEM_APK,
+						"mount -o remount,ro /system",
+						"sync",
+						"reboot"
+				};
+
+				Toast.makeText(getActivity(), R.string.will_reboot, Toast.LENGTH_LONG).show();
+				Util.runAsSu(commands);
+			}
+			else if(which == DialogInterface.BUTTON_NEGATIVE)
+				((LauncherActivity) getActivity()).launchAppOpsSummary();
+
+			final SharedPreferences.Editor editor =
+					PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+
+			editor.putBoolean(KEY_DONT_SHOW_DIALOG, mDontShowAgain)
+					.putBoolean(KEY_IS_FIRST_DIALOG, false).commit();
+		}
+
+		@Override
+		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+			mDontShowAgain = isChecked;
+		}
+	}
+
 	public static final String TAG = "AOX";
 
-	private static final String SYSTEM_APK = "/system/" +
+	public static final String KEY_DONT_SHOW_DIALOG = "launcher_activity_dont_show_dialog_";
+	public static final String KEY_IS_FIRST_DIALOG = "launcher_activity_is_first_dialog";
+	public static final String SYSTEM_APK = "/system/" +
 			(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ?
 			"priv-app" : "app") + "/AppOpsXposed.apk";
 
 	private SharedPreferences mPrefs;
-	private Handler mHandler;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-		mHandler = new Handler();
 
 		if(!Util.isXposedModuleEnabled())
 		{
@@ -68,33 +160,26 @@ public class LauncherActivity extends Activity implements DialogInterface.OnClic
 			{
 				Toast.makeText(this, R.string.checking_root, Toast.LENGTH_SHORT).show();
 
-				new Thread() {
-					public void run()
-					{
-						final AlertDialog.Builder ab = new AlertDialog.Builder(LauncherActivity.this);
-
-						if(SU.available())
+				if(!mPrefs.getBoolean(KEY_DONT_SHOW_DIALOG, false))
+				{
+					new AsyncTask<Void, Void, Boolean>() {
+						@Override
+						protected Boolean doInBackground(Void... params)
 						{
-							ab.setMessage(R.string.install_as_system_app);
-							ab.setNegativeButton(android.R.string.no, LauncherActivity.this);
-							ab.setPositiveButton(android.R.string.yes, LauncherActivity.this);
-						}
-						else
-						{
-							ab.setMessage(R.string.no_xposed_no_root);
-							ab.setNegativeButton(android.R.string.ok, LauncherActivity.this);
+							return SU.available();
 						}
 
-						mHandler.post(new Runnable() {
-							@Override
-							public void run()
-							{
-								ab.show();
-							}
-						});
-					}
-				}.start();
-				return;
+						@Override
+						protected void onPostExecute(Boolean result)
+						{
+
+							ThisIsNotXposedFragment.newInstance(result,
+									mPrefs.getBoolean(KEY_IS_FIRST_DIALOG, true)).show(
+									getFragmentManager(), "dialog");
+						}
+					}.execute();
+					return;
+				}
 			}
 			else
 			{
@@ -104,31 +189,6 @@ public class LauncherActivity extends Activity implements DialogInterface.OnClic
 		}
 
 		launchAppOpsSummary();
-	}
-
-	@Override
-	public void onClick(DialogInterface dialog, int which)
-	{
-		if(which == DialogInterface.BUTTON_POSITIVE)
-		{
-			final String apk = getApplicationInfo().sourceDir.replace("'", "\\'");
-
-			final String[] commands = {
-					"mount -o remount,rw /system",
-					"cat '" + apk + "' > " + SYSTEM_APK,
-					"rm '" + apk + "'",
-					"chmod 644 " + SYSTEM_APK,
-					"chown root:root " + SYSTEM_APK,
-					"mount -o remount,ro /system",
-					"sync",
-					"reboot"
-			};
-
-			Toast.makeText(this, R.string.will_reboot, Toast.LENGTH_LONG).show();
-			Util.runAsSu(commands);
-		}
-		else if(which == DialogInterface.BUTTON_NEGATIVE)
-			finish();
 	}
 
 	protected Intent onCreateSettingsIntent()
