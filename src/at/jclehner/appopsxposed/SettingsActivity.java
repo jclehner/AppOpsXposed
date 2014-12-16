@@ -95,6 +95,8 @@ public class SettingsActivity extends Activity
 										final String[] commands = {
 												"mount -o remount,rw /system",
 												"rm " + LauncherActivity.SYSTEM_APK,
+												"mount -o remount,ro /system",
+												"sync",
 												"reboot",
 										};
 
