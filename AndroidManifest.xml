@@ -58,7 +58,7 @@
             </intent-filter>
 
             <meta-data android:name="plugAnchorItem" android:value="apps"/>
-            <meta-data android:name="plugAnchorShift" android:value="0"/>
+            <meta-data android:name="plugAnchorShift" android:value="0.0"/>
             <meta-data android:name="plugLaunchType" android:value="activity"/>
             <meta-data android:name="plugLaunchTarget" android:value="intent:#Intent;component=at.jclehner.appopsxposed/.LauncherActivity;end"/>
         </activity>
@@ -75,7 +75,7 @@
             </intent-filter>
 
             <meta-data android:name="plugAnchorItem" android:value="apps"/>
-            <meta-data android:name="plugAnchorShift" android:value="0"/>
+            <meta-data android:name="plugAnchorShift" android:value="0.0"/>
             <meta-data android:name="plugLaunchType" android:value="fragment"/>
             <meta-data android:name="plugLaunchTarget" android:value="com.android.settings.applications.AppOpsSummary"/>
         </activity>
