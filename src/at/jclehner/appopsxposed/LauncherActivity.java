@@ -43,6 +43,11 @@ public class LauncherActivity extends Activity implements DialogInterface.OnClic
 	public static class HtcFragment {}
 
 	public static final String TAG = "AOX";
+
+	private static final String SYSTEM_APK = "/system/" +
+			(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ?
+			"priv-app" : "app") + "/AppOpsXposed.apk";
+
 	private SharedPreferences mPrefs;
 	private Handler mHandler;
 	@Override
@@ -51,12 +56,6 @@ public class LauncherActivity extends Activity implements DialogInterface.OnClic
 		super.onCreate(savedInstanceState);
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		mHandler = new Handler();
-	}
-
-	@Override
-	protected void onResume()
-	{
-		super.onResume();
 
 		if(!Util.isXposedModuleEnabled())
 		{
@@ -112,12 +111,16 @@ public class LauncherActivity extends Activity implements DialogInterface.OnClic
 	{
 		if(which == DialogInterface.BUTTON_POSITIVE)
 		{
+			final String apk = getApplicationInfo().sourceDir.replace("'", "\\'");
+
 			final String[] commands = {
 					"mount -o remount,rw /system",
-					"mv '" + getApplicationInfo().sourceDir.replace("'", "\\'") +
-							"' /system/priv-app/AppOpsXposed.apk",
-					"chmod 777 /system/priv-app/AppOpsXposed.apk",
-					"chown root:root /system/priv-app/AppOpsXposed.apk",
+					"cat '" + apk + "' > " + SYSTEM_APK,
+					"rm '" + apk + "'",
+					"chmod 644 " + SYSTEM_APK,
+					"chown root:root " + SYSTEM_APK,
+					"mount -o remount,ro /system",
+					"sync",
 					"reboot"
 			};
 

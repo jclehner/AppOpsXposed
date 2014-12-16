@@ -94,7 +94,7 @@ public class SettingsActivity extends Activity
 									{
 										final String[] commands = {
 												"mount -o remount,rw /system",
-												"rm /system/priv-app/AppOpsXposed.apk",
+												"rm " + LauncherActivity.SYSTEM_APK,
 												"reboot",
 										};
 
