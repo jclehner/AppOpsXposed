@@ -73,7 +73,7 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 	public static final int OP_ALARM_WAKEUP = getOpInt("OP_ALARM_WAKEUP");
 	public static final int OP_NFC_CHANGE = getOpInt("OP_NFC_CHANGE");
 
-	public static final int OP_BOOT_COMPLETED = getOpWithPermission(Manifest.permission.RECEIVE_BOOT_COMPLETED);
+	public static final int OP_BOOT_COMPLETED = getBootCompletedOp();
 
 	public static final int _NUM_OP = getOpInt("_NUM_OP");
 
@@ -160,6 +160,13 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		Log.d("AppOpsManagerWrapper", "No op found for permission " + permission);
 
 		return -1;
+	}
+
+	private static int getBootCompletedOp()
+	{
+		final int op = getOpInt("OP_BOOT_COMPLETED");
+		return op == -1 ? getOpWithPermission(Manifest.permission.RECEIVE_BOOT_COMPLETED)
+				: op;
 	}
 
 	public static class PackageOpsWrapper extends ObjectWrapper
