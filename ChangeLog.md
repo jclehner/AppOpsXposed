@@ -1,6 +1,8 @@
 ### 1.23
 * Finally got the HTC variant working
   (thanks to Mikanoshi@XDA)
+* Fixed some system-app-install issues
+* Bugfixes
 
 ### 1.22
 * AppOpsXposed now works without Xposed, by installing
