@@ -175,6 +175,8 @@ public class SettingsActivity extends Activity
 				{
 					final CheckBoxPreference p = (CheckBoxPreference) findPreference("show_launcher_icon");
 					p.setChecked(true);
+
+					Toast.makeText(getActivity(), R.string.must_reboot_device, Toast.LENGTH_LONG).show();
 				}
 
 				final PackageManager pm = getActivity().getPackageManager();

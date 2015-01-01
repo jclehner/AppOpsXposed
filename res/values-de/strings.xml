@@ -57,4 +57,5 @@
 	<string name="will_reboot">Gerät wird neu starten!</string>
 	<string name="aox_settings">AppOpsXposed Einstellungen</string>
 	<string name="dont_show_again">Nicht erneut zeigen</string>
+	<string name="must_reboot_device">Gerät muss neu gestartet werden!</string>
 </resources>

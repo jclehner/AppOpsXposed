@@ -59,4 +59,5 @@
 	<string name="will_reboot">Device will reboot!</string>
 	<string name="aox_settings">AppOpsXposed Settings</string>
 	<string name="dont_show_again">Don\'t show again</string>
+	<string name="must_reboot_device">Must reboot device!</string>
 </resources>
