@@ -61,4 +61,6 @@
 	<string name="must_reboot_device">Must reboot device!</string>
 	<string name="permissions_not_granted">\"%1$s\" permissions were not granted. Note that you have to reboot after
 	    enabling \"%2$s\" or installing as a system app. If this message persists, submit a detailed bug report!</string>
+	<string name="verbose_logs_title">Verbose logs</string>
+	<string name="verbose_logs_summary">Before submitting a bug report, enable this and reboot!</string>
 </resources>

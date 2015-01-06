@@ -66,8 +66,14 @@
         <Preference android:key="version"
             android:enabled="false" />
         
+        <CheckBoxPreference android:key="verbose_logs"
+            android:title="@string/verbose_logs_title"
+            android:summary="@string/verbose_logs_summary"
+            android:defaultValue="false" />
+
         <Preference android:key="build_bugreport"
             android:title="@string/build_bugreport_title"
+            android:dependency="verbose_logs"
             android:summary="@string/build_bugreport_summary" />
         
     </PreferenceCategory>

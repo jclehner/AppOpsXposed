@@ -45,6 +45,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import at.jclehner.appopsxposed.AppOpsActivity;
+import at.jclehner.appopsxposed.BuildConfig;
 import at.jclehner.appopsxposed.LauncherActivity;
 import dalvik.system.DexFile;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
@@ -75,29 +76,29 @@ public final class Util
 		}
 	};
 
-	private static int sLogLevel = 1;
+	public static int logLevel = 2;
 
 	public static void log(Throwable t)
 	{
-		if(sLogLevel >= 1)
+		if(logLevel >= 1)
 			logger.log(t);
 	}
 
 	public static void log(String s)
 	{
-		if(sLogLevel >= 1)
+		if(logLevel >= 1)
 			logger.log(s);
 	}
 
 	public static void debug(Throwable t)
 	{
-		if(sLogLevel >= 2)
+		if(logLevel >= 2)
 			logger.log(t);
 	}
 
 	public static void debug(String s)
 	{
-		if(sLogLevel >= 2)
+		if(logLevel >= 2)
 			logger.log(s);
 	}
 

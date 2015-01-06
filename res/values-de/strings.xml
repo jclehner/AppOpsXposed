@@ -63,4 +63,6 @@
 	<string name="permissions_not_granted">\"%1$s\"-Berechtigungen sind nicht verfügbar. Bitte beachten,
 	    dass das Gerät nach Aktivieren von \"%2$s\" oder Installation as Systemprogramm neu gestartet werden muss! Wenn diese
 	    Nachricht weiterhin besteht, bitte einen detaillierten Fehlerbericht übermitteln.</string>
+	<string name="verbose_logs_title">Ausführliche Logs</string>
+	<string name="verbose_logs_summary">Vor einem Bugreport aktivieren und Gerät neustarten!</string>
 </resources>

@@ -64,6 +64,8 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		mModPath = startupParam.modulePath;
 		Res.modRes = XModuleResources.createInstance(mModPath, null);
 		Res.modPrefs = new XSharedPreferences(AppOpsXposed.class.getPackage().getName());
+		Util.logLevel = Res.modPrefs.getBoolean("verbose_logs", false) ? 2 : 0;
+
 		if(!Res.modPrefs.makeWorldReadable())
 			log("Failed to make preference file world-readable");
 
