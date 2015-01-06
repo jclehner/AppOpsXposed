@@ -85,12 +85,10 @@ public class BugReportBuilder
 
 				final Intent target = new Intent(Intent.ACTION_SEND_MULTIPLE);
 				target.setType("text/plain");
-				//target.setData(Uri.fromParts("mailto", "joseph.c.lehner@gmail.com", null));
-				target.putExtra(Intent.EXTRA_EMAIL, new String[] { "joseph.c.lehner+aox@gmail.com" });
 				target.putExtra(Intent.EXTRA_SUBJECT, "[REPORT][AppOpsXposed " + Util.getAoxVersion(context) + "] " + Build.FINGERPRINT);
 				target.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
 				//target.putExtra(Intent.EXTRA_STREAM, result);
-				target.putExtra(Intent.EXTRA_TEXT, "Please describe your issue");
+				target.putExtra(Intent.EXTRA_TEXT, "!!! BUG REPORTS WITHOUT ADDITIONAL INFO WILL BE IGNORED !!!");
 				//target.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
 				final Intent intent = Intent.createChooser(target, null);
