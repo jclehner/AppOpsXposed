@@ -267,7 +267,7 @@ public final class Util
 		try
 		{
 			final ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(), 0);
-			Log.d("AOX", "isSystemApp: sourceDir=" + appInfo.sourceDir);
+			Util.debug("isSystemApp: sourceDir=" + appInfo.sourceDir);
 			return 0 != (appInfo.flags & ApplicationInfo.FLAG_SYSTEM);
 		}
 		catch(NameNotFoundException e)
@@ -284,11 +284,11 @@ public final class Util
 
 		for(String command : commands)
 		{
-			Log.i("AOX", "cmd: " + command);
+			Util.debug("cmd: " + command);
 			final List<String> out = SU.run(command);
 			if(out != null && !out.isEmpty())
 			{
-				Log.i("AOX", "---> " + out.get(0));
+				Util.debug("---> " + out.get(0));
 				hasOutput = true;
 				break;
 			}
