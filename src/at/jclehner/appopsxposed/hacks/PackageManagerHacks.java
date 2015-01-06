@@ -23,6 +23,7 @@ import java.util.Map;
 
 import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.Hack;
+import at.jclehner.appopsxposed.util.Constants;
 import at.jclehner.appopsxposed.util.XUtils;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -31,11 +32,6 @@ import de.robv.android.xposed.XposedHelpers;
 
 public class PackageManagerHacks extends Hack
 {
-	private static final String[] GRANT_PERMISSIONS = {
-			"android.permission.UPDATE_APP_OPS_STATS",
-			"android.permission.GET_APP_OPS_STATS"
-	};
-
 	@Override
 	public void initZygote(StartupParam param) throws Throwable
 	{
@@ -89,7 +85,7 @@ public class PackageManagerHacks extends Hack
 					mRestoreInfo.get().clear();
 
 					final Map<String, ?> perms = getPermissions(param.thisObject);
-					for(String perm : GRANT_PERMISSIONS)
+					for(String perm : Constants.APP_OPS_PERMISSIONS)
 					{
 						if(perms.containsKey(perm))
 						{
@@ -102,7 +98,7 @@ public class PackageManagerHacks extends Hack
 				}
 				catch(Throwable t)
 				{
-					log(t);
+					debug(t);
 				}
 			}
 
@@ -123,7 +119,7 @@ public class PackageManagerHacks extends Hack
 				}
 				catch(Throwable t)
 				{
-					log(t);
+					debug(t);
 				}
 			}
 
@@ -153,11 +149,7 @@ public class PackageManagerHacks extends Hack
 					{
 						final Throwable t = param.getThrowable();
 						if(t != null && (t instanceof NullPointerException))
-						{
 							param.setResult(null);
-							log("Consumed NPE:");
-							log(t);
-						}
 					}
 		});
 	}
