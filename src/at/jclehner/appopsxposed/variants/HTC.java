@@ -109,7 +109,7 @@ public class HTC extends ApkVariant
 						}
 					}
 			});
-			
+
 			XposedHelpers.findAndHookMethod(AppOpsXposed.APP_OPS_FRAGMENT, lpparam.classLoader,
 					"onCreateView", LayoutInflater.class, ViewGroup.class, Bundle.class, new XC_MethodHook() {
 
@@ -119,7 +119,8 @@ public class HTC extends ApkVariant
 						try
 						{
 							Object mHandlerWrapper = XposedHelpers.callMethod(param.thisObject, "getActivityHandlerWrapper");
-							if (mHandlerWrapper != null) {
+							if(mHandlerWrapper != null)
+							{
 								Activity act = ((Fragment) param.thisObject).getActivity();
 								XposedHelpers.callMethod(mHandlerWrapper, "setTitle", act.getResources().getIdentifier("app_ops_settings", "string", AppOpsXposed.SETTINGS_PACKAGE));
 							}
@@ -136,7 +137,7 @@ public class HTC extends ApkVariant
 			debug(t);
 		}
 	}
-	
+
 	@Override
 	protected int getDefaultAppOpsHeaderIcon() {
 		return ICON_SENSE;
