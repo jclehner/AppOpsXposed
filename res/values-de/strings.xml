@@ -58,4 +58,7 @@
 	<string name="aox_settings">AppOpsXposed Einstellungen</string>
 	<string name="dont_show_again">Nicht erneut zeigen</string>
 	<string name="must_reboot_device">Gerät muss neu gestartet werden!</string>
+	<string name="permissions_not_granted">\"%1$s\"-Berechtigungen sind nicht verfügbar. Bitte beachten,
+	    dass das Gerät nach Aktivieren von \"%2$s\" oder Installation as Systemprogramm neu gestartet werden muss! Wenn diese
+	    Nachricht weiterhin besteht, bitte einen detaillierten Fehlerbericht übermitteln.</string>
 </resources>
