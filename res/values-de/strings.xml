@@ -47,6 +47,8 @@
 	    das Laden von \"%1$s\" verhindert.</string>
 	<string name="toast_needs_root">Dieser Vorgang benötigt Root-Rechte.</string>
 	<string name="show_changed_only_title">Geänderte zeigen</string>
+	<string name="compatibility_mode_title">Kompatibilitätsmodus</string>
+	<string name="compatibility_mode_summary">Eine andere AppOps Implementierung verwenden, um die Kompatibilität mit den meisten Geräten zu gewährleisten.</string>
 	<string name="install_as_system_app">AppOpsXposed läuft nicht als Xposed-Modul. Als Systemprogramm installieren (benötigt Root-Rechte;
 	    Gerät startet neu)?</string>
 	<string name="no_xposed_no_root">AppOpsXposed läuft nicht als Xposed-Modul und Root-Rechte sind nicht verfügbar.</string>

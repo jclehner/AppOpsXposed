@@ -46,9 +46,8 @@
 	<string name="use_hack_pm_crash_summary">Fixes a crash in a system component that prevents \"%1$s\" from loading.</string>
 	<string name="toast_needs_root">This operation requires root.</string>
 	<string name="show_changed_only_title">Show changed</string>
-	<string name="compatibility_mode_title">Compatibility mode (BETA)</string>
-	<string name="compatibility_mode_summary">Use an alternate AppOps implementation to improve compatibility on most devices. A launcher icon
-	    must be used. </string>
+	<string name="compatibility_mode_title">Compatibility mode</string>
+	<string name="compatibility_mode_summary">Use an alternate AppOps implementation to improve compatibility on most devices.</string>
 	<string name="install_as_system_app">AppOpsXposed is not running as an Xposed module. Install as a system app (requires root;
 	    device will reboot)?</string>
 	<string name="no_xposed_no_root">AppOpsXposed is not running as an Xposed module, and root is not available.</string>
