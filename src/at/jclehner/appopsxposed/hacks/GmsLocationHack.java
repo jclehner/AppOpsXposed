@@ -69,7 +69,7 @@ public class GmsLocationHack extends Hack
 		else
 			sb.append("(no hooks installed!)");
 
-		log(sb.toString());
+		Util.debug(sb.toString());
 	}
 
 	private boolean hackLocationClient(ClassLoader classLoader, String packageName)

@@ -7,7 +7,6 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.Context;
-import android.util.Log;
 
 @TargetApi(19)
 public class AppOpsManagerWrapper extends ObjectWrapper
@@ -152,12 +151,12 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		{
 			if(permission.equals(opToPermission(op)))
 			{
-				Log.d("AppOpsManagerWrapper", "Found op #" + op + " with permission " + permission);
+				Util.log("Found op #" + op + " with permission " + permission);
 				return op;
 			}
 		}
 
-		Log.d("AppOpsManagerWrapper", "No op found for permission " + permission);
+		Util.debug("No op found for permission " + permission);
 
 		return -1;
 	}

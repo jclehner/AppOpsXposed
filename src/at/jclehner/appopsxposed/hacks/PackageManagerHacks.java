@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import at.jclehner.appopsxposed.AppOpsXposed;
-import at.jclehner.appopsxposed.BuildConfig;
 import at.jclehner.appopsxposed.Hack;
 import at.jclehner.appopsxposed.util.XUtils;
 import de.robv.android.xposed.XC_MethodHook;

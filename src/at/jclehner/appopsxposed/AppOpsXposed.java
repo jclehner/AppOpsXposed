@@ -79,7 +79,7 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 			catch(Throwable t)
 			{
 				log(hack.getClass().getSimpleName() + ": [!!]");
-				log(t);
+				Util.debug(t);
 			}
 		}
 	}
@@ -117,7 +117,7 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 			catch(Throwable t)
 			{
 				log(variant.getClass().getSimpleName() + ": [!!]");
-				log(t);
+				Util.debug(t);
 			}
 
 			break;
@@ -132,7 +132,7 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 			catch(Throwable t)
 			{
 				log(hack.getClass().getSimpleName() + ": [!!]");
-				log(t);
+				Util.debug(t);
 			}
 		}
 	}
@@ -159,7 +159,7 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 				catch(Throwable t)
 				{
 					log(hack.getClass().getSimpleName() + ": [!!]");
-					log(t);
+					Util.debug(t);
 				}
 			}
 

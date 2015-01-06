@@ -75,25 +75,29 @@ public final class Util
 		}
 	};
 
-	private static boolean sDebug = true;
+	private static int sLogLevel = 1;
 
-	public static void log(Throwable t) {
-		logger.log(t);
+	public static void log(Throwable t)
+	{
+		if(sLogLevel >= 1)
+			logger.log(t);
 	}
 
-	public static void log(String s) {
-		logger.log(s);
+	public static void log(String s)
+	{
+		if(sLogLevel >= 1)
+			logger.log(s);
 	}
 
 	public static void debug(Throwable t)
 	{
-		if(sDebug)
+		if(sLogLevel >= 2)
 			logger.log(t);
 	}
 
 	public static void debug(String s)
 	{
-		if(sDebug)
+		if(sLogLevel >= 2)
 			logger.log(s);
 	}
 
@@ -185,7 +189,7 @@ public final class Util
 		}
 		catch(IOException e)
 		{
-			log(e);
+			debug(e);
 			return null;
 		}
 		finally

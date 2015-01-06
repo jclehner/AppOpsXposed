@@ -32,7 +32,7 @@ public final class XUtils
 		}
 		catch(Exception e)
 		{
-			Util.log(e);
+			Util.debug(e);
 		}
 
 		Util.log("getApplicationInfo failed for " + packageName);

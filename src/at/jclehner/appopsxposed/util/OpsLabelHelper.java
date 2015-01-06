@@ -12,8 +12,6 @@ import at.jclehner.appopsxposed.AppOpsXposed;
 
 public class OpsLabelHelper
 {
-	private static final String TAG = "AOX:OpsResolver";
-
 	private static boolean sTryLoadOpNames = true;
 	private static String[] sOpLabels;
 	private static String[] sOpSummaries;
@@ -99,7 +97,7 @@ public class OpsLabelHelper
 						// Since the order of ops cannot be guaranteed in that case, ignore
 						// the array.
 
-						Log.w(TAG, "Length mismatch in " + idName + ": "
+						Util.log("Length mismatch in " + idName + ": "
 								+ array.length + " vs _NUM_OP " + opsCount);
 
 						sTryLoadOpNames = false;
