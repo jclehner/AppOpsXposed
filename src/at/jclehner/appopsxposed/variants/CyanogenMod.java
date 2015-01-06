@@ -18,18 +18,13 @@
 
 package at.jclehner.appopsxposed.variants;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 import android.content.pm.ApplicationInfo;
-import android.os.Build;
 import at.jclehner.appopsxposed.util.Util;
 
 public class CyanogenMod extends AOSP
 {
-	private static final String CM_VERSION = getCmVersion();
+	private static final String CM_VERSION = Util.getSystemProperty("ro.cm.version", "");
 
 	@Override
 	protected boolean onMatch(ApplicationInfo appInfo, ClassChecker classChecker) {
@@ -41,38 +36,11 @@ public class CyanogenMod extends AOSP
 	{
 		// for now...
 		super.handleLoadPackage(lpparam);
-		log("ro.cm.version=" + CM_VERSION);
+		debug("ro.cm.version=" + CM_VERSION);
 	}
 
 	@Override
 	public boolean canUseLayoutFix() {
-		return !isCm11After20140128();
-	}
-
-	private static boolean isCm11After20140128()
-	{
-		if(CM_VERSION.length() == 0)
-			return false;
-		else if(Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT)
-		{
-			XposedBridge.log("Detected CyanogenMod running post-KitKat; assuming it's affected");
-			return true;
-		}
-
-		final Matcher m = Pattern.compile("([0-9]+)-([0-9]{8})-.*").matcher(CM_VERSION);
-		if(!m.matches())
-		{
-			XposedBridge.log("Failed to match ro.cm.version");
-			return false;
-		}
-
-		final int cmMajor = Integer.parseInt(m.group(1));
-		final int cmDate = Integer.parseInt(m.group(2));
-
-		return cmMajor >= 11 && cmDate >= 20140128;
-	}
-
-	private static String getCmVersion() {
-		return Util.getSystemProperty("ro.cm.version", "");
+		return false;
 	}
 }
