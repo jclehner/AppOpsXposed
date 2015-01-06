@@ -42,7 +42,7 @@ public class FixWakeLock extends Hack
 	public static final FixWakeLock INSTANCE = new FixWakeLock();
 
 	private static final boolean ENABLE_PER_TAG_FILTERING = false;
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 
 	private Set<Unhook> mUnhooks;
 

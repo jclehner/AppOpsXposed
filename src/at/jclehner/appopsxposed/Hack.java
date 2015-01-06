@@ -142,11 +142,15 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 	protected abstract String onGetKeySuffix();
 
 	protected final void log(String message) {
-		XposedBridge.log(getLogPrefix() + message);
+		Util.log(getLogPrefix() + message);
 	}
 
-	protected final void log(Throwable t) {
-		XposedBridge.log(t);
+	protected final void debug(String message) {
+		Util.debug(getLogPrefix() + message);
+	}
+
+	protected final void debug(Throwable t) {
+		Util.debug(t);
 	}
 
 	protected final String getPreferenceString(Context context, String suffix, Object... formatArgs)

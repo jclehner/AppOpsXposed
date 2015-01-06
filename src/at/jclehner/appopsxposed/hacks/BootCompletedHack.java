@@ -158,7 +158,7 @@ public class BootCompletedHack extends Hack
 			{
 				// These functions don't exist on API 18
 				if(!"opAllowsReset".equals(f.getName()) && !"opToDefaultMode".equals(f.getName()))
-					log(e);
+					debug(e);
 			}
 		}
 
@@ -402,7 +402,8 @@ public class BootCompletedHack extends Hack
 		}
 		catch(Throwable t)
 		{
-			log(t);
+			log("Failed to add bootup template");
+			debug(t);
 		}
 	}
 
@@ -452,14 +453,14 @@ public class BootCompletedHack extends Hack
 							}
 							catch(Throwable t)
 							{
-								log(t);
+								debug(t);
 							}
 						}
 			});
 		}
 		catch(Throwable t)
 		{
-			log(t);
+			debug(t);
 		}
 	}
 
