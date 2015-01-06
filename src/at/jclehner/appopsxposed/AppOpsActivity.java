@@ -51,6 +51,8 @@ public class AppOpsActivity extends PreferenceActivity
 						getString(R.string.compatibility_mode_title)));
 				ab.setPositiveButton(android.R.string.ok, null);
 				ab.show();
+
+				break;
 			}
 		}
 	}
