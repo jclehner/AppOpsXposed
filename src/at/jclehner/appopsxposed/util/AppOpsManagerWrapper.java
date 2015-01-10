@@ -72,6 +72,17 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 	public static final int OP_ALARM_WAKEUP = getOpInt("OP_ALARM_WAKEUP");
 	public static final int OP_NFC_CHANGE = getOpInt("OP_NFC_CHANGE");
 
+	// MiUi
+	public static final int OP_AUDIO_FM_VOLUME = getOpInt("OP_AUDIO_FM_VOLUME");
+	public static final int OP_AUDIO_MATV_VOLUME = getOpInt("OP_AUDIO_MATV_VOLUME");
+	public static final int OP_AUTO_START = getOpInt("OP_AUTO_START");
+	public static final int OP_DELETE_SMS = getOpInt("OP_DELETE_SMS");
+	public static final int OP_DELETE_MMS = getOpInt("OP_DELETE_MMS");
+	public static final int OP_DELETE_CONTACTS = getOpInt("OP_DELETE_CONTACTS");
+	public static final int OP_DELETE_CALL_LOG = getOpInt("OP_DELETE_CALL_LOG");
+	public static final int OP_EXACT_ALARM = getOpInt("OP_EXACT_ALARM");
+	public static final int OP_ACCESS_XIAOMI_ACCOUNT = getOpInt("OP_ACCESS_XIAOMI_ACCOUNT");
+
 	public static final int OP_BOOT_COMPLETED = getBootCompletedOp();
 
 	public static final int _NUM_OP = getOpInt("_NUM_OP");
