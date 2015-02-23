@@ -65,4 +65,8 @@
 	    Nachricht weiterhin besteht, bitte einen detaillierten Fehlerbericht übermitteln.</string>
 	<string name="verbose_logs_title">Ausführliche Logs</string>
 	<string name="verbose_logs_summary">Vor einem Bugreport aktivieren und Gerät neustarten!</string>
+
+	<string name="use_hack_fix_prune_title">Datenbank nicht säubern</string>
+	<string name="use_hack_fix_prune_summary">Behebt ein Problem bei dem die Einstellungen von Apps auf der SD-Karte beim 
+	    Neustart verloren gehen.</string>
 </resources>

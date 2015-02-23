@@ -33,7 +33,12 @@
 	    <PreferenceScreen android:key="hacks"
 	        android:title="@string/hacks_title"
 	        android:summary="@string/hacks_summary">
-	               
+
+            <CheckBoxPreference android:key="use_hack_fix_prune"
+                android:title="@string/use_hack_fix_prune_title"
+                android:summary="@string/use_hack_fix_prune_summary"
+                android:defaultValue="false" />
+
 	        <CheckBoxPreference android:key="use_hack_boot_completed"
 	            android:title="@string/use_hack_boot_completed_title"
 	            android:summary="@string/use_hack_boot_completed_summary"
