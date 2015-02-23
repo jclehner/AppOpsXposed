@@ -1,3 +1,10 @@
+### 1.24
+* Add option to disable verbose logs
+* Potential fix for LG icon issue
+* Potential fix for Samsung GridSettings bug
+* Add hack to fix ops resetting on reboot if
+  installed on SD.
+
 ### 1.23
 * Finally got the HTC variant working
   (thanks to Mikanoshi@XDA)
