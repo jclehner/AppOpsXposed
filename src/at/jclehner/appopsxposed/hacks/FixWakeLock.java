@@ -24,6 +24,9 @@ import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.os.Binder;
+import android.os.Build;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.IBinder;
 import android.os.WorkSource;
 import at.jclehner.appopsxposed.Hack;
@@ -47,23 +50,15 @@ public class FixWakeLock extends Hack
 	private Set<Unhook> mUnhooks;
 
 	@Override
-	public void initZygote(StartupParam param) throws Throwable
+	protected void handleLoadFrameworkPackage(LoadPackageParam lpparam) throws Throwable
 	{
 		if(AppOpsManagerWrapper.OP_WAKE_LOCK == -1)
 		{
 			log("No OP_WAKE_LOCK; bailing out!");
 			return;
 		}
-		else if(!hasCheckOp())
-			return;
 
-		hookMethods(ClassLoader.getSystemClassLoader());
-	}
-
-	@Override
-	protected void handleLoadFrameworkPackage(LoadPackageParam lpparam) throws Throwable
-	{
-		hookMethods(lpparam.classLoader);
+		hookMethods();
 	}
 
 	@Override
@@ -71,12 +66,16 @@ public class FixWakeLock extends Hack
 		return "wake_lock";
 	}
 
-	private void hookMethods(ClassLoader classLoader) throws Throwable
+	private void hookMethods() throws Throwable
 	{
-		final Class<?> pwrMgrSvcClazz = classLoader.loadClass(
+		final Class<?> pwrMgrSvcClazz = loadClass(
 				"com.android.server.power.PowerManagerService");
 
-		mUnhooks = XposedBridge.hookAllMethods(pwrMgrSvcClazz, "acquireWakeLock", mAcquireHook);
+		String func = "acquireWakeLock";
+		if(VERSION.SDK_INT > VERSION_CODES.KITKAT)
+			func += "Internal";
+
+		mUnhooks = XposedBridge.hookAllMethods(pwrMgrSvcClazz, func, mAcquireHook);
 		log("Hooked " + mUnhooks.size() + " functions");
 	}
 
@@ -125,7 +124,8 @@ public class FixWakeLock extends Hack
 			ctx.enforceCallingOrSelfPermission(
 					android.Manifest.permission.WAKE_LOCK, null);
 
-			if(checkOp(ctx, AppOpsManagerWrapper.OP_WAKE_LOCK, uid, packageName) != AppOpsManager.MODE_ALLOWED)
+			final AppOpsManagerWrapper appOps = AppOpsManagerWrapper.from(ctx);
+			if(appOps.checkOp(AppOpsManagerWrapper.OP_WAKE_LOCK, uid, packageName) != AppOpsManager.MODE_ALLOWED)
 			{
 				if(tag != null && canAcquire(packageName, tag))
 				{

@@ -92,11 +92,6 @@ public class BootCompletedHack extends Hack
 			XposedHelpers.getStaticIntField(AppOpsManager.class, "OP_WIFI_SCAN");
 
 	@Override
-	public void initZygote(StartupParam startupParam) throws Throwable {
-		patchAppOpsManager(ClassLoader.getSystemClassLoader());
-	}
-
-	@Override
 	public void handleLoadSettingsPackage(LoadPackageParam lpparam) throws Throwable
 	{
 		patchFrameworkPart(lpparam.classLoader);
@@ -105,6 +100,11 @@ public class BootCompletedHack extends Hack
 		// constructors anymore!
 		addBootupTemplate(lpparam);
 		injectLabelAndSummary(lpparam);
+	}
+
+	@Override
+	protected void handleLoadAnyPackage(LoadPackageParam lpparam) throws Throwable {
+		patchAppOpsManager(lpparam.classLoader);
 	}
 
 	@Override
@@ -123,7 +123,6 @@ public class BootCompletedHack extends Hack
 		{
 			patchNotificationManagerService(classLoader);
 			patchActivityManagerService(classLoader);
-			patchAppOpsManager(classLoader);
 		}
 		catch(Throwable t)
 		{
@@ -131,7 +130,7 @@ public class BootCompletedHack extends Hack
 		}
 	}
 
-	private void patchAppOpsManager(ClassLoader classLoader)
+	private void patchAppOpsManager(ClassLoader classLoader) throws Throwable
 	{
 		final XC_MethodHook hook = new XC_MethodHook() {
 
@@ -151,7 +150,7 @@ public class BootCompletedHack extends Hack
 		{
 			try
 			{
-				XposedHelpers.findAndHookMethod(AppOpsManager.class, f.getName(),
+				XposedHelpers.findAndHookMethod(classLoader.loadClass("android.app.AppOpsManager"), f.getName(),
 						int.class, hook);
 			}
 			catch(NoSuchMethodError e)

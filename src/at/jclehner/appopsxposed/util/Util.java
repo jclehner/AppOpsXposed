@@ -80,25 +80,25 @@ public final class Util
 
 	public static void log(Throwable t)
 	{
-		if(logLevel >= 1)
+		if(BuildConfig.DEBUG || logLevel >= 1)
 			logger.log(t);
 	}
 
 	public static void log(String s)
 	{
-		if(logLevel >= 1)
+		if(BuildConfig.DEBUG || logLevel >= 1)
 			logger.log(s);
 	}
 
 	public static void debug(Throwable t)
 	{
-		if(logLevel >= 2)
+		if(BuildConfig.DEBUG || logLevel >= 2)
 			logger.log(t);
 	}
 
 	public static void debug(String s)
 	{
-		if(logLevel >= 2)
+		if(BuildConfig.DEBUG || logLevel >= 2)
 			logger.log(s);
 	}
 

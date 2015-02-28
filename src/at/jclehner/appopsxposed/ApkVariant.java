@@ -187,7 +187,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 
 			case ICON_BLACK:
 				return Res.appOpsPreferenceIconBlack;
-				
+
 			case ICON_SENSE:
 				return Res.appOpsPreferenceIconSense;
 
@@ -426,7 +426,8 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 						final Menu menu = (Menu) param.args[0];
 						final MenuItem item = menu.add(getAppOpsTitle());
 						item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-						item.setIcon(getAppOpsHeaderIcon());
+						//item.setIcon(getAppOpsHeaderIcon());
+						item.setTitle(Res.modRes.getString(R.string.app_ops_settings));
 						//item.setIcon(Res.modRes.getDrawable(R.drawable.ic_launcher2));
 						item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 

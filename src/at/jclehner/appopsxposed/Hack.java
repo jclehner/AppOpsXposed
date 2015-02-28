@@ -18,7 +18,6 @@
 
 package at.jclehner.appopsxposed;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,6 @@ import java.util.List;
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import at.jclehner.appopsxposed.hacks.BootCompletedHack;
 import at.jclehner.appopsxposed.hacks.FixOpsPruneHack;
 import at.jclehner.appopsxposed.hacks.FixWakeLock;
@@ -36,7 +34,6 @@ import at.jclehner.appopsxposed.util.Util;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
@@ -68,9 +65,7 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 	};
 
 	private String mLogTag;
-
-	private static final Method sCheckOp = findCheckOp();
-	private static final Method sNoteOp = findNoteOp();
+	private ClassLoader mClassLoader;
 
 	public static List<Hack> getAllEnabled(boolean quiet)
 	{
@@ -100,12 +95,15 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 	@Override
 	public final void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
+		mClassLoader = lpparam.classLoader;
+
+		handleLoadAnyPackage(lpparam);
+
 		if("android".equals(lpparam.packageName))
 			handleLoadFrameworkPackage(lpparam);
 		else if(AppOpsXposed.SETTINGS_PACKAGE.equals(lpparam.packageName))
 			handleLoadSettingsPackage(lpparam);
 
-		handleLoadAnyPackage(lpparam);
 	}
 
 	public final PreferenceInfo getPrefernceInfo(Context context) {
@@ -127,6 +125,10 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 	@Override
 	public void handleInitPackageResources(InitPackageResourcesParam resparam) throws Throwable {
 
+	}
+
+	protected Class<?> loadClass(String className) throws ClassNotFoundException {
+		return mClassLoader.loadClass(className);
 	}
 
 	protected String onGetPreferenceTitle(Context context) {
@@ -165,68 +167,6 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 			return context.getString(resId, formatArgs);
 
 		return name;
-	}
-
-	protected static boolean hasCheckOp() {
-		return sCheckOp != null;
-	}
-
-	@TargetApi(19)
-	protected static void noteOperation(Context context, int op, int uid, String packageName)
-	{
-		if(sNoteOp == null)
-			return;
-
-		try
-		{
-			sNoteOp.invoke(context.getSystemService(Context.APP_OPS_SERVICE),
-					op, uid, packageName);
-		}
-		catch(IllegalAccessException e)
-		{
-			Util.log(e);
-		}
-		catch(IllegalArgumentException e)
-		{
-			Util.log(e);
-		}
-		catch(InvocationTargetException e)
-		{
-			Util.log(e);
-		}
-	}
-
-	@TargetApi(19)
-	protected static int checkOp(Context context, int op, int uid, String packageName)
-	{
-		if(hasCheckOp())
-		{
-			try
-			{
-				return (Integer) sCheckOp.invoke(
-						context.getSystemService(Context.APP_OPS_SERVICE), op, uid, packageName);
-			}
-			catch(IllegalAccessException e)
-			{
-				Util.log(e);
-			}
-			catch(IllegalArgumentException e)
-			{
-				Util.log(e);
-			}
-			catch(InvocationTargetException e)
-			{
-				Util.log(e);
-			}
-		}
-
-		return AppOpsManager.MODE_ALLOWED;
-	}
-
-	protected static int checkOp(Context context, int op)
-	{
-		final ApplicationInfo info = context.getApplicationInfo();
-		return checkOp(context, op, info.uid, info.packageName);
 	}
 
 	private String getKey() {

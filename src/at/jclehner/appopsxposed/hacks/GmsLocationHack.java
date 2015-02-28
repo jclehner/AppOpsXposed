@@ -9,6 +9,7 @@ import java.util.Set;
 import android.app.AppOpsManager;
 import android.content.Context;
 import at.jclehner.appopsxposed.Hack;
+import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.Util;
 import at.jclehner.appopsxposed.util.Util.StringList;
 import de.robv.android.xposed.XC_MethodHook;
@@ -40,9 +41,6 @@ public class GmsLocationHack extends Hack
 	@Override
 	protected void handleLoadAnyPackage(LoadPackageParam lpparam) throws Throwable
 	{
-		if(!hasCheckOp())
-			return;
-
 		mClasses = Util.getClassList(lpparam, "com.google.android.gms.location", true);
 		if(mClasses == null || mClasses.isEmpty())
 			return;
@@ -218,9 +216,12 @@ public class GmsLocationHack extends Hack
 
 	private static boolean isAnyLocationOpDisabled(Context context)
 	{
+		final AppOpsManagerWrapper appOps = AppOpsManagerWrapper.from(context);
+		final int uid = context.getApplicationInfo().uid;
+
 		for(int op : LOCATION_OPS)
 		{
-			if(checkOp(context, op) != AppOpsManager.MODE_ALLOWED)
+			if(appOps.checkOp(op, uid, context.getPackageName()) != AppOpsManager.MODE_ALLOWED)
 				return true;
 		}
 

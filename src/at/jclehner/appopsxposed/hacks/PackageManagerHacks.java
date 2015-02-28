@@ -28,17 +28,16 @@ import at.jclehner.appopsxposed.util.XUtils;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
+import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 
 public class PackageManagerHacks extends Hack
 {
 	@Override
-	public void initZygote(StartupParam param) throws Throwable
+	protected void handleLoadFrameworkPackage(LoadPackageParam lpparam) throws Throwable
 	{
 		fixPmCrash();
-
-		if(XUtils.isCompatibilityModeEnabled())
-			grantAppOpsPermissionsToSelf();
+		grantAppOpsPermissionsToSelf();
 	}
 
 	@Override
@@ -53,7 +52,7 @@ public class PackageManagerHacks extends Hack
 
 	private void grantAppOpsPermissionsToSelf() throws Throwable
 	{
-		final Class<?> pmSvcClazz = Class.forName("com.android.server.pm.PackageManagerService");
+		final Class<?> pmSvcClazz = loadClass("com.android.server.pm.PackageManagerService");
 		// For the duration of grantPermissionsLPw, make PackageManagerService believe that
 		// the {UPDATE,GET}_APP_OPS_STATS permissions have a protectionLevel of 0 (normal).
 		XposedBridge.hookAllMethods(pmSvcClazz, "grantPermissionsLPw", new XC_MethodHook() {
@@ -141,7 +140,7 @@ public class PackageManagerHacks extends Hack
 
 	private void fixPmCrash() throws Throwable
 	{
-		final Class<?> pmSvcClazz = Class.forName("com.android.server.pm.PackageManagerService");
+		final Class<?> pmSvcClazz = loadClass("com.android.server.pm.PackageManagerService");
 		XposedBridge.hookAllMethods(pmSvcClazz, "addPackageHoldingPermissions",
 				new XC_MethodHook(XC_MethodHook.PRIORITY_LOWEST) {
 					@Override
