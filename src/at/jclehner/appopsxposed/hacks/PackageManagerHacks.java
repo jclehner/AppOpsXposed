@@ -23,6 +23,7 @@ import java.util.Map;
 
 import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.Hack;
+import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.Constants;
 import at.jclehner.appopsxposed.util.XUtils;
 import de.robv.android.xposed.XC_MethodHook;
@@ -38,6 +39,8 @@ public class PackageManagerHacks extends Hack
 	{
 		fixPmCrash();
 		grantAppOpsPermissionsToSelf();
+		// FIXME move to a separate hack or rename this hack
+		fixVerifyOpCrash();
 	}
 
 	@Override
@@ -149,6 +152,30 @@ public class PackageManagerHacks extends Hack
 						final Throwable t = param.getThrowable();
 						if(t != null && (t instanceof NullPointerException))
 							param.setResult(null);
+					}
+		});
+	}
+
+	private void fixVerifyOpCrash() throws Throwable
+	{
+		final Class<?> appOpsSvcClazz = loadClass("com.android.server.AppOpsService");
+		XposedHelpers.findAndHookMethod(appOpsSvcClazz, "verifyIncomingOp", int.class,
+				new XC_MethodHook() {
+
+					@Override
+					protected void afterHookedMethod(MethodHookParam param) throws Throwable
+					{
+						final Throwable t = param.getThrowable();
+						if(t != null && (t instanceof IllegalArgumentException))
+						{
+							final int op = (Integer) param.args[0];
+							if(op >= 0 && op < AppOpsManagerWrapper._NUM_OP)
+							{
+								param.setResult(null);
+								// FIXME log -> debug
+								log("Eating IllegalArgumentException for op #" + op);
+							}
+						}
 					}
 		});
 	}

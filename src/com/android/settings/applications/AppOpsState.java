@@ -708,7 +708,7 @@ public class AppOpsState {
     {
         if (op > 0 && op < AppOpsManagerWrapper._NUM_OP) {
             try {
-                mAppOps.checkOp(op, Process.SYSTEM_UID, "android");
+                //mAppOps.checkOp(op, Process.SYSTEM_UID, "android");
                 return true;
             } catch (IllegalArgumentException e) {
                 Log.w(TAG, "Skipping #" + op + " even though it is within valid range");
