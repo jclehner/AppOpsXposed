@@ -76,29 +76,29 @@ public final class Util
 		}
 	};
 
-	public static int logLevel = 2;
+	public static int logLevel = 1;
 
 	public static void log(Throwable t)
 	{
-		if(BuildConfig.DEBUG || logLevel >= 1)
+		if(logLevel >= 1)
 			logger.log(t);
 	}
 
 	public static void log(String s)
 	{
-		if(BuildConfig.DEBUG || logLevel >= 1)
+		if(logLevel >= 1)
 			logger.log(s);
 	}
 
 	public static void debug(Throwable t)
 	{
-		if(BuildConfig.DEBUG || logLevel >= 2)
+		if(logLevel >= 2)
 			logger.log(t);
 	}
 
 	public static void debug(String s)
 	{
-		if(BuildConfig.DEBUG || logLevel >= 2)
+		if(logLevel >= 2)
 			logger.log(s);
 	}
 
