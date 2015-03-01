@@ -123,7 +123,7 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		Res.modPrefs.makeWorldReadable();
 		//Util.logLevel = Res.modPrefs.getBoolean("verbose_logs", false) ? 2 : 0;
 
-		for(Hack hack : Hack.getAllEnabled("android".equals(lpparam.packageName)))
+		for(Hack hack : Hack.getAllEnabled(true))
 		{
 			try
 			{

@@ -424,11 +424,13 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 					protected void afterHookedMethod(final MethodHookParam param) throws Throwable
 					{
 						final Menu menu = (Menu) param.args[0];
+						//menu.clear();
+
 						final MenuItem item = menu.add(getAppOpsTitle());
 						item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 						//item.setIcon(getAppOpsHeaderIcon());
 						item.setTitle(Res.modRes.getString(R.string.app_ops_settings));
-						//item.setIcon(Res.modRes.getDrawable(R.drawable.ic_launcher2));
+						item.setIcon(Res.modRes.getDrawable(R.drawable.ic_launcher2));
 						item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
 							@Override

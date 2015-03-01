@@ -94,7 +94,6 @@ public class BootCompletedHack extends Hack
 	@Override
 	public void handleLoadSettingsPackage(LoadPackageParam lpparam) throws Throwable
 	{
-		patchFrameworkPart(lpparam.classLoader);
 		// Must be called before injectLabelAndSummary; otherwise, AppOpsState's
 		// static intializer may have been run, and we can't hook the OpsTemplate
 		// constructors anymore!
@@ -214,45 +213,58 @@ public class BootCompletedHack extends Hack
 		});
 	}
 
+	private static final String NOTIFICATION_MANAGER_SERVICE_CLASS =
+			Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ?
+			"com.android.server.NotificationManagerService" :
+			"com.android.server.notification.NotificationManagerService";
+
 	private void patchNotificationManagerService(ClassLoader classLoader) throws Throwable
 	{
 		final Class<?> notificationMgrSvcClazz =
-				classLoader.loadClass("com.android.server.NotificationManagerService");
+				classLoader.loadClass(NOTIFICATION_MANAGER_SERVICE_CLASS);
 
-		final Class<?> appOpsMgrClazz =
-				classLoader.loadClass("android.app.AppOpsManager");
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+		{
+			Class<?> targetClazz = null;
+			boolean foundTarget = false;
 
-		// hook AppOpsManager.checkOpNoThrow for the duration of the call to
-		// NotificationManagerService.areNotificationsEnabledForPackage
+			// In Lollipop, {are,set}NotificationsEnabledForPackage have been moved to
+			// an anonymous inner class in NotificationManagerService.mService.
+			// Since we can't get the class directly from that field using Field.getType(),
+			// loop through all inner classes and try to hook methods.
 
-		XposedHelpers.findAndHookMethod(notificationMgrSvcClazz, "areNotificationsEnabledForPackage",
-				String.class, int.class, new XC_MethodHook() {
-
-				private Unhook mUnhook;
-
-				@Override
-				protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+			for(int i = 1; i <= 100; ++i)
+			{
+				try
 				{
-					mUnhook = XposedHelpers.findAndHookMethod(appOpsMgrClazz, "checkOpNoThrow",
-							int.class, int.class, String.class, new XC_MethodHook() {
-								@Override
-								protected void beforeHookedMethod(MethodHookParam param)
-										throws Throwable
-								{
-									log("checkOpNoThrow called in areNotificationsEnabledForPackage");
-
-									final int op = (Integer) param.args[0];
-									if(op == OP_POST_NOTIFICATION)
-										param.args[0] = OP_VIBRATE;
-								}
-					});
+					targetClazz = loadClass(NOTIFICATION_MANAGER_SERVICE_CLASS + "$" + i);
+					hookNotificationMethods(targetClazz);
+					foundTarget = true;
+					break;
 				}
-
-				@Override
-				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-					mUnhook.unhook();
+				catch(ClassNotFoundException e)
+				{
+					break;
 				}
-		});
+				catch(NoSuchMethodError e)
+				{
+					continue;
+				}
+				catch(NoSuchMethodException e)
+				{
+					continue;
+				}
+			}
+
+			if(!foundTarget)
+				debug("No inner class contains notification methods!");
+			else if(targetClazz != null)
+				debug("Found notification methods in " + targetClazz.getName());
+		}
+		else
+			hookNotificationMethods(notificationMgrSvcClazz);
+
+		final Class<?> appOpsMgrClazz = loadClass("android.app.AppOpsManager");
 
 		// hook AppOpsManager.noteOpNoThrow for the duration of the call to
 		// NotificationManagerService.noteNotificationOp
@@ -289,7 +301,46 @@ public class BootCompletedHack extends Hack
 		// hook AppOpsManager.setMode for the duration of the call to
 		// NotificationManagerService.setNotificationsEnabledForPackage
 
-		XposedHelpers.findAndHookMethod(notificationMgrSvcClazz, "setNotificationsEnabledForPackage",
+
+	}
+
+	private void hookNotificationMethods(Class<?> targetClazz) throws Throwable
+	{
+		// hook AppOpsManager.checkOpNoThrow for the duration of the call to
+		// NotificationManagerService.areNotificationsEnabledForPackage
+
+		final Class<?> appOpsMgrClazz = loadClass("android.app.AppOpsManager");
+
+		XposedHelpers.findAndHookMethod(targetClazz, "areNotificationsEnabledForPackage",
+				String.class, int.class, new XC_MethodHook() {
+
+				private Unhook mUnhook;
+
+				@Override
+				protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+				{
+					mUnhook = XposedHelpers.findAndHookMethod(appOpsMgrClazz, "checkOpNoThrow",
+							int.class, int.class, String.class, new XC_MethodHook() {
+								@Override
+								protected void beforeHookedMethod(MethodHookParam param)
+										throws Throwable
+								{
+									log("checkOpNoThrow called in areNotificationsEnabledForPackage");
+
+									final int op = (Integer) param.args[0];
+									if(op == OP_POST_NOTIFICATION)
+										param.args[0] = OP_VIBRATE;
+								}
+					});
+				}
+
+				@Override
+				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+					mUnhook.unhook();
+				}
+		});
+
+		XposedHelpers.findAndHookMethod(targetClazz, "setNotificationsEnabledForPackage",
 				String.class, int.class, boolean.class, new XC_MethodHook() {
 
 				private Unhook mUnhook;

@@ -21,6 +21,8 @@ package at.jclehner.appopsxposed.variants;
 import java.util.List;
 
 import android.content.Context;
+import android.os.Build;
+import android.os.Build.VERSION;
 import android.preference.PreferenceActivity.Header;
 import at.jclehner.appopsxposed.ApkVariant;
 import at.jclehner.appopsxposed.BuildConfig;
@@ -37,9 +39,17 @@ public class AOSP extends ApkVariant
 		hookIsValidFragment(lpparam);
 		addAppOpsToAppInfo(lpparam);
 
-		if(BuildConfig.DEBUG)
-			addMenuToAppOpsSummary(lpparam);
+		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+			addAppOpsHeaderPreLollipop(lpparam);
+	}
 
+	@Override
+	protected int getDefaultAppOpsHeaderIcon() {
+		return ICON_WHITE;
+	}
+
+	private void addAppOpsHeaderPreLollipop(LoadPackageParam lpparam)
+	{
 		final int settingsHeadersId = Res.getSettingsIdentifier("xml/settings_headers");
 		final int personalSectionId = Res.getSettingsIdentifier("id/personal_section");
 
@@ -70,10 +80,5 @@ public class AOSP extends ApkVariant
 						addAppOpsHeader((List<Header>) param.args[0], personalSectionId, (Context) param.thisObject);
 					}
 		});
-	}
-
-	@Override
-	protected int getDefaultAppOpsHeaderIcon() {
-		return ICON_WHITE;
 	}
 }
