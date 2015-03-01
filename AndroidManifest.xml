@@ -48,24 +48,7 @@
         </activity>
 
         <activity
-            android:name=".LauncherActivity$HtcActivity"
-            android:icon="@drawable/ic_appops_sense"
-            android:label="@string/app_ops_settings"
-            android:excludeFromRecents="true"
-            android:enabled="false">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.htc.settings.category.PLUGIN_ENTRY" />
-            </intent-filter>
-
-            <meta-data android:name="plugAnchorItem" android:value="apps"/>
-            <meta-data android:name="plugAnchorShift" android:value="0.0"/>
-            <meta-data android:name="plugLaunchType" android:value="activity"/>
-            <meta-data android:name="plugLaunchTarget" android:value="intent:#Intent;component=at.jclehner.appopsxposed/.LauncherActivity;end"/>
-        </activity>
-
-        <activity
-            android:name=".LauncherActivity$HtcFragment"
+            android:name=".LauncherActivity$HtcActivity2"
             android:icon="@drawable/ic_appops_sense"
             android:label="@string/app_ops_settings"
             android:excludeFromRecents="true"
@@ -77,9 +60,28 @@
 
             <meta-data android:name="plugAnchorItem" android:value="apps"/>
             <meta-data android:name="plugAnchorShift" android:value="0.0"/>
+            <meta-data android:name="plugLaunchType" android:value="activity"/>
+            <meta-data android:name="plugLaunchTarget" android:value="intent:#Intent;component=at.jclehner.appopsxposed/.LauncherActivity;end"/>
+        </activity>
+
+        <!--
+        <activity
+            android:name=".LauncherActivity$HtcFragment"
+            android:icon="@drawable/ic_appops_sense"
+            android:label="@string/app_ops_settings"
+            android:excludeFromRecents="false"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.htc.settings.category.PLUGIN_ENTRY" />
+            </intent-filter>
+
+            <meta-data android:name="plugAnchorItem" android:value="apps"/>
+            <meta-data android:name="plugAnchorShift" android:value="0.0"/>
             <meta-data android:name="plugLaunchType" android:value="fragment"/>
             <meta-data android:name="plugLaunchTarget" android:value="com.android.settings.applications.AppOpsSummary"/>
         </activity>
+        -->
 
         <activity-alias
             android:enabled="true"

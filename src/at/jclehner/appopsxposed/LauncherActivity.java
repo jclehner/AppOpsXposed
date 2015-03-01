@@ -47,8 +47,8 @@ import eu.chainfire.libsuperuser.Shell.SU;
 
 public class LauncherActivity extends Activity
 {
-	public static class HtcActivity {}
-	public static class HtcFragment {}
+	public static class HtcActivity2 {}
+	public static class HtcFragment2 {}
 
 	public static class ThisIsNotXposedFragment extends DialogFragment implements
 			OnClickListener, OnCheckedChangeListener
@@ -199,8 +199,10 @@ public class LauncherActivity extends Activity
 		return intent;
 	}
 
-	private void launchAppOpsSummary() {
-		launchAppOpsSummary(mPrefs.getBoolean("compatibility_mode", false));
+	private void launchAppOpsSummary()
+	{
+		launchAppOpsSummary(true);
+		//launchAppOpsSummary(mPrefs.getBoolean("compatibility_mode", false));
 	}
 
 	private void launchAppOpsSummary(boolean useOwnFragments)

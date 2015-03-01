@@ -12,8 +12,10 @@ public final class XUtils
 		return Res.modPrefs.getBoolean("failsafe_mode", false);
 	}
 
-	public static boolean isCompatibilityModeEnabled() {
-		return Res.modPrefs.getBoolean("compatibility_mode", false);
+	public static boolean isCompatibilityModeEnabled()
+	{
+		return true;
+		//return Res.modPrefs.getBoolean("compatibility_mode", false);
 	}
 
 	public static ApplicationInfo getApplicationInfo(String packageName)

@@ -164,7 +164,7 @@ public class SettingsActivity extends Activity
 
 				findPreference("show_launcher_icon").setEnabled(!failsafe);
 				findPreference("force_variant").setEnabled(!failsafe);
-				findPreference("use_layout_fix").setEnabled(!failsafe);
+				//findPreference("use_layout_fix").setEnabled(!failsafe);
 				findPreference("hacks").setEnabled(!failsafe);
 			}
 			else if("compatibility_mode".equals(preference.getKey()))
@@ -215,10 +215,9 @@ public class SettingsActivity extends Activity
 			lp.setEntryValues(values);
 			lp.setOnPreferenceChangeListener(this);
 
-			Preference p = findPreference("failsafe_mode");
+			Preference p /*= findPreference("failsafe_mode");
 			callOnChangeListenerWithCurrentValue(p);
-			p.setOnPreferenceChangeListener(this);
-
+			p.setOnPreferenceChangeListener(this)*/;
 
 			findPreference("show_launcher_icon").setOnPreferenceChangeListener(this);
 
