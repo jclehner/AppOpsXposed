@@ -42,6 +42,7 @@ import android.os.Parcelable;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.widget.Toast;
+import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.Util;
 import eu.chainfire.libsuperuser.Shell;
 import eu.chainfire.libsuperuser.Shell.SU;
@@ -119,6 +120,7 @@ public class BugReportBuilder
 
 		collectDeviceInfo(sb);
 		collectApkInfo(sb);
+		collectAppOpsInfos(sb);
 
 		Log.d("AOX", "-------------------------");
 		Log.d("AOX", sb.toString());
@@ -242,6 +244,32 @@ public class BugReportBuilder
 			sb.append("\n" + key);
 			for(String activity : appMap.get(key))
 				sb.append("\n  " + activity);
+		}
+	}
+
+	private void collectAppOpsInfos(StringBuilder sb)
+	{
+		sb.append("\n---------------------------------------------------");
+		sb.append("\n------------------- APPOPS INFO -------------------\n");
+
+		if(AppOpsManagerWrapper._NUM_OP >= 0)
+		{
+			sb.append("\n_NUM_OP: " + AppOpsManagerWrapper._NUM_OP);
+
+			for(int op = 0; op != AppOpsManagerWrapper._NUM_OP; ++op)
+			{
+				sb.append("\n  OP_" + AppOpsManagerWrapper.opToName(op) + " = " + op);
+				try
+				{
+					final int mode = AppOpsManagerWrapper.opToDefaultMode(op);
+					if(mode != AppOpsManagerWrapper.MODE_ALLOWED)
+						sb.append("\n    default: " + AppOpsManagerWrapper.modeToName(mode));
+				}
+				catch(Exception e)
+				{
+					// ignore
+				}
+			}
 		}
 	}
 

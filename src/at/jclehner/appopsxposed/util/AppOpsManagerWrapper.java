@@ -11,7 +11,7 @@ import android.content.Context;
 @TargetApi(19)
 public class AppOpsManagerWrapper extends ObjectWrapper
 {
-	// These are all ops included in AOSP KitKat
+	// These are all ops included in AOSP Lollipop
 	public static final int OP_NONE = getOpInt("OP_NONE");
 	public static final int OP_COARSE_LOCATION = getOpInt("OP_COARSE_LOCATION");
 	public static final int OP_FINE_LOCATION = getOpInt("OP_FINE_LOCATION");
@@ -90,6 +90,7 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 	public static final int MODE_ALLOWED = getOpInt("MODE_ALLOWED");
 	public static final int MODE_IGNORED = getOpInt("MODE_IGNORED");
 	public static final int MODE_ERRORED = getOpInt("MODE_ERRORED");
+	public static final int MODE_DEFAULT = getOpInt("MODE_DEFAULT");
 
 	public static AppOpsManagerWrapper from(Context context) {
 		return new AppOpsManagerWrapper(context);
@@ -141,6 +142,27 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 
 	public static int opToSwitch(int op) {
 		return callStatic(AppOpsManager.class, "opToSwitch", new Class<?>[] { int.class }, op);
+	}
+
+	public static int opToDefaultMode(int op) {
+		return callStatic(AppOpsManager.class, "opToDefaultMode", new Class<?>[] { int.class }, op);
+	}
+
+	public static String modeToName(int mode)
+	{
+		if(mode >= 0)
+		{
+			if(mode == AppOpsManagerWrapper.MODE_ALLOWED)
+				return "ALLOWED";
+			if(mode == AppOpsManagerWrapper.MODE_ERRORED)
+				return "ERRORED";
+			if(mode == AppOpsManagerWrapper.MODE_IGNORED)
+				return "IGNORED";
+			if(mode == AppOpsManagerWrapper.MODE_DEFAULT)
+				return "DEFAULT";
+		}
+
+		return "mode #" + mode;
 	}
 
 	private static int getOpInt(String opName)
