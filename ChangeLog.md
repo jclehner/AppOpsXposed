@@ -1,3 +1,6 @@
+### 1.25
+* Fix several Lollipop issues
+
 ### 1.24
 * Add option to disable verbose logs
 * Potential fix for LG icon issue
