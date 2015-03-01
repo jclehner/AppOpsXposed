@@ -34,6 +34,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.Process;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.format.DateUtils;
@@ -603,7 +604,7 @@ public class AppOpsState {
         final ArrayList<Integer> permOps = new ArrayList<Integer>();
         final int[] opToOrder = new int[AppOpsManagerWrapper._NUM_OP];
         for (int i=0; i<tpl.ops.length; i++) {
-            if (tpl.ops[i] != -1 && tpl.showPerms[i]) {
+            if (isValidOp(tpl.ops[i]) && tpl.showPerms[i]) {
                 String perm = AppOpsManagerWrapper.opToPermission(tpl.ops[i]);
                 if (perm != null && !perms.contains(perm)) {
                     perms.add(perm);
@@ -701,5 +702,19 @@ public class AppOpsState {
 
         // Done!
         return entries;
+    }
+
+    private boolean isValidOp(int op)
+    {
+        if (op > 0 && op < AppOpsManagerWrapper._NUM_OP) {
+            try {
+                mAppOps.checkOp(op, Process.SYSTEM_UID, "android");
+                return true;
+            } catch (IllegalArgumentException e) {
+                Log.w(TAG, "Skipping #" + op + " even though it is within valid range");
+            }
+        }
+
+        return false;
     }
 }
