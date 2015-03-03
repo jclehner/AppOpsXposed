@@ -34,7 +34,6 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Process;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.format.DateUtils;
@@ -81,14 +80,6 @@ public class AppOpsState {
             mOpSummaries[AppOpsManagerWrapper.OP_POST_NOTIFICATION] = summary;
             mOpLabels[AppOpsManagerWrapper.OP_POST_NOTIFICATION] = Util.capitalizeFirst(summary);
         }
-    }
-
-    public CharSequence getOpSummary(int op) {
-        return mOpSummaries[op];
-    }
-
-    public CharSequence getOpLabel(int op) {
-        return mOpLabels[op];
     }
 
     public static class OpsTemplate implements Parcelable {
