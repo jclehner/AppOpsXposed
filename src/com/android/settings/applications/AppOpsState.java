@@ -64,10 +64,12 @@ public class AppOpsState {
         mContext = context;
         mAppOps = AppOpsManagerWrapper.from(context);
         mPm = context.getPackageManager();
-        mOpSummaries = context.getResources().getTextArray(R.array.app_ops_summaries);
-        mOpLabels = context.getResources().getTextArray(R.array.app_ops_labels);
+        //mOpSummaries = context.getResources().getTextArray(R.array.app_ops_summaries);
+        mOpSummaries = OpsLabelHelper.getOpSummaries(context);
+        //mOpLabels = context.getResources().getTextArray(R.array.app_ops_labels);
+        mOpLabels = OpsLabelHelper.getOpLabels(context);
 
-        if (Util.isUsingBootCompletedHack(context) && AppOpsManagerWrapper.OP_BOOT_COMPLETED != -1) {
+        /*if (AppOpsManagerWrapper.hasFakeBootCompletedOp()) {
             mOpSummaries[AppOpsManagerWrapper.OP_VIBRATE] = mOpSummaries[AppOpsManagerWrapper.OP_VIBRATE]
                     + "/" + mOpSummaries[AppOpsManagerWrapper.OP_POST_NOTIFICATION];
 
@@ -79,7 +81,7 @@ public class AppOpsState {
 
             mOpSummaries[AppOpsManagerWrapper.OP_POST_NOTIFICATION] = summary;
             mOpLabels[AppOpsManagerWrapper.OP_POST_NOTIFICATION] = Util.capitalizeFirst(summary);
-        }
+        }*/
     }
 
     public static class OpsTemplate implements Parcelable {

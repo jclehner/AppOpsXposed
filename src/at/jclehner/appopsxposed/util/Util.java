@@ -18,6 +18,7 @@
 
 package at.jclehner.appopsxposed.util;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -27,8 +28,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-
-import com.android.settings.applications.AppOpsDetails;
 
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
@@ -45,8 +44,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import at.jclehner.appopsxposed.AppOpsActivity;
-import at.jclehner.appopsxposed.BuildConfig;
 import at.jclehner.appopsxposed.LauncherActivity;
+
+import com.android.settings.applications.AppOpsDetails;
+
 import dalvik.system.DexFile;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 import eu.chainfire.libsuperuser.Shell.SU;
@@ -327,6 +328,19 @@ public final class Util
 		{
 			if(df != null)
 				df.close();
+		}
+		catch(IOException e)
+		{
+			// ignore
+		}
+	}
+
+	public static void closeQuietly(Closeable c)
+	{
+		try
+		{
+			if(c != null)
+				c.close();
 		}
 		catch(IOException e)
 		{
