@@ -1,6 +1,7 @@
 ### 1.26
-* Fix issue on Sony ROMS where all ops are off by default
 * Fix crash when changing ops
+* Better handling of non-AOSP ops (labels, summaries)
+* Fix issue on Sony ROMS where all ops are off by default
 
 ### 1.25.3
 * Fix several Lollipop issues
