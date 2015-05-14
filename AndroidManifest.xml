@@ -36,7 +36,13 @@
 
         <activity
             android:name=".AppOpsActivity"
-            android:label="@string/app_ops_settings" />
+            android:label="AppOpsXposed">
+            <intent-filter>
+                <!-- The "Settings" app in AOSP 4.3 had this -->
+                <action android:name="android.settings.APP_OPS_SETTINGS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".SettingsActivity"
@@ -88,7 +94,7 @@
             android:enabled="true"
             android:name=".LauncherActivity-Icon"
             android:icon="@drawable/ic_launcher2"
-            android:label="@string/app_ops_settings"
+            android:label="AppOpsXposed"
             android:targetActivity=".LauncherActivity">
            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

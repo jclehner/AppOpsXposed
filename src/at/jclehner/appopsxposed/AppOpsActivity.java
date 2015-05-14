@@ -17,9 +17,22 @@ public class AppOpsActivity extends PreferenceActivity
 	public Intent getIntent()
 	{
 		final Intent intent = new Intent(super.getIntent());
-		if(!intent.hasExtra(EXTRA_SHOW_FRAGMENT))
-			intent.putExtra(EXTRA_SHOW_FRAGMENT, AppOpsSummary.class.getName());
 		intent.putExtra(EXTRA_NO_HEADERS, true);
+
+		final String pkg = intent.getStringExtra("package");
+		if("android.settings.APP_OPS_SETTINGS".equals(intent.getAction()) || pkg != null)
+		{
+			if(pkg != null)
+			{
+				intent.putExtra(EXTRA_SHOW_FRAGMENT, AppOpsDetails.class.getName());
+				intent.putExtra(EXTRA_SHOW_FRAGMENT_ARGUMENTS, intent.getExtras());
+			}
+			else
+				intent.putExtra(EXTRA_SHOW_FRAGMENT, AppOpsSummary.class.getName());
+		}
+		else if(!intent.hasExtra(EXTRA_SHOW_FRAGMENT))
+			intent.putExtra(EXTRA_SHOW_FRAGMENT, AppOpsSummary.class.getName());
+
 		return intent;
 	}
 
