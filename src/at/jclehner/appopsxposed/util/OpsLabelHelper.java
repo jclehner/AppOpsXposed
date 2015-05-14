@@ -15,11 +15,14 @@ import at.jclehner.appopsxposed.R;
 
 public class OpsLabelHelper
 {
-	private static boolean sTryLoadOpNames = true;
 	private static String[] sOpLabels;
 	private static String[] sOpSummaries;
 
-	public static CharSequence getPermissionLabel(Context context, String permission)
+	public static CharSequence getPermissionLabel(Context context, String permission) {
+		return getPermissionLabel(context, permission, permission);
+	}
+
+	private static CharSequence getPermissionLabel(Context context, String permission, String defValue)
 	{
 		try
 		{
@@ -28,7 +31,7 @@ public class OpsLabelHelper
 		}
 		catch(NameNotFoundException e)
 		{
-			return permission;
+			return defValue;
 		}
 	}
 
@@ -109,12 +112,16 @@ public class OpsLabelHelper
 			final String str = getAppOpsString(context, opName, getLabels);
 			if(str != null)
 				strings.append(op, str);
+			else
+				Log.d("AOX", "No ops string for " + opName);
 		}
 
 		final String[] ret = new String[maxOp + 1];
 
 		for(int op = 0; op != ret.length; ++op)
+		{
 			ret[op] = strings.get(op, AppOpsManagerWrapper.opToName(op));
+		}
 
 		return ret;
 	}
@@ -144,11 +151,16 @@ public class OpsLabelHelper
 		{
 			if(getLabel)
 			{
+				// Maybe there's a summary but no label?
 				final String label = getAppOpsString(context, opName, false);
 				return label != null ? Util.capitalizeFirst(label) : null;
 			}
 
-			//Log.d("AOX", "No such id: " + id);
+			final int op = AppOpsManagerWrapper.opFromName(opName);
+			final String perm = AppOpsManagerWrapper.opToPermission(op);
+
+			if(perm != null)
+				return getPermissionLabel(context, perm, null).toString();
 
 			return null;
 		}
@@ -167,87 +179,15 @@ public class OpsLabelHelper
 			if(op == -1)
 				return opName;
 		}
-		else if(opName == null)
+
+		if(sOpLabels == null)
 		{
-			try
-			{
-				opName = "OP_" + AppOpsManagerWrapper.opToName(op);
-			}
-			catch(RuntimeException e)
-			{
-				opName = "OP_#" + op;
-			}
+			sOpLabels = getOpLabels(context);
+			sOpSummaries = getOpSummaries(context);
 		}
 
-		String[] array = getLabel ? sOpLabels : sOpSummaries;
-
-		if(array == null && sTryLoadOpNames)
-		{
-			try
-			{
-				final Resources r = context.getPackageManager()
-						.getResourcesForApplication(AppOpsXposed.SETTINGS_PACKAGE);
-
-				final String idName =
-						AppOpsXposed.SETTINGS_PACKAGE + ":array/app_ops_" +
-						(getLabel ? "labels" : "summaries");
-
-				final int id = r.getIdentifier(idName, null, null);
-
-				final int opsCount = getOpValue("_NUM_OP");
-				sTryLoadOpNames = opsCount != -1;
-
-				if(sTryLoadOpNames)
-				{
-					array = r.getStringArray(id);
-
-					if(array.length != opsCount)
-					{
-						// If the array length doesn't match, it could mean that the known
-						// ops defined in AppOpsManager aren't in sync with the Settings app.
-						// Since the order of ops cannot be guaranteed in that case, ignore
-						// the array.
-
-						Util.log("Length mismatch in " + idName + ": "
-								+ array.length + " vs _NUM_OP " + opsCount);
-
-						sTryLoadOpNames = false;
-					}
-					else
-					{
-						if(getLabel)
-							sOpLabels = array;
-						else
-							sOpSummaries = array;
-					}
-				}
-			}
-			catch(NameNotFoundException e)
-			{
-				sTryLoadOpNames = false;
-			}
-			catch(Resources.NotFoundException e)
-			{
-				sTryLoadOpNames = false;
-			}
-		}
-
-		if(array == null || op >= array.length)
-		{
-			if(op != -1)
-			{
-				final String permission = AppOpsManagerWrapper.opToPermission(op);
-				if(permission != null)
-					return getPermissionLabel(context, permission).toString();
-			}
-
-			return opName;
-		}
-
-		return array[op];
+		return (getLabel ? sOpLabels : sOpSummaries)[op];
 	}
-
-
 
 	public static int getOpValue(String name)
 	{
