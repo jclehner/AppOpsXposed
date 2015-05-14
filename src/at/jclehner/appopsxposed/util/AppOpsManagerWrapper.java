@@ -187,7 +187,7 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		return "mode #" + mode;
 	}
 
-	public static boolean hasFakeBootCompletedOp()
+	public static boolean isBootCompletedHackEnabled()
 	{
 		return AppOpsManagerWrapper.OP_BOOT_COMPLETED ==
 				AppOpsManagerWrapper.OP_POST_NOTIFICATION;
