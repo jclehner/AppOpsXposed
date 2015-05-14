@@ -32,7 +32,6 @@ import android.app.ListFragment;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.AsyncTaskLoader;
 import android.content.Context;
-import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -47,6 +46,9 @@ import android.text.SpannableStringBuilder;
 import android.text.style.StrikethroughSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -56,7 +58,6 @@ import android.widget.TextView;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.OpEntryWrapper;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.PackageOpsWrapper;
-import at.jclehner.appopsxposed.util.Res;
 
 import com.android.settings.applications.AppOpsDetails;
 import com.android.settings.applications.AppOpsState;
@@ -194,6 +195,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 		final PackageInfo packageInfo;
 		final CharSequence label;
 		CharSequence line2;
+		List<OpEntryWrapper> changedOps;
 
 		PackageInfoData(PackageInfo packageInfo, CharSequence label)
 		{
@@ -317,6 +319,11 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 				{
 					if(op.getMode() != AppOpsManagerWrapper.opToDefaultMode(op.getOp()))
 					{
+						if(info.changedOps == null)
+							info.changedOps = new ArrayList<OpEntryWrapper>();
+
+						info.changedOps.add(op);
+
 						if(ssb.length() != 0)
 							ssb.append(", ");
 
@@ -409,6 +416,13 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 	}
 
 	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+	}
+
+	@Override
 	public Loader<List<PackageInfoData>> onCreateLoader(int id, Bundle args) {
 		return new AppListLoader(getActivity(), getArguments().getBoolean("show_changed_ops_only"));
 	}
@@ -417,6 +431,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 	public void onLoadFinished(Loader<List<PackageInfoData>> loader, List<PackageInfoData> data)
 	{
 		mAdapter.setData(data);
+		getActivity().invalidateOptionsMenu();
 
 		if(isResumed())
 			setListShown(true);
@@ -454,5 +469,50 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 		f.setArguments(args);
 
 		((PreferenceActivity) getActivity()).startPreferenceFragment(f, true);
+	}
+
+	private static final int MENU_RESET = 0;
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+	{
+		super.onCreateOptionsMenu(menu, inflater);
+		MenuItem item = menu.add(0, MENU_RESET, 0, R.string.reset_all);
+		item.setIcon(android.R.drawable.ic_menu_revert);
+		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+	}
+
+	@Override
+	public void onPrepareOptionsMenu(Menu menu) {
+		menu.findItem(MENU_RESET).setEnabled(mAdapter.mList != null);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		if(mAdapter.mList == null || item.getItemId() != MENU_RESET)
+			return false;
+
+		resetChangedOps();
+		return true;
+	}
+
+	private void resetChangedOps()
+	{
+		final AppOpsManagerWrapper appOps = AppOpsManagerWrapper.from(getActivity());
+
+		for(PackageInfoData pi : mAdapter.mList)
+		{
+			final int uid = pi.packageInfo.applicationInfo.uid;
+			final String packageName = pi.packageInfo.packageName;
+
+			for(OpEntryWrapper op : pi.changedOps)
+			{
+				appOps.setMode(op.getOp(), uid, packageName,
+						AppOpsManagerWrapper.opToDefaultMode(op.getOp()));
+			}
+		}
+
+		getLoaderManager().restartLoader(0, null, this);
 	}
 }
