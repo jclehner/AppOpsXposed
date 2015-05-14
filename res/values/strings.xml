@@ -66,4 +66,5 @@
 
 	<string name="use_hack_fix_prune_title">Don\'t prune database</string>
 	<string name="use_hack_fix_prune_summary">Use this if ops are reset on reboot for apps installed on sd card.</string>
+	<string name="reset_all">Reset all</string>
 </resources>
