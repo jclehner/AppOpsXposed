@@ -92,6 +92,9 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 	public static final int MODE_ERRORED = getOpInt("MODE_ERRORED");
 	public static final int MODE_DEFAULT = getOpInt("MODE_DEFAULT");
 
+	// CyanogenMod, Sony ROMs, etc.
+	public static final int MODE_ASK = getOpInt("MODE_ASK");
+
 	public static AppOpsManagerWrapper from(Context context) {
 		return new AppOpsManagerWrapper(context);
 	}
@@ -144,8 +147,17 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		return callStatic(AppOpsManager.class, "opToSwitch", new Class<?>[] { int.class }, op);
 	}
 
-	public static int opToDefaultMode(int op) {
-		return callStatic(AppOpsManager.class, "opToDefaultMode", new Class<?>[] { int.class }, op);
+	public static int opToDefaultMode(int op)
+	{
+		try
+		{
+			return callStatic(AppOpsManager.class, "opToDefaultMode", new Class<?>[] { int.class }, op);
+		}
+		catch(ReflectiveException e)
+		{
+			Util.debug(e);
+			return MODE_ALLOWED;
+		}
 	}
 
 	public static String modeToName(int mode)
@@ -160,6 +172,8 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 				return "IGNORED";
 			if(mode == AppOpsManagerWrapper.MODE_DEFAULT)
 				return "DEFAULT";
+			if(mode == AppOpsManagerWrapper.MODE_ASK)
+				return "ASK";
 		}
 
 		return "mode #" + mode;

@@ -44,6 +44,7 @@ import android.widget.TextView;
 import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.OpEntryWrapper;
+import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.PackageOpsWrapper;
 
 public class AppOpsDetails extends Fragment {
     static final String TAG = "AppOpsDetails";
@@ -151,8 +152,7 @@ public class AppOpsDetails extends Fragment {
                         entry.getTimeText(res, true));
                 Switch sw = (Switch)view.findViewById(R.id.switchWidget);
                 final int switchOp = AppOpsManagerWrapper.opToSwitch(firstOp.getOp());
-                sw.setChecked(mAppOps.checkOp(switchOp, entry.getPackageOps().getUid(),
-                        entry.getPackageOps().getPackageName()) == AppOpsManagerWrapper.MODE_ALLOWED);
+                sw.setChecked(modeToChecked(switchOp, entry.getPackageOps()));
                 sw.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -166,6 +166,18 @@ public class AppOpsDetails extends Fragment {
         }
 
         return true;
+    }
+
+    private boolean modeToChecked(int switchOp, PackageOpsWrapper ops) {
+        final int mode = mAppOps.checkOp(switchOp, ops.getUid(), ops.getPackageName());
+        if (mode == AppOpsManagerWrapper.MODE_ALLOWED)
+            return true;
+        if (mode == AppOpsManagerWrapper.MODE_DEFAULT)
+            return true;
+        if (mode == AppOpsManagerWrapper.MODE_ASK)
+            return true;
+
+        return false;
     }
 
     private void setIntentAndFinish(boolean finish, boolean appChanged) {
