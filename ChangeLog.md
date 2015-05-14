@@ -1,3 +1,6 @@
+### 1.26.1
+* Restrictions can be reset under "Show changed"
+
 ### 1.26
 * Fix crash when changing ops
 * Better handling of non-AOSP ops (labels, summaries)
