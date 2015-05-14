@@ -508,10 +508,11 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 			final int uid = pi.packageInfo.applicationInfo.uid;
 			final String packageName = pi.packageInfo.packageName;
 
-			for(OpEntryWrapper op : pi.changedOps)
+			for(OpEntryWrapper entry : pi.changedOps)
 			{
-				appOps.setMode(op.getOp(), uid, packageName,
-						AppOpsManagerWrapper.opToDefaultMode(op.getOp()));
+				final int op = entry.getOp();
+				if(AppOpsManagerWrapper.opAllowsReset(op))
+					appOps.setMode(op, uid, packageName, AppOpsManagerWrapper.opToDefaultMode(op));
 			}
 		}
 

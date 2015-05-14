@@ -160,6 +160,19 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		}
 	}
 
+	public static boolean opAllowsReset(int op)
+	{
+		try
+		{
+			return callStatic(AppOpsManager.class, "opAllowsReset", new Class<?>[] { int.class }, op);
+		}
+		catch(ReflectiveException e)
+		{
+			Util.debug(e);
+			return op != OP_WRITE_SMS;
+		}
+	}
+
 	public static int opFromName(String opName)
 	{
 		if(!opName.startsWith("OP_"))
