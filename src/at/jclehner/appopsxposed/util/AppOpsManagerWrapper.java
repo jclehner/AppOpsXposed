@@ -193,6 +193,10 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 				AppOpsManagerWrapper.OP_POST_NOTIFICATION;
 	}
 
+	public static boolean hasTrueBootCompletedOp() {
+		return getOpInt("OP_BOOT_COMPLETED") != -1;
+	}
+
 	private static int getOpInt(String opName)
 	{
 		try

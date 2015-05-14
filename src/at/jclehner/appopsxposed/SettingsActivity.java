@@ -47,6 +47,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.OpsLabelHelper;
 import at.jclehner.appopsxposed.util.Util;
 
@@ -222,6 +223,7 @@ public class SettingsActivity extends Activity
 			findPreference("show_launcher_icon").setOnPreferenceChangeListener(this);
 
 			p = findPreference("use_hack_boot_completed");
+			p.setEnabled(!AppOpsManagerWrapper.hasTrueBootCompletedOp());
 			p.setSummary(getString(R.string.use_hack_boot_completed_summary,
 					OpsLabelHelper.getOpLabel(getActivity(), "OP_POST_NOTIFICATION"),
 					OpsLabelHelper.getOpLabel(getActivity(), "OP_VIBRATE")));
