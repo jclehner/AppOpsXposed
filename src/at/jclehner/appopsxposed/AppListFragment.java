@@ -58,6 +58,7 @@ import android.widget.TextView;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.OpEntryWrapper;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.PackageOpsWrapper;
+import at.jclehner.appopsxposed.util.OpsLabelHelper;
 
 import com.android.settings.applications.AppOpsDetails;
 import com.android.settings.applications.AppOpsState;
@@ -327,7 +328,8 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 						if(ssb.length() != 0)
 							ssb.append(", ");
 
-						final SpannableString opSummary = new SpannableString(mState.getOpSummary(op.getOp()));
+						final SpannableString opSummary = new SpannableString(
+								OpsLabelHelper.getOpSummary(getContext(), op.getOp()));
 						opSummary.setSpan(new StrikethroughSpan(), 0, opSummary.length(), 0);
 						ssb.append(opSummary);
 						hasUnchangedOps = false;

@@ -1,6 +1,7 @@
 package at.jclehner.appopsxposed.util;
 
 import java.lang.reflect.Field;
+import java.util.Locale;
 
 import android.app.AppOpsManager;
 import android.content.Context;
@@ -8,7 +9,9 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.util.Log;
+import android.util.SparseArray;
 import at.jclehner.appopsxposed.AppOpsXposed;
+import at.jclehner.appopsxposed.R;
 
 public class OpsLabelHelper
 {
@@ -43,6 +46,114 @@ public class OpsLabelHelper
 
 	public static String getOpSummary(Context context, String opName) {
 		return getOpLabelOrSummary(context, opName, -1, false);
+	}
+
+	public static String[] getOpSummaries(Context context) {
+		return getOpLabelsOrSummaries(context, false);
+	}
+
+	public static String[] getOpLabels(Context context) {
+		return getOpLabelsOrSummaries(context, true);
+	}
+
+	private static String[] getOpLabelsOrSummaries(Context context, boolean getLabels)
+	{
+		final SparseArray<String> strings = new SparseArray<String>();
+		final boolean hasFakeBootCompleted = AppOpsManagerWrapper.hasFakeBootCompletedOp();
+		int maxOp = 0;
+
+		Log.d("AOX", "getOpLabelsOrSummaries: hasFakeBootCompleted=" + hasFakeBootCompleted);
+
+		for(Field field : AppOpsManagerWrapper.class.getDeclaredFields())
+		{
+			final String opName = field.getName();
+			if(!opName.startsWith("OP_") || "OP_NONE".equals(opName))
+				continue;
+
+			final int op = AppOpsManagerWrapper.opFromName(opName);
+			if(op == -1)
+				continue;
+			else if(op > maxOp)
+				maxOp = op;
+
+			if(hasFakeBootCompleted)
+			{
+				// Don't use op == because that would be true for
+				// OP_BOOT_COMPLETED as well in this case
+				if("OP_POST_NOTIFICATION".equals(opName))
+					continue;
+				else if(op == AppOpsManagerWrapper.OP_VIBRATE)
+				{
+					if(getLabels)
+					{
+						strings.append(op, context.getString(R.string.app_ops_labels_vibrate) + "/" +
+								context.getString(R.string.app_ops_labels_post_notification));
+					}
+					else
+					{
+						strings.append(op, context.getString(R.string.app_ops_summaries_vibrate) + "/" +
+								context.getString(R.string.app_ops_summaries_post_notification));
+					}
+					continue;
+				}
+				/*else if(op == AppOpsManagerWrapper.OP_BOOT_COMPLETED)
+				{
+					strings.append(op, context.getString(getLabels ? R.string.app_ops_labels_boot_completed :
+						R.string.app_ops_summaries_boot_completed));
+
+					Log.d("AOX", "OP_BOOT_COMPLETED!");
+					continue;
+				}*/
+			}
+
+			final String str = getAppOpsString(context, opName, getLabels);
+			if(str != null)
+				strings.append(op, str);
+		}
+
+		final String[] ret = new String[maxOp + 1];
+
+		for(int op = 0; op != ret.length; ++op)
+			ret[op] = strings.get(op, AppOpsManagerWrapper.opToName(op));
+
+		return ret;
+	}
+
+	private static String getAppOpsString(Context context, String opName, boolean getLabel)
+	{
+		final String id = "app_ops_" + (getLabel ? "labels" : "summaries") + "_" +
+				opName.substring(3).toLowerCase(Locale.US);
+
+		final Resources res;
+
+		try
+		{
+			if(Constants.MODULE_PACKAGE.equals(context.getPackageName()))
+				res = context.getResources();
+			else
+				res = context.getPackageManager().getResourcesForApplication("at.jclehner.appopsxposed");
+		}
+		catch(NameNotFoundException e)
+		{
+			Log.w("AOX", e);
+			return null;
+		}
+
+		final int resId = res.getIdentifier(Constants.MODULE_PACKAGE + ":string/" + id, null, null);
+		if(resId == 0)
+		{
+			if(getLabel)
+			{
+				final String label = getAppOpsString(context, opName, false);
+				return label != null ? Util.capitalizeFirst(label) : null;
+			}
+
+			//Log.d("AOX", "No such id: " + id);
+
+			return null;
+		}
+
+		return context.getString(resId);
 	}
 
 	private static String getOpLabelOrSummary(Context context, String opName, int op, boolean getLabel)

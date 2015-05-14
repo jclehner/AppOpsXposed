@@ -160,6 +160,14 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		}
 	}
 
+	public static int opFromName(String opName)
+	{
+		if(!opName.startsWith("OP_"))
+			opName = "OP_" + opName;
+
+		return getStatic(AppOpsManagerWrapper.class, opName, -1);
+	}
+
 	public static String modeToName(int mode)
 	{
 		if(mode >= 0)
@@ -177,6 +185,12 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		}
 
 		return "mode #" + mode;
+	}
+
+	public static boolean hasFakeBootCompletedOp()
+	{
+		return AppOpsManagerWrapper.OP_BOOT_COMPLETED ==
+				AppOpsManagerWrapper.OP_POST_NOTIFICATION;
 	}
 
 	private static int getOpInt(String opName)
