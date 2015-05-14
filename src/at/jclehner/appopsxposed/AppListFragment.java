@@ -315,7 +315,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 			{
 				for(OpEntryWrapper op : pkgOps.getOps())
 				{
-					if(op.getMode() != AppOpsManager.MODE_ALLOWED)
+					if(op.getMode() != AppOpsManagerWrapper.opToDefaultMode(op.getOp()))
 					{
 						if(ssb.length() != 0)
 							ssb.append(", ");
