@@ -5,7 +5,7 @@ renamed to match the AppOpsManager.OP_* constants (namely, change
 _modify_ to _write_). These are accessed via reflection from
 OpsLabelHelper.
 -->
-<resources>
+<resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
     <string name="app_ops_summaries_coarse_location">coarse location</string>
     <string name="app_ops_summaries_fine_location">fine location</string>
     <string name="app_ops_summaries_gps">GPS</string>
