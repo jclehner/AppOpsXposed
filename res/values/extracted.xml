@@ -1,120 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingTranslation">
-        <string name="app_ops_settings">App ops</string>
-        <string name="app_ops_categories_bootup">Bootup</string>
-        <string name="version_text">version %1$s</string>
-        <string name="app_ops_running">Running</string>
-        <string name="app_ops_never_used">(Never used)</string>
+<!--
+These were taken from CyanogenMod's Settings app. Identifiers were
+renamed to match the AppOpsManager.OP_* constants (namely, change
+_modify_ to _write_). These are accessed via reflection from
+OpsLabelHelper. 
+
+DO NOT CHANGE THE ORDER OF app_ops_{summaries,labels,categories}! 
+THE EXTRACTOR SCRIPT WILL FAIL OTHERWISE!
+-->
+<resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_ops_summaries_coarse_location">coarse location</string>
+    <string name="app_ops_summaries_fine_location">fine location</string>
+    <string name="app_ops_summaries_gps">GPS</string>
+    <string name="app_ops_summaries_vibrate">vibrate</string>
+    <string name="app_ops_summaries_read_contacts">read contacts</string>
+    <string name="app_ops_summaries_write_contacts">modify contacts</string>
+    <string name="app_ops_summaries_read_call_log">read call log</string>
+    <string name="app_ops_summaries_write_call_log">modify call log</string>
+    <string name="app_ops_summaries_read_calendar">read calendar</string>
+    <string name="app_ops_summaries_write_calendar">modify calendar</string>
+    <string name="app_ops_summaries_wifi_scan">Wi\u2011Fi scan</string>
+    <string name="app_ops_summaries_post_notification">post notification</string>
+    <string name="app_ops_summaries_cell_scan">cell scan</string>
+    <string name="app_ops_summaries_call_phone">call phone</string>
+    <string name="app_ops_summaries_read_sms">read SMS</string>
+    <string name="app_ops_summaries_write_sms">write SMS</string>
+    <string name="app_ops_summaries_receive_sms">receive SMS</string>
+    <string name="app_ops_summaries_receive_emergency_sms">receive emergency SMS</string>
+    <string name="app_ops_summaries_receive_mms">receive MMS</string>
+    <string name="app_ops_summaries_receive_wap_push">receive WAP push</string>
+    <string name="app_ops_summaries_send_sms">send SMS</string>
+    <string name="app_ops_summaries_read_icc_sms">read ICC SMS</string>
+    <string name="app_ops_summaries_write_icc_sms">write ICC SMS</string>
+    <string name="app_ops_summaries_write_settings">modify settings</string>
+    <string name="app_ops_summaries_system_alert_window">draw on top</string>
+    <string name="app_ops_summaries_access_notifications">access notifications</string>
+    <string name="app_ops_summaries_camera">camera</string>
+    <string name="app_ops_summaries_record_audio">record audio</string>
+    <string name="app_ops_summaries_play_audio">play audio</string>
+    <string name="app_ops_summaries_read_clipboard">read clipboard</string>
+    <string name="app_ops_summaries_write_clipboard">modify clipboard</string>
+    <string name="app_ops_summaries_take_media_buttons">media buttons</string>
+    <string name="app_ops_summaries_audio_focus">audio focus</string>
+    <string name="app_ops_summaries_audio_master_volume">master volume</string>
+    <string name="app_ops_summaries_audio_voice_volume">voice volume</string>
+    <string name="app_ops_summaries_audio_ring_volume">ring volume</string>
+    <string name="app_ops_summaries_audio_media_volume">media volume</string>
+    <string name="app_ops_summaries_audio_alarm_volume">alarm volume</string>
+    <string name="app_ops_summaries_audio_notification_volume">notification volume</string>
+    <string name="app_ops_summaries_audio_bluetooth_volume">Bluetooth volume</string>
+    <string name="app_ops_summaries_wake_lock">keep awake</string>
+    <string name="app_ops_summaries_monitor_location">monitor location</string>
+    <string name="app_ops_summaries_monitor_high_power_location">monitor high power location</string>
+    <string name="app_ops_summaries_get_usage_stats">get app usage stats</string>
+    <string name="app_ops_summaries_mute_microphone">mute/unmute microphone</string>
+    <string name="app_ops_summaries_toast_window">display toasts</string>
+    <string name="app_ops_summaries_project_media">project media</string>
+    <string name="app_ops_summaries_activate_vpn">activate VPN</string>
+    <string name="app_ops_summaries_wifi_change">Wi\u2011Fi change</string>
+    <string name="app_ops_summaries_bluetooth_change">Bluetooth change</string>
+    <string name="app_ops_summaries_send_mms">send MMS</string>
+    <string name="app_ops_summaries_read_mms">read MMS</string>
+    <string name="app_ops_summaries_write_mms">write MMS</string>
+    <string name="app_ops_summaries_auto_start">auto start</string>
+    <string name="app_ops_summaries_nfc_change">NFC change</string>
+    <string name="app_ops_summaries_delete_sms">delete SMS</string>
+    <string name="app_ops_summaries_delete_mms">delete MMS</string>
+    <string name="app_ops_summaries_delete_contacts">delete contacts</string>
+    <string name="app_ops_summaries_delete_call_log">delete call log</string>
+    <string name="app_ops_summaries_data_change">data change</string>
+    <string name="app_ops_summaries_alarm_wakeup">wake up</string>
+    <string name="app_ops_summaries_su">root access</string>
+    <string name="app_ops_summaries_neighboring_cells">cell scan</string>
+    <string name="app_ops_summaries_boot_completed">run at startup</string>
+    <string name="app_ops_summaries_take_audio_focus">audio focus</string>
+
+    <string name="app_ops_labels_location">Location</string>
+    <string name="app_ops_labels_vibrate">Vibrate</string>
+    <string name="app_ops_labels_read_contacts">Read contacts</string>
+    <string name="app_ops_labels_write_contacts">Modify contacts</string>
+    <string name="app_ops_labels_read_call_log">Read call log</string>
+    <string name="app_ops_labels_write_call_log">Modify call log</string>
+    <string name="app_ops_labels_read_calendar">Read calendar</string>
+    <string name="app_ops_labels_write_calendar">Modify calendar</string>
+    <string name="app_ops_labels_post_notification">Post notification</string>
+    <string name="app_ops_labels_call_phone">Call phone</string>
+    <string name="app_ops_labels_read_sms_db">Read SMS DB</string>
+    <string name="app_ops_labels_write_sms_db">Write SMS DB</string>
+    <string name="app_ops_labels_receive_sms">Receive SMS</string>
+    <string name="app_ops_labels_receive_mms">Receive MMS</string>
+    <string name="app_ops_labels_send_sms">Send SMS</string>
+    <string name="app_ops_labels_write_settings">Modify settings</string>
+    <string name="app_ops_labels_system_alert_window">Draw on top</string>
+    <string name="app_ops_labels_access_notifications">Access notifications</string>
+    <string name="app_ops_labels_camera">Camera</string>
+    <string name="app_ops_labels_record_audio">Record audio</string>
+    <string name="app_ops_labels_play_audio">Play audio</string>
+    <string name="app_ops_labels_read_clipboard">Read clipboard</string>
+    <string name="app_ops_labels_write_clipboard">Modify clipboard</string>
+    <string name="app_ops_labels_take_media_buttons">Media buttons</string>
+    <string name="app_ops_labels_audio_focus">Audio focus</string>
+    <string name="app_ops_labels_audio_master_volume">Master volume</string>
+    <string name="app_ops_labels_audio_voice_volume">Voice volume</string>
+    <string name="app_ops_labels_audio_ring_volume">Ring volume</string>
+    <string name="app_ops_labels_audio_media_volume">Media volume</string>
+    <string name="app_ops_labels_audio_alarm_volume">Alarm volume</string>
+    <string name="app_ops_labels_audio_notification_volume">Notification volume</string>
+    <string name="app_ops_labels_audio_bluetooth_volume">Bluetooth volume</string>
+    <string name="app_ops_labels_wake_lock">Keep awake</string>
+    <string name="app_ops_labels_get_usage_stats">Get app usage stats</string>
+    <string name="app_ops_labels_mute_microphone">Mute/unmute microphone</string>
+    <string name="app_ops_labels_toast_window">Display toasts</string>
+    <string name="app_ops_labels_project_media">Project media</string>
+    <string name="app_ops_labels_activate_vpn">Activate VPN</string>
+    <string name="app_ops_labels_wifi_change">Wi\u2011Fi change</string>
+    <string name="app_ops_labels_bluetooth_change">Bluetooth change</string>
+    <string name="app_ops_labels_send_mms">Send MMS</string>
+    <string name="app_ops_labels_read_mms">Read MMS</string>
+    <string name="app_ops_labels_write_mms">Write MMS</string>
+    <string name="app_ops_labels_auto_start">Auto start</string>
+    <string name="app_ops_labels_nfc_change">NFC change</string>
+    <string name="app_ops_labels_delete_sms">Delete SMS</string>
+    <string name="app_ops_labels_delete_mms">Delete MMS</string>
+    <string name="app_ops_labels_delete_contacts">Delete contacts</string>
+    <string name="app_ops_labels_delete_call_log">Delete call log</string>
+    <string name="app_ops_labels_data_change">Data change</string>
+    <string name="app_ops_labels_alarm_wakeup">Wake up</string>
+    <string name="app_ops_labels_su">Root access</string>
+    <string name="app_ops_labels_neighboring_cells">Location</string>
+    <string name="app_ops_labels_boot_completed">Run at startup</string>
     
-    <string-array name="app_ops_categories">
-        <item>Location</item>
-        <item>Personal</item>
-        <item>Messaging</item>
-        <item>Media</item>
-        <item>Device</item>
-        <item>@string/app_ops_categories_bootup</item>
-    </string-array>
-    <!-- User display names for app ops codes -->
-    <string-array name="app_ops_summaries">
-        <item>coarse location</item>
-        <item>fine location</item>
-        <item>GPS</item>
-        <item>vibrate</item>
-        <item>read contacts</item>
-        <item>modify contacts</item>
-        <item>read call log</item>
-        <item>modify call log</item>
-        <item>read calendar</item>
-        <item>modify calendar</item>
-        <item>wi-fi scan</item>
-        <item>notification</item>
-        <item>cell scan</item>
-        <item>call phone</item>
-        <item>read SMS</item>
-        <item>write SMS</item>
-        <item>receive SMS</item>
-        <item>receive emergency SMS</item>
-        <item>receive MMS</item>
-        <item>receive WAP push</item>
-        <item>send SMS</item>
-        <item>read ICC SMS</item>
-        <item>write ICC SMS</item>
-        <item>modify settings</item>
-        <item>draw on top</item>
-        <item>access notifications</item>
-        <item>camera</item>
-        <item>record audio</item>
-        <item>play audio</item>
-        <item>read clipboard</item>
-        <item>modify clipboard</item>
-        <item>media buttons</item>
-        <item>audio focus</item>
-        <item>master volume</item>
-        <item>voice volume</item>
-        <item>ring volume</item>
-        <item>media volume</item>
-        <item>alarm volume</item>
-        <item>notification volume</item>
-        <item>bluetooth volume</item>
-        <item>keep awake</item>
-        <item>monitor location</item>
-        <item>monitor high power location</item>
-        <item>get usage stats</item>
-        <item>mute/unmute microphone</item>
-        <item>toast window</item>
-        <item>project media</item>
-        <item>activate VPN</item>
-    </string-array>
-    <!-- User display names for app ops codes -->
-    <string-array name="app_ops_labels">
-        <item>Location</item>
-        <item>Location</item>
-        <item>Location</item>
-        <item>Vibrate</item>
-        <item>Read contacts</item>
-        <item>Modify contacts</item>
-        <item>Read call log</item>
-        <item>Modify call log</item>
-        <item>Read calendar</item>
-        <item>Modify calendar</item>
-        <item>Location</item>
-        <item>Post notification</item>
-        <item>Location</item>
-        <item>Call phone</item>
-        <item>Read SMS/MMS</item>
-        <item>Write SMS/MMS</item>
-        <item>Receive SMS/MMS</item>
-        <item>Receive SMS/MMS</item>
-        <item>Receive SMS/MMS</item>
-        <item>Receive SMS/MMS</item>
-        <item>Send SMS/MMS</item>
-        <item>Read SMS/MMS</item>
-        <item>Write SMS/MMS</item>
-        <item>Modify settings</item>
-        <item>Draw on top</item>
-        <item>Access notifications</item>
-        <item>Camera</item>
-        <item>Record audio</item>
-        <item>Play audio</item>
-        <item>Read clipboard</item>
-        <item>Modify clipboard</item>
-        <item>Media buttons</item>
-        <item>Audio focus</item>
-        <item>Master volume</item>
-        <item>Voice volume</item>
-        <item>Ring volume</item>
-        <item>Media volume</item>
-        <item>Alarm volume</item>
-        <item>Notification volume</item>
-        <item>Bluetooth volume</item>
-        <item>Keep awake</item>
-        <item>Location</item>
-        <item>Location</item>
-        <item>Get usage stats</item>
-        <item>Mute/unmute microphone</item>
-        <item>Toast window</item>
-        <item>Project media</item>
-        <item>Activate VPN</item>
-    </string-array>
+    <string name="app_ops_categories_location">Location</string>
+    <string name="app_ops_categories_personal">Personal</string>
+    <string name="app_ops_categories_messaging">Messaging</string>
+    <string name="app_ops_categories_media">Media</string>
+    <string name="app_ops_categories_device">Device</string>
+    <string name="app_ops_categories_bootup">Bootup</string>
+    <string name="app_ops_categories_su">Root</string>
+    
+    <string name="app_ops_settings">App ops</string>
+    <string name="version_text">version %1$s</string>
+    <string name="app_ops_running">Running</string>
+    <string name="app_ops_never_used">(Never used)</string>
 </resources>

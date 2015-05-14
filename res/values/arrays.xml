@@ -7,6 +7,16 @@
         <item>@string/xperia_always_ask</item>
     </string-array>
 
+    <string-array name="app_ops_categories">
+        <item>@string/app_ops_categories_location</item>
+        <item>@string/app_ops_categories_personal</item>
+        <item>@string/app_ops_categories_messaging</item>
+        <item>@string/app_ops_categories_media</item>
+        <item>@string/app_ops_categories_device</item>
+        <item>@string/app_ops_categories_bootup</item>
+        <item>@string/app_ops_categories_su</item>
+    </string-array>
+
     <string-array name="variants">
         <item>@string/automatic</item>
         <item>AOSP</item>
