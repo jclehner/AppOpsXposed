@@ -1,4 +1,8 @@
-### 1.25
+### 1.26
+* Fix issue on Sony ROMS where all ops are off by default
+* Fix crash when changing ops
+
+### 1.25.3
 * Fix several Lollipop issues
 
 ### 1.24
