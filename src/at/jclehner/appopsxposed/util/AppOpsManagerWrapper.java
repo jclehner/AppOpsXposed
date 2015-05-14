@@ -147,30 +147,47 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		return callStatic(AppOpsManager.class, "opToSwitch", new Class<?>[] { int.class }, op);
 	}
 
+	private static boolean sUseOpToDefaultMode = true;
+
 	public static int opToDefaultMode(int op)
 	{
-		try
+		if(sUseOpToDefaultMode)
 		{
-			return callStatic(AppOpsManager.class, "opToDefaultMode", new Class<?>[] { int.class }, op);
+			try
+			{
+				return callStatic(AppOpsManager.class, "opToDefaultMode", new Class<?>[] { int.class }, op);
+			}
+			catch(ReflectiveException e)
+			{
+				Util.debug(e);
+				sUseOpToDefaultMode = false;
+			}
 		}
-		catch(ReflectiveException e)
-		{
-			Util.debug(e);
-			return MODE_ALLOWED;
-		}
+
+		return MODE_ALLOWED;
 	}
+
+	private static boolean sUseOpAllowsReset = true;
 
 	public static boolean opAllowsReset(int op)
 	{
-		try
+		if(sUseOpAllowsReset)
 		{
-			return callStatic(AppOpsManager.class, "opAllowsReset", new Class<?>[] { int.class }, op);
+			try
+			{
+				return callStatic(AppOpsManager.class, "opAllowsReset", new Class<?>[] { int.class }, op);
+			}
+			catch(ReflectiveException e)
+			{
+				Util.debug(e);
+				sUseOpAllowsReset = false;
+			}
 		}
-		catch(ReflectiveException e)
-		{
-			Util.debug(e);
-			return op != OP_WRITE_SMS;
-		}
+
+		// This op is used to control which app is the current
+		// SMS app, so we don't reset it. At the moment, this
+		// is the only op in AOSP which doesn't allow a reset.
+		return op != OP_WRITE_SMS;
 	}
 
 	public static int opFromName(String opName)
