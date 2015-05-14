@@ -254,7 +254,8 @@ public class SettingsActivity extends Activity
 
 			p = findPreference("version");
 			p.setTitle("AppOpsXposed " + Util.getAoxVersion(getActivity()));
-			p.setSummary("Copyright (C) Joseph C. Lehner 2013, 2014\n"
+			// \u2013 is an en dash!
+			p.setSummary("Copyright (C) Joseph C. Lehner 2013\u20132015\n"
 					+ "<joseph.c.lehner@gmail.com> / caspase @XDA");
 
 			if(BuildConfig.DEBUG)
