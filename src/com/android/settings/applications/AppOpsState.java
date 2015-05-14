@@ -40,6 +40,7 @@ import android.text.format.DateUtils;
 import android.text.style.StrikethroughSpan;
 import android.util.Log;
 import android.util.SparseArray;
+import at.jclehner.appopsxposed.BuildConfig;
 import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.OpEntryWrapper;
@@ -282,7 +283,7 @@ public class AppOpsState {
         public void addOp(AppOpEntry entry, OpEntryWrapper op) {
             mOps.put(op.getOp(), op);
             mHasDisallowedOps |= op.getMode() != AppOpsManagerWrapper.MODE_ALLOWED;
-            mOpSwitches.put(AppOpsManagerWrapper.opToSwitch(op.getOp()), entry);
+            mOpSwitches.put(opToSwitch(op.getOp()), entry);
         }
 
         public boolean hasOp(int op) {
@@ -290,7 +291,7 @@ public class AppOpsState {
         }
 
         public AppOpEntry getOpSwitch(int op) {
-            return mOpSwitches.get(AppOpsManagerWrapper.opToSwitch(op));
+            return mOpSwitches.get(opToSwitch(op));
         }
 
         public ApplicationInfo getApplicationInfo() {
@@ -386,7 +387,7 @@ public class AppOpsState {
         public void addOp(OpEntryWrapper op) {
             mApp.addOp(this, op);
             addOp(mOps, op);
-            if (mApp.getOpSwitch(AppOpsManagerWrapper.opToSwitch(op.getOp())) == null) {
+            if (mApp.getOpSwitch(opToSwitch(op.getOp())) == null) {
                 addOp(mSwitchOps, op);
             }
         }
@@ -709,5 +710,16 @@ public class AppOpsState {
         }
 
         return false;
+    }
+
+    private static int opToSwitch(int op)
+    {
+        // TODO Implement something like expert mode?
+
+        if (true) {
+            return AppOpsManagerWrapper.opToSwitch(op);
+        }
+
+        return op;
     }
 }
