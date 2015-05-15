@@ -15,17 +15,65 @@ PATTERNS=(
 	's/_(labels|summaries)_(.*?)_volume/_$1_audio_$2_volume/g'
 )
 
+copy() {
+	[[ -f "$1" ]] && cp "$1" "$2"
+}
+
 download() {
 	if [[ ! -z $OPSTRING_DOWNLOADS ]]; then
-		if [[ -f "$OPSTRING_DOWNLOADS/$1" ]]; then
-			if cp "$OPSTRING_DOWNLOADS/$1" "$2"; then
-				echo -n "*"
-				return 0
-			fi
+
+		if copy "$OPSTRING_DOWNLOADS/$1" "$2"; then
+			echo -n "*"
 		else
+			# Maybe we have a matching file in another
+			# directory of the same language?
+
+			dir=$(dirname "$1")
+			lang=${dir:7:2}
+			base=$(basename "$1")
+
+			if [[ ${dir:10:1} == "r" ]]; then
+				# We have a regional locale; try the main language
+				if copy "$OPSTRING_DOWNLOADS/values-$lang/$base" "$2"; then
+					echo -n "($lang)*"
+					return 0
+				fi
+			else
+				# We have a language without a region specified;
+				# try the regional locales (if any).
+				files=( "$OPSTRING_DOWNLOADS/values-${lang}"-r??/$base "(skip)")
+				valdir=$(basename "$(dirname "${files[0]}")")
+				count=${#files[@]}
+
+				if [[ $count -gt 0 && ${valdir:11} != "??" ]]; then
+					if [[ $count -gt 1 ]]; then
+						echo
+						echo "$lang: select a $base file"
+						select f in "${files[@]}"; do
+							[[ $f == "(skip)" ]] && echo -n "$lang: DL!" && return 0
+
+							locale=$(basename "$f")
+							locale=${locale:7}
+							if copy "$f" "$2"; then
+								echo -n "$lang: DL*"
+								return 0
+							else
+								echo "$lang: copy failed ($f/$base -> $2)"
+							fi
+						done
+					else
+						if copy "${files[0]}" "$2"; then
+							echo -n "(${valdir:7})*"
+						fi
+					fi
+				fi
+			fi
+
 			echo -n "!"
 			return 1
 		fi
+
+		return 0
 	fi
 
 	if wget -O "$2" -q "$RES/$1"; then
@@ -47,7 +95,7 @@ extract_lang() {
 	if ! download "values-$1/cm_strings.xml" "$TMP.dl1"; then
 		use_arrays=1
 	else
-		if ! grep -qP 'app_ops_(summaries|labels)_' "$TMP.dl1"; then
+		if ! grep -qP 'app_ops_(summaries|labels)_' "$TMP.dl1" &> /dev/null; then
 			use_arrays=1
 		else
 			use_arrays=
