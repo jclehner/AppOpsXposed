@@ -1,3 +1,6 @@
+### 1.27
+* Add translations from CM-12 for a ton of languages
+
 ### 1.26.1
 * Restrictions can be reset under "Show changed"
 
