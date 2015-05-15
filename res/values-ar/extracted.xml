@@ -58,8 +58,8 @@
   <string name="app_ops_labels_write_calendar">تعديل التقويم</string>
   <string name="app_ops_labels_notification_toast">إعلام/Toast</string>
   <string name="app_ops_labels_call_phone">مكالمة هاتفية</string>
-  <string name="app_ops_labels_read_sms_db">قراءة الرسائل القصيرة DB</string>
-  <string name="app_ops_labels_write_sms_db">كتابة الرسائل القصيرة DB</string>
+  <string name="app_ops_labels_read_sms">قراءة الرسائل القصيرة DB</string>
+  <string name="app_ops_labels_write_sms">كتابة الرسائل القصيرة DB</string>
   <string name="app_ops_labels_receive_sms">تلقي الرسائل القصيرة</string>
   <string name="app_ops_labels_receive_mms">تلقي MMS</string>
   <string name="app_ops_labels_send_sms">إرسال الرسائل القصيرة</string>

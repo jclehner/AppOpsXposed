@@ -74,8 +74,8 @@
   <string name="app_ops_labels_write_calendar">일정 수정</string>
   <string name="app_ops_labels_notification_toast">알림/토스트</string>
   <string name="app_ops_labels_call_phone">전화 걸기</string>
-  <string name="app_ops_labels_read_sms_db">SMS DB 읽기</string>
-  <string name="app_ops_labels_write_sms_db">SMS DB 쓰기</string>
+  <string name="app_ops_labels_read_sms">SMS DB 읽기</string>
+  <string name="app_ops_labels_write_sms">SMS DB 쓰기</string>
   <string name="app_ops_labels_receive_sms">SMS 수신</string>
   <string name="app_ops_labels_receive_mms">MMS 수신</string>
   <string name="app_ops_labels_send_sms">SMS 보내기</string>

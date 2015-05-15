@@ -64,8 +64,8 @@
   <string name="app_ops_labels_write_calendar">Modifică calendarul</string>
   <string name="app_ops_labels_notification_toast">Notificare/Toast</string>
   <string name="app_ops_labels_call_phone">Apelare</string>
-  <string name="app_ops_labels_read_sms_db">Citește SMS DB</string>
-  <string name="app_ops_labels_write_sms_db">Scrie SMS DB</string>
+  <string name="app_ops_labels_read_sms">Citește SMS DB</string>
+  <string name="app_ops_labels_write_sms">Scrie SMS DB</string>
   <string name="app_ops_labels_receive_sms">Primește SMS</string>
   <string name="app_ops_labels_receive_mms">Primește MMS</string>
   <string name="app_ops_labels_send_sms">Trimite SMS</string>

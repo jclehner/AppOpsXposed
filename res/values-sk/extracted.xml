@@ -74,8 +74,8 @@
   <string name="app_ops_labels_write_calendar">Upraviť údaje v kalendári</string>
   <string name="app_ops_labels_notification_toast">Oznámenie/Toast</string>
   <string name="app_ops_labels_call_phone">Telefonovať</string>
-  <string name="app_ops_labels_read_sms_db">Čítať SMS DB</string>
-  <string name="app_ops_labels_write_sms_db">Vytvoriť SMS DB</string>
+  <string name="app_ops_labels_read_sms">Čítať SMS DB</string>
+  <string name="app_ops_labels_write_sms">Vytvoriť SMS DB</string>
   <string name="app_ops_labels_receive_sms">Prijať SMS</string>
   <string name="app_ops_labels_receive_mms">Prijať MMS</string>
   <string name="app_ops_labels_send_sms">Odoslať SMS</string>

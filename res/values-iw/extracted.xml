@@ -74,8 +74,8 @@
   <string name="app_ops_labels_write_calendar">שנה לוח שנה</string>
   <string name="app_ops_labels_notification_toast">פרסם התראה</string>
   <string name="app_ops_labels_call_phone">חיוג למכשיר הטלפון</string>
-  <string name="app_ops_labels_read_sms_db">‏קבל SMS/MMS</string>
-  <string name="app_ops_labels_write_sms_db">‏שלח SMS/MMS</string>
+  <string name="app_ops_labels_read_sms">‏קבל SMS/MMS</string>
+  <string name="app_ops_labels_write_sms">‏שלח SMS/MMS</string>
   <string name="app_ops_labels_receive_sms">‏קבל SMS/MMS</string>
   <string name="app_ops_labels_receive_mms">‏קבל SMS/MMS</string>
   <string name="app_ops_labels_send_sms">‏שלח SMS/MMS</string>

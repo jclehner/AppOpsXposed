@@ -8,6 +8,7 @@ PATTERNS=(
 	's/_modify_/_write_/g'
 	's/_wake_up/_alarm_wakeup/g'
 	's/_mute_unmute/_mute/g'
+	's/_sms_db/_sms/g'
 	's/_keep_awake/_wake_lock/g'
 	's/_auto_start/_boot_completed/g'
 	's/_notification"/_post_notification"/g'

@@ -74,8 +74,8 @@
   <string name="app_ops_labels_write_calendar">Kalender ändern</string>
   <string name="app_ops_labels_notification_toast">Benachrichtigung posten</string>
   <string name="app_ops_labels_call_phone">Telefonieren</string>
-  <string name="app_ops_labels_read_sms_db">SMS-Datenbank lesen</string>
-  <string name="app_ops_labels_write_sms_db">SMS-Datenbank schreiben</string>
+  <string name="app_ops_labels_read_sms">SMS-Datenbank lesen</string>
+  <string name="app_ops_labels_write_sms">SMS-Datenbank schreiben</string>
   <string name="app_ops_labels_receive_sms">SMS empfangen</string>
   <string name="app_ops_labels_receive_mms">MMS empfangen</string>
   <string name="app_ops_labels_send_sms">SMS senden</string>

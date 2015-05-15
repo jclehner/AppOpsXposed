@@ -74,8 +74,8 @@
   <string name="app_ops_labels_write_calendar">修改日历</string>
   <string name="app_ops_labels_notification_toast">通知/Toast</string>
   <string name="app_ops_labels_call_phone">拨打电话</string>
-  <string name="app_ops_labels_read_sms_db">读取短信数据库</string>
-  <string name="app_ops_labels_write_sms_db">写入短信数据库</string>
+  <string name="app_ops_labels_read_sms">读取短信数据库</string>
+  <string name="app_ops_labels_write_sms">写入短信数据库</string>
   <string name="app_ops_labels_receive_sms">接收短信</string>
   <string name="app_ops_labels_receive_mms">接收彩信</string>
   <string name="app_ops_labels_send_sms">发送短信</string>

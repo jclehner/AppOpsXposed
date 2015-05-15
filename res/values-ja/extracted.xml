@@ -74,8 +74,8 @@
   <string name="app_ops_labels_write_calendar">カレンダーの変更</string>
   <string name="app_ops_labels_notification_toast">通知/トースト</string>
   <string name="app_ops_labels_call_phone">通話の発信</string>
-  <string name="app_ops_labels_read_sms_db">SMS DBの読み取り</string>
-  <string name="app_ops_labels_write_sms_db">SMS DBの書き込み</string>
+  <string name="app_ops_labels_read_sms">SMS DBの読み取り</string>
+  <string name="app_ops_labels_write_sms">SMS DBの書き込み</string>
   <string name="app_ops_labels_receive_sms">SMSの受信</string>
   <string name="app_ops_labels_receive_mms">MMSの受信</string>
   <string name="app_ops_labels_send_sms">SMSの送信</string>

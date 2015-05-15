@@ -74,8 +74,8 @@
   <string name="app_ops_labels_write_calendar">कैलेंडर को परिवर्तित करें</string>
   <string name="app_ops_labels_notification_toast">अधिसूचना/टोस्ट</string>
   <string name="app_ops_labels_call_phone">फ़ोन को कॉल करें</string>
-  <string name="app_ops_labels_read_sms_db">एसएमएस डेटाबेस को पढ़ें</string>
-  <string name="app_ops_labels_write_sms_db">एसएमएस डेटाबेस में लिखें</string>
+  <string name="app_ops_labels_read_sms">एसएमएस डेटाबेस को पढ़ें</string>
+  <string name="app_ops_labels_write_sms">एसएमएस डेटाबेस में लिखें</string>
   <string name="app_ops_labels_receive_sms">एसएमएस प्राप्त करें</string>
   <string name="app_ops_labels_receive_mms">एमएमएस प्राप्त करें</string>
   <string name="app_ops_labels_send_sms">एसएमएस भेजें</string>

@@ -57,8 +57,8 @@
   <string name="app_ops_labels_write_calendar">Egutegia aldatu</string>
   <string name="app_ops_labels_notification_toast">jakinarazpena/Mezua</string>
   <string name="app_ops_labels_call_phone">Deitu</string>
-  <string name="app_ops_labels_read_sms_db">SMSak irakurri</string>
-  <string name="app_ops_labels_write_sms_db">SMSak idatzi</string>
+  <string name="app_ops_labels_read_sms">SMSak irakurri</string>
+  <string name="app_ops_labels_write_sms">SMSak idatzi</string>
   <string name="app_ops_labels_receive_sms">SMSak jaso</string>
   <string name="app_ops_labels_receive_mms">MMS-ak jaso</string>
   <string name="app_ops_labels_send_sms">SMSak bidali</string>

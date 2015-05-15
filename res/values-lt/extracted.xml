@@ -74,8 +74,8 @@
   <string name="app_ops_labels_write_calendar">Keisti kalendorių</string>
   <string name="app_ops_labels_notification_toast">Paskelbti pranešimą</string>
   <string name="app_ops_labels_call_phone">Skambinti į telefoną</string>
-  <string name="app_ops_labels_read_sms_db">Skaityti SMS DB</string>
-  <string name="app_ops_labels_write_sms_db">Rašyti SMS DB</string>
+  <string name="app_ops_labels_read_sms">Skaityti SMS DB</string>
+  <string name="app_ops_labels_write_sms">Rašyti SMS DB</string>
   <string name="app_ops_labels_receive_sms">Gauti SMS</string>
   <string name="app_ops_labels_receive_mms">Gauti MMS</string>
   <string name="app_ops_labels_send_sms">Siųsti SMS </string>

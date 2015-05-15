@@ -74,8 +74,8 @@
   <string name="app_ops_labels_write_calendar">Agenda aanpassen</string>
   <string name="app_ops_labels_notification_toast">Melding/toast</string>
   <string name="app_ops_labels_call_phone">Nummer bellen</string>
-  <string name="app_ops_labels_read_sms_db">Sms-DB lezen</string>
-  <string name="app_ops_labels_write_sms_db">Sms-DB schrijven</string>
+  <string name="app_ops_labels_read_sms">Sms-DB lezen</string>
+  <string name="app_ops_labels_write_sms">Sms-DB schrijven</string>
   <string name="app_ops_labels_receive_sms">Sms/mms ontvangen</string>
   <string name="app_ops_labels_receive_mms">Sms/mms ontvangen</string>
   <string name="app_ops_labels_send_sms">Sms/mms verzenden</string>

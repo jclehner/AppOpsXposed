@@ -74,8 +74,8 @@
   <string name="app_ops_labels_write_calendar">Ubah kalender</string>
   <string name="app_ops_labels_notification_toast">Pemberitahuan/Toast</string>
   <string name="app_ops_labels_call_phone">Panggilan Telepon</string>
-  <string name="app_ops_labels_read_sms_db">Baca SMS DB</string>
-  <string name="app_ops_labels_write_sms_db">Tulis SMS DB</string>
+  <string name="app_ops_labels_read_sms">Baca SMS DB</string>
+  <string name="app_ops_labels_write_sms">Tulis SMS DB</string>
   <string name="app_ops_labels_receive_sms">Menerima SMS</string>
   <string name="app_ops_labels_receive_mms">Menerima MMS</string>
   <string name="app_ops_labels_send_sms">Kirim SMS</string>

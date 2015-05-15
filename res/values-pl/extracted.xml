@@ -74,8 +74,8 @@
   <string name="app_ops_labels_write_calendar">Modyfikowanie kalendarza</string>
   <string name="app_ops_labels_notification_toast">Powiadomienie/Toast</string>
   <string name="app_ops_labels_call_phone">Wykonywanie połączeń</string>
-  <string name="app_ops_labels_read_sms_db">Odczytywanie bazy SMS</string>
-  <string name="app_ops_labels_write_sms_db">Edytowanie bazy SMS</string>
+  <string name="app_ops_labels_read_sms">Odczytywanie bazy SMS</string>
+  <string name="app_ops_labels_write_sms">Edytowanie bazy SMS</string>
   <string name="app_ops_labels_receive_sms">Odbieranie SMS-ów</string>
   <string name="app_ops_labels_receive_mms">Odbieranie MMS-ów</string>
   <string name="app_ops_labels_send_sms">Wysyłanie SMS-ów</string>

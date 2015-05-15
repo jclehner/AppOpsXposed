@@ -62,8 +62,8 @@
   <string name="app_ops_labels_write_calendar">Mainīt kalendāru</string>
   <string name="app_ops_labels_notification_toast">Ziņojums/Apsveikums</string>
   <string name="app_ops_labels_call_phone">Zvanīt telefonam</string>
-  <string name="app_ops_labels_read_sms_db">Lasīt īsziņu datubāzi</string>
-  <string name="app_ops_labels_write_sms_db">Rakstīt īsziņu datubāzē</string>
+  <string name="app_ops_labels_read_sms">Lasīt īsziņu datubāzi</string>
+  <string name="app_ops_labels_write_sms">Rakstīt īsziņu datubāzē</string>
   <string name="app_ops_labels_receive_sms">Saņemt īsziņu</string>
   <string name="app_ops_labels_receive_mms">Saņemt multiziņu</string>
   <string name="app_ops_labels_send_sms">Sūtīt īsziņu</string>

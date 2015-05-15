@@ -74,8 +74,8 @@
   <string name="app_ops_labels_write_calendar">修改日曆</string>
   <string name="app_ops_labels_notification_toast">通知/Toast</string>
   <string name="app_ops_labels_call_phone">撥打電話</string>
-  <string name="app_ops_labels_read_sms_db">讀取簡訊資料庫</string>
-  <string name="app_ops_labels_write_sms_db">編寫簡訊資料庫</string>
+  <string name="app_ops_labels_read_sms">讀取簡訊資料庫</string>
+  <string name="app_ops_labels_write_sms">編寫簡訊資料庫</string>
   <string name="app_ops_labels_receive_sms">接收簡訊</string>
   <string name="app_ops_labels_receive_mms">接收多媒體簡訊</string>
   <string name="app_ops_labels_send_sms">傳送簡訊</string>

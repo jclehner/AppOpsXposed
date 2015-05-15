@@ -74,8 +74,8 @@
   <string name="app_ops_labels_write_calendar">Ændre kalender</string>
   <string name="app_ops_labels_notification_toast">Skriv notifikation</string>
   <string name="app_ops_labels_call_phone">Opkald til telefon</string>
-  <string name="app_ops_labels_read_sms_db">Modtag SMS/MMS</string>
-  <string name="app_ops_labels_write_sms_db">Send SMS/MMS</string>
+  <string name="app_ops_labels_read_sms">Modtag SMS/MMS</string>
+  <string name="app_ops_labels_write_sms">Send SMS/MMS</string>
   <string name="app_ops_labels_receive_sms">Modtag SMS/MMS</string>
   <string name="app_ops_labels_receive_mms">Modtag SMS/MMS</string>
   <string name="app_ops_labels_send_sms">Send SMS/MMS</string>

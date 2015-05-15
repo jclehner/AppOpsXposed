@@ -74,8 +74,8 @@
   <string name="app_ops_labels_write_calendar">Modify calendar</string>
   <string name="app_ops_labels_notification_toast">Notification/Toast</string>
   <string name="app_ops_labels_call_phone">Call phone</string>
-  <string name="app_ops_labels_read_sms_db">Read SMS DB</string>
-  <string name="app_ops_labels_write_sms_db">Write SMS DB</string>
+  <string name="app_ops_labels_read_sms">Read SMS DB</string>
+  <string name="app_ops_labels_write_sms">Write SMS DB</string>
   <string name="app_ops_labels_receive_sms">Receive SMS</string>
   <string name="app_ops_labels_receive_mms">Receive MMS</string>
   <string name="app_ops_labels_send_sms">Send SMS</string>

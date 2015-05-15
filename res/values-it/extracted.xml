@@ -74,8 +74,8 @@
   <string name="app_ops_labels_write_calendar">Modifica calendario</string>
   <string name="app_ops_labels_notification_toast">Notifica/Toast</string>
   <string name="app_ops_labels_call_phone">Chiama telefono</string>
-  <string name="app_ops_labels_read_sms_db">Leggi DB SMS</string>
-  <string name="app_ops_labels_write_sms_db">Scrivi DB SMS</string>
+  <string name="app_ops_labels_read_sms">Leggi DB SMS</string>
+  <string name="app_ops_labels_write_sms">Scrivi DB SMS</string>
   <string name="app_ops_labels_receive_sms">Ricevi SMS</string>
   <string name="app_ops_labels_receive_mms">Ricevi MMS</string>
   <string name="app_ops_labels_send_sms">Invia SMS</string>

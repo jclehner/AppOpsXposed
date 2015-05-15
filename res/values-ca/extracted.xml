@@ -74,8 +74,8 @@
   <string name="app_ops_labels_write_calendar">Modificar calendari</string>
   <string name="app_ops_labels_notification_toast">Notificació/Avís</string>
   <string name="app_ops_labels_call_phone">Trucar per telèfon</string>
-  <string name="app_ops_labels_read_sms_db">Llegir SMS DB</string>
-  <string name="app_ops_labels_write_sms_db">Escriure SMS DB</string>
+  <string name="app_ops_labels_read_sms">Llegir SMS DB</string>
+  <string name="app_ops_labels_write_sms">Escriure SMS DB</string>
   <string name="app_ops_labels_receive_sms">Rebre SMS</string>
   <string name="app_ops_labels_receive_mms">Rebre MMS</string>
   <string name="app_ops_labels_send_sms">Enviar SMS</string>

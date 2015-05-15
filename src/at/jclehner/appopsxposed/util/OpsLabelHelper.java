@@ -23,19 +23,6 @@ public class OpsLabelHelper
 		return getPermissionLabel(context, permission, permission);
 	}
 
-	private static CharSequence getPermissionLabel(Context context, String permission, String defValue)
-	{
-		try
-		{
-			final PackageManager pm = context.getPackageManager();
-			return pm.getPermissionInfo(permission, 0).loadLabel(pm);
-		}
-		catch(NameNotFoundException e)
-		{
-			return defValue;
-		}
-	}
-
 	public static String getOpLabel(Context context, int op) {
 		return getOpLabelOrSummary(context, null, op, true);
 	}
@@ -127,7 +114,11 @@ public class OpsLabelHelper
 		return ret;
 	}
 
-	private static String getAppOpsString(Context context, String opName, boolean getLabel)
+	private static String getAppOpsString(Context context, String opName, boolean getLabel) {
+		return getAppOpsString(context, opName, getLabel, true);
+	}
+
+	private static String getAppOpsString(Context context, String opName, boolean getLabel, boolean tryOther)
 	{
 		final String id = "app_ops_" + (getLabel ? "labels" : "summaries") + "_" +
 				opName.substring(3).toLowerCase(Locale.US);
@@ -150,23 +141,33 @@ public class OpsLabelHelper
 		final int resId = res.getIdentifier(Constants.MODULE_PACKAGE + ":string/" + id, null, null);
 		if(resId == 0)
 		{
-			if(getLabel)
+			if(tryOther)
 			{
-				// Maybe there's a summary but no label?
-				final String label = getAppOpsString(context, opName, false);
-				return label != null ? Util.capitalizeFirst(label) : null;
+				final String other = getAppOpsString(context, opName, !getLabel, false);
+				if(other != null)
+					return Util.capitalizeFirst(other);
 			}
 
-			final int op = AppOpsManagerWrapper.opFromName(opName);
-			final String perm = AppOpsManagerWrapper.opToPermission(op);
-
-			if(perm != null)
-				return getPermissionLabel(context, perm, null).toString();
-
-			return null;
+			return opLabelFromPermission(context, opName);
 		}
 
-		return context.getString(resId);
+		try
+		{
+			return context.getString(resId);
+		}
+		catch(NotFoundException e)
+		{
+			if(tryOther)
+			{
+				final String other = getAppOpsString(context, opName, !getLabel, false);
+				if(other != null && getLabel)
+					return Util.capitalizeFirst(other);
+
+				return other;
+			}
+
+			return opLabelFromPermission(context, opName);
+		}
 	}
 
 	private static String getOpLabelOrSummary(Context context, String opName, int op, boolean getLabel)
@@ -212,5 +213,29 @@ public class OpsLabelHelper
 		}
 
 		return -1;
+	}
+
+	private static String opLabelFromPermission(Context context, String opName)
+	{
+		final int op = AppOpsManagerWrapper.opFromName(opName);
+		final String perm = AppOpsManagerWrapper.opToPermission(op);
+
+		if(perm != null)
+			return getPermissionLabel(context, perm, null).toString();
+
+		return null;
+	}
+
+	private static CharSequence getPermissionLabel(Context context, String permission, String defValue)
+	{
+		try
+		{
+			final PackageManager pm = context.getPackageManager();
+			return pm.getPermissionInfo(permission, 0).loadLabel(pm);
+		}
+		catch(NameNotFoundException e)
+		{
+			return defValue;
+		}
 	}
 }

@@ -62,8 +62,8 @@
   <string name="app_ops_labels_write_calendar">แก้ไขปฏิทิน</string>
   <string name="app_ops_labels_notification_toast">แจ้งเตือน/แสดงข้อความ</string>
   <string name="app_ops_labels_call_phone">โทรออก</string>
-  <string name="app_ops_labels_read_sms_db">อ่านฐานข้อมูลข้อความ SMS</string>
-  <string name="app_ops_labels_write_sms_db">เขียนฐานข้อมูลข้อความ SMS</string>
+  <string name="app_ops_labels_read_sms">อ่านฐานข้อมูลข้อความ SMS</string>
+  <string name="app_ops_labels_write_sms">เขียนฐานข้อมูลข้อความ SMS</string>
   <string name="app_ops_labels_receive_sms">รับข้อความ SMS</string>
   <string name="app_ops_labels_receive_mms">รับข้อความ MMS</string>
   <string name="app_ops_labels_send_sms">ส่งข้อความ SMS</string>

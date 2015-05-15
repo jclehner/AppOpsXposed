@@ -74,8 +74,8 @@
   <string name="app_ops_labels_write_calendar">Модификуј календар</string>
   <string name="app_ops_labels_notification_toast">Обавештење/Искачући прозор</string>
   <string name="app_ops_labels_call_phone">Телефонски позив</string>
-  <string name="app_ops_labels_read_sms_db">Прочитај SMS DB</string>
-  <string name="app_ops_labels_write_sms_db">Напиши SMS DB</string>
+  <string name="app_ops_labels_read_sms">Прочитај SMS DB</string>
+  <string name="app_ops_labels_write_sms">Напиши SMS DB</string>
   <string name="app_ops_labels_receive_sms">Прими SMS</string>
   <string name="app_ops_labels_receive_mms">Прими MMS</string>
   <string name="app_ops_labels_send_sms">Пошаљи SMS</string>
