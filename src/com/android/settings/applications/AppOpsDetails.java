@@ -73,13 +73,14 @@ public class AppOpsDetails extends Fragment {
         // Version number of application
         mAppVersion = (TextView) appSnippet.findViewById(R.id.app_size);
 
+        final StringBuilder sb = new StringBuilder(pkgInfo.packageName);
+
         if (pkgInfo.versionName != null) {
-            mAppVersion.setVisibility(View.VISIBLE);
-            mAppVersion.setText(getActivity().getString(R.string.version_text,
-                    String.valueOf(pkgInfo.versionName)));
-        } else {
-            mAppVersion.setVisibility(View.INVISIBLE);
+            sb.append("\n");
+            sb.append(getActivity().getString(R.string.version_text, pkgInfo.versionName));
         }
+
+        mAppVersion.setText(sb);
     }
 
     private String retrieveAppEntry() {
