@@ -7,7 +7,7 @@ import at.jclehner.appopsxposed.R;
 
 public class Res
 {
-	public static int appOpsLauncherIcon = 0;
+	public static int appOpsPreferenceIconLauncher = 0;
 	public static int appOpsPreferenceIconWhite = 0;
 	public static int appOpsPreferenceIconBlack = 0;
 	public static int appOpsPreferenceIconSense = 0;

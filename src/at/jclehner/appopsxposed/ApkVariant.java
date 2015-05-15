@@ -192,7 +192,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 				return Res.appOpsPreferenceIconSense;
 
 			default:
-				return Res.appOpsLauncherIcon;
+				return Res.appOpsPreferenceIconLauncher;
 		}
 	}
 
