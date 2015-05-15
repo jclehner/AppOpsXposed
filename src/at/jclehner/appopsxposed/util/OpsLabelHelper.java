@@ -99,9 +99,9 @@ public class OpsLabelHelper
 
 			final String str = getAppOpsString(context, opName, getLabels);
 			if(str != null)
-				strings.append(op, str);
+				strings.append(op, Util.capitalizeFirst(str));
 			else
-				Log.d("AOX", "No ops string for " + opName);
+				Util.debug("No ops string for " + opName);
 		}
 
 		final String[] ret = new String[maxOp + 1];
@@ -139,35 +139,20 @@ public class OpsLabelHelper
 		}
 
 		final int resId = res.getIdentifier(Constants.MODULE_PACKAGE + ":string/" + id, null, null);
-		if(resId == 0)
+		if(resId != 0)
 		{
-			if(tryOther)
+			try
 			{
-				final String other = getAppOpsString(context, opName, !getLabel, false);
-				if(other != null)
-					return Util.capitalizeFirst(other);
+				return context.getString(resId);
 			}
-
-			return opLabelFromPermission(context, opName);
-		}
-
-		try
-		{
-			return context.getString(resId);
-		}
-		catch(NotFoundException e)
-		{
-			if(tryOther)
+			catch(NotFoundException e)
 			{
-				final String other = getAppOpsString(context, opName, !getLabel, false);
-				if(other != null && getLabel)
-					return Util.capitalizeFirst(other);
-
-				return other;
+				Util.debug("Failed to get string " + id);
+				Util.debug(e);
 			}
-
-			return opLabelFromPermission(context, opName);
 		}
+
+		return getFallbackString(context, opName, getLabel, tryOther);
 	}
 
 	private static String getOpLabelOrSummary(Context context, String opName, int op, boolean getLabel)
@@ -189,6 +174,18 @@ public class OpsLabelHelper
 		}
 
 		return (getLabel ? sOpLabels : sOpSummaries)[op];
+	}
+
+	private static String getFallbackString(Context context, String opName, boolean getLabel, boolean tryOther)
+	{
+		if(tryOther)
+		{
+			final String other = getAppOpsString(context, opName, !getLabel, false);
+			if(other != null)
+				return other;
+		}
+
+		return opLabelFromPermission(context, opName);
 	}
 
 	public static int getOpValue(String name)
