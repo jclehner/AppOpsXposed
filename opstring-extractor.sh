@@ -16,9 +16,22 @@ PATTERNS=(
 )
 
 download() {
+	if [[ ! -z $OPSTRING_DOWNLOADS ]]; then
+		if [[ -f "$OPSTRING_DOWNLOADS/$1" ]]; then
+			if cp "$OPSTRING_DOWNLOADS/$1" "$2"; then
+				echo -n "*"
+				return 0
+			fi
+		else
+			echo -n "!"
+			return 1
+		fi
+	fi
+
 	if wget -O "$2" -q "$RES/$1"; then
 		echo -n "*"
 	else
+		rm -f "$2"
 		echo -n "!"
 		return 1
 	fi
@@ -32,10 +45,16 @@ extract_lang() {
 	echo -n "DL"
 	download "values-$1/strings.xml" "$TMP.dl2" 
 	if ! download "values-$1/cm_strings.xml" "$TMP.dl1"; then
-		use_array=1
+		use_arrays=1
+	else
+		if ! grep -qP 'app_ops_(summaries|labels)_' "$TMP.dl1"; then
+			use_arrays=1
+		else
+			use_arrays=
+		fi
 	fi
 
-	if [[ -z $use_array ]]; then
+	if [[ -z $use_arrays ]]; then
 		echo -n " "
 		grep -P "app_ops_(summaries|labels)_" "$TMP.dl1" > "$TMP.ops"
 
@@ -58,8 +77,8 @@ extract_lang() {
 			awk '/app_ops_labels/,/\/string-array/' < "$TMP.arr" | grep -v string-array > "$TMP.lab"
 			awk '/app_ops_categories/,/\/string-array/' < "$TMP.arr" | grep -v string-array > "$TMP.cat"
 
-			perl -p -i -e "s/<.+?>//g" "$TMP".{sum,lab,cat}
-			perl -p -i -e "s/^\s+//g" "$TMP".{sum,lab,cat}
+			perl -p -i -e 's/<.+?>//g' "$TMP".{sum,lab,cat}
+			perl -p -i -e 's/^\s+//g' "$TMP".{sum,lab,cat}
 
 			readarray -t summaries < "$TMP.sum"
 			readarray -t labels < "$TMP.lab"
@@ -109,6 +128,8 @@ extract_lang() {
 			done
 
 			echo -n "* "
+		else
+			echo -n " "
 		fi
 
 		echo "  <!-- Categories -->" >> "$TMP.ops"
@@ -129,10 +150,19 @@ extract_lang() {
 		done
 	fi
 
+
+	if [[ ! -f "$TMP.dl2" ]]; then
+		echo
+		return 1
+	fi
+
 	echo -n "FINISH"
 
 	echo "  <!-- Misc -->" >> "$TMP.ops"
 	grep -P '"version_text"|"app_ops_' "$TMP.dl2" >> "$TMP.ops"
+
+	perl -p -i -e 's/msgid=".*?">/>/g' "$TMP.ops"
+	perl -p -i -e 's/<\/?xliff:.+?>//g' "$TMP.ops"
 
 	out="res/values-$1/extracted.xml"
 
@@ -150,16 +180,45 @@ EOF
 	echo "</resources>" >> $out
 
 	echo "*"
-
 }
 
 cd "$(dirname "$0")"
 
-if [[ $# -ne 1 ]]; then
-	for dir in res/values-??; do
+if [[ "$1" == "download" ]]; then
+	if [[ -z "$2" ]]; then
+		echo >&2 "usage: $0 download [target folder]"
+		exit 1
+	fi
+
+	mkdir -p "$2" || exit 1
+	unset OPSTRING_DOWNLOADS
+fi
+
+if [[ $# -eq 0 || "$1" == "download" ]]; then
+	for dir in res/values-??{,-r??}; do
 		lang=$(basename "$dir")
 		lang=${lang:7}
-		extract_lang "$lang"
+
+		if [[ -z "$1" ]]; then
+			if [[ "${lang:3:1}" == "r" && -e "res/values-${lang:0:2}/extracted.xml" ]]; then
+				echo "$lang: SKIPPED"
+			else
+				extract_lang "$lang"
+			fi
+		else
+			base=$(basename "$dir")
+			d="$2/$base"
+			mkdir -p "$d" || exit 1
+			cd "$d"
+
+			echo -n "$lang: DL"
+			download "$base/strings.xml" "strings.xml"
+			download "$base/cm_strings.xml" "cm_strings.xml"
+			download "$base/arrays.xml" "arrays.xml"
+			echo
+
+			cd - &> /dev/null
+		fi
 	done
 else
 	extract_lang "$1"
