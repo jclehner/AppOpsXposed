@@ -50,7 +50,7 @@
   <string name="app_ops_summaries_send_mms">MMS යැවීම</string>
   <string name="app_ops_summaries_read_mms">MMS කියවීම</string>
   <string name="app_ops_summaries_write_mms">MMS ලිවීම</string>
-  <string name="app_ops_summaries_auto_start">ස්වයං ඇරඹීම</string>
+  <string name="app_ops_summaries_boot_completed">ස්වයං ඇරඹීම</string>
   <string name="app_ops_summaries_data_change">දත්ත වෙනස් කිරීම</string>
   <string name="app_ops_labels_location">ස්ථානය</string>
   <string name="app_ops_labels_vibrate">කම්පනය</string>
@@ -90,7 +90,7 @@
   <string name="app_ops_labels_send_mms">MMS යැවීම</string>
   <string name="app_ops_labels_read_mms">MMS කියවීම</string>
   <string name="app_ops_labels_write_mms">MMS ලිවීම</string>
-  <string name="app_ops_labels_auto_start">ස්වයං ඇරඹීම</string>
+  <string name="app_ops_labels_boot_completed">ස්වයං ඇරඹීම</string>
   <string name="app_ops_labels_data_change">දත්ත වෙනස් කිරීම</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">ස්ථානය</string>

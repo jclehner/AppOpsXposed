@@ -55,7 +55,7 @@
   <string name="app_ops_summaries_send_mms">MMS 보내기</string>
   <string name="app_ops_summaries_read_mms">MMS 읽기</string>
   <string name="app_ops_summaries_write_mms">MMS 쓰기</string>
-  <string name="app_ops_summaries_auto_start">자동 시작</string>
+  <string name="app_ops_summaries_boot_completed">자동 시작</string>
   <string name="app_ops_summaries_nfc_change">NFC 변경</string>
   <string name="app_ops_summaries_delete_sms">SMS 삭제</string>
   <string name="app_ops_summaries_delete_mms">MMS 삭제</string>
@@ -107,7 +107,7 @@
   <string name="app_ops_labels_send_mms">MMS 보내기</string>
   <string name="app_ops_labels_read_mms">MMS 읽기</string>
   <string name="app_ops_labels_write_mms">MMS 쓰기</string>
-  <string name="app_ops_labels_auto_start">자동 시작</string>
+  <string name="app_ops_labels_boot_completed">자동 시작</string>
   <string name="app_ops_labels_nfc_change">NFC 변경</string>
   <string name="app_ops_labels_delete_sms">SMS 삭제</string>
   <string name="app_ops_labels_delete_mms">MMS 삭제</string>

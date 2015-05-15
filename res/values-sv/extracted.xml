@@ -50,7 +50,7 @@
   <string name="app_ops_summaries_send_mms">skicka MMS</string>
   <string name="app_ops_summaries_read_mms">läsa MMS</string>
   <string name="app_ops_summaries_write_mms">skriva MMS</string>
-  <string name="app_ops_summaries_auto_start">starta automatiskt</string>
+  <string name="app_ops_summaries_boot_completed">starta automatiskt</string>
   <string name="app_ops_summaries_data_change">ändra data</string>
   <string name="app_ops_labels_location">Plats</string>
   <string name="app_ops_labels_vibrate">Vibrera</string>
@@ -90,7 +90,7 @@
   <string name="app_ops_labels_send_mms">Skicka MMS</string>
   <string name="app_ops_labels_read_mms">Läsa MMS</string>
   <string name="app_ops_labels_write_mms">Skriva MMS</string>
-  <string name="app_ops_labels_auto_start">Starta automatiskt</string>
+  <string name="app_ops_labels_boot_completed">Starta automatiskt</string>
   <string name="app_ops_labels_data_change">Ändra data</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Plats</string>

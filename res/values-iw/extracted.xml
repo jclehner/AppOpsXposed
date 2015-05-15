@@ -55,7 +55,7 @@
   <string name="app_ops_summaries_send_mms">לשלוח MMS</string>
   <string name="app_ops_summaries_read_mms">לקרוא MMS</string>
   <string name="app_ops_summaries_write_mms">לכתוב MMS</string>
-  <string name="app_ops_summaries_auto_start">הפעלה אוטומטית</string>
+  <string name="app_ops_summaries_boot_completed">הפעלה אוטומטית</string>
   <string name="app_ops_summaries_nfc_change">שינוי NFC</string>
   <string name="app_ops_summaries_delete_sms">מחק SMS</string>
   <string name="app_ops_summaries_delete_mms">מחק MMS</string>
@@ -107,7 +107,7 @@
   <string name="app_ops_labels_send_mms">לשלוח MMS</string>
   <string name="app_ops_labels_read_mms">לקרוא MMS</string>
   <string name="app_ops_labels_write_mms">לכתוב MMS</string>
-  <string name="app_ops_labels_auto_start">הפעלה אוטומטית</string>
+  <string name="app_ops_labels_boot_completed">הפעלה אוטומטית</string>
   <string name="app_ops_labels_nfc_change">שינוי NFC</string>
   <string name="app_ops_labels_delete_sms">מחק SMS</string>
   <string name="app_ops_labels_delete_mms">מחק MMS</string>

@@ -55,7 +55,7 @@
   <string name="app_ops_summaries_send_mms">MMS schécken</string>
   <string name="app_ops_summaries_read_mms">MMS liesen</string>
   <string name="app_ops_summaries_write_mms">MMS schreiwen</string>
-  <string name="app_ops_summaries_auto_start">Automatesch starten</string>
+  <string name="app_ops_summaries_boot_completed">Automatesch starten</string>
   <string name="app_ops_summaries_nfc_change">NFC änneren</string>
   <string name="app_ops_summaries_delete_sms">SMS läschen</string>
   <string name="app_ops_summaries_delete_mms">MMS läschen</string>
@@ -107,7 +107,7 @@
   <string name="app_ops_labels_send_mms">MMS schécken</string>
   <string name="app_ops_labels_read_mms">MMS liesen</string>
   <string name="app_ops_labels_write_mms">MMS schreiwen</string>
-  <string name="app_ops_labels_auto_start">Automatesch starten</string>
+  <string name="app_ops_labels_boot_completed">Automatesch starten</string>
   <string name="app_ops_labels_nfc_change">NFC änneren</string>
   <string name="app_ops_labels_delete_sms">SMS läschen</string>
   <string name="app_ops_labels_delete_mms">MMS läschen</string>

@@ -55,7 +55,7 @@
   <string name="app_ops_summaries_send_mms">enviar MMS</string>
   <string name="app_ops_summaries_read_mms">llegir MMS</string>
   <string name="app_ops_summaries_write_mms">escriure MMS</string>
-  <string name="app_ops_summaries_auto_start">auto iniciar</string>
+  <string name="app_ops_summaries_boot_completed">auto iniciar</string>
   <string name="app_ops_summaries_nfc_change">canviar l\'NFC</string>
   <string name="app_ops_summaries_delete_sms">esborrar SMS</string>
   <string name="app_ops_summaries_delete_mms">esborrar MMS</string>
@@ -107,7 +107,7 @@
   <string name="app_ops_labels_send_mms">Enviar MMS</string>
   <string name="app_ops_labels_read_mms">Llegir MMS</string>
   <string name="app_ops_labels_write_mms">Escriure MMS</string>
-  <string name="app_ops_labels_auto_start">Auto iniciar</string>
+  <string name="app_ops_labels_boot_completed">Auto iniciar</string>
   <string name="app_ops_labels_nfc_change">Canviar l\'NFC</string>
   <string name="app_ops_labels_delete_sms">Esborrar SMS</string>
   <string name="app_ops_labels_delete_mms">Esborrar MMS</string>

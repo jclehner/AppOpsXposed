@@ -55,7 +55,7 @@
   <string name="app_ops_summaries_send_mms">MMSの送信</string>
   <string name="app_ops_summaries_read_mms">MMSの読み取り</string>
   <string name="app_ops_summaries_write_mms">MMSの書き込み</string>
-  <string name="app_ops_summaries_auto_start">自動実行</string>
+  <string name="app_ops_summaries_boot_completed">自動実行</string>
   <string name="app_ops_summaries_nfc_change">NFCの変更</string>
   <string name="app_ops_summaries_delete_sms">SMSの削除</string>
   <string name="app_ops_summaries_delete_mms">SMSの削除</string>
@@ -107,7 +107,7 @@
   <string name="app_ops_labels_send_mms">MMSの送信</string>
   <string name="app_ops_labels_read_mms">MMSの読み取り</string>
   <string name="app_ops_labels_write_mms">MMSの書き込み</string>
-  <string name="app_ops_labels_auto_start">自動実行</string>
+  <string name="app_ops_labels_boot_completed">自動実行</string>
   <string name="app_ops_labels_nfc_change">NFCの変更</string>
   <string name="app_ops_labels_delete_sms">SMSの削除</string>
   <string name="app_ops_labels_delete_mms">MMSの削除</string>

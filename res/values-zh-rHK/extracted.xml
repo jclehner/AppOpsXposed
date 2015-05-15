@@ -46,7 +46,7 @@
   <string name="app_ops_summaries_send_mms">傳送多媒體簡訊</string>
   <string name="app_ops_summaries_read_mms">讀取多媒體簡訊</string>
   <string name="app_ops_summaries_write_mms">撰寫多媒體短訊</string>
-  <string name="app_ops_summaries_auto_start">自動啟動</string>
+  <string name="app_ops_summaries_boot_completed">自動啟動</string>
   <string name="app_ops_summaries_data_change">數據更改</string>
   <string name="app_ops_labels_location">位置</string>
   <string name="app_ops_labels_vibrate">震動</string>
@@ -85,7 +85,7 @@
   <string name="app_ops_labels_send_mms">發送多媒體短訊</string>
   <string name="app_ops_labels_read_mms">閱讀多媒體短訊</string>
   <string name="app_ops_labels_write_mms">撰寫多媒體短訊</string>
-  <string name="app_ops_labels_auto_start">自動啟動</string>
+  <string name="app_ops_labels_boot_completed">自動啟動</string>
   <string name="app_ops_labels_data_change">數據更改</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">位置</string>

@@ -55,7 +55,7 @@
   <string name="app_ops_summaries_send_mms">发送彩信</string>
   <string name="app_ops_summaries_read_mms">阅读彩信</string>
   <string name="app_ops_summaries_write_mms">编写彩信</string>
-  <string name="app_ops_summaries_auto_start">自动启动</string>
+  <string name="app_ops_summaries_boot_completed">自动启动</string>
   <string name="app_ops_summaries_nfc_change">NFC 变更</string>
   <string name="app_ops_summaries_delete_sms">删除短信</string>
   <string name="app_ops_summaries_delete_mms">删除彩信</string>
@@ -107,7 +107,7 @@
   <string name="app_ops_labels_send_mms">发送彩信</string>
   <string name="app_ops_labels_read_mms">读取彩信</string>
   <string name="app_ops_labels_write_mms">写入彩信</string>
-  <string name="app_ops_labels_auto_start">自动启动</string>
+  <string name="app_ops_labels_boot_completed">自动启动</string>
   <string name="app_ops_labels_nfc_change">NFC 变更</string>
   <string name="app_ops_labels_delete_sms">删除短信</string>
   <string name="app_ops_labels_delete_mms">删除彩信</string>

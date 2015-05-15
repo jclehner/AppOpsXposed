@@ -50,7 +50,7 @@
   <string name="app_ops_summaries_send_mms">ส่ง MMS</string>
   <string name="app_ops_summaries_read_mms">อ่าน MMS</string>
   <string name="app_ops_summaries_write_mms">เขียน MMS</string>
-  <string name="app_ops_summaries_auto_start">เริ่มอัตโนมัติ</string>
+  <string name="app_ops_summaries_boot_completed">เริ่มอัตโนมัติ</string>
   <string name="app_ops_summaries_data_change">เปิด/ปิด อินเตอร์เน็ต</string>
   <string name="app_ops_labels_location">ตำแหน่ง</string>
   <string name="app_ops_labels_vibrate">สั่น</string>
@@ -90,7 +90,7 @@
   <string name="app_ops_labels_send_mms">ส่งข้อความ MMS</string>
   <string name="app_ops_labels_read_mms">อ่านข้อความ MMS</string>
   <string name="app_ops_labels_write_mms">เขียนข้อความ MMS</string>
-  <string name="app_ops_labels_auto_start">เริ่มอัตโนมัติ</string>
+  <string name="app_ops_labels_boot_completed">เริ่มอัตโนมัติ</string>
   <string name="app_ops_labels_data_change">เปิด/ปิด อินเตอร์เน็ต</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">ตำแหน่ง</string>

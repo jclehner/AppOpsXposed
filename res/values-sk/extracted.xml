@@ -55,7 +55,7 @@
   <string name="app_ops_summaries_send_mms">odoslať MMS</string>
   <string name="app_ops_summaries_read_mms">čítať MMS</string>
   <string name="app_ops_summaries_write_mms">vytvoriť MMS</string>
-  <string name="app_ops_summaries_auto_start">automatické spustenie</string>
+  <string name="app_ops_summaries_boot_completed">automatické spustenie</string>
   <string name="app_ops_summaries_nfc_change">zmeniť NFC</string>
   <string name="app_ops_summaries_delete_sms">vymazať SMS</string>
   <string name="app_ops_summaries_delete_mms">vymazať MMS</string>
@@ -107,7 +107,7 @@
   <string name="app_ops_labels_send_mms">Odoslať SMS</string>
   <string name="app_ops_labels_read_mms">Čítať MMS</string>
   <string name="app_ops_labels_write_mms">Vytvoriť MMS</string>
-  <string name="app_ops_labels_auto_start">Automatické spustenie</string>
+  <string name="app_ops_labels_boot_completed">Automatické spustenie</string>
   <string name="app_ops_labels_nfc_change">Zmeniť NFC</string>
   <string name="app_ops_labels_delete_sms">Vymazať SMS</string>
   <string name="app_ops_labels_delete_mms">Vymazať MMS</string>

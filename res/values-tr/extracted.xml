@@ -55,7 +55,7 @@
   <string name="app_ops_summaries_send_mms">MMS gönderme</string>
   <string name="app_ops_summaries_read_mms">MMS okuma</string>
   <string name="app_ops_summaries_write_mms">MMS yazma</string>
-  <string name="app_ops_summaries_auto_start">otomatik başla</string>
+  <string name="app_ops_summaries_boot_completed">otomatik başla</string>
   <string name="app_ops_summaries_nfc_change">NFC değiştir</string>
   <string name="app_ops_summaries_delete_sms">SMS sil</string>
   <string name="app_ops_summaries_delete_mms">MMS sil</string>
@@ -107,7 +107,7 @@
   <string name="app_ops_labels_send_mms">MMS Gönder</string>
   <string name="app_ops_labels_read_mms">MMS Oku</string>
   <string name="app_ops_labels_write_mms">MMS Yaz</string>
-  <string name="app_ops_labels_auto_start">Otomatik başla</string>
+  <string name="app_ops_labels_boot_completed">Otomatik başla</string>
   <string name="app_ops_labels_nfc_change">NFC değiştir</string>
   <string name="app_ops_labels_delete_sms">SMS sil</string>
   <string name="app_ops_labels_delete_mms">MMS sil</string>

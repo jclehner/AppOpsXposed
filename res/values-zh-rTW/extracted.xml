@@ -55,7 +55,7 @@
   <string name="app_ops_summaries_send_mms">傳送多媒體簡訊</string>
   <string name="app_ops_summaries_read_mms">讀取多媒體簡訊</string>
   <string name="app_ops_summaries_write_mms">撰寫多媒體簡訊</string>
-  <string name="app_ops_summaries_auto_start">自動啟動</string>
+  <string name="app_ops_summaries_boot_completed">自動啟動</string>
   <string name="app_ops_summaries_nfc_change">變更 NFC</string>
   <string name="app_ops_summaries_delete_sms">刪除簡訊</string>
   <string name="app_ops_summaries_delete_mms">刪除 MMS</string>
@@ -106,7 +106,7 @@
   <string name="app_ops_labels_send_mms">傳送多媒體簡訊</string>
   <string name="app_ops_labels_read_mms">讀取多媒體簡訊</string>
   <string name="app_ops_labels_write_mms">撰寫多媒體簡訊</string>
-  <string name="app_ops_labels_auto_start">自動啟動</string>
+  <string name="app_ops_labels_boot_completed">自動啟動</string>
   <string name="app_ops_labels_nfc_change">變更 NFC</string>
   <string name="app_ops_labels_delete_sms">刪除簡訊</string>
   <string name="app_ops_labels_delete_mms">刪除 MMS</string>

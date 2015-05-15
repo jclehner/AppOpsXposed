@@ -55,7 +55,7 @@
   <string name="app_ops_summaries_send_mms">send MMS</string>
   <string name="app_ops_summaries_read_mms">les MMS</string>
   <string name="app_ops_summaries_write_mms">skriv MMS</string>
-  <string name="app_ops_summaries_auto_start">automatisk start</string>
+  <string name="app_ops_summaries_boot_completed">automatisk start</string>
   <string name="app_ops_summaries_nfc_change">NFC endring</string>
   <string name="app_ops_summaries_delete_sms">Slett SMS</string>
   <string name="app_ops_summaries_delete_mms">Slett MMS</string>
@@ -107,7 +107,7 @@
   <string name="app_ops_labels_send_mms">Send MMS</string>
   <string name="app_ops_labels_read_mms">Les MMS</string>
   <string name="app_ops_labels_write_mms">Skriv MMS</string>
-  <string name="app_ops_labels_auto_start">Automatisk start</string>
+  <string name="app_ops_labels_boot_completed">Automatisk start</string>
   <string name="app_ops_labels_nfc_change">NFC endring</string>
   <string name="app_ops_labels_delete_sms">Slett SMS</string>
   <string name="app_ops_labels_delete_mms">Slett MMS</string>

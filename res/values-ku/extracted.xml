@@ -50,7 +50,7 @@
   <string name="app_ops_summaries_send_mms">ناردنی MMS</string>
   <string name="app_ops_summaries_read_mms">خوێندنه‌وه‌ی MMS</string>
   <string name="app_ops_summaries_write_mms">نوسینی MMS</string>
-  <string name="app_ops_summaries_auto_start">ده‌ستپێکردنی خۆکارانه‌</string>
+  <string name="app_ops_summaries_boot_completed">ده‌ستپێکردنی خۆکارانه‌</string>
   <string name="app_ops_summaries_data_change">گۆڕینی داتا</string>
   <string name="app_ops_labels_location">ناوچه‌ی</string>
   <string name="app_ops_labels_vibrate">له‌رینه‌وه‌</string>
@@ -90,7 +90,7 @@
   <string name="app_ops_labels_send_mms">ناردنی MMS</string>
   <string name="app_ops_labels_read_mms">خوێندنه‌وه‌ی MMS</string>
   <string name="app_ops_labels_write_mms">نوسینی MMS</string>
-  <string name="app_ops_labels_auto_start">خۆکارانه‌ ده‌ستپێبکه‌</string>
+  <string name="app_ops_labels_boot_completed">خۆکارانه‌ ده‌ستپێبکه‌</string>
   <string name="app_ops_labels_data_change">گۆڕینی داتا</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">ناوچه‌</string>

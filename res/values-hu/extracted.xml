@@ -55,7 +55,7 @@
   <string name="app_ops_summaries_send_mms">MMS küldés</string>
   <string name="app_ops_summaries_read_mms">MMS olvasás</string>
   <string name="app_ops_summaries_write_mms">MMS írás</string>
-  <string name="app_ops_summaries_auto_start">automatikus indítás</string>
+  <string name="app_ops_summaries_boot_completed">automatikus indítás</string>
   <string name="app_ops_summaries_nfc_change">NFC váltása</string>
   <string name="app_ops_summaries_delete_sms">SMS törlése</string>
   <string name="app_ops_summaries_delete_mms">MMS törlése</string>
@@ -107,7 +107,7 @@
   <string name="app_ops_labels_send_mms">MMS küldés</string>
   <string name="app_ops_labels_read_mms">MMS olvasás</string>
   <string name="app_ops_labels_write_mms">MMS írás</string>
-  <string name="app_ops_labels_auto_start">Automatikus indítás</string>
+  <string name="app_ops_labels_boot_completed">Automatikus indítás</string>
   <string name="app_ops_labels_nfc_change">NFC váltása</string>
   <string name="app_ops_labels_delete_sms">SMS törlése</string>
   <string name="app_ops_labels_delete_mms">MMS törlése</string>

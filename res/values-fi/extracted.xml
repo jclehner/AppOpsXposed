@@ -55,7 +55,7 @@
   <string name="app_ops_summaries_send_mms">lähetä multimediaviestejä</string>
   <string name="app_ops_summaries_read_mms">lue multimediaviestejä</string>
   <string name="app_ops_summaries_write_mms">kirjoita multimediaviestejä</string>
-  <string name="app_ops_summaries_auto_start">automaattinen käynnistys</string>
+  <string name="app_ops_summaries_boot_completed">automaattinen käynnistys</string>
   <string name="app_ops_summaries_nfc_change">muuttaa NFC:n tilaa</string>
   <string name="app_ops_summaries_delete_sms">poistaa tekstiviestejä</string>
   <string name="app_ops_summaries_delete_mms">poistaa multimediaviestejä</string>
@@ -107,7 +107,7 @@
   <string name="app_ops_labels_send_mms">Lähetä multimediaviestejä</string>
   <string name="app_ops_labels_read_mms">Lue multimediaviestejä</string>
   <string name="app_ops_labels_write_mms">Kirjoita multimediaviestejä</string>
-  <string name="app_ops_labels_auto_start">Automaattinen käynnistys</string>
+  <string name="app_ops_labels_boot_completed">Automaattinen käynnistys</string>
   <string name="app_ops_labels_nfc_change">NFC muutos</string>
   <string name="app_ops_labels_delete_sms">Poista tekstiviestejä</string>
   <string name="app_ops_labels_delete_mms">Poista multimediaviestejä</string>

@@ -55,7 +55,7 @@
   <string name="app_ops_summaries_send_mms">siųsti MMS</string>
   <string name="app_ops_summaries_read_mms">skaityti MMS</string>
   <string name="app_ops_summaries_write_mms">rašyti MMS</string>
-  <string name="app_ops_summaries_auto_start">automatinis paleidimas</string>
+  <string name="app_ops_summaries_boot_completed">automatinis paleidimas</string>
   <string name="app_ops_summaries_nfc_change">NFC kaita</string>
   <string name="app_ops_summaries_delete_sms">ištrinti SMS</string>
   <string name="app_ops_summaries_delete_mms">ištrinti MMS</string>
@@ -107,7 +107,7 @@
   <string name="app_ops_labels_send_mms">Siųsti MMS</string>
   <string name="app_ops_labels_read_mms">Skaityti MMS</string>
   <string name="app_ops_labels_write_mms">Rašyti MMS</string>
-  <string name="app_ops_labels_auto_start">Automatinis paleidimas</string>
+  <string name="app_ops_labels_boot_completed">Automatinis paleidimas</string>
   <string name="app_ops_labels_nfc_change">NFC kaita</string>
   <string name="app_ops_labels_delete_sms">Ištrinti SMS</string>
   <string name="app_ops_labels_delete_mms">Ištrinti MMS</string>

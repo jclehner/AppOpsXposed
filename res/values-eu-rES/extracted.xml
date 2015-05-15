@@ -45,7 +45,7 @@
   <string name="app_ops_summaries_send_mms">MMS-ak bidali</string>
   <string name="app_ops_summaries_read_mms">MMS-ak irakurri</string>
   <string name="app_ops_summaries_write_mms">MMS-ak idatzi</string>
-  <string name="app_ops_summaries_auto_start">hasiera automatikoa</string>
+  <string name="app_ops_summaries_boot_completed">hasiera automatikoa</string>
   <string name="app_ops_summaries_data_change">sare konexioa aldatu</string>
   <string name="app_ops_labels_location">Kokapena</string>
   <string name="app_ops_labels_vibrate">Bibrazioa</string>
@@ -84,7 +84,7 @@
   <string name="app_ops_labels_send_mms">MMS-ak bidali</string>
   <string name="app_ops_labels_read_mms">MMS-ak irakurri</string>
   <string name="app_ops_labels_write_mms">MMS-ak idatzi</string>
-  <string name="app_ops_labels_auto_start">Hasiera automatikoa</string>
+  <string name="app_ops_labels_boot_completed">Hasiera automatikoa</string>
   <string name="app_ops_labels_data_change">Sare konexioa kudeatu</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Kokapena</string>

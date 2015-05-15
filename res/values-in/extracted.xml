@@ -55,7 +55,7 @@
   <string name="app_ops_summaries_send_mms">mengirim MMS</string>
   <string name="app_ops_summaries_read_mms">membaca MMS</string>
   <string name="app_ops_summaries_write_mms">menulis MMS</string>
-  <string name="app_ops_summaries_auto_start">mulai otomatis</string>
+  <string name="app_ops_summaries_boot_completed">mulai otomatis</string>
   <string name="app_ops_summaries_nfc_change">perubahan NFC</string>
   <string name="app_ops_summaries_delete_sms">hapus SMS</string>
   <string name="app_ops_summaries_delete_mms">hapus MMS</string>
@@ -107,7 +107,7 @@
   <string name="app_ops_labels_send_mms">Kirim MMS</string>
   <string name="app_ops_labels_read_mms">Baca MMS</string>
   <string name="app_ops_labels_write_mms">Tulis MMS</string>
-  <string name="app_ops_labels_auto_start">Mulai otomatis</string>
+  <string name="app_ops_labels_boot_completed">Mulai otomatis</string>
   <string name="app_ops_labels_nfc_change">perubahan NFC</string>
   <string name="app_ops_labels_delete_sms">hapus SMS</string>
   <string name="app_ops_labels_delete_mms">hapus SMS</string>

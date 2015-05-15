@@ -55,7 +55,7 @@
   <string name="app_ops_summaries_send_mms">MMS يوللا</string>
   <string name="app_ops_summaries_read_mms">MMS ئوقۇ</string>
   <string name="app_ops_summaries_write_mms">MMS ياز</string>
-  <string name="app_ops_summaries_auto_start">ئۆزلۈكىدىن قوزغات</string>
+  <string name="app_ops_summaries_boot_completed">ئۆزلۈكىدىن قوزغات</string>
   <string name="app_ops_summaries_nfc_change">NFC ئۆزگەرت</string>
   <string name="app_ops_summaries_delete_sms">قىسقا ئۇچۇر ئۆچۈر</string>
   <string name="app_ops_summaries_delete_mms">MMS ئۆچۈر</string>
@@ -107,7 +107,7 @@
   <string name="app_ops_labels_send_mms">MMS يوللا</string>
   <string name="app_ops_labels_read_mms">MMS ئوقۇ</string>
   <string name="app_ops_labels_write_mms">MMS ياز</string>
-  <string name="app_ops_labels_auto_start">ئۆزلۈكىدىن قوزغات</string>
+  <string name="app_ops_labels_boot_completed">ئۆزلۈكىدىن قوزغات</string>
   <string name="app_ops_labels_nfc_change">NFC ئۆزگەرت</string>
   <string name="app_ops_labels_delete_sms">قىسقا ئۇچۇر ئۆچۈر</string>
   <string name="app_ops_labels_delete_mms">MMS ئۆچۈر</string>

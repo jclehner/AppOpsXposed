@@ -46,7 +46,7 @@
   <string name="app_ops_summaries_send_mms">إرسال رسائل MMS</string>
   <string name="app_ops_summaries_read_mms">قراءة رسائل mms</string>
   <string name="app_ops_summaries_write_mms">كتابة رسائل mms</string>
-  <string name="app_ops_summaries_auto_start">بدء التشغيل تلقائياً</string>
+  <string name="app_ops_summaries_boot_completed">بدء التشغيل تلقائياً</string>
   <string name="app_ops_summaries_data_change">data تغير</string>
   <string name="app_ops_labels_location">الموقع</string>
   <string name="app_ops_labels_vibrate">هزاز</string>
@@ -85,7 +85,7 @@
   <string name="app_ops_labels_send_mms">إرسال MMS</string>
   <string name="app_ops_labels_read_mms">قراءة mms</string>
   <string name="app_ops_labels_write_mms">كتابة mms</string>
-  <string name="app_ops_labels_auto_start">بدء التشغيل تلقائياً</string>
+  <string name="app_ops_labels_boot_completed">بدء التشغيل تلقائياً</string>
   <string name="app_ops_labels_data_change">data تغير</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">الموقع</string>

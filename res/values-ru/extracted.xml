@@ -55,7 +55,7 @@
   <string name="app_ops_summaries_send_mms">отправка MMS</string>
   <string name="app_ops_summaries_read_mms">чтение MMS</string>
   <string name="app_ops_summaries_write_mms">создание MMS</string>
-  <string name="app_ops_summaries_auto_start">автозапуск</string>
+  <string name="app_ops_summaries_boot_completed">автозапуск</string>
   <string name="app_ops_summaries_nfc_change">изм. состояния NFC</string>
   <string name="app_ops_summaries_delete_sms">удаление SMS</string>
   <string name="app_ops_summaries_delete_mms">удаление MMS</string>
@@ -107,7 +107,7 @@
   <string name="app_ops_labels_send_mms">Отправка MMS</string>
   <string name="app_ops_labels_read_mms">Чтение MMS</string>
   <string name="app_ops_labels_write_mms">Создание MMS</string>
-  <string name="app_ops_labels_auto_start">Автозапуск</string>
+  <string name="app_ops_labels_boot_completed">Автозапуск</string>
   <string name="app_ops_labels_nfc_change">Изм. состояния NFC</string>
   <string name="app_ops_labels_delete_sms">Удаление SMS</string>
   <string name="app_ops_labels_delete_mms">Удаление MMS</string>

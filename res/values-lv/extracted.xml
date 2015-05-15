@@ -50,7 +50,7 @@
   <string name="app_ops_summaries_send_mms">sūtīt multiziņu</string>
   <string name="app_ops_summaries_read_mms">lasīt multiziņu</string>
   <string name="app_ops_summaries_write_mms">rakstīt multiziņu</string>
-  <string name="app_ops_summaries_auto_start">autostarts</string>
+  <string name="app_ops_summaries_boot_completed">autostarts</string>
   <string name="app_ops_summaries_data_change">datu maiņa</string>
   <string name="app_ops_labels_location">Atrašanās vieta</string>
   <string name="app_ops_labels_vibrate">Vibrēt</string>
@@ -90,7 +90,7 @@
   <string name="app_ops_labels_send_mms">Sūtīt multiziņu</string>
   <string name="app_ops_labels_read_mms">Lasīt multiziņu</string>
   <string name="app_ops_labels_write_mms">Rakstīt multiziņu</string>
-  <string name="app_ops_labels_auto_start">Autostarts</string>
+  <string name="app_ops_labels_boot_completed">Autostarts</string>
   <string name="app_ops_labels_data_change">Datu maiņa</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Atrašanās vieta</string>

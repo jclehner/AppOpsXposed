@@ -55,7 +55,7 @@
   <string name="app_ops_summaries_send_mms">एमएमएस भेजें</string>
   <string name="app_ops_summaries_read_mms">एमएमएस पढ़ें</string>
   <string name="app_ops_summaries_write_mms">एमएमएस लिखें</string>
-  <string name="app_ops_summaries_auto_start">स्वतः शुरू</string>
+  <string name="app_ops_summaries_boot_completed">स्वतः शुरू</string>
   <string name="app_ops_summaries_nfc_change">एनएफसी परिवर्तन</string>
   <string name="app_ops_summaries_delete_sms">एसएमएस को हटाएँ</string>
   <string name="app_ops_summaries_delete_mms">एमएमएस को हटाएँ</string>
@@ -107,7 +107,7 @@
   <string name="app_ops_labels_send_mms">एमएमएस भेजें</string>
   <string name="app_ops_labels_read_mms">एमएमएस पढ़ें</string>
   <string name="app_ops_labels_write_mms">एमएमएस लिखें</string>
-  <string name="app_ops_labels_auto_start">स्वतः शुरू</string>
+  <string name="app_ops_labels_boot_completed">स्वतः शुरू</string>
   <string name="app_ops_labels_nfc_change">एनएफसी परिवर्तन</string>
   <string name="app_ops_labels_delete_sms">एसएमएस हटाएँ</string>
   <string name="app_ops_labels_delete_mms">एमएमएस हटाएँ</string>

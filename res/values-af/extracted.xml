@@ -55,7 +55,7 @@
   <string name="app_ops_summaries_send_mms">stuur MMS</string>
   <string name="app_ops_summaries_read_mms">lees MMS</string>
   <string name="app_ops_summaries_write_mms">skryf MMS</string>
-  <string name="app_ops_summaries_auto_start">outo begin</string>
+  <string name="app_ops_summaries_boot_completed">outo begin</string>
   <string name="app_ops_summaries_nfc_change">NFC verander</string>
   <string name="app_ops_summaries_delete_sms">Verwyder SMS</string>
   <string name="app_ops_summaries_delete_mms">Verwyder SMS</string>
@@ -107,7 +107,7 @@
   <string name="app_ops_labels_send_mms">Stuur MMS</string>
   <string name="app_ops_labels_read_mms">Lees MMS</string>
   <string name="app_ops_labels_write_mms">Skryf MMS</string>
-  <string name="app_ops_labels_auto_start">Outo begin</string>
+  <string name="app_ops_labels_boot_completed">Outo begin</string>
   <string name="app_ops_labels_nfc_change">NFC verander</string>
   <string name="app_ops_labels_delete_sms">Verwyder SMS</string>
   <string name="app_ops_labels_delete_mms">Verwyder MMS</string>

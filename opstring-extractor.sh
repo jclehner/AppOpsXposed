@@ -9,6 +9,7 @@ PATTERNS=(
 	's/_wake_up/_alarm_wakeup/g'
 	's/_mute_unmute/_mute/g'
 	's/_keep_awake/_wake_lock/g'
+	's/_auto_start/_boot_completed/g'
 	's/_notification"/_post_notification"/g'
 	's/_draw_on_top/_system_alert_window/g'
 	's/_media_buttons/_take_media_buttons/g'

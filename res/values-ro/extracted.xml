@@ -50,7 +50,7 @@
   <string name="app_ops_summaries_send_mms">trimite MMS</string>
   <string name="app_ops_summaries_read_mms">citește MMS</string>
   <string name="app_ops_summaries_write_mms">scrie MMS</string>
-  <string name="app_ops_summaries_auto_start">auto start</string>
+  <string name="app_ops_summaries_boot_completed">auto start</string>
   <string name="app_ops_summaries_nfc_change">Schimbare NFC</string>
   <string name="app_ops_summaries_data_change">schimbă date mobile</string>
   <string name="app_ops_summaries_su">acces root</string>
@@ -92,7 +92,7 @@
   <string name="app_ops_labels_send_mms">Trimite MMS</string>
   <string name="app_ops_labels_read_mms">Citește MMS</string>
   <string name="app_ops_labels_write_mms">Scrie MMS</string>
-  <string name="app_ops_labels_auto_start">Auto start</string>
+  <string name="app_ops_labels_boot_completed">Auto start</string>
   <string name="app_ops_labels_data_change">Schimbă date mobile</string>
   <string name="app_ops_labels_su">Acces root</string>
   <!-- Categories -->
