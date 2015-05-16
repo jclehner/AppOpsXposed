@@ -61,6 +61,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 import at.jclehner.appopsxposed.BuildConfig;
 import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
@@ -332,7 +333,7 @@ public class AppOpsDetails extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
-        MenuItem item = menu.add(R.string.add_op);
+        MenuItem item = menu.add(R.string.add_switch);
         item.setIcon(R.drawable.ic_note_add_white_24dp);
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
@@ -386,6 +387,11 @@ public class AppOpsDetails extends Fragment {
         }
 
         final Object[] addableOps = getAddableOps().toArray();
+        if (addableOps.length == 0) {
+            Toast.makeText(getActivity(), R.string.no_switches_to_add, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         final CharSequence[] items = new CharSequence[addableOps.length];
         int i = 0;
 
@@ -394,7 +400,12 @@ public class AppOpsDetails extends Fragment {
             final SpannableStringBuilder ssb = new SpannableStringBuilder();
             ssb.append(OpsLabelHelper.getOpLabel(getActivity(), op));
             ssb.append("\n");
-            ssb.append(AppOpsManagerWrapper.opToName(op), new RelativeSizeSpan(0.5f), 0);
+
+            final String opName = AppOpsManagerWrapper.opToName(op);
+            final int start = ssb.length();
+
+            ssb.append(opName);
+            ssb.setSpan(new RelativeSizeSpan(0.5f), start, start + opName.length(), 0);
 
             items[i++] = ssb;
         }

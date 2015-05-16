@@ -70,4 +70,6 @@
 	<string name="use_hack_fix_prune_summary">Behebt ein Problem bei dem die Einstellungen von Apps auf der SD-Karte beim 
 	    Neustart verloren gehen.</string>
 	<string name="reset_all">Alle zurücksetzen</string>
+	<string name="add_switch">Schalter hinzufügen</string>
+	<string name="no_switches_to_add">Keine Schalter hinzuzufügen.</string>
 </resources>
