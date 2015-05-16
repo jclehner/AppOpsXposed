@@ -151,6 +151,7 @@ public class AppOpsDetails extends Fragment {
                         entry.getSwitchText(getActivity(), mState));
                 ((TextView)view.findViewById(R.id.op_time)).setText(
                         entry.getTimeText(res, true));
+
                 Switch sw = (Switch)view.findViewById(R.id.switchWidget);
                 final int switchOp = AppOpsManagerWrapper.opToSwitch(firstOp.getOp());
                 sw.setChecked(modeToChecked(switchOp, entry.getPackageOps()));
@@ -176,6 +177,8 @@ public class AppOpsDetails extends Fragment {
         if (mode == AppOpsManagerWrapper.MODE_DEFAULT)
             return true;
         if (mode == AppOpsManagerWrapper.MODE_ASK)
+            return true;
+        if (mode == AppOpsManagerWrapper.MODE_HINT)
             return true;
 
         return false;

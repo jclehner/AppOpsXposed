@@ -103,12 +103,13 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 
 	public static final int OP_BOOT_COMPLETED = getBootCompletedOp();
 
-	public static final int _NUM_OP = getOpInt("_NUM_OP");
+	public static final int _NUM_OP = getNumOp();
 
 	public static final int MODE_ALLOWED = getOpInt("MODE_ALLOWED");
 	public static final int MODE_IGNORED = getOpInt("MODE_IGNORED");
 	public static final int MODE_ERRORED = getOpInt("MODE_ERRORED");
 	public static final int MODE_DEFAULT = getOpInt("MODE_DEFAULT");
+	public static final int MODE_HINT = getOpInt("MODE_HINT");
 
 	// CyanogenMod, Sony ROMs, etc.
 	public static final int MODE_ASK = getOpInt("MODE_ASK");
@@ -220,16 +221,18 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 	{
 		if(mode >= 0)
 		{
-			if(mode == AppOpsManagerWrapper.MODE_ALLOWED)
+			if(mode == MODE_ALLOWED)
 				return "ALLOWED";
-			if(mode == AppOpsManagerWrapper.MODE_ERRORED)
+			if(mode == MODE_ERRORED)
 				return "ERRORED";
-			if(mode == AppOpsManagerWrapper.MODE_IGNORED)
+			if(mode == MODE_IGNORED)
 				return "IGNORED";
-			if(mode == AppOpsManagerWrapper.MODE_DEFAULT)
+			if(mode == MODE_DEFAULT)
 				return "DEFAULT";
-			if(mode == AppOpsManagerWrapper.MODE_ASK)
+			if(mode == MODE_ASK)
 				return "ASK";
+			if(mode == MODE_HINT)
+				return "HINT";
 		}
 
 		return "mode #" + mode;
@@ -279,6 +282,26 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		final int op = getOpInt("OP_BOOT_COMPLETED");
 		return op == -1 ? getOpWithPermission(Manifest.permission.RECEIVE_BOOT_COMPLETED)
 				: op;
+	}
+
+	private static int getNumOp()
+	{
+		if(Util.containsManufacturer("HTC"))
+		{
+			// Some HTC ROMs have added ops, prefixed with HTC_OP_. These ops are
+			// offset by 1000, so our usual assumption of op doubling as an array
+			// index is not valid anymore; HTC has added an opToIndex method to
+			// AppOpsManager which takes care of this problem.
+			// On these ROMs, _NUM_OP == _NUM_GOOGLE_OP + _NUM_HTC_OP!
+			//
+			// For now, we only use _NUM_GOOGLE_OP.
+
+			int numGoogle = getOpInt("_NUM_GOOGLE_OP");
+			if(numGoogle != -1)
+				return numGoogle;
+		}
+
+		return getOpInt("_NUM_OP");
 	}
 
 	public static class PackageOpsWrapper extends ObjectWrapper
