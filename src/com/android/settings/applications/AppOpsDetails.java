@@ -16,6 +16,7 @@
 
 package com.android.settings.applications;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.Manifest;
@@ -31,16 +32,20 @@ import android.content.pm.PermissionInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import at.jclehner.appopsxposed.BuildConfig;
 import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.OpEntryWrapper;
@@ -152,8 +157,63 @@ public class AppOpsDetails extends Fragment {
                 ((TextView)view.findViewById(R.id.op_time)).setText(
                         entry.getTimeText(res, true));
 
+                final int switchOp = AppOpsState.opToSwitch(firstOp.getOp());
+
+                if(BuildConfig.DEBUG && true)
+                {
+                    final int currentMode = mAppOps.checkOpNoThrow(switchOp, entry.getPackageOps().getUid(),
+                            entry.getPackageOps().getPackageName());
+
+                    final int modes[] = {
+                            AppOpsManagerWrapper.MODE_ALLOWED,
+                            AppOpsManagerWrapper.MODE_ASK,
+                            AppOpsManagerWrapper.MODE_HINT,
+                            AppOpsManagerWrapper.MODE_IGNORED,
+                            AppOpsManagerWrapper.MODE_ERRORED,
+                            AppOpsManagerWrapper.MODE_DEFAULT
+                    };
+
+                    final int[] indexToMode = new int[modes.length];
+                    final List<String> modeNames = new ArrayList<String>();
+                    int currentIndex = 0;
+
+                    for (int mode : modes) {
+                        if (mode == -1) continue;
+                        if (mode == currentMode) currentIndex = modeNames.size();
+                        indexToMode[modeNames.size()] = mode;
+                        modeNames.add(AppOpsManagerWrapper.modeToName(mode));
+                    }
+
+                    view.findViewById(R.id.switchWidget).setVisibility(View.GONE);
+
+                    Spinner sp = (Spinner)view.findViewById(R.id.spinnerWidget);
+                    sp.setVisibility(View.VISIBLE);
+                    sp.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1,
+                            modeNames));
+                    sp.setSelection(currentIndex);
+                    sp.setOnItemSelectedListener(new OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent,
+                                View view, int position, long id) {
+                            setMode(indexToMode[position]);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+                           setMode(currentMode);
+                        }
+
+                        private void setMode(int mode) {
+                            mAppOps.setMode(switchOp, entry.getPackageOps().getUid(),
+                                entry.getPackageOps().getPackageName(), mode);
+                        }
+					});
+
+                    mOperationsSection.addView(view);
+                    continue;
+                }
+
                 Switch sw = (Switch)view.findViewById(R.id.switchWidget);
-                final int switchOp = AppOpsManagerWrapper.opToSwitch(firstOp.getOp());
                 sw.setChecked(modeToChecked(switchOp, entry.getPackageOps()));
                 sw.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
                     @Override
@@ -171,7 +231,7 @@ public class AppOpsDetails extends Fragment {
     }
 
     private boolean modeToChecked(int switchOp, PackageOpsWrapper ops) {
-        final int mode = mAppOps.checkOp(switchOp, ops.getUid(), ops.getPackageName());
+        final int mode = mAppOps.checkOpNoThrow(switchOp, ops.getUid(), ops.getPackageName());
         if (mode == AppOpsManagerWrapper.MODE_ALLOWED)
             return true;
         if (mode == AppOpsManagerWrapper.MODE_DEFAULT)

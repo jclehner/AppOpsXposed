@@ -148,6 +148,12 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 				op, uid, packageName);
 	}
 
+	public int checkOpNoThrow(int op, int uid, String packageName)
+	{
+		return call("checkOpNoThrow", new Class<?>[] { int.class, int.class, String.class },
+				op, uid, packageName);
+	}
+
 	public void setMode(int code, int uid, String packageName, int mode)
 	{
 		call("setMode", new Class<?>[] { int.class, int.class, String.class, int.class },
