@@ -183,11 +183,11 @@ public class AppOpsDetails extends Fragment {
 
                     final int modes[] = {
                             AppOpsManagerWrapper.MODE_ALLOWED,
-                            AppOpsManagerWrapper.MODE_ASK,
-                            AppOpsManagerWrapper.MODE_HINT,
                             AppOpsManagerWrapper.MODE_IGNORED,
                             AppOpsManagerWrapper.MODE_ERRORED,
-                            AppOpsManagerWrapper.MODE_DEFAULT
+                            AppOpsManagerWrapper.MODE_DEFAULT,
+                            AppOpsManagerWrapper.MODE_ASK,
+                            AppOpsManagerWrapper.MODE_HINT,
                     };
 
                     final int[] indexToMode = new int[modes.length];
