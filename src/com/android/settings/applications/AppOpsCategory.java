@@ -357,7 +357,7 @@ public class AppOpsCategory extends ListFragment implements
 
         PreferenceActivity pa = (PreferenceActivity)getActivity();
         pa.startPreferencePanel(AppOpsDetails.class.getName(), args,
-                R.string.app_ops_settings, null, this, RESULT_APP_DETAILS);
+                0, null, this, RESULT_APP_DETAILS);
     }
 
     @Override public void onListItemClick(ListView l, View v, int position, long id) {

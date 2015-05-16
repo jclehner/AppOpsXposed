@@ -18,6 +18,7 @@
 
 package at.jclehner.appopsxposed.util;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,8 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.Context;
+import android.os.IBinder;
+import android.util.Log;
 
 @TargetApi(19)
 public class AppOpsManagerWrapper extends ObjectWrapper
@@ -160,6 +163,66 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 				code, uid, packageName, mode);
 	}
 
+	public Object getService()
+	{
+		try
+		{
+			final Class<?> sm = Class.forName("android.os.ServiceManager");
+			final IBinder service = callStatic(sm, "getService", Context.APP_OPS_SERVICE);
+			final Class<?> aos = Class.forName("com.android.internal.app.IAppOpsService$Stub");
+			return callStatic(aos, "asInterface", new Class<?>[] { IBinder.class }, service);
+		}
+		catch(Exception e)
+		{
+			throw new ReflectiveException(e);
+		}
+	}
+
+	public boolean resetAllModes()
+	{
+		try
+		{
+			new ObjectWrapper(getService()).call("resetAllModes");
+			return true;
+		}
+		catch(ReflectiveException e)
+		{
+			Util.debug(e);
+			Log.w("AOX", e);
+			return false;
+		}
+	}
+
+	public void resetAllModes(int uid, String packageName)
+	{
+		for(PackageOpsWrapper pow : getOpsForPackage(uid, packageName, null))
+		{
+			for(OpEntryWrapper oew : pow.getOps())
+			{
+				final int op = oew.getOp();
+				if(!AppOpsManagerWrapper.opAllowsReset(op))
+					continue;
+
+				int defMode =  AppOpsManagerWrapper.opToDefaultMode(op);
+
+				// When calling setMode with the ops default mode, the op
+				// is pruned by AppOpsService. However, setMode call is
+				// ignored if that mode is already ser for this op. We
+				// simply set it to another mode than the current one,
+				// and then to its default.
+				// Note that we can only use MODE_{IGNORED,ALLOWED,ERRORED},
+				// as these are universal across all ROMs.
+
+				if(defMode != AppOpsManagerWrapper.MODE_IGNORED)
+					setMode(op, uid, packageName, AppOpsManagerWrapper.MODE_IGNORED);
+				else
+					setMode(op, uid, packageName, AppOpsManagerWrapper.MODE_ALLOWED);
+
+				setMode(op, uid, packageName, defMode);
+			}
+		}
+	}
+
 	public static String opToName(int op) {
 		return callStatic(AppOpsManager.class, "opToName", new Class<?>[] { int.class }, op);
 	}
@@ -252,6 +315,28 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 
 	public static boolean hasTrueBootCompletedOp() {
 		return getOpInt("OP_BOOT_COMPLETED") != -1;
+	}
+
+	public static int[] getAllValidOps()
+	{
+		// TODO if HTC ops are ever implemented, this function
+		// must be adapted
+		final int[] ops = new int[_NUM_OP];
+		for(int i = 0; i != ops.length; ++i)
+			ops[i] = i;
+
+		return ops;
+	}
+
+	public static int permissionToOp(String permission)
+	{
+		for(int op : getAllValidOps())
+		{
+			if(permission.equals(opToPermission(op)))
+				return op;
+		}
+
+		return OP_NONE;
 	}
 
 	private static int getOpInt(String opName)

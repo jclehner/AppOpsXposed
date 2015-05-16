@@ -17,12 +17,18 @@
 package com.android.settings.applications;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -32,12 +38,18 @@ import android.content.pm.PermissionInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.text.SpannableStringBuilder;
+import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -45,11 +57,14 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 import at.jclehner.appopsxposed.BuildConfig;
 import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
+import at.jclehner.appopsxposed.util.ObjectWrapper;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.OpEntryWrapper;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.PackageOpsWrapper;
+import at.jclehner.appopsxposed.util.OpsLabelHelper;
 
 public class AppOpsDetails extends Fragment {
     static final String TAG = "AppOpsDetails";
@@ -283,5 +298,121 @@ public class AppOpsDetails extends Fragment {
         if (!refreshUi()) {
             setIntentAndFinish(true, true);
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
+        MenuItem item = menu.add(R.string.add_op);
+        item.setIcon(R.drawable.ic_note_add_white_24dp);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                showAddOpDialog();
+                return true;
+            }
+        });
+
+        item = menu.add(R.string.reset_all);
+        item.setIcon(R.drawable.ic_undo_white_24dp);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                final int uid = mPackageInfo.applicationInfo.uid;
+                final String packageName = mPackageInfo.packageName;
+
+                for (PackageOpsWrapper pow : mAppOps.getOpsForPackage(uid, packageName, null)) {
+                    for (OpEntryWrapper oew : pow.getOps()) {
+                        final int op = oew.getOp();
+                        if (!AppOpsManagerWrapper.opAllowsReset(op)) {
+                            continue;
+                        }
+
+                        int defMode = AppOpsManagerWrapper.opToDefaultMode(op);
+
+                        // setMode has the benefit of
+
+                        if (defMode != AppOpsManagerWrapper.MODE_IGNORED) {
+                            mAppOps.setMode(op, uid, packageName, AppOpsManagerWrapper.MODE_IGNORED);
+                        } else {
+                            mAppOps.setMode(op, uid, packageName, AppOpsManagerWrapper.MODE_ERRORED);
+                        }
+
+                        mAppOps.setMode(op, uid, packageName, defMode);
+                    }
+                }
+
+                refreshUi();
+                return true;
+            }
+        });
+    }
+
+    private void showAddOpDialog()
+    {
+        if (mPackageInfo == null) {
+            return;
+        }
+
+        final Object[] addableOps = getAddableOps().toArray();
+        final CharSequence[] items = new CharSequence[addableOps.length];
+        int i = 0;
+
+        for (Object opObj : addableOps) {
+            final int op = (int) opObj;
+            final SpannableStringBuilder ssb = new SpannableStringBuilder();
+            ssb.append(OpsLabelHelper.getOpLabel(getActivity(), op));
+            ssb.append("\n");
+            ssb.append(AppOpsManagerWrapper.opToName(op), new RelativeSizeSpan(0.5f), 0);
+
+            items[i++] = ssb;
+        }
+
+        final AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
+        ab.setSingleChoiceItems(items, -1, new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which > 0) {
+                    mAppOps.setMode((int) addableOps[which], mPackageInfo.applicationInfo.uid,
+                        mPackageInfo.packageName, AppOpsManagerWrapper.MODE_IGNORED);
+                }
+                dialog.dismiss();
+                refreshUi();
+            }
+        });
+        ab.show();
+    }
+
+    private Set<Integer> getAddableOps()
+    {
+        final Set<Integer> addableOps = new TreeSet<>();
+        for (int op : AppOpsManagerWrapper.getAllValidOps())
+            addableOps.add(op);
+
+        final List<PackageOpsWrapper> ops = mAppOps.getOpsForPackage(mPackageInfo.applicationInfo.uid,
+                mPackageInfo.packageName, null);
+
+        // First, remove all ops that are found by getOpsForPackage.
+        for (PackageOpsWrapper pow : ops) {
+            for (OpEntryWrapper oew : pow.getOps()) {
+                addableOps.remove(oew.getOp());
+            }
+        }
+
+        // Now remove all apps that are tied to a permission, as
+        // these should have been found by getOpsForPackage.
+        for (Object opObj : addableOps.toArray()) {
+            final int op = (int) opObj;
+            final int opSwitch = AppOpsManagerWrapper.opToSwitch(op);
+            final String perm = AppOpsManagerWrapper.opToPermission(opSwitch);
+            if (perm != null) {
+                addableOps.remove(op);
+                Log.d("AOX", "Removed " + AppOpsManagerWrapper.opToName(op) + " (has " + perm + ")");
+            }
+        }
+
+        return addableOps;
     }
 }

@@ -480,7 +480,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 	{
 		super.onCreateOptionsMenu(menu, inflater);
 		MenuItem item = menu.add(0, MENU_RESET, 0, R.string.reset_all);
-		item.setIcon(android.R.drawable.ic_menu_revert);
+		item.setIcon(R.drawable.ic_undo_white_24dp);
 		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 	}
 
@@ -502,17 +502,12 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 	private void resetChangedOps()
 	{
 		final AppOpsManagerWrapper appOps = AppOpsManagerWrapper.from(getActivity());
-
-		for(PackageInfoData pi : mAdapter.mList)
+		if(!appOps.resetAllModes())
 		{
-			final int uid = pi.packageInfo.applicationInfo.uid;
-			final String packageName = pi.packageInfo.packageName;
-
-			for(OpEntryWrapper entry : pi.changedOps)
+			for(PackageInfoData pi : mAdapter.mList)
 			{
-				final int op = entry.getOp();
-				if(AppOpsManagerWrapper.opAllowsReset(op))
-					appOps.setMode(op, uid, packageName, AppOpsManagerWrapper.opToDefaultMode(op));
+				appOps.resetAllModes(pi.packageInfo.applicationInfo.uid,
+						pi.packageInfo.packageName);
 			}
 		}
 

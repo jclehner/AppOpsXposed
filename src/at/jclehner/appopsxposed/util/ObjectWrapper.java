@@ -1,6 +1,10 @@
 package at.jclehner.appopsxposed.util;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import org.apache.http.MethodNotSupportedException;
 
 import android.util.Log;
 
@@ -22,12 +26,16 @@ public class ObjectWrapper
 		mObj = obj;
 	}
 
+	public Class<?> getWrappedClass() {
+		return mObj.getClass();
+	}
+
 	@SuppressWarnings("unchecked")
 	public <T> T get(String fieldName)
 	{
 		try
 		{
-			return (T) mObj.getClass().getField(fieldName).get(mObj);
+			return (T) getField(mObj.getClass(), fieldName).get(mObj);
 		}
 		catch(IllegalAccessException e)
 		{
@@ -61,7 +69,7 @@ public class ObjectWrapper
 	{
 		try
 		{
-			return (T) clazz.getField(fieldName).get(null);
+			return (T) getField(clazz, fieldName).get(null);
 		}
 		catch(IllegalAccessException e)
 		{
@@ -81,7 +89,7 @@ public class ObjectWrapper
 	{
 		try
 		{
-			mObj.getClass().getField(fieldName).set(mObj, value);
+			getField(mObj.getClass(), fieldName).set(mObj, value);
 		}
 		catch(NoSuchFieldException e)
 		{
@@ -148,6 +156,23 @@ public class ObjectWrapper
 
 			throw new ReflectiveException(e);
 		}
+	}
+
+	private static Field getField(Class<?> clazz, String fieldName) throws NoSuchFieldException
+	{
+		Field f;
+
+		try
+		{
+			f = clazz.getDeclaredField(fieldName);
+		}
+		catch(NoSuchFieldException e)
+		{
+			f = clazz.getField(fieldName);
+		}
+
+		f.setAccessible(true);
+		return f;
 	}
 
 	private static Class<?>[] getTypes(Object[] args)
