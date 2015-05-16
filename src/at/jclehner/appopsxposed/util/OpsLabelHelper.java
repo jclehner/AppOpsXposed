@@ -125,9 +125,10 @@ public class OpsLabelHelper
 		final String[] ret = new String[maxOp + 1];
 
 		for(int op = 0; op != ret.length; ++op)
-		{
 			ret[op] = strings.get(op, AppOpsManagerWrapper.opToName(op));
-		}
+
+		if(maxOp + 1 != AppOpsManagerWrapper._NUM_OP)
+			Util.log("maxOp=" + maxOp + ", but _NUM_OP=" + AppOpsManagerWrapper._NUM_OP);
 
 		return ret;
 	}
@@ -191,7 +192,8 @@ public class OpsLabelHelper
 			sOpSummaries = getOpSummaries(context);
 		}
 
-		return (getLabel ? sOpLabels : sOpSummaries)[op];
+		final String[] array = getLabel ? sOpLabels : sOpSummaries;
+		return op < array.length ? array[op] : "OP #" + op;
 	}
 
 	private static String getFallbackString(Context context, String opName, boolean getLabel, boolean tryOther)
