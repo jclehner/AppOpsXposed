@@ -17,7 +17,6 @@
 package com.android.settings.applications;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -38,8 +37,13 @@ import android.content.pm.PermissionInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
+import android.text.style.StrikethroughSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -57,11 +61,9 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 import at.jclehner.appopsxposed.BuildConfig;
 import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
-import at.jclehner.appopsxposed.util.ObjectWrapper;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.OpEntryWrapper;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.PackageOpsWrapper;
 import at.jclehner.appopsxposed.util.OpsLabelHelper;
@@ -189,14 +191,41 @@ public class AppOpsDetails extends Fragment {
                     };
 
                     final int[] indexToMode = new int[modes.length];
-                    final List<String> modeNames = new ArrayList<String>();
+                    final List<CharSequence> modeNames = new ArrayList<CharSequence>();
                     int currentIndex = 0;
 
                     for (int mode : modes) {
                         if (mode == -1) continue;
                         if (mode == currentMode) currentIndex = modeNames.size();
                         indexToMode[modeNames.size()] = mode;
-                        modeNames.add(AppOpsManagerWrapper.modeToName(mode));
+
+                        final String modeName = AppOpsManagerWrapper.modeToName(mode);
+
+                        final String color;
+                        Object style = null;
+
+                        if (mode == AppOpsManagerWrapper.MODE_ERRORED) {
+                            color = "#ef5350";
+                            //style = new StrikethroughSpan();
+                        } else if (mode == AppOpsManagerWrapper.MODE_IGNORED) {
+                            color = "#ff8f00";
+                            //style = new StrikethroughSpan();
+                        } else if (mode == AppOpsManagerWrapper.MODE_ALLOWED) {
+                            color = "#66bb6a";
+                        } else if (mode == AppOpsManagerWrapper.MODE_DEFAULT) {
+                            color = "#90caf9";
+                        } else if (mode == AppOpsManagerWrapper.MODE_ASK) {
+                            color = "#009688";
+                        } else {
+                            color = "#f48fb1";
+                        }
+
+                        final Spanned s = Html.fromHtml("<font color=\"" + color + "\">" + modeName + "</font>");
+                        if (s instanceof Spannable) {
+                            ((Spannable)s).setSpan(style, 0, s.length(), 0);
+                        }
+
+                        modeNames.add(s);
                     }
 
                     view.findViewById(R.id.switchWidget).setVisibility(View.GONE);
