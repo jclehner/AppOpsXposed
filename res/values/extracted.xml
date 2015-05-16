@@ -76,6 +76,11 @@ THE EXTRACTOR SCRIPT WILL FAIL OTHERWISE!
     <string name="app_ops_summaries_take_audio_focus">audio focus</string>
 
     <string name="app_ops_labels_location">Location</string>
+    <string name="app_ops_labels_coarse_location">@string/app_ops_labels_location</string>
+    <string name="app_ops_labels_fine_location">@string/app_ops_labels_location</string>
+    <string name="app_ops_labels_gps">@string/app_ops_labels_location</string>
+    <string name="app_ops_labels_monitor_location">@string/app_ops_labels_location</string>
+    <string name="app_ops_labels_monitor_high_power_location">@string/app_ops_labels_location</string>
     <string name="app_ops_labels_vibrate">Vibrate</string>
     <string name="app_ops_labels_read_contacts">Read contacts</string>
     <string name="app_ops_labels_write_contacts">Modify contacts</string>
