@@ -352,27 +352,7 @@ public class AppOpsDetails extends Fragment {
             public boolean onMenuItemClick(MenuItem item) {
                 final int uid = mPackageInfo.applicationInfo.uid;
                 final String packageName = mPackageInfo.packageName;
-
-                for (PackageOpsWrapper pow : mAppOps.getOpsForPackage(uid, packageName, null)) {
-                    for (OpEntryWrapper oew : pow.getOps()) {
-                        final int op = oew.getOp();
-                        if (!AppOpsManagerWrapper.opAllowsReset(op)) {
-                            continue;
-                        }
-
-                        int defMode = AppOpsManagerWrapper.opToDefaultMode(op);
-
-                        // setMode has the benefit of
-
-                        if (defMode != AppOpsManagerWrapper.MODE_IGNORED) {
-                            mAppOps.setMode(op, uid, packageName, AppOpsManagerWrapper.MODE_IGNORED);
-                        } else {
-                            mAppOps.setMode(op, uid, packageName, AppOpsManagerWrapper.MODE_ERRORED);
-                        }
-
-                        mAppOps.setMode(op, uid, packageName, defMode);
-                    }
-                }
+                mAppOps.resetAllModes(uid, packageName);
 
                 refreshUi();
                 return true;
