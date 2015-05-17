@@ -20,12 +20,9 @@ package at.jclehner.appopsxposed.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -240,8 +237,6 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		final PackageManager pm = mContext.getPackageManager();
 		final List<PackageOpsWrapper> pows = getOpsForPackage(uid, packageName, ops);
 
-		final Set<OpEntryWrapper> allOps = new HashSet<>();
-
 		for(PackageOpsWrapper pow : pows)
 		{
 			final PackageInfo pi;
@@ -256,48 +251,20 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 				continue;
 			}
 
-			if(pi.applicationInfo.uid != uid)
-			{
-				Util.debug("Mismatched uid for " + packageName + ": expected " +
-						uid + ", got " + pi.applicationInfo.uid);
+			if(pi.applicationInfo.uid != uid || pi.sharedUserId == null)
 				continue;
-			}
 
-			allOps.addAll(pow.getOps());
+			final Set<OpEntryWrapper> pkgOps = new HashSet<>(pow.getOps());
+			final PackageOpsWrapper spow = getPackageOpsFromAllOps(uid, packageName, ops);
 
-			if(pi.sharedUserId != null)
+			for(OpEntryWrapper soew : spow.getOps())
 			{
-				Util.log(packageId(pi));
-				Util.log("  called from " + Util.getCallingFunction());
-
-				final Set<String> perms = new HashSet<>(Arrays.asList(pi.requestedPermissions));
-				for(PackageInfo spi : getPackagesWithSharedUid(pm, pi.sharedUserId))
+				if(!pkgOps.contains(soew))
 				{
-					if(packageName.equals(spi.packageName))
-						continue;
-
-					int before = perms.size();
-					perms.addAll(Arrays.asList(spi.requestedPermissions));
-					Util.log("  " + (perms.size() - before) + " permissions added from " + spi.packageName);
-				}
-
-				for(String perm : perms)
-				{
-					if(pm.checkPermission(perm, packageName) != PackageManager.PERMISSION_GRANTED)
-						continue;
-
-					final int op = permissionToOp(perm);
-					if (op == -1)
-						continue;
-
-					final int mode = checkOpNoThrow(op, uid, packageName);
-					final OpEntryWrapper oew = new OpEntryWrapper(op, mode, 0, 0, -1);
-
-					if(allOps.add(oew))
-					{
-						pow.getOps().add(oew);
-						Util.log("  added op " + opToName(op) + " from " + perm);
-					}
+					soew.mUid = spow.mUid;
+					soew.mPackageName = spow.mPackageName;
+					pkgOps.add(soew);
+					pow.getOps().add(soew);
 				}
 			}
 		}
@@ -513,17 +480,15 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		return getOpInt("_NUM_OP");
 	}
 
-	private static String packageId(PackageInfo pi)
+	private PackageOpsWrapper getPackageOpsFromAllOps(int uid, String packageName, int[] ops)
 	{
-		final String ret = pi.packageName + "(" + pi.applicationInfo.uid + ")";
-		if(pi.sharedUserId != null)
-			return ret + "; sharedUid=" + pi.sharedUserId;
-		return ret;
-	}
+		for(PackageOpsWrapper pow : getPackagesForOps(ops))
+		{
+			if(pow.mUid == uid && pow.mPackageName == packageName)
+				return pow;
+		}
 
-	private static String packageId(PackageOpsWrapper pow)
-	{
-		return pow.getPackageName() + "(" + pow.getUid() + ")";
+		return null;
 	}
 
 	public static class PackageOpsWrapper extends ObjectWrapper
@@ -606,6 +571,9 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		private final long mTime;
 		private final long mRejectTime;
 		private final int mDuration;
+
+		private int mUid = -1;
+		private String mPackageName = null;
 
 		private boolean mInitialized = false;
 
