@@ -1,3 +1,8 @@
+### 1.28
+* Fix crashes on certain HTC devices
+* Fix switch labels
+* Smaller icon in Settings
+
 ### 1.27
 * Add translations from CM-12 for a ton of languages
 

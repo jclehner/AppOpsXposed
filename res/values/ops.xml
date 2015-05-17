@@ -41,7 +41,7 @@ THE EXTRACTOR SCRIPT WILL FAIL OTHERWISE!
     <string name="app_ops_summaries_read_clipboard">read clipboard</string>
     <string name="app_ops_summaries_write_clipboard">modify clipboard</string>
     <string name="app_ops_summaries_take_media_buttons">media buttons</string>
-    <string name="app_ops_summaries_audio_focus">audio focus</string>
+    <string name="app_ops_summaries_take_audio_focus">audio focus</string>
     <string name="app_ops_summaries_audio_master_volume">master volume</string>
     <string name="app_ops_summaries_audio_voice_volume">voice volume</string>
     <string name="app_ops_summaries_audio_ring_volume">ring volume</string>
@@ -73,7 +73,6 @@ THE EXTRACTOR SCRIPT WILL FAIL OTHERWISE!
     <string name="app_ops_summaries_su">root access</string>
     <string name="app_ops_summaries_neighboring_cells">cell scan</string>
     <string name="app_ops_summaries_boot_completed">run at startup</string>
-    <string name="app_ops_summaries_take_audio_focus">audio focus</string>
 
     <string name="app_ops_labels_location">Location</string>
     <string name="app_ops_labels_coarse_location">@string/app_ops_labels_location</string>
@@ -88,13 +87,19 @@ THE EXTRACTOR SCRIPT WILL FAIL OTHERWISE!
     <string name="app_ops_labels_write_call_log">Modify call log</string>
     <string name="app_ops_labels_read_calendar">Read calendar</string>
     <string name="app_ops_labels_write_calendar">Modify calendar</string>
+    <string name="app_ops_labels_wifi_scan">@string/app_ops_labels_location</string>
     <string name="app_ops_labels_post_notification">Post notification</string>
+    <string name="app_ops_labels_cell_scan">@string/app_ops_labels_location</string>
     <string name="app_ops_labels_call_phone">Call phone</string>
-    <string name="app_ops_labels_read_sms_db">Read SMS DB</string>
-    <string name="app_ops_labels_write_sms_db">Write SMS DB</string>
+    <string name="app_ops_labels_read_sms">Read SMS DB</string>
+    <string name="app_ops_labels_write_sms">Write SMS DB</string>
     <string name="app_ops_labels_receive_sms">Receive SMS</string>
+    <string name="app_ops_labels_receive_emergency_sms">@string/app_ops_labels_receive_sms</string>
     <string name="app_ops_labels_receive_mms">Receive MMS</string>
+    <string name="app_ops_labels_receive_wap_push">@string/app_ops_labels_receive_sms</string>
     <string name="app_ops_labels_send_sms">Send SMS</string>
+    <string name="app_ops_labels_read_icc_sms">@string/app_ops_labels_read_sms</string>
+    <string name="app_ops_labels_write_icc_sms">@string/app_ops_labels_write_sms</string>
     <string name="app_ops_labels_write_settings">Modify settings</string>
     <string name="app_ops_labels_system_alert_window">Draw on top</string>
     <string name="app_ops_labels_access_notifications">Access notifications</string>
@@ -104,7 +109,7 @@ THE EXTRACTOR SCRIPT WILL FAIL OTHERWISE!
     <string name="app_ops_labels_read_clipboard">Read clipboard</string>
     <string name="app_ops_labels_write_clipboard">Modify clipboard</string>
     <string name="app_ops_labels_take_media_buttons">Media buttons</string>
-    <string name="app_ops_labels_audio_focus">Audio focus</string>
+    <string name="app_ops_labels_take_audio_focus">Audio focus</string>
     <string name="app_ops_labels_audio_master_volume">Master volume</string>
     <string name="app_ops_labels_audio_voice_volume">Voice volume</string>
     <string name="app_ops_labels_audio_ring_volume">Ring volume</string>
