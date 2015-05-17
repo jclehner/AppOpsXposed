@@ -252,7 +252,7 @@ public class AppOpsDetails extends Fragment {
                             mAppOps.setMode(switchOp, entry.getPackageOps().getUid(),
                                 entry.getPackageOps().getPackageName(), mode);
                         }
-					});
+                    });
 
                     mOperationsSection.addView(view);
                     continue;
@@ -378,6 +378,47 @@ public class AppOpsDetails extends Fragment {
                 return true;
             }
         });
+
+        if (!BuildConfig.DEBUG) {
+            return;
+        }
+
+        item = menu.add("Info");
+        item.setIcon(android.R.drawable.ic_menu_info_details);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                final int uid = mPackageInfo.applicationInfo.uid;
+                final String packageName = mPackageInfo.packageName;
+                final StringBuilder sb = new StringBuilder("<tt>");
+
+                /*
+                    List<AppOpsState.AppOpEntry> entries = mState.buildState(tpl,
+                            uid, packageName);
+                    for (final AppOpsState.AppOpEntry entry : entries) {
+                        for (OpEntryWrapper wrapper : entry.getPackageOps().getOps()) {
+                 */
+                for (PackageOpsWrapper pow : mAppOps.getOpsForPackage(uid, packageName, null)) {
+                    for (OpEntryWrapper oew : pow.getOps()) {
+                        final int op = oew.getOp();
+                        final int switchOp = AppOpsManagerWrapper.opToSwitch(op);
+                        sb.append(AppOpsManagerWrapper.opToName(op));
+                        sb.append("<br/>+-MODE  : " + AppOpsManagerWrapper.modeToName(oew.getMode()));
+                        sb.append("<br/>+-SWITCH: " + AppOpsManagerWrapper.opToName(switchOp));
+                        final int switchMode = mAppOps.checkOpNoThrow(switchOp, uid, packageName);
+                        sb.append("<br/>&nbsp;&nbsp;+-MODE: " + AppOpsManagerWrapper.modeToName(switchMode));
+                        sb.append("<br/>");
+                    }
+                }
+
+                sb.append("</tt>");
+                final AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
+                ab.setMessage(Html.fromHtml(sb.toString()));
+                ab.show();
+                return true;
+            }
+        });
     }
 
     private void showAddOpDialog()
@@ -429,8 +470,9 @@ public class AppOpsDetails extends Fragment {
     private Set<Integer> getAddableOps()
     {
         final Set<Integer> addableOps = new TreeSet<>();
-        for (int op : AppOpsManagerWrapper.getAllValidOps())
+        for (int op : AppOpsManagerWrapper.getAllValidOps()) {
             addableOps.add(op);
+        }
 
         final List<PackageOpsWrapper> ops = mAppOps.getOpsForPackage(mPackageInfo.applicationInfo.uid,
                 mPackageInfo.packageName, null);
@@ -450,7 +492,6 @@ public class AppOpsDetails extends Fragment {
             final String perm = AppOpsManagerWrapper.opToPermission(opSwitch);
             if (perm != null) {
                 addableOps.remove(op);
-                Log.d("AOX", "Removed " + AppOpsManagerWrapper.opToName(op) + " (has " + perm + ")");
             }
         }
 
