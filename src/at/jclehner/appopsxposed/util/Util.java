@@ -335,6 +335,15 @@ public final class Util
 		}
 	}
 
+	public static String getCallingFunction()
+	{
+		final Exception e = new Exception();
+		final StackTraceElement s = e.getStackTrace()[2];
+		return
+				s.getClassName() + "." + s.getMethodName() + "(" +
+				s.getFileName() + ":" + s.getLineNumber() + ")";
+	}
+
 	public static void closeQuietly(Closeable c)
 	{
 		try

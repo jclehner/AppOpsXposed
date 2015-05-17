@@ -18,15 +18,22 @@
 
 package at.jclehner.appopsxposed.util;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -118,13 +125,17 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 	// CyanogenMod, Sony ROMs, etc.
 	public static final int MODE_ASK = getOpInt("MODE_ASK");
 
+	private final Context mContext;
+
 	public static AppOpsManagerWrapper from(Context context) {
 		return new AppOpsManagerWrapper(context);
 	}
 
 	@TargetApi(19)
-	private AppOpsManagerWrapper(Context context) {
+	private AppOpsManagerWrapper(Context context)
+	{
 		super(context.getSystemService(Context.APP_OPS_SERVICE));
+		mContext = context;
 	}
 
 	public List<PackageOpsWrapper> getOpsForPackage(int uid, String packageName, int[] ops)
@@ -222,6 +233,89 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 				setMode(op, uid, packageName, defMode);
 			}
 		}
+	}
+
+	public List<PackageOpsWrapper> getAllOpsForPackage(int uid, String packageName, int[] ops)
+	{
+		final PackageManager pm = mContext.getPackageManager();
+		final List<PackageOpsWrapper> pows = getOpsForPackage(uid, packageName, ops);
+
+		final Set<OpEntryWrapper> allOps = new HashSet<>();
+
+		for(PackageOpsWrapper pow : pows)
+		{
+			final PackageInfo pi;
+
+			try
+			{
+				pi = pm.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS);
+			}
+			catch(NameNotFoundException e)
+			{
+				Util.debug(e);
+				continue;
+			}
+
+			if(pi.applicationInfo.uid != uid)
+			{
+				Util.debug("Mismatched uid for " + packageName + ": expected " +
+						uid + ", got " + pi.applicationInfo.uid);
+				continue;
+			}
+
+			allOps.addAll(pow.getOps());
+
+			if(pi.sharedUserId != null)
+			{
+				Util.log(packageId(pi));
+				Util.log("  called from " + Util.getCallingFunction());
+
+				final Set<String> perms = new HashSet<>(Arrays.asList(pi.requestedPermissions));
+				for(PackageInfo spi : getPackagesWithSharedUid(pm, pi.sharedUserId))
+				{
+					if(packageName.equals(spi.packageName))
+						continue;
+
+					int before = perms.size();
+					perms.addAll(Arrays.asList(spi.requestedPermissions));
+					Util.log("  " + (perms.size() - before) + " permissions added from " + spi.packageName);
+				}
+
+				for(String perm : perms)
+				{
+					if(pm.checkPermission(perm, packageName) != PackageManager.PERMISSION_GRANTED)
+						continue;
+
+					final int op = permissionToOp(perm);
+					if (op == -1)
+						continue;
+
+					final int mode = checkOpNoThrow(op, uid, packageName);
+					final OpEntryWrapper oew = new OpEntryWrapper(op, mode, 0, 0, -1);
+
+					if(allOps.add(oew))
+					{
+						pow.getOps().add(oew);
+						Util.log("  added op " + opToName(op) + " from " + perm);
+					}
+				}
+			}
+		}
+
+		return pows;
+	}
+
+	private List <PackageInfo> getPackagesWithSharedUid(PackageManager pm, String sharedUid)
+	{
+		final List<PackageInfo> pkgs = new ArrayList<>();
+
+		for(PackageInfo pi : pm.getInstalledPackages(PackageManager.GET_PERMISSIONS))
+		{
+			if(sharedUid.equals(pi.sharedUserId))
+				pkgs.add(pi);
+		}
+
+		return pkgs;
 	}
 
 	public static String opToName(int op) {
@@ -419,23 +513,42 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		return getOpInt("_NUM_OP");
 	}
 
+	private static String packageId(PackageInfo pi)
+	{
+		final String ret = pi.packageName + "(" + pi.applicationInfo.uid + ")";
+		if(pi.sharedUserId != null)
+			return ret + "; sharedUid=" + pi.sharedUserId;
+		return ret;
+	}
+
+	private static String packageId(PackageOpsWrapper pow)
+	{
+		return pow.getPackageName() + "(" + pow.getUid() + ")";
+	}
+
 	public static class PackageOpsWrapper extends ObjectWrapper
 	{
-		private String mPackageName;
-		private int mUid;
-		private List<OpEntryWrapper> mEntries;
+		private final String mPackageName;
+		private final int mUid;
+		private final List<OpEntryWrapper> mEntries;
+		private boolean mInitialized = false;
 
-		private PackageOpsWrapper(Object obj) {
+		private PackageOpsWrapper(Object obj)
+		{
 			super(obj);
+			mPackageName = getPackageName();
+			mUid = getUid();
+			mEntries = getOps();
+			mInitialized = true;
 		}
 
 		public PackageOpsWrapper(String packageName, int uid, List<OpEntryWrapper> entries)
 		{
 			super(null);
-
 			mPackageName = packageName;
 			mUid = uid;
 			mEntries = entries;
+			mInitialized = true;
 		}
 
 		public static List<PackageOpsWrapper> convertList(List<?> list)
@@ -452,7 +565,7 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 
 		public String getPackageName()
 		{
-			if(mObj != null)
+			if(!mInitialized)
 				return call("getPackageName");
 
 			return mPackageName;
@@ -460,7 +573,7 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 
 		public int getUid()
 		{
-			if(mObj != null)
+			if(!mInitialized)
 				return (Integer) call("getUid");
 
 			return mUid;
@@ -468,7 +581,7 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 
 		public List<OpEntryWrapper> getOps()
 		{
-			if(mObj != null)
+			if(!mInitialized)
 				return OpEntryWrapper.convertList((List<?>) call("getOps"));
 
 			return mEntries;
@@ -477,15 +590,24 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 
 	public static class OpEntryWrapper extends ObjectWrapper
 	{
-		private OpEntryWrapper(Object obj) {
+		private OpEntryWrapper(Object obj)
+		{
 			super(obj);
+			mOp = getOp();
+			mMode = getMode();
+			mTime = getTime();
+			mRejectTime = getRejectTime();
+			mDuration = getDuration();
+			mInitialized = true;
 		}
 
-		private int mOp;
-		private int mMode;
-		private long mTime;
-		private long mRejectTime;
-		private int mDuration;
+		private final int mOp;
+		private final int mMode;
+		private final long mTime;
+		private final long mRejectTime;
+		private final int mDuration;
+
+		private boolean mInitialized = false;
 
 		public OpEntryWrapper(int op, int mode, long time, long rejectTime, int duration)
 		{
@@ -496,6 +618,7 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 			mTime = time;
 			mRejectTime = rejectTime;
 			mDuration = duration;
+			mInitialized = true;
 		}
 
 		public static List<OpEntryWrapper> convertList(List<?> list)
@@ -512,7 +635,7 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 
 		public int getOp()
 		{
-			if(mObj != null)
+			if(!mInitialized)
 				return (Integer) call("getOp");
 
 			return mOp;
@@ -520,7 +643,7 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 
 		public int getMode()
 		{
-			if(mObj != null)
+			if(!mInitialized)
 				return (Integer) call("getMode");
 
 			return mMode;
@@ -528,7 +651,7 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 
 		public long getTime()
 		{
-			if(mObj != null)
+			if(!mInitialized)
 				return (Long) call("getTime");
 
 			return mTime;
@@ -536,7 +659,7 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 
 		public long getRejectTime()
 		{
-			if(mObj != null)
+			if(!mInitialized)
 				return (Long) call("getRejectTime");
 
 			return mRejectTime;
@@ -544,7 +667,7 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 
 		public boolean isRunning()
 		{
-			if(mObj != null)
+			if(!mInitialized)
 				return (Boolean) call("isRunning");
 
 			return mDuration == -1;
@@ -552,10 +675,52 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 
 		public int getDuration()
 		{
-			if(mObj != null)
+			if(!mInitialized)
 				return (Integer) call("getDuration");
 
 			return mDuration == -1 ? (int)(System.currentTimeMillis() - mTime) : mDuration;
+		}
+
+		@Override
+		public String toString()
+		{
+			return
+					"OpEntryWrapper@" + Integer.toHexString(hashCode()) + "{" +
+					" op=" + opToName(mOp) + ", mode=" + modeToName(mMode) +
+					", time=" + mTime + ", rejectTime=" + mRejectTime +
+					", duration=" + mDuration + " }";
+		}
+
+		@Override
+		public int hashCode()
+		{
+			return (mOp + 1) * 0x0f1f1f1f
+					/*^ mMode << 23
+					^ (int) (mTime ^ mTime >>> 32)
+					^ (int) (mRejectTime ^ mRejectTime >>> 32)
+					^ mDuration*/;
+		}
+
+		@Override
+		public boolean equals(Object o)
+		{
+			if(o == null || !(o instanceof OpEntryWrapper))
+				return false;
+
+			final OpEntryWrapper other = (OpEntryWrapper) o;
+
+			if(mOp != other.mOp)
+				return false;
+			/*if(mMode != other.mMode)
+				return false;
+			if(mTime != other.mTime)
+				return false;
+			if(mRejectTime != other.mRejectTime)
+				return false;
+			if(mDuration != other.mDuration)
+				return false;*/
+
+			return true;
 		}
 	}
 }

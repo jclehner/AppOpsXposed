@@ -611,6 +611,7 @@ public class AppOpsState {
         List<PackageOpsWrapper> pkgs;
         if (packageName != null) {
             pkgs = mAppOps.getOpsForPackage(uid, packageName, tpl.ops);
+            //pkgs = mAppOps.getAllOpsForPackage(uid, packageName, tpl.ops);
         } else {
             pkgs = mAppOps.getPackagesForOps(tpl.ops);
         }

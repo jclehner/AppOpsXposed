@@ -25,6 +25,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -370,7 +371,7 @@ public class AppOpsDetails extends Fragment {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 final int uid = mPackageInfo.applicationInfo.uid;
-                final String packageName = mPackageInfo.packageName;
+                final String packageName = mPackageInfo.applicationInfo.packageName;
                 final StringBuilder sb = new StringBuilder("<tt>");
 
                 /*
@@ -379,22 +380,32 @@ public class AppOpsDetails extends Fragment {
                     for (final AppOpsState.AppOpEntry entry : entries) {
                         for (OpEntryWrapper wrapper : entry.getPackageOps().getOps()) {
                  */
-                for (PackageOpsWrapper pow : mAppOps.getOpsForPackage(uid, packageName, null)) {
+                for (PackageOpsWrapper pow : mAppOps.getAllOpsForPackage(uid, packageName, null)) {
+                    sb.append("<br/>" + pow.getPackageName() + "(" + pow.getUid() + ")");
                     for (OpEntryWrapper oew : pow.getOps()) {
                         final int op = oew.getOp();
                         final int switchOp = AppOpsManagerWrapper.opToSwitch(op);
                         sb.append(AppOpsManagerWrapper.opToName(op));
-                        sb.append("<br/>+-MODE  : " + AppOpsManagerWrapper.modeToName(oew.getMode()));
-                        sb.append("<br/>+-SWITCH: " + AppOpsManagerWrapper.opToName(switchOp));
+                        sb.append("&nbsp;&nbsp;<br/>+-MODE  : " + AppOpsManagerWrapper.modeToName(oew.getMode()));
+                        sb.append("&nbsp;&nbsp;<br/>+-SWITCH: " + AppOpsManagerWrapper.opToName(switchOp));
                         final int switchMode = mAppOps.checkOpNoThrow(switchOp, uid, packageName);
-                        sb.append("<br/>&nbsp;&nbsp;+-MODE: " + AppOpsManagerWrapper.modeToName(switchMode));
-                        sb.append("<br/>");
+                        sb.append("&nbsp;&nbsp;<br/>&nbsp;&nbsp;+-MODE: " + AppOpsManagerWrapper.modeToName(switchMode));
+                        sb.append("&nbsp;&nbsp;<br/>");
                     }
                 }
 
                 sb.append("</tt>");
                 final AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
                 ab.setMessage(Html.fromHtml(sb.toString()));
+                ab.setNeutralButton("App info", new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        final Intent intent = new Intent();
+                        intent.setClassName("com.android.settings", "com.android.settings.applications.InstalledAppDetails");
+                        intent.putExtra("package", mPackageInfo.packageName);
+                        getActivity().startActivity(intent);
+                    }
+                });
                 ab.show();
                 return true;
             }
