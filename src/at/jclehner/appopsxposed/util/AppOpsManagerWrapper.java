@@ -20,6 +20,7 @@ package at.jclehner.appopsxposed.util;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android.Manifest;
@@ -326,6 +327,29 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 			ops[i] = i;
 
 		return ops;
+	}
+
+	public static int[] getAllValidModes()
+	{
+		final int[] allModes = {
+				MODE_ALLOWED,
+				MODE_IGNORED,
+				MODE_ERRORED,
+				MODE_DEFAULT,
+				MODE_ASK,
+				MODE_HINT
+		};
+
+		final int[] modes = new int[allModes.length];
+		int i = 0;
+
+		for(int mode : allModes)
+		{
+			if(mode != -1)
+				modes[i++] = mode;
+		}
+
+		return Arrays.copyOf(modes, i);
 	}
 
 	public static int permissionToOp(String permission)

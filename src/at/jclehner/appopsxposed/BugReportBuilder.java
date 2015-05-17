@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -41,6 +42,7 @@ import android.os.Build;
 import android.os.Parcelable;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
+import android.util.SparseArray;
 import android.widget.Toast;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.Util;
@@ -252,23 +254,46 @@ public class BugReportBuilder
 		sb.append("\n---------------------------------------------------");
 		sb.append("\n------------------- APPOPS INFO -------------------\n");
 
-		if(AppOpsManagerWrapper._NUM_OP >= 0)
-		{
-			sb.append("\n_NUM_OP: " + AppOpsManagerWrapper._NUM_OP);
+		sb.append("\nMODES:\n");
 
-			for(int op = 0; op != AppOpsManagerWrapper._NUM_OP; ++op)
+		for(int mode : AppOpsManagerWrapper.getAllValidModes())
+			sb.append("  " + AppOpsManagerWrapper.modeToName(mode) + " = " + mode + "\n");
+
+		sb.append("\n_NUM_OP: " + AppOpsManagerWrapper._NUM_OP + "\n");
+
+		if(AppOpsManagerWrapper._NUM_OP > 0)
+		{
+			final TreeMap<Integer, ArrayList<String>> switches = new TreeMap<>();
+
+			for(int op : AppOpsManagerWrapper.getAllValidOps())
 			{
-				sb.append("\n  OP_" + AppOpsManagerWrapper.opToName(op) + " = " + op);
-				try
+				final int switchOp = AppOpsManagerWrapper.opToSwitch(op);
+
+				ArrayList<String> list = switches.get(switchOp);
+				if(list == null)
+					switches.put(switchOp, list = new ArrayList<>());
+
+				String s = "OP_" + AppOpsManagerWrapper.opToName(op) + " = " + op;
+
+				final int mode = AppOpsManagerWrapper.opToDefaultMode(op);
+				if(mode != AppOpsManagerWrapper.MODE_ALLOWED)
+					s += " (def: " + AppOpsManagerWrapper.modeToName(mode) + ")";
+
+				list.add(s);
+			}
+
+			for(int switchOp : switches.keySet())
+			{
+				final ArrayList<String> list = switches.get(switchOp);
+				if(list.size() > 1)
 				{
-					final int mode = AppOpsManagerWrapper.opToDefaultMode(op);
-					if(mode != AppOpsManagerWrapper.MODE_ALLOWED)
-						sb.append("\n    default: " + AppOpsManagerWrapper.modeToName(mode));
+					sb.append("  SWITCH " + AppOpsManagerWrapper.opToName(switchOp) + " = " + switchOp + "\n");
+					for(String line : list)
+						sb.append("    " + line + "\n");
+
 				}
-				catch(Exception e)
-				{
-					// ignore
-				}
+				else
+					sb.append("  " + list.get(0) + "\n");
 			}
 		}
 	}
