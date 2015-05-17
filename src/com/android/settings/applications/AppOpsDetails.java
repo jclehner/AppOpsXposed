@@ -411,7 +411,8 @@ public class AppOpsDetails extends Fragment {
         }
 
         final AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
-        ab.setSingleChoiceItems(items, -1, new OnClickListener() {
+        // TODO display permission icons
+        ab.setItems(items, new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which > 0) {
