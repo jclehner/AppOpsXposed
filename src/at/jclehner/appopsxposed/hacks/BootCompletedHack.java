@@ -20,6 +20,9 @@ package at.jclehner.appopsxposed.hacks;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -145,7 +148,7 @@ public class BootCompletedHack extends Hack
 			}
 		};
 
-		for(Field f : AppOpsManagerReturnValues.class.getDeclaredFields())
+		for(Field f : AppOpsManagerReturnValues.getFields())
 		{
 			try
 			{
@@ -154,9 +157,7 @@ public class BootCompletedHack extends Hack
 			}
 			catch(NoSuchMethodError e)
 			{
-				// These functions don't exist on API 18
-				if(!"opAllowsReset".equals(f.getName()) && !"opToDefaultMode".equals(f.getName()))
-					debug(e);
+				debug(e);
 			}
 		}
 
@@ -587,10 +588,40 @@ public class BootCompletedHack extends Hack
 
 	static class AppOpsManagerReturnValues
 	{
-		static final int opToSwitch = OP_BOOT_COMPLETED;
-		static final String opToName = "BOOT_COMPLETED";
-		static final String opToPermission = Manifest.permission.RECEIVE_BOOT_COMPLETED;
-		static final int opToDefaultMode = AppOpsManager.MODE_ALLOWED;
-		static final boolean opAllowsReset = false;
+		static class Api18
+		{
+			static final int opToSwitch = OP_BOOT_COMPLETED;
+			static final String opToName = "BOOT_COMPLETED";
+			static final String opToPermission = Manifest.permission.RECEIVE_BOOT_COMPLETED;
+		}
+
+		static class Api19
+		{
+			static final int opToDefaultMode = AppOpsManager.MODE_ALLOWED;
+			static final boolean opAllowsReset = true;
+		}
+
+		static class Api21
+		{
+			static final String opToRestriction = null;
+			static final boolean opAllowSystemBypassRestriction = true;
+		}
+
+		static List<Field> getFields()
+		{
+			final List<Field> fields = new ArrayList<>();
+
+			switch(Build.VERSION.SDK_INT)
+			{
+				case 21:
+					fields.addAll(Arrays.asList(Api21.class.getDeclaredFields()));
+				case 19:
+					fields.addAll(Arrays.asList(Api19.class.getDeclaredFields()));
+				case 18:
+					fields.addAll(Arrays.asList(Api18.class.getDeclaredFields()));
+			}
+
+			return fields;
+		}
 	}
 }
