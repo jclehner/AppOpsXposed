@@ -254,8 +254,11 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 			if(pi.applicationInfo.uid != uid || pi.sharedUserId == null)
 				continue;
 
-			final Set<OpEntryWrapper> pkgOps = new HashSet<>(pow.getOps());
 			final PackageOpsWrapper spow = getPackageOpsFromAllOps(uid, packageName, ops);
+			if(spow == null)
+				continue;
+
+			final Set<OpEntryWrapper> pkgOps = new HashSet<>(pow.getOps());
 
 			for(OpEntryWrapper soew : spow.getOps())
 			{
@@ -270,19 +273,6 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		}
 
 		return pows;
-	}
-
-	private List <PackageInfo> getPackagesWithSharedUid(PackageManager pm, String sharedUid)
-	{
-		final List<PackageInfo> pkgs = new ArrayList<>();
-
-		for(PackageInfo pi : pm.getInstalledPackages(PackageManager.GET_PERMISSIONS))
-		{
-			if(sharedUid.equals(pi.sharedUserId))
-				pkgs.add(pi);
-		}
-
-		return pkgs;
 	}
 
 	public static String opToName(int op) {
@@ -553,7 +543,7 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		}
 	}
 
-	public static class OpEntryWrapper extends ObjectWrapper
+	public static class OpEntryWrapper extends ObjectWrapper implements Comparable<OpEntryWrapper>
 	{
 		private OpEntryWrapper(Object obj)
 		{
@@ -689,6 +679,19 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 				return false;*/
 
 			return true;
+		}
+
+		@Override
+		public int compareTo(OpEntryWrapper another)
+		{
+			Util.log("compareTo: \n" +
+					"     this=" + this + "\n" +
+					"  another=" + another);
+
+			if(another.equals(this))
+				return 0;
+
+			return mOp < another.mOp ? -1 : 1;
 		}
 	}
 }

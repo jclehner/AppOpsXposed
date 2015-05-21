@@ -18,14 +18,15 @@ package com.android.settings.applications;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -40,11 +41,9 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.text.Html;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
-import android.text.style.StrikethroughSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -195,9 +194,13 @@ public class AppOpsDetails extends Fragment {
                     final int[] indexToMode = new int[modes.length];
                     final List<CharSequence> modeNames = new ArrayList<CharSequence>();
                     int currentIndex = 0;
+                    boolean showDefault = AppOpsManagerWrapper.MODE_DEFAULT != -1
+                            && AppOpsManagerWrapper.opToDefaultMode(switchOp)
+                            == AppOpsManagerWrapper.MODE_DEFAULT;
 
                     for (int mode : modes) {
                         if (mode == -1) continue;
+                        if (mode == AppOpsManagerWrapper.MODE_DEFAULT && !showDefault) continue;
                         if (mode == currentMode) currentIndex = modeNames.size();
                         indexToMode[modeNames.size()] = mode;
 
@@ -372,7 +375,7 @@ public class AppOpsDetails extends Fragment {
             public boolean onMenuItemClick(MenuItem item) {
                 final int uid = mPackageInfo.applicationInfo.uid;
                 final String packageName = mPackageInfo.applicationInfo.packageName;
-                final StringBuilder sb = new StringBuilder("<tt>");
+                final StringBuilder sb = new StringBuilder("");
 
                 /*
                     List<AppOpsState.AppOpEntry> entries = mState.buildState(tpl,
@@ -381,7 +384,7 @@ public class AppOpsDetails extends Fragment {
                         for (OpEntryWrapper wrapper : entry.getPackageOps().getOps()) {
                  */
                 for (PackageOpsWrapper pow : mAppOps.getAllOpsForPackage(uid, packageName, null)) {
-                    sb.append("<br/>" + pow.getPackageName() + "(" + pow.getUid() + ")");
+                    sb.append(pow.getPackageName() + "(" + pow.getUid() + ")<tt><br/>");
                     for (OpEntryWrapper oew : pow.getOps()) {
                         final int op = oew.getOp();
                         final int switchOp = AppOpsManagerWrapper.opToSwitch(op);
@@ -418,26 +421,36 @@ public class AppOpsDetails extends Fragment {
             return;
         }
 
-        final Object[] addableOps = getAddableOps().toArray();
-        if (addableOps.length == 0) {
+        final Map<Integer, Set<Integer>> addable = getAddableOpSwitches();
+        if (addable.size() == 0) {
             Toast.makeText(getActivity(), R.string.no_switches_to_add, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        final CharSequence[] items = new CharSequence[addableOps.length];
+        final CharSequence[] items = new CharSequence[addable.size()];
         int i = 0;
 
-        for (Object opObj : addableOps) {
-            final int op = (int) opObj;
+        final Object[] opSwitches = addable.keySet().toArray();
+        for (Object opSwitch : opSwitches) {
             final SpannableStringBuilder ssb = new SpannableStringBuilder();
-            ssb.append(OpsLabelHelper.getOpLabel(getActivity(), op));
+            ssb.append(OpsLabelHelper.getOpLabel(getActivity(), (int) opSwitch));
             ssb.append("\n");
 
-            final String opName = AppOpsManagerWrapper.opToName(op);
-            final int start = ssb.length();
+            boolean isFirst = true;
 
-            ssb.append(opName);
-            ssb.setSpan(new RelativeSizeSpan(0.5f), start, start + opName.length(), 0);
+            for (int op : addable.get(opSwitch)) {
+                final int start = ssb.length();
+
+                if (!isFirst) {
+                    ssb.append(", ");
+                } else {
+                    isFirst = false;
+                }
+
+                //final String opName = AppOpsManagerWrapper.opToName(op);
+                ssb.append(OpsLabelHelper.getOpSummary(getActivity(), op));
+                ssb.setSpan(new RelativeSizeSpan(0.5f), start, ssb.length(), 0);
+            }
 
             items[i++] = ssb;
         }
@@ -448,8 +461,11 @@ public class AppOpsDetails extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which > 0) {
-                    mAppOps.setMode((int) addableOps[which], mPackageInfo.applicationInfo.uid,
-                        mPackageInfo.packageName, AppOpsManagerWrapper.MODE_IGNORED);
+                    final int uid = mPackageInfo.applicationInfo.uid;
+                    final String packageName = mPackageInfo.packageName;
+                    for (int op : addable.get(opSwitches[which])) {
+                        mAppOps.setMode(op, uid, packageName, AppOpsManagerWrapper.MODE_IGNORED);
+                    }
                 }
                 dialog.dismiss();
                 refreshUi();
@@ -458,15 +474,17 @@ public class AppOpsDetails extends Fragment {
         ab.show();
     }
 
-    private Set<Integer> getAddableOps()
+    private Map<Integer, Set<Integer>> getAddableOpSwitches()
     {
         final Set<Integer> addableOps = new TreeSet<>();
         for (int op : AppOpsManagerWrapper.getAllValidOps()) {
             addableOps.add(op);
         }
+        final int uid = mPackageInfo.applicationInfo.uid;
+        final String packageName = mPackageInfo.packageName;
 
-        final List<PackageOpsWrapper> ops = mAppOps.getOpsForPackage(mPackageInfo.applicationInfo.uid,
-                mPackageInfo.packageName, null);
+        final List<PackageOpsWrapper> ops = mAppOps.getOpsForPackage(
+                uid, packageName, null);
 
         // First, remove all ops that are found by getOpsForPackage.
         for (PackageOpsWrapper pow : ops) {
@@ -475,17 +493,37 @@ public class AppOpsDetails extends Fragment {
             }
         }
 
+        final PackageManager pm = getActivity().getPackageManager();
+
         // Now remove all apps that are tied to a permission, as
         // these should have been found by getOpsForPackage.
         for (Object opObj : addableOps.toArray()) {
             final int op = (int) opObj;
             final int opSwitch = AppOpsManagerWrapper.opToSwitch(op);
             final String perm = AppOpsManagerWrapper.opToPermission(opSwitch);
-            if (perm != null) {
+            if (perm == null) {
+                continue;
+            }
+
+            if (pm.checkPermission(perm, packageName) != PackageManager.PERMISSION_GRANTED) {
                 addableOps.remove(op);
             }
         }
 
-        return addableOps;
+        // Now that we have all addable ops, group them into their respective switches
+
+        final Map<Integer, Set<Integer>> addableOpSwitches = new TreeMap<>();
+
+        for(int op : addableOps) {
+            Set<Integer> opsInSwitch = addableOpSwitches.get(
+                    AppOpsManagerWrapper.opToSwitch(op));
+            if (opsInSwitch == null) {
+                addableOpSwitches.put(op, opsInSwitch = new TreeSet<>());
+            }
+            opsInSwitch.add(op);
+
+        }
+
+        return addableOpSwitches;
     }
 }
