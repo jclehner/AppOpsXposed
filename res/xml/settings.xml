@@ -43,6 +43,11 @@
                 android:summary="@string/use_hack_fix_prune_summary"
                 android:defaultValue="false" />
 
+            <CheckBoxPreference android:key="use_hack_dont_group_ops"
+                android:title="@string/use_hack_dont_group_ops_title"
+                android:summary="@string/use_hack_dont_group_ops_summary"
+                android:defaultValue="false" />
+
 	        <CheckBoxPreference android:key="use_hack_boot_completed"
 	            android:title="@string/use_hack_boot_completed_title"
 	            android:summary="@string/use_hack_boot_completed_summary"

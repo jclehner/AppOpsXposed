@@ -28,6 +28,7 @@ import android.content.Context;
 import at.jclehner.appopsxposed.hacks.BootCompletedHack;
 import at.jclehner.appopsxposed.hacks.FixOpsPruneHack;
 import at.jclehner.appopsxposed.hacks.FixWakeLock;
+import at.jclehner.appopsxposed.hacks.DontGroupOpsHack;
 import at.jclehner.appopsxposed.hacks.PackageManagerHacks;
 import at.jclehner.appopsxposed.util.Res;
 import at.jclehner.appopsxposed.util.Util;
@@ -60,6 +61,7 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 		new BootCompletedHack(),
 		new FixWakeLock(),
 		new FixOpsPruneHack(),
+		new DontGroupOpsHack(),
 		//new GmsLocationHack(),
 		new PackageManagerHacks()
 	};
@@ -187,35 +189,5 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 		}
 
 		return mLogTag;
-	}
-
-	@TargetApi(19)
-	private static Method findCheckOp()
-	{
-		try
-		{
-			return XposedHelpers.findMethodExact(AppOpsManager.class, "checkOp",
-					int.class, int.class, String.class);
-		}
-		catch(Throwable t)
-		{
-			Util.log("AppOpsManager.checkOp not available");
-			return null;
-		}
-	}
-
-	@TargetApi(19)
-	private static Method findNoteOp()
-	{
-		try
-		{
-			return XposedHelpers.findMethodExact(AppOpsManager.class, "noteOp",
-					int.class, int.class, String.class);
-		}
-		catch(Throwable t)
-		{
-			Util.log("AppOpsManager.noteOp not available");
-			return null;
-		}
 	}
 }
