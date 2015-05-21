@@ -275,6 +275,16 @@ public class SettingsActivity extends Activity
 				p.setEnabled(true);
 			}
 
+			p = findPreference("use_hack_dont_group_ops");
+			if(p != null)
+			{
+				p.setSummary(getString(R.string.use_hack_dont_group_ops_summary,
+						getString(R.string.app_ops_labels_location)));
+
+				if(!BuildConfig.DEBUG)
+					getPreferenceScreen().removePreference(p);
+			}
+
 			p = findPreference("build_bugreport");
 			p.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 

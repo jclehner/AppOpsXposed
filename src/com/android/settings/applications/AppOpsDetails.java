@@ -337,7 +337,7 @@ public class AppOpsDetails extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
-        MenuItem item = menu.add(R.string.add_switch);
+        MenuItem item = menu.add(R.string.add_switches);
         item.setIcon(R.drawable.ic_note_add_white_24dp);
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         item.setOnMenuItemClickListener(new OnMenuItemClickListener() {

@@ -70,7 +70,7 @@
 	<string name="add_switches">Add switches</string>
 	<string name="no_switches_to_add">No switches to add.</string>
 
-	<string name="use_hack_dont_group_ops_title">Don't group ops</string>
+	<string name="use_hack_dont_group_ops_title">Don\'t group ops</string>
 	<string name="use_hack_dont_group_ops_summary">
 	    Do not group ops such as \"%1$s\". Allows for more fine grained 
 	    control of some ops.

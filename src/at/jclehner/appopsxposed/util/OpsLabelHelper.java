@@ -67,11 +67,13 @@ public class OpsLabelHelper
 
 	private static String[] getOpLabelsOrSummaries(Context context, boolean getLabels)
 	{
+		if(!AppOpsManagerWrapper.hasOpsSwitches())
+			getLabels = false;
+
 		final SparseArray<String> strings = new SparseArray<String>();
 		final boolean hasFakeBootCompleted = AppOpsManagerWrapper.isBootCompletedHackEnabled();
 		int maxOp = 0;
 
-		Log.d("AOX", "getOpLabelsOrSummaries: hasFakeBootCompleted=" + hasFakeBootCompleted);
 
 		for(Field field : AppOpsManagerWrapper.class.getDeclaredFields())
 		{
@@ -93,16 +95,13 @@ public class OpsLabelHelper
 					continue;
 				else if(op == AppOpsManagerWrapper.OP_VIBRATE)
 				{
-					if(getLabels)
-					{
-						strings.append(op, context.getString(R.string.app_ops_labels_vibrate) + "/" +
-								context.getString(R.string.app_ops_labels_post_notification));
-					}
-					else
-					{
-						strings.append(op, context.getString(R.string.app_ops_summaries_vibrate) + "/" +
-								context.getString(R.string.app_ops_summaries_post_notification));
-					}
+					strings.append(op,
+							getAppOpsString(context,
+							AppOpsManagerWrapper.opToName(AppOpsManagerWrapper.OP_VIBRATE), getLabels) +
+							"/" +
+							getAppOpsString(context,
+							AppOpsManagerWrapper.opToName(AppOpsManagerWrapper.OP_POST_NOTIFICATION), getLabels)
+					);
 					continue;
 				}
 				/*else if(op == AppOpsManagerWrapper.OP_BOOT_COMPLETED)

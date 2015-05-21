@@ -369,6 +369,10 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		return getOpInt("OP_BOOT_COMPLETED") != -1;
 	}
 
+	public static boolean hasOpsSwitches() {
+		return opToSwitch(OP_GPS) == opToSwitch(OP_FINE_LOCATION);
+	}
+
 	public static int[] getAllValidOps()
 	{
 		// TODO if HTC ops are ever implemented, this function
