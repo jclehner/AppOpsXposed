@@ -105,11 +105,16 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 			handleLoadFrameworkPackage(lpparam);
 		else if(AppOpsXposed.SETTINGS_PACKAGE.equals(lpparam.packageName))
 			handleLoadSettingsPackage(lpparam);
-
+		else if(AppOpsXposed.MODULE_PACKAGE.equals(lpparam.packageName))
+			handleLoadModulePackage(lpparam);
 	}
 
 	public final PreferenceInfo getPrefernceInfo(Context context) {
 		return new PreferenceInfo(getKey(), onGetPreferenceTitle(context), onGetPreferenceSummary(context));
+	}
+
+	protected void handleLoadModulePackage(LoadPackageParam lpparam) throws Throwable {
+
 	}
 
 	protected void handleLoadFrameworkPackage(LoadPackageParam lpparam) throws Throwable {
