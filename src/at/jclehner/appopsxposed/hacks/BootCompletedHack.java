@@ -134,26 +134,22 @@ public class BootCompletedHack extends Hack
 
 	private void patchAppOpsManager(ClassLoader classLoader) throws Throwable
 	{
-		final XC_MethodHook hook = new XC_MethodHook() {
-
-			@Override
-			protected void beforeHookedMethod(MethodHookParam param) throws Throwable
-			{
-				final int op = (Integer) param.args[0];
-				if(op == OP_BOOT_COMPLETED)
-				{
-					param.setResult(XposedHelpers.getStaticObjectField(AppOpsManagerReturnValues.class,
-							param.method.getName()));
-				}
-			}
-		};
-
-		for(Field f : AppOpsManagerReturnValues.getFields())
+		for(final Field f : AppOpsManagerReturnValues.getFields())
 		{
 			try
 			{
-				XposedHelpers.findAndHookMethod(classLoader.loadClass("android.app.AppOpsManager"), f.getName(),
-						int.class, hook);
+				XposedHelpers.findAndHookMethod(AppOpsManager.class, f.getName(),
+						int.class, new XC_MethodHook() {
+							@Override
+							protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+							{
+								if((int) param.args[0] != OP_BOOT_COMPLETED)
+									return;
+
+								param.setResult(f.get(null));
+							}
+
+				});
 			}
 			catch(NoSuchMethodError e)
 			{

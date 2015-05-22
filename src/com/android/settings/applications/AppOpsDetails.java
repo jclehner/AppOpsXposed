@@ -430,6 +430,8 @@ public class AppOpsDetails extends Fragment {
         final CharSequence[] items = new CharSequence[addable.size()];
         int i = 0;
 
+        final boolean showOpSummaries = !AppOpsManagerWrapper.hasOpsSwitches();
+
         final Object[] opSwitches = addable.keySet().toArray();
         for (Object opSwitch : opSwitches) {
             final SpannableStringBuilder ssb = new SpannableStringBuilder();

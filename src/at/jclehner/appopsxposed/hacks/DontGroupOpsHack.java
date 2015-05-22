@@ -16,7 +16,7 @@ public class DontGroupOpsHack extends Hack {
 	protected void handleLoadAnyPackage(LoadPackageParam lpparam) throws Throwable
 	{
 		XposedHelpers.findAndHookMethod(AppOpsManager.class,
-				"opToSwitch", new XC_MethodHook() {
+				"opToSwitch", int.class, new XC_MethodHook() {
 					@Override
 					protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
 						param.setResult(param.args[0]);
@@ -35,7 +35,7 @@ public class DontGroupOpsHack extends Hack {
 					@Override
 					protected void beforeHookedMethod(MethodHookParam param) throws Throwable
 					{
-						XposedBridge.invokeOriginalMethod(opToSwitch, null, param.args);
+						param.setResult(XposedBridge.invokeOriginalMethod(opToSwitch, null, param.args));
 					}
 
 		});

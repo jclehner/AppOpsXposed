@@ -95,13 +95,21 @@ public class OpsLabelHelper
 					continue;
 				else if(op == AppOpsManagerWrapper.OP_VIBRATE)
 				{
-					strings.append(op,
-							getAppOpsString(context,
-							AppOpsManagerWrapper.opToName(AppOpsManagerWrapper.OP_VIBRATE), getLabels) +
-							"/" +
-							getAppOpsString(context,
-							AppOpsManagerWrapper.opToName(AppOpsManagerWrapper.OP_POST_NOTIFICATION), getLabels)
-					);
+					final String str;
+
+					if(getLabels)
+					{
+						str = context.getString(R.string.app_ops_labels_vibrate) +
+								"/" + context.getString(R.string.app_ops_labels_post_notification);
+					}
+					else
+					{
+						str = context.getString(R.string.app_ops_labels_vibrate) +
+								"/" + context.getString(R.string.app_ops_labels_post_notification);
+					}
+
+					strings.append(op, Util.capitalizeFirst(str));
+
 					continue;
 				}
 				/*else if(op == AppOpsManagerWrapper.OP_BOOT_COMPLETED)
