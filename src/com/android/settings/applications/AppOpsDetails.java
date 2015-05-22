@@ -387,11 +387,11 @@ public class AppOpsDetails extends Fragment {
                     sb.append(pow.getPackageName() + "(" + pow.getUid() + ")<tt><br/>");
                     for (OpEntryWrapper oew : pow.getOps()) {
                         final int op = oew.getOp();
-                        final int switchOp = AppOpsManagerWrapper.opToSwitch(op);
+                        final int groupOp = AppOpsManagerWrapper.opToGroup(op);
                         sb.append(AppOpsManagerWrapper.opToName(op));
                         sb.append("&nbsp;&nbsp;<br/>+-MODE  : " + AppOpsManagerWrapper.modeToName(oew.getMode()));
-                        sb.append("&nbsp;&nbsp;<br/>+-SWITCH: " + AppOpsManagerWrapper.opToName(switchOp));
-                        final int switchMode = mAppOps.checkOpNoThrow(switchOp, uid, packageName);
+                        sb.append("&nbsp;&nbsp;<br/>+-SWITCH: " + AppOpsManagerWrapper.opToName(groupOp));
+                        final int switchMode = mAppOps.checkOpNoThrow(groupOp, uid, packageName);
                         sb.append("&nbsp;&nbsp;<br/>&nbsp;&nbsp;+-MODE: " + AppOpsManagerWrapper.modeToName(switchMode));
                         sb.append("&nbsp;&nbsp;<br/>");
                     }
