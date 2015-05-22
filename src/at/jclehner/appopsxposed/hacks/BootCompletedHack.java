@@ -609,7 +609,7 @@ public class BootCompletedHack extends Hack
 
 		static List<Field> getFields()
 		{
-			final List<Field> fields = new ArrayList<>();
+			final List<Field> fields = new ArrayList<Field>();
 
 			switch(Build.VERSION.SDK_INT)
 			{
