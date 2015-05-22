@@ -338,6 +338,10 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		return getStatic(AppOpsManagerWrapper.class, opName, -1);
 	}
 
+	public static int opToGroup(int op) {
+		return opToSwitch(op);
+	}
+
 	public static String modeToName(int mode)
 	{
 		if(mode >= 0)
@@ -432,8 +436,7 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 
 	private static int getOpWithPermission(String permission)
 	{
-		final int num = getOpInt("_NUM_OP");
-		for(int op = 0; op < num; ++op)
+		for(int op = 0; op < _NUM_OP; ++op)
 		{
 			if(permission.equals(opToPermission(op)))
 			{
