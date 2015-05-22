@@ -310,6 +310,9 @@ public class SettingsActivity extends Activity
 
 		private void showHacksWarningDialog(final Preference pref)
 		{
+			if(BuildConfig.DEBUG)
+				return;
+
 			final AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
 			ab.setCancelable(false);
 			ab.setIcon(android.R.drawable.ic_dialog_alert);
