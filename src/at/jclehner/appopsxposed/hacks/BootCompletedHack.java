@@ -138,8 +138,8 @@ public class BootCompletedHack extends Hack
 		{
 			try
 			{
-				XposedHelpers.findAndHookMethod(AppOpsManager.class, f.getName(),
-						int.class, new XC_MethodHook() {
+				XposedHelpers.findAndHookMethod(classLoader.loadClass("android.app.AppOpsManager"),
+						f.getName(), int.class, new XC_MethodHook() {
 							@Override
 							protected void beforeHookedMethod(MethodHookParam param) throws Throwable
 							{
