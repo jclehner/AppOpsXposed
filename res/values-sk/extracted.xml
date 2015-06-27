@@ -13,7 +13,7 @@
   <string name="app_ops_summaries_read_calendar">čítať údaje z kalendára</string>
   <string name="app_ops_summaries_write_calendar">upraviť údaje v kalendári</string>
   <string name="app_ops_summaries_wifi_scan">skenovať Wi\u2011Fi</string>
-  <string name="app_ops_summaries_post_notification">oznámenia</string>
+  <string name="app_ops_summaries_post_notification">upozornenia</string>
   <string name="app_ops_summaries_cell_scan">prehľadávanie bunky</string>
   <string name="app_ops_summaries_call_phone">telefonovať</string>
   <string name="app_ops_summaries_read_sms">čítať SMS</string>
@@ -27,7 +27,7 @@
   <string name="app_ops_summaries_write_icc_sms">vytvoriť ICC SMS</string>
   <string name="app_ops_summaries_write_settings">upraviť nastavenia</string>
   <string name="app_ops_summaries_system_alert_window">vykresliť do najvyššej vrstvy</string>
-  <string name="app_ops_summaries_access_notifications">pristupovať k oznámeniam</string>
+  <string name="app_ops_summaries_access_notifications">pristupovať k upozorneniam</string>
   <string name="app_ops_summaries_camera">fotoaparát</string>
   <string name="app_ops_summaries_record_audio">záznam zvuku</string>
   <string name="app_ops_summaries_play_audio">prehrávať zvuk</string>
@@ -40,7 +40,7 @@
   <string name="app_ops_summaries_audio_ring_volume">hlasitosť zvonenia</string>
   <string name="app_ops_summaries_audio_media_volume">hlasitosť médií</string>
   <string name="app_ops_summaries_audio_alarm_volume">hlasitosť budíka</string>
-  <string name="app_ops_summaries_audio_notification_volume">hlasitosť oznámenia</string>
+  <string name="app_ops_summaries_audio_notification_volume">hlasitosť upozornenia</string>
   <string name="app_ops_summaries_audio_bluetooth_volume">Hlasitosť Bluetooth</string>
   <string name="app_ops_summaries_wake_lock">zabrániť zariadeniu prejsť do režimu spánku</string>
   <string name="app_ops_summaries_monitor_location">sledovať polohu</string>
@@ -72,6 +72,7 @@
   <string name="app_ops_labels_write_call_log">Upraviť denník hovorov</string>
   <string name="app_ops_labels_read_calendar">Čítať údaje z kalendára</string>
   <string name="app_ops_labels_write_calendar">Upraviť údaje v kalendári</string>
+  <string name="app_ops_labels_post_notification">Zobraziť upozornenia</string>
   <string name="app_ops_labels_notification_toast">Oznámenie/Toast</string>
   <string name="app_ops_labels_call_phone">Telefonovať</string>
   <string name="app_ops_labels_read_sms">Čítať SMS DB</string>
@@ -81,7 +82,7 @@
   <string name="app_ops_labels_send_sms">Odoslať SMS</string>
   <string name="app_ops_labels_write_settings">Upraviť nastavenia</string>
   <string name="app_ops_labels_system_alert_window">Vykresliť do najvyššej vrstvy</string>
-  <string name="app_ops_labels_access_notifications">Pristupovať k oznámeniam</string>
+  <string name="app_ops_labels_access_notifications">Pristupovať k upozorneniam</string>
   <string name="app_ops_labels_camera">Fotoaparát</string>
   <string name="app_ops_labels_record_audio">Záznam zvuku</string>
   <string name="app_ops_labels_play_audio">Prehrať zvuk</string>
@@ -94,7 +95,7 @@
   <string name="app_ops_labels_audio_ring_volume">Hlasitosť zvonenia</string>
   <string name="app_ops_labels_audio_media_volume">Hlasitosť médií</string>
   <string name="app_ops_labels_audio_alarm_volume">Hlasitosť budíka</string>
-  <string name="app_ops_labels_audio_notification_volume">Hlasitosť oznámenia</string>
+  <string name="app_ops_labels_audio_notification_volume">Hlasitosť upozornenia</string>
   <string name="app_ops_labels_audio_bluetooth_volume">Hlasitosť bluetooth</string>
   <string name="app_ops_labels_wake_lock">Zabrániť zariadeniu prejsť do režimu spánku</string>
   <string name="app_ops_labels_get_usage_stats">Získať štatistiky používania aplikácií</string>
