@@ -134,7 +134,25 @@ public class BootCompletedHack extends Hack
 
 	private void patchAppOpsManager(ClassLoader classLoader) throws Throwable
 	{
+<<<<<<< HEAD
 		for(final Field f : AppOpsManagerReturnValues.getFields())
+=======
+		final XC_MethodHook hook = new XC_MethodHook() {
+
+			@Override
+			protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+			{
+				final int op = (Integer) param.args[0];
+				if(op == OP_BOOT_COMPLETED)
+				{
+					param.setResult(XposedHelpers.getStaticObjectField(AppOpsManagerReturnValues.class,
+							param.method.getName()));
+				}
+			}
+		};
+
+		for(Field f : AppOpsManagerReturnValues.getFields())
+>>>>>>> master
 		{
 			try
 			{
