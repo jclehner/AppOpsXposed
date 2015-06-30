@@ -26,28 +26,6 @@ public class DontGroupOpsHack extends Hack {
 	}
 
 	@Override
-	protected void handleLoadModulePackage(LoadPackageParam lpparam) throws Throwable {
-		final Method opToSwitch = AppOpsManager.class.getDeclaredMethod(
-				"opToSwitch", int.class);
-
-		XposedHelpers.findAndHookMethod(AppOpsManagerWrapper.class,
-				"opToGroup", int.class, new XC_MethodHook() {
-
-					@Override
-					protected void beforeHookedMethod(MethodHookParam param) throws Throwable
-					{
-						final int opGroup = (int) XposedBridge.invokeOriginalMethod(
-								opToSwitch, null, param.args);
-
-						param.setResult(opGroup);
-						Log.i("AOX", "opToGroup called: op=" + param.args[0] + "; opGroup=" + opGroup);
-
-					}
-
-		});
-	}
-
-	@Override
 	protected String onGetKeySuffix() {
 		return "dont_group_ops";
 	}
