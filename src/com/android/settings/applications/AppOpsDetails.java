@@ -430,28 +430,30 @@ public class AppOpsDetails extends Fragment {
         final CharSequence[] items = new CharSequence[addable.size()];
         int i = 0;
 
-        final boolean showOpSummaries = !AppOpsManagerWrapper.hasOpsSwitches();
+        final boolean showOpSummaries = AppOpsManagerWrapper.hasOpsSwitches();
 
         final Object[] opSwitches = addable.keySet().toArray();
         for (Object opSwitch : opSwitches) {
             final SpannableStringBuilder ssb = new SpannableStringBuilder();
             ssb.append(OpsLabelHelper.getOpLabel(getActivity(), (int) opSwitch));
-            ssb.append("\n");
 
-            boolean isFirst = true;
+            if (showOpSummaries) {
+                ssb.append("\n");
 
-            for (int op : addable.get(opSwitch)) {
-                final int start = ssb.length();
+                boolean isFirst = true;
+                for (int op : addable.get(opSwitch)) {
+                    final int start = ssb.length();
 
-                if (!isFirst) {
-                    ssb.append(", ");
-                } else {
-                    isFirst = false;
+                    if (!isFirst) {
+                        ssb.append(", ");
+                    } else {
+                        isFirst = false;
+                    }
+
+                    //final String opName = AppOpsManagerWrapper.opToName(op);
+                    ssb.append(OpsLabelHelper.getOpSummary(getActivity(), op));
+                    ssb.setSpan(new RelativeSizeSpan(0.5f), start, ssb.length(), 0);
                 }
-
-                //final String opName = AppOpsManagerWrapper.opToName(op);
-                ssb.append(OpsLabelHelper.getOpSummary(getActivity(), op));
-                ssb.setSpan(new RelativeSizeSpan(0.5f), start, ssb.length(), 0);
             }
 
             items[i++] = ssb;

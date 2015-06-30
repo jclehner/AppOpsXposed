@@ -609,8 +609,10 @@ public class BootCompletedHack extends Hack
 
 			switch(Build.VERSION.SDK_INT)
 			{
+				default:
 				case 21:
 					fields.addAll(Arrays.asList(Api21.class.getDeclaredFields()));
+				case 20:
 				case 19:
 					fields.addAll(Arrays.asList(Api19.class.getDeclaredFields()));
 				case 18:
