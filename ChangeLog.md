@@ -1,3 +1,6 @@
+### 1.28.1
+* Fix wake lock op on >= 5.0
+
 ### 1.28
 * Fix crashes on certain HTC devices
 * Fix switch labels
