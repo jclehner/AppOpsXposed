@@ -66,17 +66,17 @@ public class FixWakeLock extends Hack
 		return "wake_lock";
 	}
 
-	private static final String ACQUIRE_WAKE_LOCK_FUNC =
-			Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
-			"acquireWakeLockInternal" : "acquireWakeLock";
+	private static final String ACQUIRE_WAKE_LOCK_CLASS =
+			"com.android.server.power.PowerManagerService" +
+			(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
+			"$BinderService" : "");
 
 	private void hookMethods() throws Throwable
 	{
-		final Class<?> pwrMgrSvcClazz = loadClass(
-				"com.android.server.power.PowerManagerService");
+		final Class<?> pwrMgrSvcClazz = loadClass(ACQUIRE_WAKE_LOCK_CLASS);
 
 		mUnhooks = XposedBridge.hookAllMethods(pwrMgrSvcClazz,
-				ACQUIRE_WAKE_LOCK_FUNC, mAcquireHook);
+				"acquireWakeLock", mAcquireHook);
 		log("Hooked " + mUnhooks.size() + " functions");
 	}
 
