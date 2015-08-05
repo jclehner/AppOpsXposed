@@ -99,6 +99,14 @@ public class FixWakeLock extends Hack
 		return false;
 	}
 
+	private static Context getContextFromThis(Object object)
+	{
+		final Object location = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
+				XposedHelpers.getSurroundingThis(object) : object;
+
+		return (Context) XposedHelpers.getObjectField(location, "mContext");
+	}
+
 	private final XC_MethodHook mAcquireHook = new XC_MethodHook() {
 		@Override
 		protected void beforeHookedMethod(MethodHookParam param) throws Throwable
@@ -117,8 +125,7 @@ public class FixWakeLock extends Hack
 			if(lock == null || packageName == null)
 				return;
 
-			final Context ctx = (Context)
-					XposedHelpers.getObjectField(param.thisObject, "mContext");
+			final Context ctx = getContextFromThis(param.thisObject);
 			if(ctx == null)
 				return;
 
