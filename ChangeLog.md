@@ -1,5 +1,5 @@
 ### 1.28.1
-* Fix wake lock op on >= 5.0
+* Fix bugs in hacks for OP_WAKE_LOCK and OP_BOOT_COMPLETED
 
 ### 1.28
 * Fix crashes on certain HTC devices
