@@ -22,7 +22,9 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -33,10 +35,12 @@ import android.os.Build;
 import android.os.Bundle;
 import at.jclehner.appopsxposed.Hack;
 import at.jclehner.appopsxposed.R;
+import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.OpsLabelHelper;
 import at.jclehner.appopsxposed.util.Res;
 import at.jclehner.appopsxposed.util.Util;
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
@@ -134,6 +138,8 @@ public class BootCompletedHack extends Hack
 
 	private void patchAppOpsManager(ClassLoader classLoader) throws Throwable
 	{
+		final Map<String, Object> functions = getAppOpsManagerFunctionsToPatch();
+
 		final XC_MethodHook hook = new XC_MethodHook() {
 
 			@Override
@@ -142,17 +148,16 @@ public class BootCompletedHack extends Hack
 				final int op = (Integer) param.args[0];
 				if(op == OP_BOOT_COMPLETED)
 				{
-					param.setResult(XposedHelpers.getStaticObjectField(AppOpsManagerReturnValues.class,
-							param.method.getName()));
+					param.setResult(functions.get(param.method.getName()));
 				}
 			}
 		};
 
-		for(Field f : AppOpsManagerReturnValues.getFields())
+		for(String function : functions.keySet())
 		{
 			try
 			{
-				XposedHelpers.findAndHookMethod(classLoader.loadClass("android.app.AppOpsManager"), f.getName(),
+				XposedHelpers.findAndHookMethod(classLoader.loadClass("android.app.AppOpsManager"), function,
 						int.class, hook);
 			}
 			catch(NoSuchMethodError e)
@@ -586,44 +591,45 @@ public class BootCompletedHack extends Hack
 	}
 	*/
 
-	static class AppOpsManagerReturnValues
+	private static final Object[][][] APP_OPS_MANAGER_RETURN_VALUES = {
+			{ // API 18
+				{ "opToSwitch", OP_BOOT_COMPLETED },
+				{ "opToName", "BOOT_COMPLETED" },
+				{ "opToPermission", Manifest.permission.RECEIVE_BOOT_COMPLETED }
+			},
+			{ // API 19
+				{ "opToDefaultMode", AppOpsManagerWrapper.MODE_ALLOWED },
+				{ "opAllowsReset", true }
+			},
+			null, // API 20
+			{ // API 21
+				{ "opToRestriction", null },
+				{ "opAllowSystemBypassRestriction", true }
+			},
+			null // API 22
+
+	};
+
+	private static Map<String, Object> getAppOpsManagerFunctionsToPatch()
 	{
-		static class Api18
-		{
-			static final int opToSwitch = OP_BOOT_COMPLETED;
-			static final String opToName = "BOOT_COMPLETED";
-			static final String opToPermission = Manifest.permission.RECEIVE_BOOT_COMPLETED;
-		}
+		final Map<String, Object> allFunctions = new HashMap<String, Object>();
 
-		static class Api19
+		for(int api = 18; api <= Build.VERSION.SDK_INT; ++api)
 		{
-			static final int opToDefaultMode = AppOpsManager.MODE_ALLOWED;
-			static final boolean opAllowsReset = true;
-		}
-
-		static class Api21
-		{
-			static final String opToRestriction = null;
-			static final boolean opAllowSystemBypassRestriction = true;
-		}
-
-		static List<Field> getFields()
-		{
-			final List<Field> fields = new ArrayList<>();
-
-			switch(Build.VERSION.SDK_INT)
+			final int i = api - 18;
+			if(i < APP_OPS_MANAGER_RETURN_VALUES.length)
 			{
-				default:
-				case 21:
-					fields.addAll(Arrays.asList(Api21.class.getDeclaredFields()));
-				case 20:
-				case 19:
-					fields.addAll(Arrays.asList(Api19.class.getDeclaredFields()));
-				case 18:
-					fields.addAll(Arrays.asList(Api18.class.getDeclaredFields()));
+				final Object[][] funcs = APP_OPS_MANAGER_RETURN_VALUES[i];
+				if(funcs != null)
+				{
+					for(Object[] func : funcs)
+						allFunctions.put((String) func[0], func[1]);
+				}
 			}
-
-			return fields;
+			else
+				break;
 		}
+
+		return allFunctions;
 	}
 }
