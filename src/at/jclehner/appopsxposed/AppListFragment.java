@@ -318,7 +318,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 			{
 				for(OpEntryWrapper op : pkgOps.getOps())
 				{
-					if(op.getMode() != AppOpsManagerWrapper.opToDefaultMode(op.getOp()))
+					if(!isUnchanged(op))
 					{
 						if(info.changedOps == null)
 							info.changedOps = new ArrayList<OpEntryWrapper>();
@@ -405,6 +405,23 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 			}
 
 			return null;
+		}
+
+		private static boolean isUnchanged(OpEntryWrapper opWrapper)
+		{
+			final int mode = opWrapper.getMode();
+			final int op = opWrapper.getOp();
+
+			if(mode == AppOpsManagerWrapper.opToDefaultMode(op))
+				return true;
+
+			// On >= KitKat, checkOp() returns MODE_ALLOWED for OP_WRITE_SMS, but
+			// opToDefaultMode returns MODE_DEFAULT.
+
+			if(op == AppOpsManagerWrapper.OP_WRITE_SMS && mode == AppOpsManagerWrapper.MODE_ALLOWED)
+				return true;
+
+			return false;
 		}
 	}
 
