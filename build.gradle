@@ -1,0 +1,43 @@
+apply plugin: 'com.android.application'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.0.0'
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
+	provided files('lib/XposedBridgeApi.jar')
+}
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion '21.1.2'
+
+	defaultConfig {
+		minSdkVersion 18
+		targetSdkVersion 22
+
+		versionCode 12851
+		versionName '1.29-BETA1'
+	} 
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+
+        debug.setRoot('build-types/debug')
+        release.setRoot('build-types/release')
+    }
+}
