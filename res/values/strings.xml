@@ -67,4 +67,7 @@
 	<string name="use_hack_fix_prune_title">Don\'t prune database</string>
 	<string name="use_hack_fix_prune_summary">Use this if ops are reset on reboot for apps installed on sd card.</string>
 	<string name="reset_all">Reset all</string>
+	<string name="package_updated">Updated</string>
+	<string name="show_pkg_notifications_title">Notifications</string>
+	<string name="show_pkg_notifications_summary">Show notifications for newly installed and updated apps.</string>
 </resources>

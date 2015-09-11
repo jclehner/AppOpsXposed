@@ -70,4 +70,7 @@
 	<string name="use_hack_fix_prune_summary">Behebt ein Problem bei dem die Einstellungen von Apps auf der SD-Karte beim 
 	    Neustart verloren gehen.</string>
 	<string name="reset_all">Alle zurücksetzen</string>
+	<string name="package_updated">Aktualisiert</string>
+	<string name="show_pkg_notifications_title">Benachrichtigungen</string>
+	<string name="show_pkg_notifications_summary">Zeige Benachrichtigungen für neu installierte und aktualisierte Apps.</string>
 </resources>

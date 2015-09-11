@@ -6,6 +6,11 @@
         android:title="@string/show_launcher_icon_title"
         android:defaultValue="true" />
 
+    <CheckBoxPreference android:key="show_pkg_notifications"
+        android:title="@string/show_pkg_notifications_title"
+        android:summary="@string/show_pkg_notifications_summary"
+        android:defaultValue="true" />
+
     <!--
     <CheckBoxPreference android:key="failsafe_mode"
         android:title="@string/failsafe_mode_title"
