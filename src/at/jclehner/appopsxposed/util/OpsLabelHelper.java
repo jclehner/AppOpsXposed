@@ -93,16 +93,8 @@ public class OpsLabelHelper
 					continue;
 				else if(op == AppOpsManagerWrapper.OP_VIBRATE)
 				{
-					if(getLabels)
-					{
-						strings.append(op, context.getString(R.string.app_ops_labels_vibrate) + "/" +
-								context.getString(R.string.app_ops_labels_post_notification));
-					}
-					else
-					{
-						strings.append(op, context.getString(R.string.app_ops_summaries_vibrate) + "/" +
-								context.getString(R.string.app_ops_summaries_post_notification));
-					}
+					strings.append(op, context.getString(R.string.app_ops_labels_vibrate) + "/" +
+							context.getString(R.string.app_ops_labels_post_notification));
 					continue;
 				}
 				/*else if(op == AppOpsManagerWrapper.OP_BOOT_COMPLETED)

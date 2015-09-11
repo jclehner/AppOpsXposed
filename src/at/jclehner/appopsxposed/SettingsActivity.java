@@ -225,8 +225,8 @@ public class SettingsActivity extends Activity
 			p = findPreference("use_hack_boot_completed");
 			p.setEnabled(!AppOpsManagerWrapper.hasTrueBootCompletedOp());
 			p.setSummary(getString(R.string.use_hack_boot_completed_summary,
-					OpsLabelHelper.getOpLabel(getActivity(), "OP_POST_NOTIFICATION"),
-					OpsLabelHelper.getOpLabel(getActivity(), "OP_VIBRATE")));
+					getString(R.string.app_ops_labels_post_notification),
+					getString(R.string.app_ops_labels_vibrate)));
 
 			p = findPreference("use_hack_wake_lock");
 			p.setSummary(getString(R.string.use_hack_wake_lock_summary,
