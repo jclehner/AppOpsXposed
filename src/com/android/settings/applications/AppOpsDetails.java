@@ -41,6 +41,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.OpEntryWrapper;
@@ -100,6 +102,10 @@ public class AppOpsDetails extends Fragment {
         } catch (NameNotFoundException e) {
             Log.e(TAG, "Exception when retrieving package:" + packageName, e);
             mPackageInfo = null;
+        }
+
+        if (getActivity().getPackageName().equals(packageName)) {
+            Toast.makeText(getActivity(), "\uD83D\uDE22", Toast.LENGTH_SHORT).show();
         }
 
         return packageName;
