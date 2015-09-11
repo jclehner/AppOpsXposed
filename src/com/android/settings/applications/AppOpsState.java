@@ -700,7 +700,7 @@ public class AppOpsState {
 
     private boolean isValidOp(int op)
     {
-        if (op > 0 && op < AppOpsManagerWrapper._NUM_OP) {
+        if (op >= 0 && op < AppOpsManagerWrapper._NUM_OP) {
             try {
                 //mAppOps.checkOp(op, Process.SYSTEM_UID, "android");
                 return true;
