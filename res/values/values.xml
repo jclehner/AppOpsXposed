@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="is_sdk_ge_19" type="bool">false</item>
+    <dimen name="icon_dropdown_size">48dip</dimen>
+    <dimen name="icon_spinner_size">32dip</dimen>
+    <color name="icon_background">#CCC</color>
 </resources>

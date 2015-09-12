@@ -4,4 +4,7 @@
         <item name="android:textAllCaps">true</item>
         <item name="android:textStyle">bold</item>
     </style>
+    <style name="IconSpinner">
+        <item name="android:background">#ccc</item>
+    </style>
 </resources>

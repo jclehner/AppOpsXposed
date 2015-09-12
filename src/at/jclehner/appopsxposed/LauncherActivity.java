@@ -47,7 +47,7 @@ import eu.chainfire.libsuperuser.Shell.SU;
 
 public class LauncherActivity extends Activity
 {
-	public static class HtcActivity2 {}
+	public static class HtcActivity2 extends Activity {}
 	public static class HtcFragment2 {}
 
 	public static class ThisIsNotXposedFragment extends DialogFragment implements

@@ -288,9 +288,9 @@ public class SettingsActivity extends Activity
 
 			final int icons[] = {
 					R.drawable.ic_appops_launcher,
+					R.drawable.ic_appops_sense6,
 					R.drawable.ic_appops_white,
 					R.drawable.ic_appops_black,
-					R.drawable.ic_appops_sense6
 			};
 
 			p = findPreference("icon_app_info");

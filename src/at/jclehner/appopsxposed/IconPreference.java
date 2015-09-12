@@ -1,9 +1,10 @@
 package at.jclehner.appopsxposed;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.content.res.TypedArray;
 import android.preference.Preference;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +14,14 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
-public class IconPreference extends Preference implements AdapterView.OnItemClickListener
+public class IconPreference extends Preference implements AdapterView.OnItemSelectedListener
 {
 	private LayoutInflater mInflater;
 	private Spinner mSpinner;
 	private int[] mIcons;
-	private int mSelection;
+
+	private int mValue;
+	private boolean mWasValueSet = false;
 
 	public IconPreference(Context context, AttributeSet attrs)
 	{
@@ -34,19 +37,37 @@ public class IconPreference extends Preference implements AdapterView.OnItemClic
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+	protected void onClick()
 	{
-		if(callChangeListener(position))
-			persistInt(position);
+		super.onClick();
+
+		if(mSpinner != null)
+			mSpinner.performClick();
 	}
 
 	@Override
-	protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValueRaw)
+	public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
 	{
-		final int defaultValue = defaultValueRaw != null ? Integer.parseInt(defaultValueRaw.toString()) : 0;
-		mSelection = restorePersistedValue ? getPersistedInt(defaultValue) : defaultValue;
+		if(callChangeListener(position))
+			setValue(position);
+	}
 
-		updateSpinner();
+	@Override
+	public void onNothingSelected(AdapterView<?> parent)
+	{
+
+	}
+
+	@Override
+	protected Object onGetDefaultValue(TypedArray a, int index)
+	{
+		return a.getIndex(index);
+	}
+
+	@Override
+	protected void onSetInitialValue(boolean restoreValue, Object defaultValue)
+	{
+		setValue(restoreValue ? getPersistedInt(mValue) : (int) defaultValue);
 	}
 
 	@Override
@@ -54,8 +75,21 @@ public class IconPreference extends Preference implements AdapterView.OnItemClic
 	{
 		super.onBindView(view);
 		mSpinner = (Spinner) view.findViewById(R.id.spinnerWidget);
-		mSpinner.setBackgroundColor(Color.LTGRAY);
 		updateSpinner();
+		mSpinner.setOnItemSelectedListener(this);
+	}
+
+	private void setValue(int value)
+	{
+		final boolean changed = mValue != value;
+		if(changed || !mWasValueSet)
+		{
+			mValue = value;
+			mWasValueSet = true;
+			persistInt(value);
+			if(changed)
+				notifyChanged();
+		}
 	}
 
 	private void updateSpinner()
@@ -65,7 +99,7 @@ public class IconPreference extends Preference implements AdapterView.OnItemClic
 
 		mSpinner.setAdapter(null);
 		mSpinner.setAdapter(mAdapter);
-		mSpinner.setSelection(mSelection);
+		mSpinner.setSelection(mValue);
 	}
 
 	private final SpinnerAdapter mAdapter = new BaseAdapter() {
@@ -76,15 +110,15 @@ public class IconPreference extends Preference implements AdapterView.OnItemClic
 		}
 
 		@Override
-		public View getView(int position, View view, ViewGroup parent)
+		public View getView(int position, View convertView, ViewGroup parent)
 		{
-			if(view == null)
-				view = (ImageView) mInflater.inflate(R.layout.icon, null);
+			return getView(position, null, R.layout.icon_spinner);
+		}
 
-			((ImageView) view).setImageResource(mIcons[position]);
-			view.setBackgroundColor(position % 2 == 0 ? Color.DKGRAY : Color.TRANSPARENT);
-
-			return view;
+		@Override
+		public View getDropDownView(int position, View convertView, ViewGroup parent)
+		{
+			return getView(position, null, R.layout.icon_dropdown);
 		}
 
 		@Override
@@ -97,6 +131,16 @@ public class IconPreference extends Preference implements AdapterView.OnItemClic
 		public Object getItem(int position)
 		{
 			return mIcons[position];
+		}
+
+		private View getView(int position, View view, int layoutResId)
+		{
+			if(view == null)
+				view = mInflater.inflate(layoutResId, null);
+
+			((ImageView) view).setImageResource(mIcons[position]);
+
+			return view;
 		}
 	};
 }

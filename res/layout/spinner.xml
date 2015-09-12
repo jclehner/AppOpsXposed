@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Spinner xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/spinnerWidget"
+    android:layout_width="@dimen/icon_spinner_size"
+    android:layout_height="@dimen/icon_spinner_size"
+    android:background="@null" />
