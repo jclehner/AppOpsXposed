@@ -27,6 +27,7 @@ import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.util.Constants;
 import at.jclehner.appopsxposed.util.Res;
+import at.jclehner.appopsxposed.util.Util;
 import at.jclehner.appopsxposed.util.XUtils;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
@@ -52,9 +53,7 @@ public class LG extends AOSP
 	@Override
 	protected String[] targetPackages()
 	{
-		return new String[] { AppOpsXposed.SETTINGS_PACKAGE,
-				EASY_SETTINGS_PACKAGE
-		};
+		return new String[] { AppOpsXposed.SETTINGS_PACKAGE, EASY_SETTINGS_PACKAGE };
 	}
 
 	@Override
@@ -72,8 +71,6 @@ public class LG extends AOSP
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
-		debug("handleLoadPackage: " + lpparam.packageName);
-
 		if(!EASY_SETTINGS_PACKAGE.equals(lpparam.packageName))
 		{
 			super.handleLoadPackage(lpparam);
@@ -98,21 +95,15 @@ public class LG extends AOSP
 							if(intent != null && "android.settings.APPLICATION_SETTINGS"
 									.equals(intent.getAction()))
 							{
-								debug("  APPLICATION_SETTINGS at pos " + i);
 								order = i + 1;
 								break;
 							}
 						}
 
-						final Intent intent = new Intent();
-						intent.setPackage("com.android.settings");
-						intent.setAction("android.settings.SETTINGS");
-						intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_FRAGMENT);
-
 						final Preference p = new Preference(pf.getActivity());
 						p.setTitle(Res.modRes.getString(R.string.app_ops_settings));
 						p.setIcon(getAppOpsHeaderIcon());
-						p.setIntent(intent);
+						p.setIntent(Util.createAppOpsIntent(null));
 						p.setOrder(order);
 
 						ps.addPreference(p);

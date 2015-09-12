@@ -35,7 +35,6 @@ public class AOSP extends ApkVariant
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
 	{
-		hookIsValidFragment(lpparam);
 		addAppOpsToAppInfo(lpparam);
 
 		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)

@@ -26,13 +26,10 @@ import java.util.Set;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.TaskStackBuilder;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceActivity.Header;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -146,21 +143,13 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 		// empty
 	}
 
-	public boolean canUseLayoutFix() {
-		return true;
-	}
-
 	protected Object onCreateAppOpsHeader(Context context, int addAfterHeaderId)
 	{
 		final Header appOpsHeader = new Header();
 		appOpsHeader.title = getAppOpsTitle();
 		appOpsHeader.id = R.id.app_ops_settings;
 		appOpsHeader.iconRes = getAppOpsHeaderIcon();
-
-		if(XUtils.isCompatibilityModeEnabled())
-			appOpsHeader.intent = Util.getCompatibilityModeIntent(null);
-		else
-			appOpsHeader.fragment = AppOpsXposed.APP_OPS_FRAGMENT;
+		appOpsHeader.intent = Util.createAppOpsIntent(null);
 
 		return appOpsHeader;
 	}
@@ -320,52 +309,6 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 				"loadHeadersFromResource", int.class, List.class, hook);
 	}
 
-	private static final String[] VALID_FRAGMENTS = {
-		AppOpsXposed.APP_OPS_FRAGMENT, AppOpsXposed.APP_OPS_DETAILS_FRAGMENT
-	};
-
-	protected static void hookIsValidFragment(Class<?> clazz) throws Throwable
-	{
-		try
-		{
-			XUtils.findAndHookMethodRecursive(clazz, "isValidFragment",
-					String.class, new XC_MethodHook() {
-
-						@Override
-						protected void afterHookedMethod(MethodHookParam param) throws Throwable
-						{
-							if((Boolean) param.getResult())
-								return;
-
-							for(String name : VALID_FRAGMENTS)
-							{
-								if(name.equals(param.args[0]))
-								{
-									param.setResult(true);
-									return;
-								}
-							}
-						}
-			});
-		}
-		catch(NoSuchMethodError e)
-		{
-			// Apps before KitKat didn't need to override PreferenceActivity.isValidFragment,
-			// so we ignore a NoSuchMethodError in that case.
-
-			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-				XposedBridge.log("No isValidFragment in " + clazz.getName());
-		}
-	}
-
-	public static void hookIsValidFragment(LoadPackageParam lpparam) throws Throwable {
-		hookIsValidFragment(lpparam, "com.android.settings.Settings");
-	}
-
-	public static void hookIsValidFragment(LoadPackageParam lpparam, String className) throws Throwable {
-		hookIsValidFragment(lpparam.classLoader.loadClass(className));
-	}
-
 	protected void addAppOpsToAppInfo(LoadPackageParam lpparam)
 	{
 		XposedHelpers.findAndHookMethod("com.android.settings.applications.InstalledAppDetails", lpparam.classLoader,
@@ -431,38 +374,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 									return true;
 								}
 
-								if(!XUtils.isCompatibilityModeEnabled())
-								{
-									if("android.settings.APPLICATION_DETAILS_SETTINGS".equals(activity.getIntent().getAction()))
-									{
-										debug("Launching AppOps using startActivities()");
-
-										final Intent intent = new Intent("android.settings.SETTINGS");
-										intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, getAppOpsDetailsFragmentName());
-										intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS, args);
-										intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_TITLE, Res.getModString(R.string.app_ops_settings));
-
-										final TaskStackBuilder tsb = TaskStackBuilder.create(activity);
-										tsb.addNextIntent(intent);
-
-										tsb.startActivities();
-									}
-									else
-									{
-										debug("Launching AppOps using startPreferencePanel()");
-
-										// Using reflection because on HTC Sense ROMs, our Activity is not
-										// a PreferenceActivity, but an HtcPreferenceActivity (which does *not*
-										// inherit from the former).
-
-										XposedHelpers.callMethod(activity, "startPreferencePanel", new Class<?>[] {
-												String.class, Bundle.class, int.class, CharSequence.class,
-												Fragment.class, int.class }, getAppOpsDetailsFragmentName(),
-												args, 0, Res.getModString(R.string.app_ops_settings), f, 0);
-									}
-								}
-								else
-									activity.startActivity(Util.getCompatibilityModeIntent(pkg));
+								activity.startActivity(Util.createAppOpsIntent(pkg));
 
 								return true;
 							}

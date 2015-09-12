@@ -40,7 +40,7 @@ public class PackageChangedReceiver extends BroadcastReceiver
 		nb.setAutoCancel(true);
 		nb.setPriority(Notification.PRIORITY_LOW);
 		nb.setContentIntent(PendingIntent.getActivity(context, 0,
-				Util.getCompatibilityModeIntent(pi.packageName), PendingIntent.FLAG_CANCEL_CURRENT));
+				Util.createAppOpsIntent(pi.packageName), PendingIntent.FLAG_CANCEL_CURRENT));
 
 		final NotificationManager nm =
 				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

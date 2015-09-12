@@ -19,32 +19,7 @@
 package at.jclehner.appopsxposed.variants;
 
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import android.annotation.TargetApi;
-import android.app.AppOpsManager;
-import android.app.Fragment;
-import android.content.Context;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import at.jclehner.appopsxposed.AppOpsXposed;
-import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.util.Constants;
-import at.jclehner.appopsxposed.util.OpsLabelHelper;
-import at.jclehner.appopsxposed.util.Res;
-import at.jclehner.appopsxposed.util.Util;
-import at.jclehner.appopsxposed.util.XUtils;
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
-import de.robv.android.xposed.XC_MethodHook.Unhook;
-import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 
 /*
@@ -66,36 +41,13 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
  */
 public abstract class Sony extends AOSP
 {
+	// Keep these for now, so we don't break the "force_variant" setting
+	
 	public static class JellyBean extends Sony
 	{
 		@Override
 		protected int apiLevel() {
 			return 18;
-		}
-
-		@Override
-		public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
-		{
-			super.handleLoadPackage(lpparam);
-
-			if(Res.modPrefs.getBoolean("use_layout_fix", true))
-			{
-				XposedHelpers.findAndHookMethod(AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, lpparam.classLoader,
-						"refreshUi", new XC_MethodHook() {
-
-							private Unhook mUnhook;
-
-							@Override
-							protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-								mUnhook = hookLayoutInflater();
-							}
-
-							@Override
-							protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-								mUnhook.unhook();
-							}
-				});
-			}
 		}
 	}
 
@@ -106,9 +58,6 @@ public abstract class Sony extends AOSP
 			return 0;
 		}
 	}
-
-	// only used by fixGetCombinedText at the moment
-	private WeakReference<Context> mContextRef = null;
 
 	@Override
 	protected abstract int apiLevel();
@@ -124,31 +73,6 @@ public abstract class Sony extends AOSP
 	}
 
 	@Override
-	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable
-	{
-		super.handleLoadPackage(lpparam);
-
-		fixGetCombinedText(lpparam);
-
-		XposedHelpers.findAndHookMethod(AppOpsXposed.APP_OPS_FRAGMENT, lpparam.classLoader,
-				"onCreateView", LayoutInflater.class, ViewGroup.class, Bundle.class,
-				new XC_MethodHook() {
-
-					private Unhook mUnhook;
-
-					@Override
-					protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-						mUnhook = hookActivityFinish(param);
-					}
-
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-						mUnhook.unhook();
-					}
-		});
-	}
-
-	@Override
 	protected String[] indicatorClasses()
 	{
 		final String[] classes = {
@@ -158,167 +82,5 @@ public abstract class Sony extends AOSP
 		};
 
 		return classes;
-	}
-
-	protected Unhook hookActivityFinish(MethodHookParam param) throws Throwable
-	{
-		final Fragment f = (Fragment) param.thisObject;
-
-		return XUtils.findAndHookMethodRecursive(f.getActivity().getClass(),
-				"finish", new XC_MethodHook() {
-
-					@Override
-					protected void beforeHookedMethod(MethodHookParam param) throws Throwable
-					{
-						log("Blocked " + param.thisObject.getClass().getName() + ".finish()");
-						param.setResult(null);
-					}
-		});
-	}
-
-	protected XC_MethodHook.Unhook hookLayoutInflater() throws Throwable
-	{
-		return XUtils.findAndHookMethodRecursive(LayoutInflater.class, "inflate",
-				int.class, ViewGroup.class, boolean.class, new XC_MethodHook() {
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) throws Throwable
-					{
-						final int layoutResId = (Integer) param.args[0];
-						if(layoutResId != Res.getSettingsIdentifier("layout/app_ops_details_item"))
-							return;
-
-						debug("In LayoutInflater hook");
-
-						final View view = (View) param.getResult();
-						final Spinner spinner = (Spinner) view.findViewWithTag("spinnerWidget");
-						if(spinner != null)
-						{
-							view.findViewWithTag("switchWidget").setVisibility(View.GONE);
-							spinner.setVisibility(View.VISIBLE);
-
-							if(spinner.getCount() == 0)
-							{
-								debug("No items in spinnerWidget");
-
-								final Context context = ((LayoutInflater) param.thisObject).getContext();
-								final int arrayResId = Res.getSettingsIdentifier("array/app_ops_permissions");
-								final String[] options;
-
-								if(arrayResId != 0)
-									options = Res.settingsRes.getStringArray(arrayResId);
-								else
-									options = Res.modRes.getStringArray(R.array.app_ops_permissions);
-
-								debug("arrayResId=" + arrayResId);
-								debug("options=" + Arrays.toString(options));
-
-								final ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
-										android.R.layout.simple_spinner_item, options);
-								adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-								spinner.setAdapter(adapter);
-							}
-							else
-								debug("spinnerWidget has " + spinner.getCount() + " items");
-						}
-						else
-							log("No spinnerWidget in layout?");
-
-						Util.dumpViewHierarchy(view);
-					}
-		});
-	}
-
-	protected void fixGetCombinedText(LoadPackageParam lpparam)
-	{
-		XposedHelpers.findAndHookMethod(AppOpsXposed.APP_OPS_DETAILS_FRAGMENT, lpparam.classLoader,
-						"refreshUi", new XC_MethodHook(XC_MethodHook.PRIORITY_HIGHEST) {
-							@Override
-							protected void beforeHookedMethod(MethodHookParam param) throws Throwable
-							{
-								mContextRef = new WeakReference<Context>(
-										((Fragment) param.thisObject).getActivity().getApplicationContext());
-							}
-		});
-
-		XposedHelpers.findAndHookMethod("com.android.settings.applications.AppOpsState$AppOpEntry",
-				lpparam.classLoader, "getCombinedText", ArrayList.class, CharSequence[].class, new XC_MethodHook() {
-
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) throws Throwable
-					{
-						if(param.hasThrowable())
-						{
-							final Throwable t = param.getThrowable();
-							if(t instanceof ArrayIndexOutOfBoundsException)
-							{
-								debug(t);
-								param.setResult(getCombinedText((ArrayList<?>) param.args[0], (CharSequence[]) param.args[1]));
-							}
-						}
-					}
-
-					private CharSequence getCombinedText(ArrayList<?> ops, CharSequence[] items)
-					{
-						if(ops.size() == 1)
-							return getOpString(items, ops.get(0));
-
-						final StringBuilder sb = new StringBuilder();
-						for(int i = 0; i != ops.size(); ++i)
-						{
-							if(i != 0)
-								sb.append(", ");
-
-							sb.append(getOpString(items, ops.get(i)));
-						}
-
-						return sb.toString();
-					}
-
-					@TargetApi(19)
-					private CharSequence getOpString(CharSequence[] items, Object opObj)
-					{
-						try
-						{
-							final int op = (Integer) XposedHelpers.callMethod(opObj, "getOp");
-							if(op < items.length)
-								return items[op];
-
-							final CharSequence opStr = Util.capitalizeFirst(
-									getOpStringFromPermission(mContextRef.get(), op));
-							if(opStr != null)
-								return opStr;
-
-							return (String) XposedHelpers.callStaticMethod(
-									AppOpsManager.class, "opToName", op);
-						}
-						catch(Throwable t)
-						{
-							log(t);
-							return "?????";
-						}
-					}
-
-
-		});
-	}
-
-	@TargetApi(19)
-	private CharSequence getOpStringFromPermission(Context context, int op)
-	{
-		try
-		{
-			final String permission = (String) XposedHelpers.callStaticMethod(
-					AppOpsManager.class, "opToPermission", op);
-
-			if(permission != null)
-				return OpsLabelHelper.getPermissionLabel(context, permission);
-		}
-		catch(Throwable t)
-		{
-			debug(t);
-		}
-
-		return null;
 	}
 }

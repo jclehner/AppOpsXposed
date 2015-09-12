@@ -41,8 +41,6 @@ public class Samsung extends ApkVariant
 {
 	public static final String GRID_SETTINGS = "com.android.settings.GridSettings";
 
-	private boolean mIsUsingGridSettings = false;
-
 	@Override
 	protected String manufacturer() {
 		return "Samsung";
@@ -51,13 +49,7 @@ public class Samsung extends ApkVariant
 	@Override
 	public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable
 	{
-		hookIsValidFragment(lpparam);
 		addAppOpsToAppInfo(lpparam);
-
-		// Adding the fragment to both arrays should pose no problem. No idea why they used
-		// UpperCamelCase for a private member...
-		hookConstuctorAddFragmentNameToTab(lpparam, "SettingsInMoreTab");
-		hookConstuctorAddFragmentNameToTab(lpparam, "SettingsInGeneralTab");
 
 		/*
 		 * In SecSettings.apk, the regular "Manage applications" header is referenced in
@@ -83,39 +75,12 @@ public class Samsung extends ApkVariant
 				Res.getSettingsIdentifier("xml/grid_settings_headers")
 		};
 
-		debug("xmlHookResIds=" + Arrays.toString(xmlHookResIds));
-
 		final int manageAppsHeaderId = Res.getSettingsIdentifier("id/application_settings");
 
 		hookLoadHeadersFromResource(lpparam, AppOpsXposed.SETTINGS_MAIN_ACTIVITY, xmlHookResIds, manageAppsHeaderId);
 
 		if(hasGridSettings(lpparam))
-		{
-			log("APK has " + GRID_SETTINGS);
-
-			final int gridId = Res.getSettingsIdentifier("bool/settings_grid");
-			debug("bool/settings_grid=" + gridId);
-
-			mIsUsingGridSettings = gridId != 0 && Res.settingsRes.getBoolean(gridId);
-
-			hookIsValidFragment(lpparam, GRID_SETTINGS);
 			hookLoadHeadersFromResource(lpparam, GRID_SETTINGS, xmlHookResIds, manageAppsHeaderId);
-			hookGridSettingsHeaderClick(lpparam);
-		}
-	}
-
-	@Override
-	protected Object onCreateAppOpsHeader(Context context, int addAfterHeaderId)
-	{
-		final Header header = (Header) super.onCreateAppOpsHeader(context, addAfterHeaderId);
-		if(mIsUsingGridSettings && header.intent == null)
-		{
-			header.intent = new Intent();
-			header.intent.setClassName(context.getPackageName(), AppOpsXposed.SETTINGS_MAIN_ACTIVITY);
-			header.intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, AppOpsXposed.APP_OPS_FRAGMENT);
-		}
-
-		return header;
 	}
 
 	@Override
@@ -127,75 +92,6 @@ public class Samsung extends ApkVariant
 				"com.android.settings.helpdialog.TwTouchPunchView",
 				GRID_SETTINGS
 		};
-	}
-
-	protected final boolean hookConstuctorAddFragmentNameToTab(LoadPackageParam lpparam, final String tabsFieldName)
-	{
-		try
-		{
-			final Class<?> settingsClazz = lpparam.classLoader.loadClass(AppOpsXposed.SETTINGS_MAIN_ACTIVITY);
-			final Field f = XposedHelpers.findField(settingsClazz, tabsFieldName);
-			if(f.getType() != String[].class)
-			{
-				debug("Field exists, but not a string array: " + tabsFieldName);
-				return false;
-			}
-
-			XposedBridge.hookAllConstructors(settingsClazz, new XC_MethodHook() {
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) throws Throwable
-					{
-
-						final Field f = XposedHelpers.findField(settingsClazz, tabsFieldName);
-						final String[] settingsInMoreTab = (String[]) f.get(param.thisObject);
-
-						f.set(param.thisObject, Util.appendToStringArray(settingsInMoreTab, "AppOpsSummary"));
-						debug(tabsFieldName + "=" + f.get(param.thisObject));
-					}
-			});
-
-			return true;
-		}
-		catch(Throwable t)
-		{
-			log("No " + tabsFieldName + " field?");
-			debug(t);
-			return false;
-		}
-	}
-
-	private void hookGridSettingsHeaderClick(LoadPackageParam lpparam) throws Throwable
-	{
-		XUtils.findAndHookMethodRecursive(GRID_SETTINGS, lpparam.classLoader,
-				"onHeaderClick", Header.class, int.class, new XC_MethodHook() {
-
-					@Override
-					protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-						setRegularSettingsEnabled(param, true);
-					}
-
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-						setRegularSettingsEnabled(param, false);
-					}
-
-					private void setRegularSettingsEnabled(MethodHookParam param, boolean enabled)
-					{
-						try
-						{
-							final Context ctx = (Context) param.thisObject;
-							ctx.getPackageManager().setComponentEnabledSetting(
-									new ComponentName(ctx.getPackageName(), AppOpsXposed.SETTINGS_MAIN_ACTIVITY),
-									enabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-									: PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-									PackageManager.DONT_KILL_APP);
-						}
-						catch(Throwable t)
-						{
-							debug(t);
-						}
-					}
-		});
 	}
 
 	private boolean hasGridSettings(LoadPackageParam lpparam)

@@ -38,9 +38,4 @@ public class CyanogenMod extends AOSP
 		super.handleLoadPackage(lpparam);
 		debug("ro.cm.version=" + CM_VERSION);
 	}
-
-	@Override
-	public boolean canUseLayoutFix() {
-		return false;
-	}
 }

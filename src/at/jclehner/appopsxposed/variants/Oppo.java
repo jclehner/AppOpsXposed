@@ -70,7 +70,7 @@ public class Oppo extends AOSP
 		if(mForceCompatibilityMode)
 		{
 			header.fragment = null;
-			header.intent = Util.getCompatibilityModeIntent(null);
+			header.intent = Util.createAppOpsIntent(null);
 		}
 		return header;
 	}

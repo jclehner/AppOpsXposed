@@ -222,7 +222,7 @@ public class LauncherActivity extends Activity
 			//tsb.addNextIntent(onCreateSettingsIntent());
 		}
 		else
-			tsb.addNextIntent(Util.getCompatibilityModeIntent(null));
+			tsb.addNextIntent(Util.createAppOpsIntent(null));
 
 		tsb.startActivities();
 		finish();

@@ -107,12 +107,6 @@ public final class Util
 		return sIsExposedModuleEnabled;
 	}
 
-	public static boolean isUsingBootCompletedHack(Context context)
-	{
-		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
-				"use_hack_boot_completed", false);
-	}
-
 	public static boolean containsManufacturer(String str) {
 		return Build.MANUFACTURER.toLowerCase(Locale.US).contains(str.toLowerCase());
 	}
@@ -155,7 +149,7 @@ public final class Util
 		}
 	}
 
-	public static Intent getCompatibilityModeIntent(String packageName)
+	public static Intent createAppOpsIntent(String packageName)
 	{
 		final Intent intent = new Intent();
 		intent.setClassName(AppOpsActivity.class.getPackage().getName(),

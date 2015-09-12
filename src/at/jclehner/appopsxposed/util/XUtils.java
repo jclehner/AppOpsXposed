@@ -8,16 +8,6 @@ import de.robv.android.xposed.XposedHelpers;
 
 public final class XUtils
 {
-	public static boolean isInFailsafeMode() {
-		return Res.modPrefs.getBoolean("failsafe_mode", false);
-	}
-
-	public static boolean isCompatibilityModeEnabled()
-	{
-		return true;
-		//return Res.modPrefs.getBoolean("compatibility_mode", false);
-	}
-
 	public static ApplicationInfo getApplicationInfo(String packageName)
 	{
 		final Class<?> atClazz = XposedHelpers.findClass("android.app.ActivityThread", null);
