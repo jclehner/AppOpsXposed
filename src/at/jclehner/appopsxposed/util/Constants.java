@@ -1,6 +1,6 @@
 package at.jclehner.appopsxposed.util;
 
-import android.app.LauncherActivity;
+import at.jclehner.appopsxposed.R;
 
 public final class Constants
 {
@@ -10,6 +10,22 @@ public final class Constants
 	};
 
 	public static final String MODULE_PACKAGE = "at.jclehner.appopsxposed";
+
+	public static final int[] ICONS = {
+			R.drawable.ic_appops_launcher,
+			R.drawable.ic_appops_cog_grey,
+			R.drawable.ic_appops_cog_black,
+			R.drawable.ic_appops_cog_white,
+			R.drawable.ic_appops_black,
+			R.drawable.ic_appops_white
+	};
+
+	public static final int ICON_LAUNCHER = 0;
+	public static final int ICON_COG_GREY = 1;
+	public static final int ICON_COG_BLACK = 2;
+	public static final int ICON_COG_WHITE = 3;
+	public static final int ICON_SHIELD_BLACK = 4;
+	public static final int ICON_SHIELD_WHITE = 5;
 
 	private Constants() {}
 }

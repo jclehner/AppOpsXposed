@@ -19,6 +19,7 @@
 package at.jclehner.appopsxposed;
 
 
+import at.jclehner.appopsxposed.util.Constants;
 import eu.chainfire.libsuperuser.Shell.SU;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -276,7 +277,8 @@ public class SettingsActivity extends Activity
 			}
 
 			p = findPreference("build_bugreport");
-			p.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			p.setOnPreferenceClickListener(new OnPreferenceClickListener()
+			{
 
 				@Override
 				public boolean onPreferenceClick(Preference preference)
@@ -286,15 +288,20 @@ public class SettingsActivity extends Activity
 				}
 			});
 
-			final int icons[] = {
-					R.drawable.ic_appops_launcher,
-					R.drawable.ic_appops_sense6,
-					R.drawable.ic_appops_white,
-					R.drawable.ic_appops_black,
-			};
-
-			p = findPreference("icon_app_info");
-			((IconPreference) p).setIcons(icons);
+			final String[] iconKeys = { "icon_appinfo", "icon_settings" };
+			for(String iconKey : iconKeys)
+			{
+				p = findPreference(iconKey);
+				((IconPreference) p).setIcons(Constants.ICONS);
+				p.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+					@Override
+					public boolean onPreferenceChange(Preference preference, Object newValue)
+					{
+						Toast.makeText(getActivity(), R.string.must_reboot_device, Toast.LENGTH_SHORT).show();
+						return true;
+					}
+				});
+			}
 		}
 
 		private void callOnChangeListenerWithCurrentValue(Preference p)

@@ -5,4 +5,4 @@
         android:minHeight="@dimen/icon_dropdown_size"
         android:minWidth="@dimen/icon_dropdown_size"
         android:scaleType="fitXY"
-        style="@style/IconSpinner" />
+        android:background="@drawable/checkerboard" />

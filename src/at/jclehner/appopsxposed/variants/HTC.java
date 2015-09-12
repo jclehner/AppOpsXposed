@@ -21,15 +21,14 @@ package at.jclehner.appopsxposed.variants;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import at.jclehner.appopsxposed.ApkVariant;
 import at.jclehner.appopsxposed.AppOpsXposed;
+import at.jclehner.appopsxposed.util.Constants;
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
@@ -140,6 +139,6 @@ public class HTC extends ApkVariant
 
 	@Override
 	protected int getDefaultAppOpsHeaderIcon() {
-		return ICON_SENSE;
+		return Constants.ICON_COG_GREY;
 	}
 }

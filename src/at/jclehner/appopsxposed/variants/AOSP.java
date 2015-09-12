@@ -22,10 +22,9 @@ import java.util.List;
 
 import android.content.Context;
 import android.os.Build;
-import android.os.Build.VERSION;
 import android.preference.PreferenceActivity.Header;
 import at.jclehner.appopsxposed.ApkVariant;
-import at.jclehner.appopsxposed.BuildConfig;
+import at.jclehner.appopsxposed.util.Constants;
 import at.jclehner.appopsxposed.util.Res;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
@@ -45,7 +44,7 @@ public class AOSP extends ApkVariant
 
 	@Override
 	protected int getDefaultAppOpsHeaderIcon() {
-		return ICON_WHITE;
+		return Constants.ICON_SHIELD_WHITE;
 	}
 
 	private void addAppOpsHeaderPreLollipop(LoadPackageParam lpparam)

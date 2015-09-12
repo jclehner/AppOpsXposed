@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:drawable="@drawable/ic_appops_sense6" />
+    <item android:drawable="@drawable/ic_appops_cog_grey" />
 </selector>

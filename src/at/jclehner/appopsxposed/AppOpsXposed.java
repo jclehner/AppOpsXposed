@@ -22,7 +22,6 @@ import static at.jclehner.appopsxposed.util.Util.log;
 import android.content.res.XModuleResources;
 import at.jclehner.appopsxposed.util.Res;
 import at.jclehner.appopsxposed.util.Util;
-import at.jclehner.appopsxposed.util.XUtils;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
@@ -74,10 +73,12 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		if(!ApkVariant.isSettingsPackage(resparam.packageName))
 			return;
 
-		Res.appOpsPreferenceIconWhite = resparam.res.addResource(Res.modRes, R.drawable.ic_appops_white);
-		Res.appOpsPreferenceIconBlack = resparam.res.addResource(Res.modRes, R.drawable.ic_appops_black);
-		Res.appOpsPreferenceIconSense = resparam.res.addResource(Res.modRes, R.drawable.ic_appops_sense6);
-		Res.appOpsPreferenceIconLauncher = resparam.res.addResource(Res.modRes, R.drawable.ic_appops_launcher);
+		Res.iconShieldWhite = resparam.res.addResource(Res.modRes, R.drawable.ic_appops_white);
+		Res.iconShieldBlack = resparam.res.addResource(Res.modRes, R.drawable.ic_appops_black);
+		Res.iconCogGrey = resparam.res.addResource(Res.modRes, R.drawable.ic_appops_cog_grey);
+		Res.iconLauncher = resparam.res.addResource(Res.modRes, R.drawable.ic_appops_launcher);
+		Res.iconCogBlack = resparam.res.addResource(Res.modRes,R.drawable.ic_appops_cog_black);
+		Res.iconCogWhite = resparam.res.addResource(Res.modRes,R.drawable.ic_appops_cog_white);
 
 		for(ApkVariant variant : ApkVariant.getAllMatching(resparam.packageName))
 		{

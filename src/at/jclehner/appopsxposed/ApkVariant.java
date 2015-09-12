@@ -21,8 +21,6 @@ package at.jclehner.appopsxposed;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -41,6 +39,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.Toast;
+
+import at.jclehner.appopsxposed.util.Constants;
 import at.jclehner.appopsxposed.util.Res;
 import at.jclehner.appopsxposed.util.Util;
 import at.jclehner.appopsxposed.util.XUtils;
@@ -52,7 +52,6 @@ import at.jclehner.appopsxposed.variants.OmniROM;
 import at.jclehner.appopsxposed.variants.Oppo;
 import at.jclehner.appopsxposed.variants.Samsung;
 import at.jclehner.appopsxposed.variants.Sony;
-import dalvik.system.DexFile;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
@@ -94,11 +93,6 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 		new Oppo(),
 		new AOSP() // must be the last entry!
 	};
-
-	public static final int ICON_LAUNCHER = 0;
-	public static final int ICON_WHITE = 1;
-	public static final int ICON_BLACK = 2;
-	public static final int ICON_SENSE = 3;
 
 	public static boolean isSettingsPackage(String packageName)
 	{
@@ -180,24 +174,32 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 
 	protected final int getAppOpsHeaderIcon()
 	{
-		switch(Res.modPrefs.getInt("icon", getDefaultAppOpsHeaderIcon()))
+		Res.modPrefs.reload();
+
+		switch(Res.modPrefs.getInt("icon_settings", getDefaultAppOpsHeaderIcon()))
 		{
-			case ICON_WHITE:
-				return Res.appOpsPreferenceIconWhite;
+			case Constants.ICON_SHIELD_WHITE:
+				return Res.iconShieldWhite;
 
-			case ICON_BLACK:
-				return Res.appOpsPreferenceIconBlack;
+			case Constants.ICON_SHIELD_BLACK:
+				return Res.iconShieldBlack;
 
-			case ICON_SENSE:
-				return Res.appOpsPreferenceIconSense;
+			case Constants.ICON_COG_GREY:
+				return Res.iconCogGrey;
+
+			case Constants.ICON_COG_WHITE:
+				return Res.iconCogWhite;
+
+			case Constants.ICON_COG_BLACK:
+				return Res.iconCogBlack;
 
 			default:
-				return Res.appOpsPreferenceIconLauncher;
+				return Res.iconLauncher;
 		}
 	}
 
 	protected int getDefaultAppOpsHeaderIcon() {
-		return ICON_LAUNCHER;
+		return Constants.ICON_LAUNCHER;
 	}
 
 	protected String getAppOpsTitle()
@@ -309,7 +311,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 	}
 
 	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, int hookResId, int addAfterHeaderId) throws Throwable {
-		hookLoadHeadersFromResource(lpparam, "com.android.settings.Settings", new int[] { hookResId }, addAfterHeaderId);
+		hookLoadHeadersFromResource(lpparam, "com.android.settings.Settings", new int[]{hookResId}, addAfterHeaderId);
 	}
 
 	protected final void hookLoadHeadersFromResource(LoadPackageParam lpparam, String className, XC_MethodHook hook) throws Throwable
@@ -364,57 +366,6 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 		hookIsValidFragment(lpparam.classLoader.loadClass(className));
 	}
 
-	protected void addMenuToAppOpsSummary(LoadPackageParam lpparam) throws Throwable
-	{
-		XUtils.findAndHookMethodRecursive(AppOpsXposed.APP_OPS_FRAGMENT, lpparam.classLoader,
-				"onCreate", Bundle.class, new XC_MethodHook() {
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) throws Throwable
-					{
-						((Fragment) param.thisObject).setHasOptionsMenu(true);
-					}
-		});
-
-		XUtils.findAndHookMethodRecursive(AppOpsXposed.APP_OPS_FRAGMENT, lpparam.classLoader,
-				"onCreateOptionsMenu", Menu.class, MenuInflater.class, new XC_MethodHook() {
-
-					@Override
-					protected void afterHookedMethod(final MethodHookParam param) throws Throwable
-					{
-						final Menu menu = (Menu) param.args[0];
-						menu.add(Res.getModString(R.string.show_changed_only_title))
-								.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
-									@Override
-									public boolean onMenuItemClick(MenuItem item)
-									{
-										final Fragment f = (Fragment) param.thisObject;
-										((PreferenceActivity) f.getActivity()).startPreferenceFragment(
-												AppListFragment.newInstance(true), true);
-										return true;
-									}
-						});
-					}
-		});
-
-		// Without this, an orientation change crashes the settings app,
-		// because its class loader fails to find AppListFragment.
-		XposedBridge.hookAllMethods(Fragment.class, "instantiate", new XC_MethodHook() {
-
-			@Override
-			protected void beforeHookedMethod(MethodHookParam param) throws Throwable
-			{
-				if(param.args[1].equals(AppListFragment.class.getName()))
-				{
-					final AppListFragment f = new AppListFragment();
-					if(param.args.length >= 3)
-						f.setArguments((Bundle) param.args[2]);
-					param.setResult(f);
-				}
-			}
-		});
-	}
-
 	protected void addAppOpsToAppInfo(LoadPackageParam lpparam)
 	{
 		XposedHelpers.findAndHookMethod("com.android.settings.applications.InstalledAppDetails", lpparam.classLoader,
@@ -426,11 +377,13 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 						final Menu menu = (Menu) param.args[0];
 						//menu.clear();
 
+						Res.modPrefs.reload();
+						int icon = Res.modPrefs.getInt("icon_appinfo", Constants.ICON_LAUNCHER);
+
 						final MenuItem item = menu.add(getAppOpsTitle());
 						item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-						//item.setIcon(getAppOpsHeaderIcon());
 						item.setTitle(Res.modRes.getString(R.string.app_ops_settings));
-						item.setIcon(Res.modRes.getDrawable(R.drawable.ic_launcher2));
+						item.setIcon(Res.modRes.getDrawable(Constants.ICONS[icon]));
 						item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
 							@Override

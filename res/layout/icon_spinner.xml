@@ -5,4 +5,5 @@
         android:minHeight="@dimen/icon_spinner_size"
         android:minWidth="@dimen/icon_spinner_size"
         android:scaleType="fitXY"
-        style="@style/IconSpinner" />
+        android:padding="1dip"
+        android:background="@drawable/checkerboard" />

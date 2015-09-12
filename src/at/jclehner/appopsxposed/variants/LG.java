@@ -25,6 +25,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.R;
+import at.jclehner.appopsxposed.util.Constants;
 import at.jclehner.appopsxposed.util.Res;
 import at.jclehner.appopsxposed.util.XUtils;
 import de.robv.android.xposed.XC_MethodHook;
@@ -121,6 +122,6 @@ public class LG extends AOSP
 
 	@Override
 	protected int getDefaultAppOpsHeaderIcon() {
-		return ICON_LAUNCHER;
+		return Constants.ICON_LAUNCHER;
 	}
 }

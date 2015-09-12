@@ -7,10 +7,12 @@ import at.jclehner.appopsxposed.R;
 
 public class Res
 {
-	public static int appOpsPreferenceIconLauncher = 0;
-	public static int appOpsPreferenceIconWhite = 0;
-	public static int appOpsPreferenceIconBlack = 0;
-	public static int appOpsPreferenceIconSense = 0;
+	public static int iconLauncher = 0;
+	public static int iconShieldWhite = 0;
+	public static int iconShieldBlack = 0;
+	public static int iconCogGrey = 0;
+	public static int iconCogWhite = 0;
+	public static int iconCogBlack = 0;
 
 	public static XModuleResources settingsRes;
 	public static XModuleResources modRes;

@@ -21,6 +21,7 @@ package at.jclehner.appopsxposed.variants;
 import android.content.Context;
 import android.preference.PreferenceActivity.Header;
 import at.jclehner.appopsxposed.AppOpsXposed;
+import at.jclehner.appopsxposed.util.Constants;
 import at.jclehner.appopsxposed.util.Util;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
@@ -43,7 +44,7 @@ public class Oppo extends AOSP
 
 	@Override
 	protected int getDefaultAppOpsHeaderIcon() {
-		return ICON_LAUNCHER;
+		return Constants.ICON_LAUNCHER;
 	}
 
 	@Override
