@@ -13,6 +13,7 @@ public class Res
 	public static int iconCogGrey = 0;
 	public static int iconCogWhite = 0;
 	public static int iconCogBlack = 0;
+	public static int iconCogCircle = 0;
 
 	public static XModuleResources settingsRes;
 	public static XModuleResources modRes;

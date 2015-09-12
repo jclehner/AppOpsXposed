@@ -42,7 +42,7 @@ import at.jclehner.appopsxposed.util.Constants;
 public abstract class Sony extends AOSP
 {
 	// Keep these for now, so we don't break the "force_variant" setting
-	
+
 	public static class JellyBean extends Sony
 	{
 		@Override
