@@ -285,6 +285,16 @@ public class SettingsActivity extends Activity
 					return true;
 				}
 			});
+
+			final int icons[] = {
+					R.drawable.ic_appops_launcher,
+					R.drawable.ic_appops_white,
+					R.drawable.ic_appops_black,
+					R.drawable.ic_appops_sense6
+			};
+
+			p = findPreference("icon_app_info");
+			((IconPreference) p).setIcons(icons);
 		}
 
 		private void callOnChangeListenerWithCurrentValue(Preference p)

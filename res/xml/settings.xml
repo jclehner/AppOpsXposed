@@ -11,6 +11,11 @@
         android:summary="@string/show_pkg_notifications_summary"
         android:defaultValue="true" />
 
+    <at.jclehner.appopsxposed.IconPreference android:key="icon_app_info"
+         android:title="&quot;App info&quot; icon"
+         android:summary="Icon to display in the &quot;App info&quot; screen."
+         android:defaultValue="0" />
+
     <!--
     <CheckBoxPreference android:key="failsafe_mode"
         android:title="@string/failsafe_mode_title"
