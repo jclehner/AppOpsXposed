@@ -1,3 +1,8 @@
+### 1.29
+* Add option to customize icons used
+* AOX now displays notifications on app installs/updates,
+  launching the AppOps screen for that particular app
+
 ### 1.28.1
 * Fix bugs in hacks for OP_WAKE_LOCK and OP_BOOT_COMPLETED
 
