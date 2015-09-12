@@ -262,12 +262,11 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 
 	private static int getOpWithPermission(String permission)
 	{
-		final int num = getOpInt("_NUM_OP");
-		for(int op = 0; op < num; ++op)
+		for(int op = 0; op < _NUM_OP; ++op)
 		{
 			if(permission.equals(opToPermission(op)))
 			{
-				Util.log("Found op #" + op + " with permission " + permission);
+				Util.debug("Found op #" + op + " with permission " + permission);
 				return op;
 			}
 		}
