@@ -71,7 +71,7 @@
 	<string name="show_pkg_notifications_title">Notifications</string>
 	<string name="show_pkg_notifications_summary">Show notifications for newly installed and updated apps.</string>
 	<string name="icons_title">Icons</string>
-	<string name="icons_summary">Select icons used by AppOpsXposed.</string>
+	<string name="icons_summary">Choose icons used by AppOpsXposed.</string>
 	<string name="icon_appinfo_title">App info</string>
 	<string name="icon_appinfo_summary">Icon used for the \"App info\" screen.</string>
 	<string name="icon_settings_title">Settings</string>
