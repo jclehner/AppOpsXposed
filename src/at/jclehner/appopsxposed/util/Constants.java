@@ -12,7 +12,7 @@ public final class Constants
 	public static final String MODULE_PACKAGE = "at.jclehner.appopsxposed";
 
 	public static final int[] ICONS = {
-			R.drawable.ic_appops_launcher,
+			R.drawable.ic_launcher2,
 			R.drawable.ic_appops_cog_grey,
 			R.drawable.ic_appops_cog_black,
 			R.drawable.ic_appops_cog_white,
