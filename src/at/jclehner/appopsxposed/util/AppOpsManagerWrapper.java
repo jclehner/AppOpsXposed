@@ -248,6 +248,11 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		return getOpInt("OP_BOOT_COMPLETED") != -1;
 	}
 
+	public static boolean isValidOp(int op)
+	{
+		return op >= 0 && op < _NUM_OP;
+	}
+
 	private static int getOpInt(String opName)
 	{
 		try

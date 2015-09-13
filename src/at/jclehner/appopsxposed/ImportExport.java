@@ -1,7 +1,9 @@
 package at.jclehner.appopsxposed;
 
 
+import android.app.AppOpsManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,6 +20,7 @@ import java.io.IOException;
 import java.util.List;
 
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
+import at.jclehner.appopsxposed.util.ObjectWrapper;
 import at.jclehner.appopsxposed.util.Util;
 
 /**
@@ -40,6 +43,7 @@ public class ImportExport
 {
 	public static boolean restore(Context context)
 	{
+		final AppOpsManagerWrapper appOps = AppOpsManagerWrapper.from(context);
 		FileInputStream stream = null;
 
 		try
@@ -63,9 +67,14 @@ public class ImportExport
 					break;
 
 				expectStartTag(xml, "pkg");
-				final String pkg = expectAttribute(xml, "n");
+				final String packageName = expectAttribute(xml, "n");
+				final int uid = getPackageUid(context, packageName);
 
-				Log.d("AOX:Backup", pkg);
+				// If uid == -1, the package is not installed. Skip the
+				// restore phase, but keep parsing so as to validate the
+				// file and not mess up the parser's state.
+
+				boolean skipInfoPrinted = false;
 
 				while(xml.next() != XmlPullParser.END_DOCUMENT)
 				{
@@ -77,7 +86,26 @@ public class ImportExport
 					final String opName = expectAttribute(xml, "n");
 					final String modeName = expectAttribute(xml, "m");
 
-					Log.d("AOX:Backup", "  " + opName + " = " + modeName);
+					final int op = AppOpsManagerWrapper.opFromName(opName.toUpperCase());
+					final int mode = translateMode(packageName, modeName);
+
+					if(AppOpsManagerWrapper.isValidOp(op) && mode != -1)
+					{
+						if(uid != -1)
+						{
+							appOps.setMode(op, uid, packageName, mode);
+							Log.i("AOX:Backup", packageName + ": " + opName + " = " + mode);
+						}
+						else if(!skipInfoPrinted)
+						{
+							Log.i("AOX:Backup", packageName + ": not installed; skipping");
+							skipInfoPrinted = true;
+						}
+					}
+					else
+					{
+						Log.i("AOX:Backup", packageName + ": not restoring op " + opName + " = " + modeName);
+					}
 
 					xml.next();
 					expectEndTag(xml, "op");
@@ -181,8 +209,9 @@ public class ImportExport
 		return value;
 	}
 
-	private static boolean isEndTag(XmlPullParser xml, String tag) throws XmlPullParserException
+	private static boolean isEndTag(XmlPullParser xml, String tag) throws IOException, XmlPullParserException
 	{
+		skipWhitespace(xml);
 		return xml.getEventType() == XmlPullParser.END_TAG && tag.equals(xml.getName());
 	}
 
@@ -198,15 +227,11 @@ public class ImportExport
 
 	private static void expectTag(XmlPullParser xml, String tag, boolean end) throws IOException, XmlPullParserException
 	{
-		int type = xml.getEventType();
-
-		// Skip over whitespace
-		while((type == XmlPullParser.TEXT) && TextUtils.isEmpty(xml.getName()))
-			type = xml.next();
+		skipWhitespace(xml);
 
 		boolean validEvent = false;
 
-		switch(type)
+		switch(xml.getEventType())
 		{
 			case XmlPullParser.START_TAG:
 				validEvent = !end;
@@ -226,6 +251,15 @@ public class ImportExport
 		}
 	}
 
+	private static void skipWhitespace(XmlPullParser xml) throws IOException, XmlPullParserException
+	{
+		int type = xml.getEventType();
+
+		// Skip over whitespace
+		while((type == XmlPullParser.TEXT) && TextUtils.isEmpty(xml.getName()))
+			type = xml.next();
+	}
+
 	private static String stateToString(XmlPullParser xml) throws XmlPullParserException
 	{
 		final int type = xml.getEventType();
@@ -238,6 +272,34 @@ public class ImportExport
 
 			default:
 				return XmlPullParser.TYPES[type];
+		}
+	}
+
+	private static int translateMode(String pkg, String modeName)
+	{
+		final String fieldName = "MODE_" + modeName.toUpperCase();
+		// Do not get this from AppOpsManagerWrapper, because there might be modes
+		// we don't know about. This ensures that the backup is correctly restored,
+		// even though the modes are not yet handled by AOX.
+		final int mode = ObjectWrapper.getStatic(AppOpsManager.class, fieldName, -1);
+		if(mode == -1)
+		{
+			Log.i("AOX:Backup", pkg + ": mode " + modeName + " -> ignored");
+			return AppOpsManagerWrapper.MODE_IGNORED;
+		}
+
+		return mode;
+	}
+
+	private static int getPackageUid(Context context, String pkg)
+	{
+		try
+		{
+			return context.getPackageManager().getPackageInfo(pkg, 0).applicationInfo.uid;
+		}
+		catch(PackageManager.NameNotFoundException e)
+		{
+			return -1;
 		}
 	}
 
