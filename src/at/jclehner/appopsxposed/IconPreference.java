@@ -2,11 +2,14 @@ package at.jclehner.appopsxposed;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Rect;
 import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.TouchDelegate;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -74,6 +77,16 @@ public class IconPreference extends Preference implements AdapterView.OnItemSele
 	{
 		super.onBindView(view);
 		mSpinner = (Spinner) view.findViewById(R.id.spinnerWidget);
+
+		final ViewParent parent = mSpinner.getParent();
+		if(parent instanceof View)
+		{
+			final Rect rect  = new Rect(0, 0, ((View) parent).getWidth(),
+					((View) parent).getHeight());
+			((View) parent).setTouchDelegate(new TouchDelegate(rect, (View) parent));
+
+		}
+
 		updateSpinner();
 		mSpinner.setOnItemSelectedListener(this);
 	}
