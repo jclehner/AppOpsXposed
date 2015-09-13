@@ -1,7 +1,6 @@
 package at.jclehner.appopsxposed;
 
 
-import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Environment;
@@ -49,7 +48,7 @@ public class Backup
 		try
 		{
 			final XmlPullParser xml = Xml.newPullParser();
-			stream = new FileInputStream(getBackupFile(context));
+			stream = new FileInputStream(getAndCreateFile(context));
 			xml.setInput(stream, "utf-8");
 
 			// Skip START_DOCUMENT
@@ -134,7 +133,7 @@ public class Backup
 		{
 			final XmlSerializer xml = Xml.newSerializer();
 			xml.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
-			stream = new FileOutputStream(getBackupFile(context));
+			stream = new FileOutputStream(getAndCreateFile(context));
 
 			xml.setOutput(stream, "utf-8");
 			xml.startDocument(null, true);
@@ -192,11 +191,16 @@ public class Backup
 		}
 	}
 
-	private static File getBackupFile(Context context) throws IOException
+
+	public static File getFile(Context context)
 	{
-		final File f = new File(Environment.getExternalStorageDirectory(), "appopsxposed-backup.xml");
-		if(!f.exists())
-			f.createNewFile();
+		return new File(Environment.getExternalStorageDirectory(), "appopsxposed-backup.xml");
+	}
+
+	private static File getAndCreateFile(Context context) throws IOException
+	{
+		final File f = getFile(context);
+		f.createNewFile();
 		return f;
 	}
 

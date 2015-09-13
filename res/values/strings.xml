@@ -76,4 +76,13 @@
 	<string name="icon_appinfo_summary">Icon used for the \"App info\" screen.</string>
 	<string name="icon_settings_title">Settings</string>
 	<string name="icon_settings_summary">Icon used in the \"Settings\" app (if applicable).</string>
+	<string name="note_icons_title">Important</string>
+	<string name="note_icons_summary">Changes to these settings may require a reboot.</string>
+	<string name="import_export_title">Backup</string>
+	<string name="import_export_summary">Import/export settings to/from external storage.</string>
+	<string name="backup_create_title">Export</string>
+	<string name="backup_restore_title">Import</string>
+	<string name="backup_file_title">File</string>
+	<string name="failed">Failed.</string>
+	<string name="success">Success.</string>
 </resources>

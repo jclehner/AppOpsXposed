@@ -15,46 +15,33 @@
         android:title="@string/icons_title"
         android:summary="@string/icons_summary">
 
+        <Preference
+            android:title="@string/note_icons_title"
+            android:summary="@string/note_icons_summary"
+            android:enabled="false" />
 
         <at.jclehner.appopsxposed.IconPreference android:key="icon_appinfo"
-             android:title="@string/icon_appinfo_title"
-             android:summary="@string/icon_appinfo_summary"
-             android:defaultValue="0" />
+            android:title="@string/icon_appinfo_title"
+            android:summary="@string/icon_appinfo_summary"
+            android:defaultValue="0" />
 
         <at.jclehner.appopsxposed.IconPreference android:key="icon_settings"
-             android:title="@string/icon_settings_title"
-             android:summary="@string/icon_settings_summary"
-             android:defaultValue="0" />
+            android:title="@string/icon_settings_title"
+            android:summary="@string/icon_settings_summary"
+            android:defaultValue="0" />
 
-     </PreferenceScreen>
-
-    <!--
-    <CheckBoxPreference android:key="failsafe_mode"
-        android:title="@string/failsafe_mode_title"
-        android:summary="@string/failsafe_mode_summary"
-        android:defaultValue="false" />
-
-    <CheckBoxPreference android:key="compatibility_mode"
-        android:title="@string/compatibility_mode_title"
-        android:summary="@string/compatibility_mode_summary"
-        android:defaultValue="false" />
-     -->
+    </PreferenceScreen>
 
     <PreferenceCategory
         android:title="@string/advanced_settings_title">
-
-        <!--
-        <CheckBoxPreference android:key="use_layout_fix"
-            android:summary="@string/use_layout_fix_summary"
-            android:title="@string/use_layout_fix_title"
-            android:defaultValue="true" />
-        -->
 
         <ListPreference android:key="force_variant"
             android:title="@string/title_force_variant"
             android:summary="@string/automatic"
             android:entries="@array/variants"
             android:defaultValue="" />
+
+
 
 	    <PreferenceScreen android:key="hacks"
 	        android:title="@string/hacks_title"
@@ -76,19 +63,23 @@
 	            android:defaultValue="false"
 	            android:enabled="@bool/is_sdk_ge_19" />
 
-	        <!--
-	        <CheckBoxPreference android:key="use_hack_pm_crash"
-	            android:title="@string/use_hack_pm_crash_title"
-	            android:summary="@string/use_hack_pm_crash_summary"
-	            android:defaultValue="false" />
-
-
-	        <CheckBoxPreference android:key="use_hack_gms_location"
-	            android:title="use_hack_gms_location"
-	            android:defaultValue="false" />
-	         -->
-
     	</PreferenceScreen>
+
+       <PreferenceScreen
+            android:title="@string/import_export_title"
+            android:summary="@string/import_export_summary">
+
+            <Preference android:key="backup_create"
+                android:title="@string/backup_create_title" />
+
+            <Preference android:key="backup_restore"
+                android:title="@string/backup_restore_title" />
+
+            <Preference android:key="backup_file"
+                android:title="@string/backup_file_title"
+                android:enabled="false" />
+
+        </PreferenceScreen>
    
     </PreferenceCategory>
     

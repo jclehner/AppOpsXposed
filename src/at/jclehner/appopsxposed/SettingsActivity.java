@@ -71,26 +71,6 @@ public class SettingsActivity extends Activity
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		menu.add("Test backup").setOnMenuItemClickListener(new OnMenuItemClickListener()
-		{
-			@Override
-			public boolean onMenuItemClick(MenuItem item)
-			{
-				Backup.create(SettingsActivity.this);
-				return true;
-			}
-		});
-		menu.add("Test restore").setOnMenuItemClickListener(new OnMenuItemClickListener()
-		{
-			@Override
-			public boolean onMenuItemClick(MenuItem item)
-			{
-				Backup.restore(SettingsActivity.this);
-				return true;
-			}
-		});
-
-
 		if(Util.isSystemApp(this))
 		{
 			menu.add(R.string.uninstall)
@@ -309,20 +289,39 @@ public class SettingsActivity extends Activity
 				}
 			});
 
-			final String[] iconKeys = { "icon_appinfo", "icon_settings" };
-			for(String iconKey : iconKeys)
+			String[] keys = { "icon_appinfo", "icon_settings" };
+			for(String key : keys)
 			{
-				p = findPreference(iconKey);
+				p = findPreference(key);
 				((IconPreference) p).setIcons(Constants.ICONS);
-				p.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			}
+
+			keys = new String[] { "backup_create", "backup_restore" };
+			for(String key: keys)
+			{
+				p = findPreference(key);
+				p.setOnPreferenceClickListener(new OnPreferenceClickListener()
+				{
 					@Override
-					public boolean onPreferenceChange(Preference preference, Object newValue)
+					public boolean onPreferenceClick(Preference preference)
 					{
-						Toast.makeText(getActivity(), R.string.must_reboot_device, Toast.LENGTH_SHORT).show();
+						final boolean success;
+
+						if("backup_create".equals(preference.getKey()))
+							success = Backup.create(getActivity());
+						else
+							success = Backup.restore(getActivity());
+
+						Toast.makeText(getActivity(), success ? R.string.success
+								: R.string.failed, Toast.LENGTH_SHORT).show();
+
 						return true;
 					}
 				});
 			}
+
+			p = findPreference("backup_file");
+			p.setSummary(Html.fromHtml("<tt><small>" + Backup.getFile(getActivity()) + "</small></tt>"));
 		}
 
 		private void callOnChangeListenerWithCurrentValue(Preference p)
