@@ -2,10 +2,8 @@ package at.jclehner.appopsxposed;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.preference.Preference;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -119,7 +117,10 @@ public class IconPreference extends Preference implements AdapterView.OnItemSele
 		@Override
 		public View getDropDownView(int position, View convertView, ViewGroup parent)
 		{
-			return getView(position, null, R.layout.icon_dropdown);
+			final View v = getView(position, null, R.layout.icon_dropdown);
+			v.setBackgroundResource(position != mValue ? R.drawable.checkerboard
+					: R.drawable.checkerboard_framed);
+			return v;
 		}
 
 		@Override
