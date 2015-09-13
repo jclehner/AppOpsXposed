@@ -39,7 +39,7 @@ import at.jclehner.appopsxposed.util.Util;
  * accessed via reflection from AppOpsManagerWrapper (e.g.
  * "call_phone" -> "OP_" + "call_phone".toUpperCase())
  */
-public class ImportExport
+public class Backup
 {
 	public static boolean restore(Context context)
 	{
@@ -127,7 +127,7 @@ public class ImportExport
 		}
 	}
 
-	public static boolean export(Context context)
+	public static boolean create(Context context)
 	{
 		FileOutputStream stream = null;
 

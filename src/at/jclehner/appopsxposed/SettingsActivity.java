@@ -49,8 +49,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.io.IOException;
-
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.OpsLabelHelper;
 import at.jclehner.appopsxposed.util.Util;
@@ -78,7 +76,7 @@ public class SettingsActivity extends Activity
 			@Override
 			public boolean onMenuItemClick(MenuItem item)
 			{
-				ImportExport.export(SettingsActivity.this);
+				Backup.create(SettingsActivity.this);
 				return true;
 			}
 		});
@@ -87,7 +85,7 @@ public class SettingsActivity extends Activity
 			@Override
 			public boolean onMenuItemClick(MenuItem item)
 			{
-				ImportExport.restore(SettingsActivity.this);
+				Backup.restore(SettingsActivity.this);
 				return true;
 			}
 		});
