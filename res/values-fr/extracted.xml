@@ -72,7 +72,7 @@
   <string name="app_ops_labels_write_call_log">Modifier le journal d\'appels</string>
   <string name="app_ops_labels_read_calendar">Voir le calendrier</string>
   <string name="app_ops_labels_write_calendar">Modifier le calendrier</string>
-  <string name="app_ops_labels_notification_toast">Notification/Toast</string>
+  <string name="app_ops_labels_post_notification">Notification/Toast</string>
   <string name="app_ops_labels_call_phone">Appel téléphonique</string>
   <string name="app_ops_labels_read_sms">Voir SMS DB</string>
   <string name="app_ops_labels_write_sms">Écrire SMS DB</string>

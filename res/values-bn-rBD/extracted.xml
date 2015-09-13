@@ -60,7 +60,7 @@
   <string name="app_ops_labels_write_call_log">কল লগ পরিবর্তন করুন</string>
   <string name="app_ops_labels_read_calendar">পঞ্জিকা দেখুন</string>
   <string name="app_ops_labels_write_calendar">পঞ্জিকা পরিবর্তন করুন</string>
-  <string name="app_ops_labels_notification_toast">নোটিফিকেশন/টোস্ট</string>
+  <string name="app_ops_labels_post_notification">নোটিফিকেশন/টোস্ট</string>
   <string name="app_ops_labels_call_phone">ফোন কল</string>
   <string name="app_ops_labels_read_sms">এসএমএস ডিবিতে প্রবেশাধিকার</string>
   <string name="app_ops_labels_write_sms">এসএমএস ডিবি লিখার অনুমতি</string>

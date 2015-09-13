@@ -72,7 +72,7 @@
   <string name="app_ops_labels_write_call_log">Зміна списку дзвінків</string>
   <string name="app_ops_labels_read_calendar">Читання даних календаря</string>
   <string name="app_ops_labels_write_calendar">Зміна даних календаря</string>
-  <string name="app_ops_labels_notification_toast">Вивід повідомлення</string>
+  <string name="app_ops_labels_post_notification">Вивід повідомлення</string>
   <string name="app_ops_labels_call_phone">Телефонний дзвінок</string>
   <string name="app_ops_labels_read_sms">Читання БД SMS-повідомлень</string>
   <string name="app_ops_labels_write_sms">Запис БД SMS-повідомлень</string>

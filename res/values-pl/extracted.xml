@@ -72,7 +72,7 @@
   <string name="app_ops_labels_write_call_log">Edytowanie rejestru połączeń</string>
   <string name="app_ops_labels_read_calendar">Czytanie kalendarza</string>
   <string name="app_ops_labels_write_calendar">Modyfikowanie kalendarza</string>
-  <string name="app_ops_labels_notification_toast">Powiadomienie/Toast</string>
+  <string name="app_ops_labels_post_notification">Powiadomienie/Toast</string>
   <string name="app_ops_labels_call_phone">Wykonywanie połączeń</string>
   <string name="app_ops_labels_read_sms">Odczytywanie bazy SMS</string>
   <string name="app_ops_labels_write_sms">Edytowanie bazy SMS</string>

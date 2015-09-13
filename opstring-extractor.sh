@@ -13,6 +13,7 @@ PATTERNS=(
 	's/_auto_start/_boot_completed/g'
 	's/_audio_focus/_take_audio_focus/g'
 	's/_notification"/_post_notification"/g'
+	's/_notification_toast/_post_notification/g'
 	's/_draw_on_top/_system_alert_window/g'
 	's/_media_buttons/_take_media_buttons/g'
 	's/_(labels|summaries)_(.*?)_volume/_$1_audio_$2_volume/g'

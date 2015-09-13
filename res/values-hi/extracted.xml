@@ -72,7 +72,7 @@
   <string name="app_ops_labels_write_call_log">कॉल लॉग को परिवर्तित करें</string>
   <string name="app_ops_labels_read_calendar">कैलेंडर को पढ़ें</string>
   <string name="app_ops_labels_write_calendar">कैलेंडर को परिवर्तित करें</string>
-  <string name="app_ops_labels_notification_toast">अधिसूचना/टोस्ट</string>
+  <string name="app_ops_labels_post_notification">अधिसूचना/टोस्ट</string>
   <string name="app_ops_labels_call_phone">फ़ोन को कॉल करें</string>
   <string name="app_ops_labels_read_sms">एसएमएस डेटाबेस को पढ़ें</string>
   <string name="app_ops_labels_write_sms">एसएमएस डेटाबेस में लिखें</string>

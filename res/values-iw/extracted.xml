@@ -72,7 +72,7 @@
   <string name="app_ops_labels_write_call_log">שנה יומן שיחות</string>
   <string name="app_ops_labels_read_calendar">קרא יומן</string>
   <string name="app_ops_labels_write_calendar">שנה לוח שנה</string>
-  <string name="app_ops_labels_notification_toast">פרסם התראה</string>
+  <string name="app_ops_labels_post_notification">פרסם התראה</string>
   <string name="app_ops_labels_call_phone">חיוג למכשיר הטלפון</string>
   <string name="app_ops_labels_read_sms">‏קבל SMS/MMS</string>
   <string name="app_ops_labels_write_sms">‏שלח SMS/MMS</string>

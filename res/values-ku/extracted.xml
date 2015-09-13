@@ -60,7 +60,7 @@
   <string name="app_ops_labels_write_call_log">لابردنی تۆماری ته‌له‌فۆن</string>
   <string name="app_ops_labels_read_calendar">خوێندنه‌وه‌ی ڕۆژمێر</string>
   <string name="app_ops_labels_write_calendar">لابردنی ڕۆژمێر</string>
-  <string name="app_ops_labels_notification_toast">ڕۆژمێر/تۆست</string>
+  <string name="app_ops_labels_post_notification">ڕۆژمێر/تۆست</string>
   <string name="app_ops_labels_call_phone">ته‌له‌فۆن</string>
   <string name="app_ops_labels_read_sms">خوێندنه‌وه‌ی SMS DB</string>
   <string name="app_ops_labels_write_sms">نوسینی SMS DB</string>

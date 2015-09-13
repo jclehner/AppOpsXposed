@@ -72,7 +72,7 @@
   <string name="app_ops_labels_write_call_log">Модификуј евиденцију позива</string>
   <string name="app_ops_labels_read_calendar">Прочитај календар</string>
   <string name="app_ops_labels_write_calendar">Модификуј календар</string>
-  <string name="app_ops_labels_notification_toast">Обавештење/Искачући прозор</string>
+  <string name="app_ops_labels_post_notification">Обавештење/Искачући прозор</string>
   <string name="app_ops_labels_call_phone">Телефонски позив</string>
   <string name="app_ops_labels_read_sms">Прочитај SMS DB</string>
   <string name="app_ops_labels_write_sms">Напиши SMS DB</string>

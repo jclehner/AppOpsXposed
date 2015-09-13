@@ -60,7 +60,7 @@
   <string name="app_ops_labels_write_call_log">Modifiera samtalslista</string>
   <string name="app_ops_labels_read_calendar">Läsa kalender</string>
   <string name="app_ops_labels_write_calendar">Modifiera kalender</string>
-  <string name="app_ops_labels_notification_toast">Avisering/Bubbla</string>
+  <string name="app_ops_labels_post_notification">Avisering/Bubbla</string>
   <string name="app_ops_labels_call_phone">Ringa telefon</string>
   <string name="app_ops_labels_read_sms">Läsa SMS DB</string>
   <string name="app_ops_labels_write_sms">Skriva till SMS DB</string>

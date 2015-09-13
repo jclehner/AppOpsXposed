@@ -72,7 +72,7 @@
   <string name="app_ops_labels_write_call_log">통화 기록 수정</string>
   <string name="app_ops_labels_read_calendar">일정 읽기</string>
   <string name="app_ops_labels_write_calendar">일정 수정</string>
-  <string name="app_ops_labels_notification_toast">알림/토스트</string>
+  <string name="app_ops_labels_post_notification">알림/토스트</string>
   <string name="app_ops_labels_call_phone">전화 걸기</string>
   <string name="app_ops_labels_read_sms">SMS DB 읽기</string>
   <string name="app_ops_labels_write_sms">SMS DB 쓰기</string>

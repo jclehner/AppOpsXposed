@@ -72,7 +72,7 @@
   <string name="app_ops_labels_write_call_log">Arama kaydını düzenle</string>
   <string name="app_ops_labels_read_calendar">Takvimi oku</string>
   <string name="app_ops_labels_write_calendar">Takvimi düzenle</string>
-  <string name="app_ops_labels_notification_toast">Bildirim gönder</string>
+  <string name="app_ops_labels_post_notification">Bildirim gönder</string>
   <string name="app_ops_labels_call_phone">Arama yap</string>
   <string name="app_ops_labels_read_sms">SMS VT oku</string>
   <string name="app_ops_labels_write_sms">SMS VT oku</string>

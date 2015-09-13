@@ -72,7 +72,7 @@
   <string name="app_ops_labels_write_call_log">Muokkaa puhelulokia</string>
   <string name="app_ops_labels_read_calendar">Lue kalenteria</string>
   <string name="app_ops_labels_write_calendar">Muokkaa kalenteria</string>
-  <string name="app_ops_labels_notification_toast">Ilmoitus/Toast-ilmoitus</string>
+  <string name="app_ops_labels_post_notification">Ilmoitus/Toast-ilmoitus</string>
   <string name="app_ops_labels_call_phone">Soita puhelimella</string>
   <string name="app_ops_labels_read_sms">Lue SMS DB</string>
   <string name="app_ops_labels_write_sms">Kirjoita SMS DB</string>

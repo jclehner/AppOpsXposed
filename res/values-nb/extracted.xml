@@ -72,7 +72,7 @@
   <string name="app_ops_labels_write_call_log">Endre samtaleloggen</string>
   <string name="app_ops_labels_read_calendar">Les kalender</string>
   <string name="app_ops_labels_write_calendar">Endre kalender</string>
-  <string name="app_ops_labels_notification_toast">Varsling/Toast</string>
+  <string name="app_ops_labels_post_notification">Varsling/Toast</string>
   <string name="app_ops_labels_call_phone">Ringe</string>
   <string name="app_ops_labels_read_sms">Les SMS DB</string>
   <string name="app_ops_labels_write_sms">Skriv SMS DB</string>

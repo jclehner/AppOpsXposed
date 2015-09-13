@@ -72,7 +72,7 @@
   <string name="app_ops_labels_write_call_log">Změnit seznam hovorů</string>
   <string name="app_ops_labels_read_calendar">Čtení kalendáře</string>
   <string name="app_ops_labels_write_calendar">Změnit kalendář</string>
-  <string name="app_ops_labels_notification_toast">Vytvořit upozornění</string>
+  <string name="app_ops_labels_post_notification">Vytvořit upozornění</string>
   <string name="app_ops_labels_call_phone">Volání</string>
   <string name="app_ops_labels_read_sms">Čtení SMS</string>
   <string name="app_ops_labels_write_sms">Vytvoření SMS</string>

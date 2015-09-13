@@ -72,7 +72,7 @@
   <string name="app_ops_labels_write_call_log">Anrufliste ändern</string>
   <string name="app_ops_labels_read_calendar">Kalender lesen</string>
   <string name="app_ops_labels_write_calendar">Kalender ändern</string>
-  <string name="app_ops_labels_notification_toast">Benachrichtigung posten</string>
+  <string name="app_ops_labels_post_notification">Benachrichtigung posten</string>
   <string name="app_ops_labels_call_phone">Telefonieren</string>
   <string name="app_ops_labels_read_sms">SMS-Datenbank lesen</string>
   <string name="app_ops_labels_write_sms">SMS-Datenbank schreiben</string>

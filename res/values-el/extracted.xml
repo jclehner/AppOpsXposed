@@ -72,7 +72,7 @@
   <string name="app_ops_labels_write_call_log">Τροποποίηση αρχείου κλήσεων</string>
   <string name="app_ops_labels_read_calendar">Ανάγνωση ημερολογίου</string>
   <string name="app_ops_labels_write_calendar">Τροποποίηση ημερολογίου</string>
-  <string name="app_ops_labels_notification_toast">Ειδοποίηση/μήνυμα στην οθόνη</string>
+  <string name="app_ops_labels_post_notification">Ειδοποίηση/μήνυμα στην οθόνη</string>
   <string name="app_ops_labels_call_phone">Κλήση τηλεφώνου</string>
   <string name="app_ops_labels_read_sms">Ανάγνωση βάσης δεδομένων SMS</string>
   <string name="app_ops_labels_write_sms">Τροποποίηση βάσης δεδομένων SMS</string>

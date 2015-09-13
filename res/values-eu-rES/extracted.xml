@@ -55,7 +55,7 @@
   <string name="app_ops_labels_write_call_log">Dei erregistroa editatu</string>
   <string name="app_ops_labels_read_calendar">Egutegia irakurri</string>
   <string name="app_ops_labels_write_calendar">Egutegia aldatu</string>
-  <string name="app_ops_labels_notification_toast">jakinarazpena/Mezua</string>
+  <string name="app_ops_labels_post_notification">jakinarazpena/Mezua</string>
   <string name="app_ops_labels_call_phone">Deitu</string>
   <string name="app_ops_labels_read_sms">SMSak irakurri</string>
   <string name="app_ops_labels_write_sms">SMSak idatzi</string>

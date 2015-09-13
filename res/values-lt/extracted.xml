@@ -72,7 +72,7 @@
   <string name="app_ops_labels_write_call_log">Keisti skambučių žurnalą</string>
   <string name="app_ops_labels_read_calendar">Skaityti kalendorių</string>
   <string name="app_ops_labels_write_calendar">Keisti kalendorių</string>
-  <string name="app_ops_labels_notification_toast">Paskelbti pranešimą</string>
+  <string name="app_ops_labels_post_notification">Paskelbti pranešimą</string>
   <string name="app_ops_labels_call_phone">Skambinti į telefoną</string>
   <string name="app_ops_labels_read_sms">Skaityti SMS DB</string>
   <string name="app_ops_labels_write_sms">Rašyti SMS DB</string>
