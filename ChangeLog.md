@@ -1,5 +1,6 @@
 ### 1.29
-* Add option to customize icons used
+* Add option to customize appearance (theme, icons)
+* Add option to export/import app restrictions
 * AOX now displays notifications on app installs/updates,
   launching the AppOps screen for that particular app
 
