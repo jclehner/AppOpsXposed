@@ -18,8 +18,11 @@
 
 package at.jclehner.appopsxposed.hacks;
 
+import android.os.Build;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.jar.Manifest;
 
 import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.Hack;
@@ -29,6 +32,7 @@ import at.jclehner.appopsxposed.util.XUtils;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
+import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 
@@ -41,6 +45,26 @@ public class PackageManagerHacks extends Hack
 		grantAppOpsPermissionsToSelf();
 		// FIXME move to a separate hack or rename this hack
 		fixVerifyOpCrash();
+	}
+
+	@Override
+	protected void handleLoadAnyPackage(LoadPackageParam lpparam) throws Throwable
+	{
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+			return;
+
+		// On <= KitKat, opToPermission(OP_POST_NOTIFICATION) returns a WiFi permission
+		XposedHelpers.findAndHookMethod("android.app.AppOpsManager", lpparam.classLoader,
+				"opToPermission", int.class, new XC_MethodHook() {
+					@Override
+					protected void afterHookedMethod(MethodHookParam param) throws Throwable
+					{
+						if(AppOpsManagerWrapper.OP_POST_NOTIFICATION != (int) param.args[0])
+							return;
+
+						param.setResult(null);
+					}
+		});
 	}
 
 	@Override
