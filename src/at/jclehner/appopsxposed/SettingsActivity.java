@@ -48,6 +48,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+
+import java.io.IOException;
+
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.OpsLabelHelper;
 import at.jclehner.appopsxposed.util.Util;
@@ -70,6 +73,24 @@ public class SettingsActivity extends Activity
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
+		menu.add("Test export").setOnMenuItemClickListener(new OnMenuItemClickListener()
+		{
+			@Override
+			public boolean onMenuItemClick(MenuItem item)
+			{
+				try
+				{
+					ImportExport.export(SettingsActivity.this);
+				}
+				catch(IOException e)
+				{
+					throw new RuntimeException(e);
+				}
+				return true;
+			}
+		});
+
+
 		if(Util.isSystemApp(this))
 		{
 			menu.add(R.string.uninstall)
