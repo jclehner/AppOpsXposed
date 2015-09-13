@@ -36,7 +36,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 
-public class PackageManagerHacks extends Hack
+public class GeneralHacks extends Hack
 {
 	@Override
 	protected void handleLoadFrameworkPackage(LoadPackageParam lpparam) throws Throwable
