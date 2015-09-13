@@ -58,6 +58,7 @@ public class SettingsActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
+		Util.applyTheme(this);
 		super.onCreate(savedInstanceState);
 		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
 
@@ -322,6 +323,17 @@ public class SettingsActivity extends Activity
 
 			p = findPreference("backup_file");
 			p.setSummary(Html.fromHtml("<tt><small>" + Backup.getFile(getActivity()) + "</small></tt>"));
+
+			p = findPreference("light_theme");
+			p.setOnPreferenceChangeListener(new OnPreferenceChangeListener()
+			{
+				@Override
+				public boolean onPreferenceChange(Preference preference, Object newValue)
+				{
+					getActivity().recreate();
+					return true;
+				}
+			});
 		}
 
 		private void callOnChangeListenerWithCurrentValue(Preference p)

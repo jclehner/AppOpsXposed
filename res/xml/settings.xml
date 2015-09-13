@@ -11,24 +11,32 @@
         android:summary="@string/show_pkg_notifications_summary"
         android:defaultValue="true" />
 
-    <PreferenceScreen android:key="icons"
-        android:title="@string/icons_title"
-        android:summary="@string/icons_summary">
+    <PreferenceScreen
+        android:title="@string/appearance_title"
+        android:summary="@string/appearance_summary">
 
-        <Preference
-            android:title="@string/note_icons_title"
-            android:summary="@string/note_icons_summary"
-            android:enabled="false" />
+        <CheckBoxPreference android:key="light_theme"
+            android:title="@string/light_theme_title"
+            android:summary="@string/light_theme_summary" />
 
-        <at.jclehner.appopsxposed.IconPreference android:key="icon_appinfo"
-            android:title="@string/icon_appinfo_title"
-            android:summary="@string/icon_appinfo_summary"
-            android:defaultValue="0" />
+        <PreferenceCategory android:title="@string/icons">
 
-        <at.jclehner.appopsxposed.IconPreference android:key="icon_settings"
-            android:title="@string/icon_settings_title"
-            android:summary="@string/icon_settings_summary"
-            android:defaultValue="0" />
+            <at.jclehner.appopsxposed.IconPreference android:key="icon_appinfo"
+                android:title="@string/icon_appinfo_title"
+                android:summary="@string/icon_appinfo_summary"
+                android:defaultValue="0" />
+
+            <at.jclehner.appopsxposed.IconPreference android:key="icon_settings"
+                android:title="@string/icon_settings_title"
+                android:summary="@string/icon_settings_summary"
+                android:defaultValue="0" />
+
+            <Preference
+                android:title="@string/note_icons_title"
+                android:summary="@string/note_icons_summary"
+                android:enabled="false" />
+
+        </PreferenceCategory>
 
     </PreferenceScreen>
 

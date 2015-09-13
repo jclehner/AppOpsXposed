@@ -24,6 +24,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import at.jclehner.appopsxposed.util.Constants;
+import at.jclehner.appopsxposed.util.Util;
 
 import com.android.settings.applications.AppOpsCategory;
 import com.android.settings.applications.AppOpsDetails;
@@ -57,6 +58,7 @@ public class AppOpsActivity extends PreferenceActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
+		Util.applyTheme(this);
 		super.onCreate(savedInstanceState);
 		checkForAppOpsPermissions();
 	}

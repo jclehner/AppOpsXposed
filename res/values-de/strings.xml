@@ -73,8 +73,9 @@
 	<string name="package_updated">Aktualisiert</string>
 	<string name="show_pkg_notifications_title">Benachrichtigungen</string>
 	<string name="show_pkg_notifications_summary">Zeige Benachrichtigungen für neu installierte und aktualisierte Apps.</string>
-	<string name="icons_title">Icons</string>
-	<string name="icons_summary">Wähle von AppOpsXposed verwendete Icons.</string>
+	<string name="appearance_title">Design</string>
+	<string name="appearance_summary">Passe das Design von AppOpsXposed an.</string>
+	<string name="icons">Icons</string>
 	<string name="icon_appinfo_title">App-Info</string>
 	<string name="icon_appinfo_summary">Icon für die \"App-Info\"-Ansicht.</string>
 	<string name="icon_settings_title">Settings</string>
@@ -88,4 +89,5 @@
 	<string name="backup_file_title">Datei</string>
 	<string name="failed">Fehlgeschlagen.</string>
 	<string name="success">Erfolgreich.</string>
+	<string name="light_theme_title">Helles Theme</string>
 </resources>

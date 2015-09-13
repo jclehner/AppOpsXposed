@@ -30,6 +30,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
@@ -172,6 +173,16 @@ public final class Util
 	{
 		debug("dumpViewHierarchy: ");
 		dumpViewHierarchyInternal(v, 0);
+	}
+
+	public static void applyTheme(Activity activity)
+	{
+		int themeResId = PreferenceManager.getDefaultSharedPreferences(activity)
+				.getBoolean("light_theme", false)
+				? android.R.style.Theme_DeviceDefault_Light_DarkActionBar
+				: android.R.style.Theme_DeviceDefault;
+
+		activity.setTheme(themeResId);
 	}
 
 	public static Set<String> getClassList(String apkFile, String packageName, boolean getSubPackages)

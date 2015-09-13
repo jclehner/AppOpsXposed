@@ -70,8 +70,9 @@
 	<string name="package_updated">Updated</string>
 	<string name="show_pkg_notifications_title">Notifications</string>
 	<string name="show_pkg_notifications_summary">Show notifications for newly installed and updated apps.</string>
-	<string name="icons_title">Icons</string>
-	<string name="icons_summary">Choose icons used by AppOpsXposed.</string>
+	<string name="appearance_title">Appearance</string>
+	<string name="appearance_summary">Customize appearance of AppOpsXposed.</string>
+	<string name="icons">Icons</string>
 	<string name="icon_appinfo_title">App info</string>
 	<string name="icon_appinfo_summary">Icon used for the \"App info\" screen.</string>
 	<string name="icon_settings_title">Settings</string>
@@ -85,4 +86,6 @@
 	<string name="backup_file_title">File</string>
 	<string name="failed">Failed.</string>
 	<string name="success">Success.</string>
+	<string name="light_theme_title">Light theme</string>
+	<string name="light_theme_summary">@null</string>
 </resources>
