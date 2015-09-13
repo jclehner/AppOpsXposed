@@ -74,7 +74,7 @@ public class Backup
 				// restore phase, but keep parsing so as to validate the
 				// file and not mess up the parser's state.
 
-				boolean skipInfoPrinted = false;
+				boolean wasSkipMsgDisplayed = false;
 
 				while(xml.next() != XmlPullParser.END_DOCUMENT)
 				{
@@ -84,28 +84,27 @@ public class Backup
 					expectStartTag(xml, "op");
 
 					final String opName = expectAttribute(xml, "n");
-					final String modeName = expectAttribute(xml, "m");
+					String modeName = expectAttribute(xml, "m");
 
 					final int op = AppOpsManagerWrapper.opFromName(opName.toUpperCase());
 					final int mode = translateMode(packageName, modeName);
+					modeName = AppOpsManagerWrapper.modeToName(mode).toLowerCase();
 
 					if(AppOpsManagerWrapper.isValidOp(op) && mode != -1)
 					{
 						if(uid != -1)
 						{
 							appOps.setMode(op, uid, packageName, mode);
-							Log.i("AOX:Backup", packageName + ": " + opName + " = " + mode);
+							Log.i("AOX:Backup", packageName + ": " + opName + " = " + modeName);
 						}
-						else if(!skipInfoPrinted)
+						else if(!wasSkipMsgDisplayed)
 						{
 							Log.i("AOX:Backup", packageName + ": not installed; skipping");
-							skipInfoPrinted = true;
+							wasSkipMsgDisplayed = true;
 						}
 					}
 					else
-					{
-						Log.i("AOX:Backup", packageName + ": not restoring op " + opName + " = " + modeName);
-					}
+						Log.i("AOX:Backup", packageName + ": not restoring op " + opName);
 
 					xml.next();
 					expectEndTag(xml, "op");
@@ -278,13 +277,10 @@ public class Backup
 	private static int translateMode(String pkg, String modeName)
 	{
 		final String fieldName = "MODE_" + modeName.toUpperCase();
-		// Do not get this from AppOpsManagerWrapper, because there might be modes
-		// we don't know about. This ensures that the backup is correctly restored,
-		// even though the modes are not yet handled by AOX.
-		final int mode = ObjectWrapper.getStatic(AppOpsManager.class, fieldName, -1);
+		final int mode = ObjectWrapper.getStatic(AppOpsManagerWrapper.class, fieldName, -1);
 		if(mode == -1)
 		{
-			Log.i("AOX:Backup", pkg + ": mode " + modeName + " -> ignored");
+			Log.i("AOX:Backup", pkg + ": unknown mode " + modeName + " -> ignored");
 			return AppOpsManagerWrapper.MODE_IGNORED;
 		}
 
