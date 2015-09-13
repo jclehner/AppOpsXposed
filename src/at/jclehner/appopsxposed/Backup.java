@@ -114,7 +114,7 @@ public class Backup
 
 			return true;
 		}
-		catch(IOException|XmlPullParserException e)
+		catch(IOException|XmlPullParserException|ParseException e)
 		{
 			Log.w("AOX:Backup", e);
 			return false;
