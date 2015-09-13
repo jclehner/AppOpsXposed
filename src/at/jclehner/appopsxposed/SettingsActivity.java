@@ -73,19 +73,21 @@ public class SettingsActivity extends Activity
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		menu.add("Test export").setOnMenuItemClickListener(new OnMenuItemClickListener()
+		menu.add("Test backup").setOnMenuItemClickListener(new OnMenuItemClickListener()
 		{
 			@Override
 			public boolean onMenuItemClick(MenuItem item)
 			{
-				try
-				{
-					ImportExport.export(SettingsActivity.this);
-				}
-				catch(IOException e)
-				{
-					throw new RuntimeException(e);
-				}
+				ImportExport.export(SettingsActivity.this);
+				return true;
+			}
+		});
+		menu.add("Test restore").setOnMenuItemClickListener(new OnMenuItemClickListener()
+		{
+			@Override
+			public boolean onMenuItemClick(MenuItem item)
+			{
+				ImportExport.restore(SettingsActivity.this);
 				return true;
 			}
 		});
