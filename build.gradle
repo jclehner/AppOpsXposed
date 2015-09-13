@@ -1,12 +1,18 @@
-apply plugin: 'com.android.application'
-
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
+        //classpath 'com.android.tools.build:gradle:1.0.0'
+        classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
     }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'com.jakewharton.hugo'
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
