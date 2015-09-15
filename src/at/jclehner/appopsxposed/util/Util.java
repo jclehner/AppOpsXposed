@@ -45,6 +45,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import at.jclehner.appopsxposed.AppOpsActivity;
+import at.jclehner.appopsxposed.BuildConfig;
 import at.jclehner.appopsxposed.LauncherActivity;
 
 import com.android.settings.applications.AppOpsDetails;
@@ -78,7 +79,7 @@ public final class Util
 		}
 	};
 
-	public static int logLevel = 1;
+	public static int logLevel = BuildConfig.DEBUG ? 100 : 1;
 
 	public static void log(Throwable t)
 	{
