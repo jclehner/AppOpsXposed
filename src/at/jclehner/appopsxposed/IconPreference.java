@@ -63,7 +63,7 @@ public class IconPreference extends Preference implements AdapterView.OnItemSele
 	@Override
 	protected Object onGetDefaultValue(TypedArray a, int index)
 	{
-		return a.getIndex(index);
+		return a.getInt(index, 0);
 	}
 
 	@Override
