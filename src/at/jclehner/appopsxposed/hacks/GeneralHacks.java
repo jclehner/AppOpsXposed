@@ -50,21 +50,7 @@ public class GeneralHacks extends Hack
 	@Override
 	protected void handleLoadAnyPackage(LoadPackageParam lpparam) throws Throwable
 	{
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-			return;
-
-		// On <= KitKat, opToPermission(OP_POST_NOTIFICATION) returns a WiFi permission
-		XposedHelpers.findAndHookMethod("android.app.AppOpsManager", lpparam.classLoader,
-				"opToPermission", int.class, new XC_MethodHook() {
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) throws Throwable
-					{
-						if(AppOpsManagerWrapper.OP_POST_NOTIFICATION != (int) param.args[0])
-							return;
-
-						param.setResult(null);
-					}
-		});
+		fixOpPermissions();
 	}
 
 	@Override
@@ -200,6 +186,29 @@ public class GeneralHacks extends Hack
 								log("Eating IllegalArgumentException for op #" + op);
 							}
 						}
+					}
+		});
+	}
+
+	private void fixOpPermissions() throws Throwable
+	{
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+			return;
+
+		// On <= KitKat, the permissions for OP_POST_NOTIFICATION and OP_WIFI_SCAN
+		// are interchanged: OP_POST_NOTIFICATION returns a WiFi permission, whereas
+		// OP_WIFI_SCAN returns null.
+		XposedHelpers.findAndHookMethod(loadClass("android.app.AppOpsManager"),
+				"opToPermission", int.class, new XC_MethodHook() {
+					@Override
+					protected void afterHookedMethod(MethodHookParam param) throws Throwable
+					{
+						final int op = (int) param.args[0];
+
+						if(op == AppOpsManagerWrapper.OP_POST_NOTIFICATION)
+							param.setResult(null);
+						else if(op == AppOpsManagerWrapper.OP_WIFI_SCAN)
+							param.setResult(android.Manifest.permission.ACCESS_WIFI_STATE);
 					}
 		});
 	}

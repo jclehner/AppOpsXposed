@@ -36,6 +36,7 @@ import android.os.Bundle;
 import at.jclehner.appopsxposed.Hack;
 import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
+import at.jclehner.appopsxposed.util.Constants;
 import at.jclehner.appopsxposed.util.OpsLabelHelper;
 import at.jclehner.appopsxposed.util.Res;
 import at.jclehner.appopsxposed.util.Util;
@@ -81,22 +82,11 @@ public class BootCompletedHack extends Hack
 	private static final int OP_POST_NOTIFICATION =
 			XposedHelpers.getStaticIntField(AppOpsManager.class, "OP_POST_NOTIFICATION");
 
-	private static final int OP_READ_CLIPBOARD =
-			XposedHelpers.getStaticIntField(AppOpsManager.class, "OP_READ_CLIPBOARD");
-
-	private static final int OP_WRITE_CLIPBOARD =
-			XposedHelpers.getStaticIntField(AppOpsManager.class, "OP_READ_CLIPBOARD");
-
 
 	private static final int MERGE_TARGET = OP_VIBRATE;
 	private static final int MERGE_SOURCE = OP_POST_NOTIFICATION;
 
 	public static final int OP_BOOT_COMPLETED = MERGE_SOURCE;
-
-	// Not neccessary for our cause, but we can fix an error while we're
-	// at it; see patchFramework() for details
-	private static final int OP_WIFI_SCAN =
-			XposedHelpers.getStaticIntField(AppOpsManager.class, "OP_WIFI_SCAN");
 
 	@Override
 	public void handleLoadSettingsPackage(LoadPackageParam lpparam) throws Throwable
@@ -164,27 +154,6 @@ public class BootCompletedHack extends Hack
 			{
 				debug(e);
 			}
-		}
-
-		// While we're at it, we can also fix the error where
-		// AppOpsManager.opToPermission(OP_WIFI_SCAN) returns null
-
-		if(false)
-		{
-			XposedHelpers.findAndHookMethod(AppOpsManager.class, "opToPermission",
-					int.class, new XC_MethodHook() {
-
-						@Override
-						protected void afterHookedMethod(MethodHookParam param) throws Throwable
-						{
-							if(param.getResult() != null)
-								return;
-
-							final int op = (Integer) param.args[0];
-							if(op == OP_WIFI_SCAN)
-								param.setResult(Manifest.permission.ACCESS_WIFI_STATE);
-						}
-			});
 		}
 	}
 
