@@ -215,8 +215,18 @@ public class AppOpsState {
                     true, }
             );
 
+    private static final int OP_POST_NOTIFICATION;
+
+    static {
+        if (AppOpsManagerWrapper.OP_POST_NOTIFICATION == AppOpsManagerWrapper.OP_BOOT_COMPLETED) {
+            OP_POST_NOTIFICATION = -1;
+        } else {
+            OP_POST_NOTIFICATION = AppOpsManagerWrapper.OP_POST_NOTIFICATION;
+        }
+    }
+
     public static final OpsTemplate DEVICE_TEMPLATE = new OpsTemplate(
-            new int[] { AppOpsManagerWrapper.OP_POST_NOTIFICATION,
+            new int[] { OP_POST_NOTIFICATION,
                     AppOpsManagerWrapper.OP_ACCESS_NOTIFICATIONS,
                     AppOpsManagerWrapper.OP_CALL_PHONE,
                     AppOpsManagerWrapper.OP_WRITE_SETTINGS,
