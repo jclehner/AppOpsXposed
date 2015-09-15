@@ -267,7 +267,9 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 
 	private static int getOpWithPermission(String permission)
 	{
-		for(int op = 0; op < _NUM_OP; ++op)
+		// Must not use _NUM_OP here, has this will causes problems
+		// with static initialization order
+		for(int op = 0; op < getNumOp(); ++op)
 		{
 			if(permission.equals(opToPermission(op)))
 			{
@@ -284,8 +286,7 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 	private static int getBootCompletedOp()
 	{
 		final int op = getOpInt("OP_BOOT_COMPLETED");
-		return op == -1 ? getOpWithPermission(Manifest.permission.RECEIVE_BOOT_COMPLETED)
-				: op;
+		return op == -1 ? getOpWithPermission(Manifest.permission.RECEIVE_BOOT_COMPLETED) : op;
 	}
 
 	private static int getNumOp()
