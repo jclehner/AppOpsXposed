@@ -65,6 +65,8 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	{
 		mModPath = startupParam.modulePath;
 		Res.modRes = XModuleResources.createInstance(mModPath, null);
+		Res.modPrefs = new XSharedPreferences(AppOpsXposed.class.getPackage().getName());
+		Res.modPrefs.makeWorldReadable();
 	}
 
 	@Override
@@ -121,10 +123,6 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 					"isXposedModuleEnabled", XC_MethodReplacement.returnConstant(true));
 		}
 
-		Res.modPrefs = new XSharedPreferences(AppOpsXposed.class.getPackage().getName());
-		Res.modPrefs.makeWorldReadable();
-		//Util.logLevel = Res.modPrefs.getBoolean("verbose_logs", false) ? 2 : 0;
-
 		for(Hack hack : Hack.getAllEnabled(true))
 		{
 			try
@@ -146,8 +144,6 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		final String forceVariant = Res.modPrefs.getString("force_variant", "");
 		if(forceVariant.length() == 0)
 		{
-			log("Trying variants...");
-
 			for(ApkVariant variant : ApkVariant.getAllMatching(lpparam))
 			{
 				final String variantName = "  " + variant.getClass().getSimpleName();
@@ -160,8 +156,8 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 				}
 				catch(Throwable t)
 				{
-					log(variantName + ": [!!]");
-					log(t);
+					Util.debug(variantName + ": [!!]");
+					Util.debug(t);
 				}
 			}
 		}

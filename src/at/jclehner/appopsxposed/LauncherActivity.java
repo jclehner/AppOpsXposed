@@ -120,11 +120,10 @@ public class LauncherActivity extends Activity
 			else if(which == DialogInterface.BUTTON_NEGATIVE)
 				((LauncherActivity) getActivity()).launchAppOpsSummary();
 
-			final SharedPreferences.Editor editor =
-					PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
-
-			editor.putBoolean(KEY_DONT_SHOW_DIALOG, mDontShowAgain)
-					.putBoolean(KEY_IS_FIRST_DIALOG, false).commit();
+			Util.getSharedPrefs(getActivity()).edit()
+					.putBoolean(KEY_DONT_SHOW_DIALOG, mDontShowAgain)
+					.putBoolean(KEY_IS_FIRST_DIALOG, false)
+					.commit();
 		}
 
 		@Override
@@ -147,7 +146,7 @@ public class LauncherActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		mPrefs = Util.getSharedPrefs(this);
 
 		if(!Util.isXposedModuleEnabled())
 		{

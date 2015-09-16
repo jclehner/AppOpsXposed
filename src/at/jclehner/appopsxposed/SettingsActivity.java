@@ -129,9 +129,11 @@ public class SettingsActivity extends Activity
 		@Override
 		public void onCreate(Bundle savedInstanceState)
 		{
-			mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
 			super.onCreate(savedInstanceState);
+
+			getPreferenceManager().setSharedPreferencesMode(MODE_WORLD_READABLE);
+			mPrefs = Util.getSharedPrefs(getActivity());
+
 			addPreferencesFromResource(R.xml.settings);
 			setupPreferences();
 		}

@@ -14,7 +14,6 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 
 import at.jclehner.appopsxposed.util.Util;
 
@@ -23,7 +22,7 @@ public class PackageChangedReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		final SharedPreferences sp = Util.getSharedPrefs(context);
 		if(!sp.getBoolean("show_package_notifications", true))
 			return;
 
