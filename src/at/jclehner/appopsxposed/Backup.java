@@ -141,7 +141,7 @@ public class Backup
 			xml.attribute(null, "v", "1");
 
 			final AppOpsManagerWrapper appOps = AppOpsManagerWrapper.from(context);
-			final List<AppOpsManagerWrapper.PackageOpsWrapper> pows = appOps.getPackagesForOps(null);
+			final List<AppOpsManagerWrapper.PackageOpsWrapper> pows = appOps.getAllPackagesForOps(null);
 
 			if(pows != null)
 			{

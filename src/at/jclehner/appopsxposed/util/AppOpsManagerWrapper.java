@@ -25,6 +25,8 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 
 @TargetApi(19)
 public class AppOpsManagerWrapper extends ObjectWrapper
@@ -114,6 +116,8 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 	// CyanogenMod, Sony ROMs, etc.
 	public static final int MODE_ASK = getOpInt("MODE_ASK");
 
+	private final Context mContext;
+
 	public static AppOpsManagerWrapper from(Context context) {
 		return new AppOpsManagerWrapper(context);
 	}
@@ -121,6 +125,7 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 	@TargetApi(19)
 	private AppOpsManagerWrapper(Context context) {
 		super(context.getSystemService(Context.APP_OPS_SERVICE));
+		mContext = context;
 	}
 
 	public List<PackageOpsWrapper> getOpsForPackage(int uid, String packageName, int[] ops)
@@ -134,6 +139,24 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 	{
 		return PackageOpsWrapper.convertList((List<?>) call(
 				"getPackagesForOps", new Class<?>[] { int[].class }, ops));
+	}
+
+	public List<PackageOpsWrapper> getAllPackagesForOps(int[] ops)
+	{
+		final List<PackageOpsWrapper> pkgs = new ArrayList<>();
+
+		for(PackageInfo pi : mContext.getPackageManager().getInstalledPackages(0))
+		{
+			final List<PackageOpsWrapper> pkg = getOpsForPackage(pi.applicationInfo.uid,
+					pi.packageName, ops);
+
+			if(pkg.size() == 1)
+				pkgs.add(pkg.get(0));
+			else
+				Util.log(pi.packageName + ": pkg.size()=" + pkg.size());
+		}
+
+		return pkgs;
 	}
 
 	public int checkOp(String op, int uid, String packageName)

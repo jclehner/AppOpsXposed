@@ -227,27 +227,30 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 		@Override
 		public List<PackageInfoData> loadInBackground()
 		{
-			final List<PackageInfo> packageInfos = mPm.getInstalledPackages(
-					PackageManager.GET_PERMISSIONS | PackageManager.GET_DISABLED_COMPONENTS);
-
-			if(sOpPerms != null)
-				removeAppsWithoutOps(packageInfos);
-
 			final List<PackageInfoData> data = new ArrayList<PackageInfoData>();
 
-			for(PackageInfo packageInfo : packageInfos)
+			final AppOpsManagerWrapper appOps = AppOpsManagerWrapper.from(getContext());
+			for(PackageOpsWrapper pow : appOps.getAllPackagesForOps(null))
 			{
 				CharSequence label;
+				PackageInfo pi = null;
+
 				try
 				{
-					label = packageInfo.applicationInfo.loadLabel(mPm);
+					pi = mPm.getPackageInfo(pow.getPackageName(), 0);
+					label = pi.applicationInfo.loadLabel(mPm);
 				}
 				catch(Resources.NotFoundException e)
 				{
-					label = packageInfo.packageName;
+					label = pow.getPackageName();
+				}
+				catch(PackageManager.NameNotFoundException e)
+				{
+					continue;
 				}
 
-				data.add(new PackageInfoData(packageInfo, label));
+				if(pi != null && label != null)
+					data.add(new PackageInfoData(pi, label));
 			}
 
 			if(mRemoveAppsWithUnchangedOps)
