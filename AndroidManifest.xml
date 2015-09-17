@@ -110,7 +110,7 @@
         </provider>
 
         <receiver
-            android:name=".PackageChangedReceiver"
+            android:name=".SystemEventReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />

@@ -17,7 +17,7 @@ import android.net.Uri;
 
 import at.jclehner.appopsxposed.util.Util;
 
-public class PackageChangedReceiver extends BroadcastReceiver
+public class SystemEventReceiver extends BroadcastReceiver
 {
 	@Override
 	public void onReceive(Context context, Intent intent)
