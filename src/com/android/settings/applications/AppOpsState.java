@@ -144,6 +144,9 @@ public class AppOpsState {
                     AppOpsManagerWrapper.OP_READ_CALENDAR,
                     AppOpsManagerWrapper.OP_WRITE_CALENDAR,
                     AppOpsManagerWrapper.OP_READ_CLIPBOARD,
+                    AppOpsManagerWrapper.OP_DELETE_CALL_LOG,
+                    AppOpsManagerWrapper.OP_DELETE_CONTACTS,
+                    AppOpsManagerWrapper.OP_ACCESS_XIAOMI_ACCOUNT,
                     AppOpsManagerWrapper.OP_WRITE_CLIPBOARD },
             new boolean[] { true,
                     true,
@@ -167,6 +170,8 @@ public class AppOpsState {
                     AppOpsManagerWrapper.OP_WRITE_ICC_SMS,
                     AppOpsManagerWrapper.OP_SEND_MMS,
                     AppOpsManagerWrapper.OP_READ_MMS,
+                    AppOpsManagerWrapper.OP_DELETE_SMS,
+                    AppOpsManagerWrapper.OP_DELETE_MMS,
                     AppOpsManagerWrapper.OP_WRITE_MMS },
             new boolean[] { true,
                     true,
@@ -196,6 +201,8 @@ public class AppOpsState {
                     AppOpsManagerWrapper.OP_AUDIO_ALARM_VOLUME,
                     AppOpsManagerWrapper.OP_AUDIO_NOTIFICATION_VOLUME,
                     AppOpsManagerWrapper.OP_AUDIO_BLUETOOTH_VOLUME,
+                    AppOpsManagerWrapper.OP_AUDIO_FM_VOLUME,
+                    AppOpsManagerWrapper.OP_AUDIO_MATV_VOLUME,
                     AppOpsManagerWrapper.OP_MUTE_MICROPHONE, },
             new boolean[] { false,
                     true,
@@ -238,6 +245,7 @@ public class AppOpsState {
                     AppOpsManagerWrapper.OP_PROJECT_MEDIA,
                     AppOpsManagerWrapper.OP_ACTIVATE_VPN,
                     AppOpsManagerWrapper.OP_GET_USAGE_STATS,
+                    AppOpsManagerWrapper.OP_EXACT_ALARM,
                     AppOpsManagerWrapper.OP_TOAST_WINDOW, },
             new boolean[] { false,
                     true,
@@ -257,8 +265,10 @@ public class AppOpsState {
             );
 
     public static final OpsTemplate BOOTUP_TEMPLATE = new OpsTemplate(
-            new int[] { AppOpsManagerWrapper.OP_BOOT_COMPLETED },
-            new boolean[] { true }
+            new int[] { AppOpsManagerWrapper.OP_BOOT_COMPLETED,
+                    AppOpsManagerWrapper.OP_AUTO_START },
+            new boolean[] { true,
+                    true }
             );
 
     public static final OpsTemplate[] ALL_TEMPLATES = new OpsTemplate[] {
