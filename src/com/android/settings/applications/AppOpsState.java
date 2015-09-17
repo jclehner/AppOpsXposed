@@ -40,13 +40,11 @@ import android.text.format.DateUtils;
 import android.text.style.StrikethroughSpan;
 import android.util.Log;
 import android.util.SparseArray;
-import at.jclehner.appopsxposed.BuildConfig;
 import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.OpEntryWrapper;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.PackageOpsWrapper;
 import at.jclehner.appopsxposed.util.OpsLabelHelper;
-import at.jclehner.appopsxposed.util.Util;
 
 public class AppOpsState {
     static final String TAG = "AppOpsState";
@@ -426,6 +424,16 @@ public class AppOpsState {
             return mApp.mHasDisallowedOps;
         }
 
+        private static boolean isSwitchChecked(List<OpEntryWrapper> ops, int op) {
+            int opSwitch = AppOpsManagerWrapper.opToSwitch(op);
+            for (OpEntryWrapper wrapper : ops) {
+                if (wrapper.getOp() == opSwitch) {
+                    return AppOpsDetails.modeToChecked(wrapper.getMode());
+                }
+            }
+            return true;
+        }
+
         private CharSequence getCombinedText(Context context, ArrayList<OpEntryWrapper> ops,
                 CharSequence[] items, boolean isSummary) {
             SpannableStringBuilder builder = new SpannableStringBuilder();
@@ -445,7 +453,7 @@ public class AppOpsState {
                     ss = new SpannableString(OpsLabelHelper.getOpLabel(context, op));
                 }
 
-                if (isSummary && ops.get(i).getMode() != AppOpsManagerWrapper.MODE_ALLOWED) {
+                if (isSummary && !isSwitchChecked(ops, op)) {
                     ss.setSpan(new StrikethroughSpan(), 0, ss.length(), 0);
                 }
 

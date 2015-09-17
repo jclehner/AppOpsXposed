@@ -177,7 +177,10 @@ public class AppOpsDetails extends Fragment {
     }
 
     private boolean modeToChecked(int switchOp, PackageOpsWrapper ops) {
-        final int mode = mAppOps.checkOp(switchOp, ops.getUid(), ops.getPackageName());
+       return modeToChecked(mAppOps.checkOp(switchOp, ops.getUid(), ops.getPackageName()));
+    }
+
+    static boolean modeToChecked(int mode) {
         if (mode == AppOpsManagerWrapper.MODE_ALLOWED)
             return true;
         if (mode == AppOpsManagerWrapper.MODE_DEFAULT)

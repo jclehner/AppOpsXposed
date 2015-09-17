@@ -332,7 +332,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 							ssb.append(", ");
 
 						final SpannableString opSummary = new SpannableString(
-								OpsLabelHelper.getOpSummary(getContext(), op.getOp()));
+								OpsLabelHelper.getOpLabel(getContext(), AppOpsManagerWrapper.opToSwitch(op.getOp())));
 						opSummary.setSpan(new StrikethroughSpan(), 0, opSummary.length(), 0);
 						ssb.append(opSummary);
 						hasUnchangedOps = false;
@@ -344,20 +344,6 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 				info.line2 = ssb;
 
 			return hasUnchangedOps;
-		}
-
-		private void removeAppsWithoutOps(List<PackageInfo> data)
-		{
-			Log.i(TAG, "removeAppsWithoutOps: ");
-
-			for(int i = 0; i != data.size(); ++i)
-			{
-				if(!hasAppOps(data.get(i)))
-				{
-					data.remove(i);
-					--i;
-				}
-			}
 		}
 
 		private boolean hasAppOps(PackageInfo info)
