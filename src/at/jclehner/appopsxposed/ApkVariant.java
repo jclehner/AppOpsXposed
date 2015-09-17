@@ -173,6 +173,9 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 			case Constants.ICON_SHIELD_BLACK:
 				return Res.iconShieldBlack;
 
+			case Constants.ICON_SHIELD_CIRCLE:
+				return Res.iconShieldCircle;
+
 			case Constants.ICON_COG_GREY:
 				return Res.iconCogGrey;
 

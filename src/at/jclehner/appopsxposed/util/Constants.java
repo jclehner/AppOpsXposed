@@ -18,7 +18,8 @@ public final class Constants
 			R.drawable.ic_appops_cog_white,
 			R.drawable.ic_appops_cog_circle,
 			R.drawable.ic_appops_black,
-			R.drawable.ic_appops_white
+			R.drawable.ic_appops_white,
+			R.drawable.ic_appops_shield_circle
 	};
 
 	public static final int ICON_LAUNCHER = 0;
@@ -28,6 +29,7 @@ public final class Constants
 	public static final int ICON_COG_CIRCLE = 4;
 	public static final int ICON_SHIELD_BLACK = 5;
 	public static final int ICON_SHIELD_WHITE = 6;
+	public static final int ICON_SHIELD_CIRCLE = 7;
 
 	private Constants() {}
 }

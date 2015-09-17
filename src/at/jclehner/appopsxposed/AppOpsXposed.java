@@ -77,6 +77,7 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 		Res.iconShieldWhite = resparam.res.addResource(Res.modRes, R.drawable.ic_appops_white);
 		Res.iconShieldBlack = resparam.res.addResource(Res.modRes, R.drawable.ic_appops_black);
+		Res.iconShieldCircle = resparam.res.addResource(Res.modRes, R.drawable.ic_appops_shield_circle);
 		Res.iconCogGrey = resparam.res.addResource(Res.modRes, R.drawable.ic_appops_cog_grey);
 		Res.iconLauncher = resparam.res.addResource(Res.modRes, R.drawable.ic_appops_launcher);
 		Res.iconCogBlack = resparam.res.addResource(Res.modRes,R.drawable.ic_appops_cog_black);
