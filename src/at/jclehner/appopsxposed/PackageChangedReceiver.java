@@ -22,6 +22,14 @@ public class PackageChangedReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
+		if(intent.getData() != null && "package".equals(intent.getData().getScheme()))
+			showPackageNotification(context, intent);
+		else if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()))
+			Util.fixPreferencePermissions(context);
+	}
+
+	private void showPackageNotification(Context context, Intent intent)
+	{
 		final SharedPreferences sp = Util.getSharedPrefs(context);
 		if(!sp.getBoolean("show_package_notifications", true))
 			return;
@@ -33,7 +41,7 @@ public class PackageChangedReceiver extends BroadcastReceiver
 
 		final Notification.Builder nb = new Notification.Builder(context);
 		nb.setLargeIcon(drawableToBitmap(pi.applicationInfo.loadIcon(pm)));
-		nb.setSmallIcon(R.drawable.ic_appops_sense);
+		nb.setSmallIcon(R.drawable.ic_appops_cog_white);
 		nb.setContentTitle(context.getString(R.string.package_updated));
 		nb.setContentText(pi.applicationInfo.loadLabel(pm) + " " + pi.versionName);
 		nb.setAutoCancel(true);

@@ -19,6 +19,7 @@
 package at.jclehner.appopsxposed.util;
 
 import java.io.Closeable;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -150,6 +152,16 @@ public final class Util
 			e.printStackTrace();
 			return defValue;
 		}
+	}
+
+	public static void fixPreferencePermissions(Context context)
+	{
+		final String pkg = context.getPackageName();
+		final File f = new File(Environment.getDataDirectory(), "data/" + pkg
+				+ "/shared_prefs/" + pkg + "_preferences.xml");
+
+		if(f.exists() && !f.setReadable(true, false))
+			log("Failed to make preferences file readable: " + f);
 	}
 
 	public static Intent createAppOpsIntent(String packageName)
