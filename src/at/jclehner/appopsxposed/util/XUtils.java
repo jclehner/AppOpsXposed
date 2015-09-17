@@ -1,6 +1,8 @@
 package at.jclehner.appopsxposed.util;
 
 import android.content.pm.ApplicationInfo;
+import android.os.StrictMode;
+
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodHook.Unhook;
 import de.robv.android.xposed.XC_MethodHookRecursive;
@@ -31,6 +33,18 @@ public final class XUtils
 
 		return null;
 	}
+
+	public static void reloadPrefs()
+	{
+		if(Res.modPrefs == null)
+			return;
+
+		final StrictMode.ThreadPolicy tp = StrictMode.getThreadPolicy();
+		StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.LAX);
+		Res.modPrefs.reload();
+		StrictMode.setThreadPolicy(tp);
+	}
+
 
 	public static Unhook findAndHookMethodRecursive(String className, ClassLoader classLoader,
 			String methodName, Object... parameterTypesAndCallback) throws Throwable

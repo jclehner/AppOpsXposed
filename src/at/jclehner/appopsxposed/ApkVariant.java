@@ -57,6 +57,8 @@ import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
+import static at.jclehner.appopsxposed.util.Util.log;
+
 /**
  * Describes a variant of the Settings.apk file.
  * <p>
@@ -126,10 +128,35 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 	{
 		List<ApkVariant> variants = new ArrayList<ApkVariant>();
 
-		for(ApkVariant variant : VARIANTS)
+		final String forceVariant = Res.modPrefs.getString("force_variant", "");
+		if(forceVariant.length() != 0)
 		{
-			if(variant.isMatching(appInfo, classChecker))
-				variants.add(variant);
+			Util.debug("Using forced variant: " + forceVariant);
+			try
+			{
+				final Class<?> variantClazz = Class.forName("at.jclehner.appopsxposed.variants." + forceVariant.replace('.', '$'));
+				variants.add((ApkVariant) variantClazz.newInstance());
+			}
+			catch(ClassNotFoundException e)
+			{
+				Util.log(e);
+			}
+			catch(IllegalAccessException e)
+			{
+				Util.log(e);
+			}
+			catch(InstantiationException e)
+			{
+				Util.log(e);
+			}
+		}
+		else
+		{
+			for(ApkVariant variant : VARIANTS)
+			{
+				if(variant.isMatching(appInfo, classChecker))
+					variants.add(variant);
+			}
 		}
 
 		return variants;

@@ -20,8 +20,11 @@ package at.jclehner.appopsxposed;
 
 import static at.jclehner.appopsxposed.util.Util.log;
 import android.content.res.XModuleResources;
+import android.os.StrictMode;
+
 import at.jclehner.appopsxposed.util.Res;
 import at.jclehner.appopsxposed.util.Util;
+import at.jclehner.appopsxposed.util.XUtils;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
@@ -84,6 +87,8 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		Res.iconCogWhite = resparam.res.addResource(Res.modRes,R.drawable.ic_appops_cog_white);
 		Res.iconCogCircle = resparam.res.addResource(Res.modRes,R.drawable.ic_appops_cog_circle);
 
+		XUtils.reloadPrefs();
+
 		for(ApkVariant variant : ApkVariant.getAllMatching(resparam.packageName))
 		{
 			try
@@ -124,6 +129,8 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 					"isXposedModuleEnabled", XC_MethodReplacement.returnConstant(true));
 		}
 
+		XUtils.reloadPrefs();
+
 		for(Hack hack : Hack.getAllEnabled(true))
 		{
 			try
@@ -142,31 +149,21 @@ public class AppOpsXposed implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 		Res.settingsRes = XModuleResources.createInstance(lpparam.appInfo.sourceDir, null);
 
-		final String forceVariant = Res.modPrefs.getString("force_variant", "");
-		if(forceVariant.length() == 0)
+		for(ApkVariant variant : ApkVariant.getAllMatching(lpparam))
 		{
-			for(ApkVariant variant : ApkVariant.getAllMatching(lpparam))
-			{
-				final String variantName = "  " + variant.getClass().getSimpleName();
+			final String variantName = "  " + variant.getClass().getSimpleName();
 
-				try
-				{
-					variant.handleLoadPackage(lpparam);
-					log(variantName + ": [OK]");
-					break;
-				}
-				catch(Throwable t)
-				{
-					Util.debug(variantName + ": [!!]");
-					Util.debug(t);
-				}
+			try
+			{
+				variant.handleLoadPackage(lpparam);
+				log(variantName + ": [OK]");
+				break;
 			}
-		}
-		else
-		{
-			log("Using forced variant: " + forceVariant);
-			final Class<?> variantClazz = Class.forName("at.jclehner.appopsxposed.variants." + forceVariant.replace('.', '$'));
-			((ApkVariant) variantClazz.newInstance()).handleLoadPackage(lpparam);
+			catch(Throwable t)
+			{
+				Util.debug(variantName + ": [!!]");
+				Util.debug(t);
+			}
 		}
 	}
 }
