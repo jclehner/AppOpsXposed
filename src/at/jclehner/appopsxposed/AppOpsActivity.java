@@ -64,6 +64,13 @@ public class AppOpsActivity extends PreferenceActivity
 	}
 
 	@Override
+	protected void onPause()
+	{
+		super.onPause();
+		Util.fixPreferencePermissions();
+	}
+
+	@Override
 	protected boolean isValidFragment(String fragmentName)
 	{
 		return AppOpsSummary.class.getName().equals(fragmentName)

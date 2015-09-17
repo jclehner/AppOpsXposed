@@ -190,6 +190,13 @@ public class LauncherActivity extends Activity
 		launchAppOpsSummary();
 	}
 
+	@Override
+	protected void onPause()
+	{
+		super.onPause();
+		Util.fixPreferencePermissions();
+	}
+
 	protected Intent onCreateSettingsIntent()
 	{
 		final Intent intent = new Intent();

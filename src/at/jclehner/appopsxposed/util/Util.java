@@ -154,14 +154,17 @@ public final class Util
 		}
 	}
 
-	public static void fixPreferencePermissions(Context context)
+	public static File getPreferenceFile()
 	{
-		final String pkg = context.getPackageName();
-		final File f = new File(Environment.getDataDirectory(), "data/" + pkg
-				+ "/shared_prefs/" + pkg + "_preferences.xml");
+		return new File(Environment.getDataDirectory(), "data/" + Constants.MODULE_PACKAGE
+				+ "/shared_prefs/" + Constants.MODULE_PACKAGE + "_preferences.xml");
+	}
 
+	public static void fixPreferencePermissions()
+	{
+		final File f = getPreferenceFile();
 		if(f.exists() && !f.setReadable(true, false))
-			log("Failed to make preferences file readable: " + f);
+			log("Failed to make preferences file readable");
 	}
 
 	public static Intent createAppOpsIntent(String packageName)

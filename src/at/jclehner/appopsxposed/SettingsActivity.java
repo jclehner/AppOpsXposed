@@ -29,6 +29,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -67,6 +68,13 @@ public class SettingsActivity extends Activity
 			getFragmentManager().beginTransaction().replace(android.R.id.content,
 					new SettingsFragment()).commit();
 		}
+	}
+
+	@Override
+	protected void onPause()
+	{
+		super.onPause();
+		Util.fixPreferencePermissions();
 	}
 
 	@Override
@@ -122,7 +130,8 @@ public class SettingsActivity extends Activity
 		return true;
 	}
 
-	public static class SettingsFragment extends PreferenceFragment implements OnPreferenceChangeListener
+	public static class SettingsFragment extends PreferenceFragment implements
+			OnPreferenceChangeListener, OnSharedPreferenceChangeListener
 	{
 		private SharedPreferences mPrefs;
 
@@ -145,6 +154,12 @@ public class SettingsActivity extends Activity
 			v.findViewById(R.id.xposed_settings_warning).setVisibility(
 					Util.isXposedModuleEnabled() ? View.GONE : View.VISIBLE);
 			return v;
+		}
+
+		@Override
+		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
+		{
+			Util.fixPreferencePermissions();
 		}
 
 		@Override

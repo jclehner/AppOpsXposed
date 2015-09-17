@@ -24,8 +24,6 @@ public class SystemEventReceiver extends BroadcastReceiver
 	{
 		if(intent.getData() != null && "package".equals(intent.getData().getScheme()))
 			showPackageNotification(context, intent);
-		else if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()))
-			Util.fixPreferencePermissions(context);
 	}
 
 	private void showPackageNotification(Context context, Intent intent)
