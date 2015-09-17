@@ -40,6 +40,8 @@ import android.text.format.DateUtils;
 import android.text.style.StrikethroughSpan;
 import android.util.Log;
 import android.util.SparseArray;
+
+import at.jclehner.appopsxposed.BuildConfig;
 import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper.OpEntryWrapper;
@@ -83,13 +85,30 @@ public class AppOpsState {
         }*/
     }
 
+    private static final boolean IGNORE_SHOW_PERMS = true;
+
     public static class OpsTemplate implements Parcelable {
         public final int[] ops;
         public final boolean[] showPerms;
 
         public OpsTemplate(int[] _ops, boolean[] _showPerms) {
             ops = _ops;
-            showPerms = _showPerms;
+            if (!IGNORE_SHOW_PERMS) {
+                showPerms = _showPerms;
+            } else {
+                showPerms = new boolean[ops.length];
+                for (int i = 0; i != ops.length; ++i) {
+                    if (!AppOpsManagerWrapper.isValidOp(ops[i])) {
+                        continue;
+                    }
+                    showPerms[i] = ops[i] == AppOpsManagerWrapper.opToSwitch(ops[i]);
+                    if (BuildConfig.DEBUG && showPerms[i] != _showPerms[i]) {
+                        Log.d("AOX", "Discrepancy in showPerms for "
+                                + AppOpsManagerWrapper.opToName(ops[i]) + ": "
+                                + showPerms[i] + "/" + _showPerms[i]);
+                    }
+                }
+            }
         }
 
         OpsTemplate(Parcel src) {
