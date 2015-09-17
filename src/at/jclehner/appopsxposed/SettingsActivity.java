@@ -336,6 +336,13 @@ public class SettingsActivity extends Activity
 					return true;
 				}
 			});
+
+			if(!BuildConfig.DEBUG)
+			{
+				p = findPreference("dont_group_ops");
+				if(p != null)
+					getPreferenceScreen().removePreference(p);
+			}
 		}
 
 		private void callOnChangeListenerWithCurrentValue(Preference p)

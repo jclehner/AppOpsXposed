@@ -71,6 +71,11 @@
 	            android:defaultValue="false"
 	            android:enabled="@bool/is_sdk_ge_19" />
 
+            <CheckBoxPreference android:key="dont_group_ops"
+	            android:title="Do not group ops"
+	            android:summary="More fine grained control over ops"
+	            android:defaultValue="false" />
+
     	</PreferenceScreen>
 
        <PreferenceScreen

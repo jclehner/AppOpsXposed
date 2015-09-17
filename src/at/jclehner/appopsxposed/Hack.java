@@ -26,6 +26,7 @@ import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.Context;
 import at.jclehner.appopsxposed.hacks.BootCompletedHack;
+import at.jclehner.appopsxposed.hacks.DontGroupOpsHack;
 import at.jclehner.appopsxposed.hacks.FixOpsPruneHack;
 import at.jclehner.appopsxposed.hacks.FixWakeLock;
 import at.jclehner.appopsxposed.hacks.GeneralHacks;
@@ -61,6 +62,7 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 		new FixWakeLock(),
 		new FixOpsPruneHack(),
 		//new GmsLocationHack(),
+		BuildConfig.DEBUG ? new DontGroupOpsHack() : null,
 		new GeneralHacks()
 	};
 
@@ -76,6 +78,9 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 
 		for(Hack hack : HACKS)
 		{
+			if(hack == null)
+				continue;
+
 			if(Res.modPrefs.getBoolean(hack.getKey(), hack.isEnabledByDefault()))
 			{
 				hacks.add(hack);
