@@ -25,6 +25,7 @@ import android.preference.PreferenceActivity;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -126,6 +127,10 @@ public class AppOpsSummary extends Fragment {
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             tabs.setTabIndicatorColorResource(android.R.color.holo_blue_light);
+        } else {
+            final TypedValue val = new TypedValue();
+            getActivity().getTheme().resolveAttribute(android.R.attr.colorAccent, val, true);
+            tabs.setTabIndicatorColor(val.data);
         }
 
         // We have to do this now because PreferenceFrameLayout looks at it
