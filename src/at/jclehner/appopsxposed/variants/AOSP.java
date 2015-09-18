@@ -85,6 +85,7 @@ public class AOSP extends ApkVariant
 		});
 	}
 
+	@SuppressWarnings("RawTypes")
 	private void addAppOpsDashboardTile(LoadPackageParam lpparam) throws Throwable
 	{
 		final Class<?> tileClazz = lpparam.classLoader.loadClass(
