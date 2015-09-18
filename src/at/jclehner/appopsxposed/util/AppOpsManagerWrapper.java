@@ -293,12 +293,12 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		{
 			if(permission.equals(opToPermission(op)))
 			{
-				Util.debug("Found op #" + op + " with permission " + permission);
+				//Util.debug("Found op #" + op + " with permission " + permission);
 				return op;
 			}
 		}
 
-		Util.debug("No op found for permission " + permission);
+		//Util.debug("No op found for permission " + permission);
 
 		return -1;
 	}

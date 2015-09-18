@@ -193,34 +193,4 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 
 		return mLogTag;
 	}
-
-	@TargetApi(19)
-	private static Method findCheckOp()
-	{
-		try
-		{
-			return XposedHelpers.findMethodExact(AppOpsManager.class, "checkOp",
-					int.class, int.class, String.class);
-		}
-		catch(Throwable t)
-		{
-			Util.log("AppOpsManager.checkOp not available");
-			return null;
-		}
-	}
-
-	@TargetApi(19)
-	private static Method findNoteOp()
-	{
-		try
-		{
-			return XposedHelpers.findMethodExact(AppOpsManager.class, "noteOp",
-					int.class, int.class, String.class);
-		}
-		catch(Throwable t)
-		{
-			Util.log("AppOpsManager.noteOp not available");
-			return null;
-		}
-	}
 }
