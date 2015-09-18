@@ -136,6 +136,8 @@ public class AOSP extends ApkVariant
 										{
 											XposedHelpers.callMethod(category, "addTile", tile);
 										}
+
+										break;
 									}
 									catch(Throwable t)
 									{
