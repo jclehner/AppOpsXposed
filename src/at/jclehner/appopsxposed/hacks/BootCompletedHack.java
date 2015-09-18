@@ -88,11 +88,6 @@ public class BootCompletedHack extends Hack
 
 	public static final int OP_BOOT_COMPLETED = MERGE_SOURCE;
 
-	static
-	{
-		AppOpsManagerWrapper.OP_BOOT_COMPLETED = OP_BOOT_COMPLETED;
-	}
-
 	@Override
 	public void handleLoadSettingsPackage(LoadPackageParam lpparam) throws Throwable
 	{

@@ -103,7 +103,10 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 	public static final int OP_EXACT_ALARM = getOpInt("OP_EXACT_ALARM");
 	public static final int OP_ACCESS_XIAOMI_ACCOUNT = getOpInt("OP_ACCESS_XIAOMI_ACCOUNT");
 
-	public static /*final*/ int OP_BOOT_COMPLETED = getBootCompletedOp();
+	/**
+	 * @deprecated In module code, use #getBootCompletedOp() instead!
+	 */
+	public static final int OP_BOOT_COMPLETED = getBootCompletedOp();
 
 	public static final int _NUM_OP = getNumOp();
 
@@ -261,12 +264,6 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		return "mode #" + mode;
 	}
 
-	public static boolean isBootCompletedHackEnabled()
-	{
-		return AppOpsManagerWrapper.OP_BOOT_COMPLETED ==
-				AppOpsManagerWrapper.OP_POST_NOTIFICATION;
-	}
-
 	public static boolean hasTrueBootCompletedOp() {
 		return getOpInt("OP_BOOT_COMPLETED") != -1;
 	}
@@ -306,7 +303,7 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		return -1;
 	}
 
-	private static int getBootCompletedOp()
+	public static int getBootCompletedOp()
 	{
 		final int op = getOpInt("OP_BOOT_COMPLETED");
 		return op == -1 ? getOpWithPermission(Manifest.permission.RECEIVE_BOOT_COMPLETED) : op;

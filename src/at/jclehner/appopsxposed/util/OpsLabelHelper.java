@@ -68,7 +68,8 @@ public class OpsLabelHelper
 	private static String[] getOpLabelsOrSummaries(Context context, boolean getLabels)
 	{
 		final SparseArray<String> strings = new SparseArray<String>();
-		final boolean hasFakeBootCompleted = AppOpsManagerWrapper.isBootCompletedHackEnabled();
+		final boolean hasFakeBootCompleted = AppOpsManagerWrapper.OP_POST_NOTIFICATION
+				== AppOpsManagerWrapper.getBootCompletedOp();
 		int maxOp = 0;
 
 		Log.d("AOX", "getOpLabelsOrSummaries: hasFakeBootCompleted=" + hasFakeBootCompleted);
