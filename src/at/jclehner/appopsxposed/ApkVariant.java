@@ -192,32 +192,11 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 	{
 		Res.modPrefs.reload();
 
-		switch(Res.modPrefs.getInt("icon_settings", getDefaultAppOpsHeaderIcon()))
-		{
-			case Constants.ICON_SHIELD_WHITE:
-				return Res.iconShieldWhite;
+		int icon = Res.modPrefs.getInt("icon_settings", getDefaultAppOpsHeaderIcon());
+		if(icon < 0 || icon >= Constants.ICONS.length)
+			icon = Constants.ICON_LAUNCHER;
 
-			case Constants.ICON_SHIELD_BLACK:
-				return Res.iconShieldBlack;
-
-			case Constants.ICON_SHIELD_CIRCLE:
-				return Res.iconShieldCircle;
-
-			case Constants.ICON_COG_GREY:
-				return Res.iconCogGrey;
-
-			case Constants.ICON_COG_WHITE:
-				return Res.iconCogWhite;
-
-			case Constants.ICON_COG_BLACK:
-				return Res.iconCogBlack;
-
-			case Constants.ICON_COG_CIRCLE:
-				return Res.iconCogCircle;
-
-			default:
-				return Res.iconLauncher;
-		}
+		return Res.icons[icon];
 	}
 
 	protected int getDefaultAppOpsHeaderIcon() {

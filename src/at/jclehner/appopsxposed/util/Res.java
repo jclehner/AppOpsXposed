@@ -7,14 +7,7 @@ import at.jclehner.appopsxposed.R;
 
 public class Res
 {
-	public static int iconLauncher = 0;
-	public static int iconShieldWhite = 0;
-	public static int iconShieldBlack = 0;
-	public static int iconShieldCircle = 0;
-	public static int iconCogGrey = 0;
-	public static int iconCogWhite = 0;
-	public static int iconCogBlack = 0;
-	public static int iconCogCircle = 0;
+	public static int[] icons = new int[Constants.ICONS.length];
 
 	public static XModuleResources settingsRes;
 	public static XModuleResources modRes;

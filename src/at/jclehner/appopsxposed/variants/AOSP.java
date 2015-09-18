@@ -47,7 +47,8 @@ public class AOSP extends ApkVariant
 
 	@Override
 	protected int getDefaultAppOpsHeaderIcon() {
-		return Constants.ICON_SHIELD_WHITE;
+		return Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP
+				? Constants.ICON_SHIELD_WHITE : Constants.ICON_SHIELD_TEAL;
 	}
 
 	private void addAppOpsHeader(LoadPackageParam lpparam)
