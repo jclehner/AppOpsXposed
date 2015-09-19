@@ -17,7 +17,8 @@
 
         <CheckBoxPreference android:key="light_theme"
             android:title="@string/light_theme_title"
-            android:summary="@string/light_theme_summary" />
+            android:summary="@string/light_theme_summary"
+            android:defaultValue="@bool/theme_default_is_light" />
 
         <PreferenceCategory android:title="@string/icons">
 

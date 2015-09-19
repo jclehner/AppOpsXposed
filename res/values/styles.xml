@@ -7,4 +7,5 @@
     <style name="IconSpinner">
         <item name="android:background">#ccc</item>
     </style>
+    <style name="DefaultTheme" parent="@android:style/Theme.DeviceDefault" />
 </resources>
