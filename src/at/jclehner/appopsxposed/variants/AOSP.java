@@ -115,8 +115,8 @@ public class AOSP extends ApkVariant
 
 								// Try three approaches: addTile(int, DashboardTile) may not be
 								// available, so we try to add it to the list managed by this
-								// DashboardCategory. If that fails, addTile() should work, but
-								// adds our entry at the end of the list.
+								// DashboardCategory. If that fails, addTile(DashBoardTile)
+								// should work, but adds our entry at the end of the list.
 
 								for(int i = 0; i != 3; ++i)
 								{
