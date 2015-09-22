@@ -30,6 +30,7 @@ import at.jclehner.appopsxposed.hacks.DontGroupOpsHack;
 import at.jclehner.appopsxposed.hacks.FixOpsPruneHack;
 import at.jclehner.appopsxposed.hacks.FixWakeLock;
 import at.jclehner.appopsxposed.hacks.GeneralHacks;
+import at.jclehner.appopsxposed.hacks.MiuiHacks;
 import at.jclehner.appopsxposed.util.Res;
 import at.jclehner.appopsxposed.util.Util;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
@@ -63,6 +64,7 @@ public abstract class Hack implements IXposedHookLoadPackage, IXposedHookZygoteI
 		new FixOpsPruneHack(),
 		//new GmsLocationHack(),
 		BuildConfig.DEBUG ? new DontGroupOpsHack() : null,
+		new MiuiHacks(),
 		new GeneralHacks()
 	};
 
