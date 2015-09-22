@@ -19,6 +19,8 @@
 package at.jclehner.appopsxposed.util;
 
 import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.HashMap;
 import java.util.List;
 
 import android.Manifest;
@@ -27,6 +29,7 @@ import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.util.SparseIntArray;
 
 @TargetApi(19)
 public class AppOpsManagerWrapper extends ObjectWrapper
@@ -160,6 +163,48 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		}
 
 		return pkgs;
+	}
+
+	public List<PackageOpsWrapper> getPackagesForOpsMerged(int[] ops)
+	{
+		final HashMap<String, PackageOpsWrapper> pkgMap = new HashMap<>();
+		for(PackageOpsWrapper pkg : getPackagesForOps(ops))
+		{
+			PackageOpsWrapper pow = pkgMap.get(pkg.getPackageName());
+			if(pow == null)
+			{
+				pow = new PackageOpsWrapper(pkg.getPackageName(), pkg.getUid(), pkg.getOps());
+				pkgMap.put(pkg.getPackageName(), pow);
+			}
+			else
+			{
+				Util.debug(pkg.getPackageName() + ": merging uid " + pkg.getUid() + " with " + pow.getUid());
+				mergeOpEntryWrappers(pow.getOps(), pkg.getOps());
+			}
+		}
+
+		return new ArrayList<>(pkgMap.values());
+	}
+
+	public List<PackageOpsWrapper> getAllOpsForPackage(int uid, String packageName, int[] ops)
+	{
+		final List<PackageOpsWrapper> pkgs = getPackagesForOps(ops);
+		final List<PackageOpsWrapper> ret = new ArrayList<>();
+
+		Util.debug("getAllOpsForPackage(" + uid + ", " + packageName + ")");
+
+		for(PackageOpsWrapper pkg : pkgs)
+		{
+			Util.debug("  uid=" + pkg.getUid() + ", pkg=" + pkg.getPackageName()
+					+ ", count=" + pkg.getOps().size());
+			if(packageName.equals(pkg.getPackageName()) || uid == pkg.getUid())
+			{
+				Util.debug("  added to list");
+				ret.add(pkg);
+			}
+		}
+
+		return ret;
 	}
 
 	public int checkOp(String op, int uid, String packageName)
@@ -327,6 +372,19 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		}
 
 		return getOpInt("_NUM_OP");
+	}
+
+	private static void mergeOpEntryWrappers(List<OpEntryWrapper> dest, List<OpEntryWrapper> src)
+	{
+		final BitSet bs = new BitSet(_NUM_OP);
+		for(OpEntryWrapper oew : dest)
+			bs.set(oew.getOp());
+
+		for(OpEntryWrapper oew : src)
+		{
+			if(!bs.get(oew.getOp()))
+				dest.add(oew);
+		}
 	}
 
 	public static class PackageOpsWrapper extends ObjectWrapper

@@ -22,7 +22,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -455,13 +457,9 @@ public class AppOpsState {
         private CharSequence getCombinedText(Context context, ArrayList<OpEntryWrapper> ops,
                 CharSequence[] items, boolean isSummary) {
             SpannableStringBuilder builder = new SpannableStringBuilder();
+            Set<String> strings = new HashSet<>();
             for (int i=0; i<ops.size(); i++) {
-                if (i > 0) {
-                    builder.append(", ");
-                }
-
                 int op = ops.get(i).getOp();
-
                 SpannableString ss;
                 if (op < items.length && items[op].length() != 0) {
                     ss = new SpannableString(items[op]);
@@ -471,8 +469,16 @@ public class AppOpsState {
                     ss = new SpannableString(OpsLabelHelper.getOpLabel(context, op));
                 }
 
+                if (!strings.add(ss.toString())) {
+                    continue;
+                }
+
                 if (isSummary && !isSwitchChecked(ops, op)) {
                     ss.setSpan(new StrikethroughSpan(), 0, ss.length(), 0);
+                }
+
+                if (i > 0) {
+                    builder.append(", ");
                 }
 
                 builder.append(ss);
@@ -648,7 +654,7 @@ public class AppOpsState {
         if (packageName != null) {
             pkgs = mAppOps.getOpsForPackage(uid, packageName, tpl.ops);
         } else {
-            pkgs = mAppOps.getPackagesForOps(tpl.ops);
+            pkgs = mAppOps.getPackagesForOpsMerged(tpl.ops);
         }
 
         if (pkgs != null) {
