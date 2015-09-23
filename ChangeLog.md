@@ -1,5 +1,6 @@
 ### 1.29
 * Add option to customize appearance (theme, icons)
+* Fixed issue on MiUi where ops were reset
 * Add AppOps to AOSP Lollipop Settings
 * Add option to export/import app restrictions
 * AOX now displays notifications on app installs/updates,
