@@ -38,7 +38,7 @@ public class MiuiHacks extends Hack
 	{
 		try
 		{
-			final Class<?> appOpsSvcClazz = loadClass("android.server.AppOpsService");
+			final Class<?> appOpsSvcClazz = loadClass("com.android.server.AppOpsService");
 			XposedBridge.hookAllMethods(appOpsSvcClazz, "isMiuiAllowed",
 					XC_MethodReplacement.returnConstant(true));
 			XposedBridge.hookAllMethods(appOpsSvcClazz, "inMiuiAllowedBlackList",
@@ -56,7 +56,8 @@ public class MiuiHacks extends Hack
 							if(Constants.MODULE_PACKAGE.equals(param.args[2]))
 								param.setResult(true);
 						}
-			});
+					}
+			);
 
 			log("Hooked: isMiuiAllowed, inMiuiAllowedBlackList, checkSystemApp");
 		}
