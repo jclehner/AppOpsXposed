@@ -49,7 +49,7 @@ public class SystemEventReceiver extends BroadcastReceiver
 
 		final NotificationManager nm =
 				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-		nm.notify(0, nb.build());
+		nm.notify(pi.applicationInfo.uid, nb.build());
 	}
 
 	private PackageInfo getPkgInfo(Context context, Intent intent)
