@@ -23,7 +23,7 @@ public class MiuiHacks extends Hack
 	{
 		try
 		{
-			loadClass("miui.os.Build");
+			Class.forName("miui.os.Build");
 			log("Hack enabled");
 			return true;
 		}

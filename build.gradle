@@ -28,8 +28,8 @@ android {
 		minSdkVersion 18
 		targetSdkVersion 22
 
-		versionCode 12856
-		versionName '1.29-BETA6'
+		versionCode 12857
+		versionName '1.29-BETA7'
 	} 
 
     sourceSets {
