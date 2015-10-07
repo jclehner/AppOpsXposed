@@ -62,7 +62,7 @@
 
 	<string name="use_hack_fix_prune_title">不要精簡資料庫</string>
 	<string name="use_hack_fix_prune_summary">如果ops的設定對於安裝在記憶卡的程式會在重啟裝置後被重設。</string>
-	<string name="reset_all"重設全部</string>
+	<string name="reset_all">重設全部</string>
 	<string name="package_updated">已更新</string>
 	<string name="show_pkg_notifications_title">通知</string>
 	<string name="show_pkg_notifications_summary">在安裝新程式或是程式更新後顯示通知</string>
