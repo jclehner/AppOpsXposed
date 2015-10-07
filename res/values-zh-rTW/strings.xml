@@ -20,7 +20,7 @@
     <string name="automatic">(自動)</string>
 	<string name="failsafe_mode_title">故障保護模式</string>
 	<string name="failsafe_mode_summary">Use only the minimum patches required for \"應用程式作業\" to work; in this case, a launcher icon
-	    must be used. Use this if you experience crashes.</string>
+	    must be used. 如果程式會閃退時使用。</string>
 	<string name="hacks_title">破解</string>
 	<string name="hacks_summary">實驗功能。使用者風險自負！</string>	    
 	<string name="use_hack_boot_completed_title">增加 OP_BOOT_COMPLETED</string>
@@ -30,9 +30,7 @@
 	</string>
 
 	<string name="hacks_dialog_title">警告</string>
-	<string name="hacks_dialog_message">These features are <strong>highly experimental</strong> and may cause your phone to
-	    get stuck in a boot-loop and become unusable. Use <em>only</em> if you know how to disable Xposed (or this 模組) from
-	    recovery mode or a shell. You have been warned!</string>
+	<string name="hacks_dialog_message">這些功能是<strong>實驗功能</strong>，而且可能讓你的裝置變磚，卡在boot-loop畫面而無法使用。<em>僅供</em>你知道如何在救援模式(recovery mode)或shell裡，停用Xposed(或是此模組)。我已經警告過你了！</string>
 
 	<string name="use_hack_wake_lock_title">修復 OP_WAKE_LOCK</string>
 	<string name="use_hack_wake_lock_summary">修復 \"%1$s"\" 選項。</string>
@@ -40,7 +38,7 @@
 	<string name="build_bugreport_title">建立錯誤報告</string>
 	<string name="build_bugreport_summary">上傳經由 email/Dropbox/Google Drive/等；需要root。</string>
 	<string name="building_toast">建立中&#8230;</string>
-	<string name="use_hack_pm_crash_title">Fix PackageManager</string>
+	<string name="use_hack_pm_crash_title">修復程式安裝器</string>
 	<string name="use_hack_pm_crash_summary">Fixes a crash in a system component that prevents \"%1$s\" from loading.</string>
 	<string name="toast_needs_root">這個操作需要root</string>
 	<string name="show_changed_only_title">顯示更新內容</string>
@@ -58,4 +56,32 @@
 	<string name="aox_settings">AppOpsXposed 設定</string>
 	<string name="dont_show_again">不要再顯示</string>
 	<string name="must_reboot_device">必須重啟裝置！</string>
+	<string name="permissions_not_granted">\"%1$s\" permissions were not granted. 注意，當你啟用 \"%2$s\" 或安裝為系統程式，必須重新開機。如果這個訊息持續出現，請用詳細錯誤回報！</string>
+	<string name="verbose_logs_title">詳細記錄</string>
+	<string name="verbose_logs_summary">在你回報錯誤以前，請先勾選並且重新開機！</string>
+
+	<string name="use_hack_fix_prune_title">不要精簡資料庫</string>
+	<string name="use_hack_fix_prune_summary">如果ops的設定對於安裝在記憶卡的程式會在重啟裝置後被重設。</string>
+	<string name="reset_all"重設全部</string>
+	<string name="package_updated">已更新</string>
+	<string name="show_pkg_notifications_title">通知</string>
+	<string name="show_pkg_notifications_summary">在安裝新程式或是程式更新後顯示通知</string>
+	<string name="appearance_title">外觀</string>
+	<string name="appearance_summary">自訂 AppOpsXposed 的外觀</string>
+	<string name="icons">圖示</string>
+	<string name="icon_appinfo_title">應用程式資訊</string>
+	<string name="icon_appinfo_summary">圖示顯示在 \"應用程式資訊\" 畫面。</string>
+	<string name="icon_settings_title">設定</string>
+	<string name="icon_settings_summary">圖示顯示在 \"設定\" 程式 (如果可用)。</string>
+	<string name="note_icons_title">重要</string>
+	<string name="note_icons_summary">更改這些設定可能需要重啟裝置。</string>
+	<string name="import_export_title">備份</string>
+	<string name="import_export_summary">匯入/匯出設定到內建儲存空間。</string>
+	<string name="backup_create_title">匯出</string>
+	<string name="backup_restore_title">匯入</string>
+	<string name="backup_file_title">檔案</string>
+	<string name="failed">失敗。</string>
+	<string name="success">成功。</string>
+	<string name="light_theme_title">明亮主題</string>
+	<string name="light_theme_summary">@null</string>
 </resources>
