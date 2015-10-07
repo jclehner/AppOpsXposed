@@ -90,4 +90,7 @@
 	<string name="failed">Fehlgeschlagen.</string>
 	<string name="success">Erfolgreich.</string>
 	<string name="light_theme_title">Helles Theme</string>
+	<string name="enable_module">AppOpsXposed läuft nicht als Xposed-Modul; aktiviere es in %1$s!</string>
+	<string name="cannot_enable">AppOpsXposed läuft nicht als Xposed-Modul, und Xposed ist auf diesem System nicht installiert.</string>
+	<string name="install_system_app_helper">System-App-Helfer installieren?</string>
 </resources>

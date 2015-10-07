@@ -208,6 +208,17 @@ public final class Util
 		activity.setTheme(themeResId);
 	}
 
+	public static boolean hasAppOpsPermissions(Context context)
+	{
+		for(String perm : Constants.APP_OPS_PERMISSIONS)
+		{
+			if(context.checkCallingOrSelfPermission(perm) != PackageManager.PERMISSION_GRANTED)
+				return false;
+		}
+
+		return true;
+	}
+
 	public static Set<String> getClassList(String apkFile, String packageName, boolean getSubPackages)
 	{
 		final Enumeration<String> entries;
@@ -297,12 +308,11 @@ public final class Util
 		try
 		{
 			final ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(), 0);
-			Util.debug("isSystemApp: sourceDir=" + appInfo.sourceDir);
 			return 0 != (appInfo.flags & ApplicationInfo.FLAG_SYSTEM);
 		}
 		catch(NameNotFoundException e)
 		{
-			Log.w(LauncherActivity.TAG, e);
+			// shouldn't happen
 		}
 
 		return false;

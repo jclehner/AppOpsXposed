@@ -48,9 +48,6 @@
 	<string name="show_changed_only_title">Show changed</string>
 	<string name="compatibility_mode_title">Compatibility mode</string>
 	<string name="compatibility_mode_summary">Use an alternate AppOps implementation to improve compatibility on most devices.</string>
-	<string name="install_as_system_app">AppOpsXposed is not running as an Xposed module. Install as a system app (requires root;
-	    device will reboot)?</string>
-	<string name="no_xposed_no_root">AppOpsXposed is not running as an Xposed module, and root is not available.</string>
 	<string name="checking_root">Checking root&#8230;</string>
 	<string name="settings">Settings</string>
 	<string name="xposed_settings_warning">These settings have no effect when not running as an Xposed module!</string>
@@ -88,4 +85,7 @@
 	<string name="success">Success.</string>
 	<string name="light_theme_title">Light theme</string>
 	<string name="light_theme_summary">@null</string>
+	<string name="enable_module">AppOpsXposed is not running as an Xposed module; activate it in %1$s!</string>
+	<string name="cannot_enable">AppOpsXposed is not running as an Xposed module, and Xposed is not installed on your system.</string>
+	<string name="install_system_app_helper">Install system-app helper (requires root)?</string>
 </resources>

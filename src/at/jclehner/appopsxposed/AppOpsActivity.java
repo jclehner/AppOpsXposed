@@ -60,7 +60,16 @@ public class AppOpsActivity extends PreferenceActivity
 	{
 		Util.applyTheme(this);
 		super.onCreate(savedInstanceState);
-		checkForAppOpsPermissions();
+
+		if(!Util.hasAppOpsPermissions(this))
+		{
+			final AlertDialog.Builder ab = new AlertDialog.Builder(this);
+			ab.setMessage(getString(R.string.permissions_not_granted,
+					getString(R.string.app_ops_settings),
+					getString(R.string.compatibility_mode_title)));
+			ab.setPositiveButton(android.R.string.ok, null);
+			ab.show();
+		}
 	}
 
 	@Override
@@ -77,23 +86,5 @@ public class AppOpsActivity extends PreferenceActivity
 				|| AppOpsDetails.class.getName().equals(fragmentName)
 				|| AppOpsCategory.class.getName().equals(fragmentName)
 				|| AppListFragment.class.getName().equals(fragmentName);
-	}
-
-	private void checkForAppOpsPermissions()
-	{
-		for(String perm : Constants.APP_OPS_PERMISSIONS)
-		{
-			if(checkCallingOrSelfPermission(perm) != PackageManager.PERMISSION_GRANTED)
-			{
-				final AlertDialog.Builder ab = new AlertDialog.Builder(this);
-				ab.setMessage(getString(R.string.permissions_not_granted,
-						getString(R.string.app_ops_settings),
-						getString(R.string.compatibility_mode_title)));
-				ab.setPositiveButton(android.R.string.ok, null);
-				ab.show();
-
-				break;
-			}
-		}
 	}
 }
