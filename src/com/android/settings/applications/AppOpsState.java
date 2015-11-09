@@ -698,11 +698,6 @@ public class AppOpsState {
             List<OpEntryWrapper> dummyOps = null;
             PackageOpsWrapper pkgOps = null;
             if (appInfo.requestedPermissions != null) {
-                if (appInfo.sharedUserId != null) {
-                    if (DEBUG) Log.d(TAG, "Pkg " + appInfo.packageName
-                            + " has shared user-id; skipping");
-                    continue;
-                }
                 for (int j=0; j<appInfo.requestedPermissions.length; j++) {
                     if (appInfo.requestedPermissionsFlags != null) {
                         if ((appInfo.requestedPermissionsFlags[j]
