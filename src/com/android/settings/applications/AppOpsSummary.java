@@ -73,8 +73,11 @@ public class AppOpsSummary extends Fragment {
         @Override
         public int getCount() {
             int count = sPageTemplates.length;
-            if (AppOpsManagerWrapper.OP_BOOT_COMPLETED == -1) {
+            int bootCompletedOp = AppOpsManagerWrapper.getBootCompletedOp();
+            if (bootCompletedOp == -1) {
                 --count;
+            } else {
+                AppOpsState.BOOTUP_TEMPLATE.ops[0] = bootCompletedOp;
             }
             return count;
         }
