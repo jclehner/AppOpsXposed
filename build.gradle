@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        //classpath 'com.android.tools.build:gradle:1.0.0'
+        classpath 'com.android.tools.build:gradle:1.0.0'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
     }
 }
@@ -28,8 +28,8 @@ android {
 		minSdkVersion 18
 		targetSdkVersion 22
 
-		versionCode 12857
-		versionName '1.29-BETA7'
+		versionCode 12858
+		versionName '1.29-BETA8'
 	} 
 
     sourceSets {
