@@ -36,8 +36,6 @@
 	<string name="show_changed_only_title">Zobraziť zmenené</string>
 	<string name="compatibility_mode_title">Režim kompatibility</string>
 	<string name="compatibility_mode_summary">Použiť alternatívnu implementáciu AppOps k zlepšeniu kompatibility na väčšine zariadení.</string>
-	<string name="install_as_system_app">AppOpsXposed nebeží ako Xposed modul. Nainštalovať ako systémovú aplikáciu (vyžaduje root; zariadenie sa reštartuje)?</string>
-	<string name="no_xposed_no_root">AppOpsXposed nie je spustený ako Xposed modul a root nie je dostupný.</string>
 	<string name="checking_root">Kontroluje sa root&#8230;</string>
 	<string name="settings">Nastavenia</string>
 	<string name="xposed_settings_warning">Tieto nastavenia nemajú žiadny efekt ak AppOpsXposed nie je spustený ako Xposed modul!</string>

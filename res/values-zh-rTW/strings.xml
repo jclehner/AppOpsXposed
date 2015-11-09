@@ -45,9 +45,6 @@
 	<string name="compatibility_mode_title">兼容模式(測試)</string>
 	<string name="compatibility_mode_summary">Use an alternate 應用程式作業 implementation to improve compatibility on most devices. A launcher icon
 	    must be used. </string>
-	<string name="install_as_system_app">AppOpsXposed 未運行於Xposed模組。安裝為系統程式 (需要root;
-	    裝置將重啟)?</string>
-	<string name="no_xposed_no_root">AppOpsXposed 未運行於Xposed模組，而且無法使用root。</string>
 	<string name="checking_root">檢查 root&#8230;</string>
 	<string name="settings">設定</string>
 	<string name="xposed_settings_warning">運行於Xposed模組之前，這些設定沒有任何效果！</string>
