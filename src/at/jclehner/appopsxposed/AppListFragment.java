@@ -486,7 +486,7 @@ public class AppListFragment extends ListFragment implements LoaderCallbacks<Lis
 	{
 		super.onCreateOptionsMenu(menu, inflater);
 		MenuItem item = menu.add(0, MENU_RESET, 0, R.string.reset_all);
-		item.setIcon(R.drawable.ic_undo_white);
+		item.setIcon(android.R.drawable.ic_menu_delete);
 		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 	}
 
