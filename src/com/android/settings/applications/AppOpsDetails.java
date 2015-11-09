@@ -31,7 +31,6 @@ import android.content.pm.PermissionInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -177,7 +176,7 @@ public class AppOpsDetails extends Fragment {
     }
 
     private boolean modeToChecked(int switchOp, PackageOpsWrapper ops) {
-       return modeToChecked(mAppOps.checkOp(switchOp, ops.getUid(), ops.getPackageName()));
+       return modeToChecked(mAppOps.checkOpNoThrow(switchOp, ops.getUid(), ops.getPackageName()));
     }
 
     static boolean modeToChecked(int mode) {

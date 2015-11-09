@@ -25,10 +25,8 @@ import android.app.AppOpsManager;
 import android.content.Context;
 import android.os.Binder;
 import android.os.Build;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.os.IBinder;
-import android.os.WorkSource;
+
 import at.jclehner.appopsxposed.Hack;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.Res;
@@ -133,7 +131,7 @@ public class FixWakeLock extends Hack
 					android.Manifest.permission.WAKE_LOCK, null);
 
 			final AppOpsManagerWrapper appOps = AppOpsManagerWrapper.from(ctx);
-			if(appOps.checkOp(AppOpsManagerWrapper.OP_WAKE_LOCK, uid, packageName) != AppOpsManager.MODE_ALLOWED)
+			if(appOps.checkOpNoThrow(AppOpsManagerWrapper.OP_WAKE_LOCK, uid, packageName) != AppOpsManager.MODE_ALLOWED)
 			{
 				if(tag != null && canAcquire(packageName, tag))
 				{

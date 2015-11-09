@@ -239,7 +239,7 @@ public class GmsLocationHack extends Hack
 
 		for(int op : LOCATION_OPS)
 		{
-			if(appOps.checkOp(op, uid, context.getPackageName()) != AppOpsManager.MODE_ALLOWED)
+			if(appOps.checkOpNoThrow(op, uid, context.getPackageName()) != AppOpsManager.MODE_ALLOWED)
 				return true;
 		}
 

@@ -208,15 +208,9 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		return ret;
 	}
 
-	public int checkOp(String op, int uid, String packageName)
+	public int checkOpNoThrow(int op, int uid, String packageName)
 	{
-		return call("checkOp", new Class<?>[] { String.class, int.class, String.class },
-				op, uid, packageName);
-	}
-
-	public int checkOp(int op, int uid, String packageName)
-	{
-		return call("checkOp", new Class<?>[] { int.class, int.class, String.class },
+		return call("checkOpNoThrow", new Class<?>[] { int.class, int.class, String.class },
 				op, uid, packageName);
 	}
 

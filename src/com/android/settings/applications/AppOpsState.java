@@ -729,7 +729,7 @@ public class AppOpsState {
                                     appInfo.packageName, appInfo.applicationInfo.uid, dummyOps);
 
                         }
-                        int mode = mAppOps.checkOp(permOps.get(k), appInfo.applicationInfo.uid, appInfo.packageName);
+                        int mode = mAppOps.checkOpNoThrow(permOps.get(k), appInfo.applicationInfo.uid, appInfo.packageName);
                         OpEntryWrapper opEntry = new OpEntryWrapper(
                                 permOps.get(k), mode, 0, 0, 0);
                         dummyOps.add(opEntry);
