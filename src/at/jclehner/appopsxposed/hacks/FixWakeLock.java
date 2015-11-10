@@ -26,14 +26,17 @@ import android.content.Context;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.PowerManager;
 
 import at.jclehner.appopsxposed.Hack;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
+import at.jclehner.appopsxposed.util.ExceptionEater;
 import at.jclehner.appopsxposed.util.Res;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodHook.Unhook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
+import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 
@@ -44,6 +47,8 @@ public class FixWakeLock extends Hack
 
 	private static final boolean ENABLE_PER_TAG_FILTERING = false;
 	private static final boolean DEBUG = false;
+
+	private static final String POWER_SERVICE = "com.android.server.power.PowerManagerService";
 
 	private Set<Unhook> mUnhooks;
 
@@ -59,13 +64,27 @@ public class FixWakeLock extends Hack
 		hookMethods();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void handleLoadAnyPackage(LoadPackageParam lpparam) throws Throwable
+	{
+		if(AppOpsManagerWrapper.OP_WAKE_LOCK == -1)
+			return;
+
+		// On some (HTC) ROMs, an IllegalArgumentException thrown by the PowerManagerService
+		// (because the lock is not actually held) is not ignored in setWorkSource().
+
+		final Class<?> clazz = loadClass("android.os.PowerManager$WakeLock");
+		XposedBridge.hookAllMethods(clazz, "setWorkSource", new ExceptionEater(IllegalArgumentException.class));
+	}
+
 	@Override
 	protected String onGetKeySuffix() {
 		return "wake_lock";
 	}
 
 	private static final String ACQUIRE_WAKE_LOCK_CLASS =
-			"com.android.server.power.PowerManagerService" +
+			POWER_SERVICE +
 			(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
 			"$BinderService" : "");
 
