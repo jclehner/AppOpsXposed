@@ -354,9 +354,13 @@ public class SettingsActivity extends Activity
 
 			if(!BuildConfig.DEBUG)
 			{
-				p = findPreference("dont_group_ops");
+				p = findPreference("use_hack_dont_group_ops");
 				if(p != null)
-					getPreferenceScreen().removePreference(p);
+				{
+					final Preference ps = findPreference("hacks");
+					if(ps instanceof PreferenceScreen)
+						((PreferenceScreen) ps).removePreference(p);
+				}
 			}
 		}
 
