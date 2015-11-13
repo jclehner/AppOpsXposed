@@ -21,7 +21,6 @@ public class ExceptionEater extends XC_MethodHook
 		this(null, types);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void afterHookedMethod(MethodHookParam param) throws Throwable
 	{
@@ -42,8 +41,7 @@ public class ExceptionEater extends XC_MethodHook
 					// Retry in case both classes are from different class loaders
 					try
 					{
-						cls = (Class<? extends Throwable>) tCls.getClassLoader().loadClass(cls.getName());
-						if(cls.isAssignableFrom(tCls))
+						if(tCls.getClassLoader().loadClass(cls.getName()).isAssignableFrom(tCls))
 						{
 							param.setResult(mResult);
 							return;
