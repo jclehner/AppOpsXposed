@@ -25,10 +25,10 @@ public class ExceptionEater extends XC_MethodHook
 	protected void afterHookedMethod(MethodHookParam param) throws Throwable
 	{
 		final Throwable t = param.getThrowable();
-		final Class<? extends Throwable> tCls = t.getClass();
-
 		if(t != null)
 		{
+			final Class<? extends Throwable> tCls = t.getClass();
+
 			for(Class<? extends Throwable> cls : mExceptionClasses)
 			{
 				if(cls.isAssignableFrom(tCls))
