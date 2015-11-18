@@ -2,7 +2,7 @@
 
 BRANCH="cm-12.1"
 RES="https://github.com/CyanogenMod/android_packages_apps_Settings/raw/$BRANCH/res/"
-TMP=$(mktemp)
+TMP=$(mktemp -t aoxXXXXXX)
 
 PATTERNS=(
 	's/_modify_/_write_/g'
@@ -18,6 +18,18 @@ PATTERNS=(
 	's/_media_buttons/_take_media_buttons/g'
 	's/_(labels|summaries)_(.*?)_volume/_$1_audio_$2_volume/g'
 )
+
+readarray() {
+	builtin readarray -t "$1" &> /dev/null || read -r -a "$1"
+}
+
+grep() {
+	if command -v ggrep &> /dev/null; then
+		ggrep "$@"
+	else
+		command grep "$@"
+	fi
+}
 
 copy() {
 	[[ -f "$1" ]] && cp "$1" "$2"
@@ -132,9 +144,9 @@ extract_lang() {
 			perl -p -i -e 's/<.+?>//g' "$TMP".{sum,lab,cat}
 			perl -p -i -e 's/^\s+//g' "$TMP".{sum,lab,cat}
 
-			readarray -t summaries < "$TMP.sum"
-			readarray -t labels < "$TMP.lab"
-			readarray -t categories < "$TMP.cat"
+			readarray summaries < "$TMP.sum"
+			readarray labels < "$TMP.lab"
+			readarray categories < "$TMP.cat"
 
 			size=${#summaries[@]}
 
