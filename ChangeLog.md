@@ -1,3 +1,7 @@
+### 1.30
+* Better support for Marshmallow
+* Fix multiple icons in "App info" screen
+
 ### 1.29
 * Add option to customize appearance (theme, icons)
 * Fixed issue on MiUi where ops were reset
