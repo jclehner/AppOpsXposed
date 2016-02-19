@@ -259,11 +259,12 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 			catch(ReflectiveException e)
 			{
 				if(sOpToDefaultModeFuncArgs.length != 2)
-					sOpToDefaultModeFuncArgs = new Class<?>[] { int.class, boolean.class };
+					sOpToDefaultModeFuncArgs = new Class<?>[]{ int.class, boolean.class };
 				else
+				{
 					sOpToDefaultModeFuncArgs = null;
-
-				Util.debug(e);
+					Util.debug(e);
+				}
 			}
 		}
 

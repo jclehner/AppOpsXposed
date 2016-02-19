@@ -73,8 +73,6 @@ public class OpsLabelHelper
 				== AppOpsManagerWrapper.getBootCompletedOp();
 		int maxOp = 0;
 
-		Log.d("AOX", "getOpLabelsOrSummaries: hasFakeBootCompleted=" + hasFakeBootCompleted);
-
 		for(Field field : AppOpsManagerWrapper.class.getDeclaredFields())
 		{
 			final String opName = field.getName();
