@@ -84,6 +84,21 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 	public static final int OP_TOAST_WINDOW = getOpInt("OP_TOAST_WINDOW");
 	public static final int OP_PROJECT_MEDIA = getOpInt("OP_PROJECT_MEDIA");
 	public static final int OP_ACTIVATE_VPN = getOpInt("OP_ACTIVATE_VPN");
+	public static final int OP_WRITE_WALLPAPER = getOpInt("OP_WRITE_WALLPAPER");
+	public static final int OP_ASSIST_STRUCTURE = getOpInt("OP_ASSIST_STRUCTURE");
+	public static final int OP_ASSIST_SCREENSHOT = getOpInt("OP_ASSIST_SCREENSHOT");
+	public static final int OP_READ_PHONE_STATE = getOpInt("OP_READ_PHONE_STATE");
+	public static final int OP_ADD_VOICEMAIL = getOpInt("OP_ADD_VOICEMAIL");
+	public static final int OP_USE_SIP = getOpInt("OP_USE_SIP");
+	public static final int OP_PROCESS_OUTGOING_CALLS = getOpInt("OP_PROCESS_OUTGOING_CALLS");
+	public static final int OP_USE_FINGERPRINT = getOpInt("OP_USE_FINGERPRINT");
+	public static final int OP_BODY_SENSORS = getOpInt("OP_BODY_SENSORS");
+	public static final int OP_READ_CELL_BROADCASTS = getOpInt("OP_READ_CELL_BROADCASTS");
+	public static final int OP_MOCK_LOCATION = getOpInt("OP_MOCK_LOCATION");
+	public static final int OP_READ_EXTERNAL_STORAGE = getOpInt("OP_READ_EXTERNAL_STORAGE");
+	public static final int OP_WRITE_EXTERNAL_STORAGE = getOpInt("OP_WRITE_EXTERNAL_STORAGE");
+	public static final int OP_TURN_SCREEN_ON = getOpInt("OP_TURN_SCREEN_ON");
+	public static final int OP_GET_ACCOUNTS = getOpInt("OP_GET_ACCOUNTS");
 
 	// CyanogenMod (also seen on some Xperia ROMs!)
 	public static final int OP_WIFI_CHANGE = getOpInt("OP_WIFI_CHANGE");
