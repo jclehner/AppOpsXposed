@@ -73,6 +73,21 @@ THE EXTRACTOR SCRIPT WILL FAIL OTHERWISE!
     <string name="app_ops_summaries_su">root access</string>
     <string name="app_ops_summaries_neighboring_cells">cell scan</string>
     <string name="app_ops_summaries_boot_completed">run at startup</string>
+    <string name="app_ops_summaries_write_wallpaper">write wallpaper</string>
+    <string name="app_ops_summaries_assist_structure">assist structure</string>
+    <string name="app_ops_summaries_assist_screenshot">assist screenshot</string>
+    <string name="app_ops_summaries_read_phone_state">read phone state</string>
+    <string name="app_ops_summaries_add_voicemail">add voicemail</string>
+    <string name="app_ops_summaries_use_sip">use SIP</string>
+    <string name="app_ops_summaries_make_call">make call</string>
+    <string name="app_ops_summaries_use_fingerprint">use fingerprint</string>
+    <string name="app_ops_summaries_use_body_sensors">use body sensors</string>
+    <string name="app_ops_summaries_read_cell_broadcasts">read cell broadcasts</string>
+    <string name="app_ops_summaries_mock_location">mock location</string>
+    <string name="app_ops_summaries_read_external_storage">read external storage</string>
+    <string name="app_ops_summaries_write_external_storage">write to external storage</string>
+    <string name="app_ops_summaries_turn_screen_on">turn screen on</string>
+    <string name="app_ops_summaries_get_accounts">get accounts</string>
 
     <string name="app_ops_labels_location">Location</string>
     <string name="app_ops_labels_coarse_location">@string/app_ops_labels_location</string>
@@ -139,6 +154,11 @@ THE EXTRACTOR SCRIPT WILL FAIL OTHERWISE!
     <string name="app_ops_labels_su">Root access</string>
     <string name="app_ops_labels_neighboring_cells">Location</string>
     <string name="app_ops_labels_boot_completed">Run at startup</string>
+    <string name="app_ops_labels_mock_location">Mock location</string>
+    <string name="app_ops_labels_read_external_storage">Read external storage</string>
+    <string name="app_ops_labels_write_external_storage">Write to external storage</string>
+    <string name="app_ops_labels_turn_screen_on">Turn screen on</string>
+    <string name="app_ops_labels_get_accounts">Get accounts</string>
     
     <string name="app_ops_categories_location">Location</string>
     <string name="app_ops_categories_personal">Personal</string>
