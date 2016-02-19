@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">čitanje stanja telefona</string>
   <string name="app_ops_summaries_add_voicemail">dodajte glasovnu poštu</string>
   <string name="app_ops_summaries_use_sip">koristi SIP</string>
-  <string name="app_ops_summaries_call_phone">nazvati</string>
+  <string name="app_ops_summaries_make_call">nazvati</string>
   <string name="app_ops_summaries_use_fingerprint">koristi otisak prsta</string>
   <string name="app_ops_summaries_body_sensors">koristi senzore</string>
   <string name="app_ops_summaries_read_cell_broadcasts">pročitati signal odašiljača</string>
@@ -69,7 +69,7 @@
   <string name="app_ops_summaries_bluetooth_change">upravljati Bluetooth-om</string>
   <string name="app_ops_summaries_boot_completed">pokreni pri pokretanju</string>
   <string name="app_ops_summaries_nfc_change">uključi/isključi NFC</string>
-  <string name="app_ops_summaries_mobile_data_change">uključi/isključi mobilne podatke</string>
+  <string name="app_ops_summaries_data_connect_change">uključi/isključi mobilne podatke</string>
   <string name="app_ops_summaries_su">root pristup</string>
   <string name="app_ops_labels_coarse_location">Gruba lokacija</string>
   <string name="app_ops_labels_fine_location">Dobra lokacija</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">Čitanje stanja telefona</string>
   <string name="app_ops_labels_add_voicemail">Dodajte glasovnu poštu</string>
   <string name="app_ops_labels_use_sip">Koristite SIP</string>
-  <string name="app_ops_labels_call_phone">Nazvati</string>
+  <string name="app_ops_labels_make_call">Nazvati</string>
   <string name="app_ops_labels_use_fingerprint">Koristi otisak prsta</string>
   <string name="app_ops_labels_body_sensors">Koristi senzore</string>
   <string name="app_ops_labels_read_cell_broadcasts">Pročitati signal odašiljača</string>
@@ -138,7 +138,7 @@
   <string name="app_ops_labels_bluetooth_change">Upravljati Bluetooth-om</string>
   <string name="app_ops_labels_boot_completed">Pokreni pri pokretanju</string>
   <string name="app_ops_labels_nfc_change">Uključi/isključi NFC</string>
-  <string name="app_ops_labels_mobile_data_change">Uključi/isključi mobilne podatke</string>
+  <string name="app_ops_labels_data_connect_change">Uključi/isključi mobilne podatke</string>
   <string name="app_ops_labels_su">Root pristup</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Lokacija</string>

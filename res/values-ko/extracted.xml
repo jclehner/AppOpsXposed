@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">전화 상태 읽기</string>
   <string name="app_ops_summaries_add_voicemail">음성 메일 추가</string>
   <string name="app_ops_summaries_use_sip">SIP 사용</string>
-  <string name="app_ops_summaries_call_phone">전화 걸기</string>
+  <string name="app_ops_summaries_make_call">전화 걸기</string>
   <string name="app_ops_summaries_use_fingerprint">지문인식 사용</string>
   <string name="app_ops_summaries_body_sensors">신체 센서를 사용함</string>
   <string name="app_ops_summaries_read_cell_broadcasts">셀 브로드캐스트 읽기</string>
@@ -69,7 +69,7 @@
   <string name="app_ops_summaries_bluetooth_change">블루투스 켜기/끄기</string>
   <string name="app_ops_summaries_boot_completed">부팅시 시작</string>
   <string name="app_ops_summaries_nfc_change">NFC 켜기/끄기</string>
-  <string name="app_ops_summaries_mobile_data_change">셀룰러 데이터 켜기/끄기</string>
+  <string name="app_ops_summaries_data_connect_change">셀룰러 데이터 켜기/끄기</string>
   <string name="app_ops_summaries_su">루트 권한</string>
   <string name="app_ops_labels_coarse_location">대략적인 위치</string>
   <string name="app_ops_labels_fine_location">자세한 위치</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">전화 상태 읽기</string>
   <string name="app_ops_labels_add_voicemail">음성 메일 추가</string>
   <string name="app_ops_labels_use_sip">SIP 사용</string>
-  <string name="app_ops_labels_call_phone">전화 걸기</string>
+  <string name="app_ops_labels_make_call">전화 걸기</string>
   <string name="app_ops_labels_use_fingerprint">지문인식 사용</string>
   <string name="app_ops_labels_body_sensors">신체 센서 사용</string>
   <string name="app_ops_labels_read_cell_broadcasts">셀 브로드캐스트 읽기</string>
@@ -138,7 +138,7 @@
   <string name="app_ops_labels_bluetooth_change">블루투스 켜기/끄기</string>
   <string name="app_ops_labels_boot_completed">부팅시 시작</string>
   <string name="app_ops_labels_nfc_change">NFC 켜기/끄기</string>
-  <string name="app_ops_labels_mobile_data_change">셀룰러 데이터 켜기/끄기</string>
+  <string name="app_ops_labels_data_connect_change">셀룰러 데이터 켜기/끄기</string>
   <string name="app_ops_labels_su">루트 권한</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">위치</string>

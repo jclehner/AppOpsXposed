@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">čtení stavu telefonu</string>
   <string name="app_ops_summaries_add_voicemail">přidání hlasové zprávy</string>
   <string name="app_ops_summaries_use_sip">použití SIP</string>
-  <string name="app_ops_summaries_call_phone">zavolat</string>
+  <string name="app_ops_summaries_make_call">zavolat</string>
   <string name="app_ops_summaries_use_fingerprint">použití otisku prstu</string>
   <string name="app_ops_summaries_body_sensors">použití senzoru na těle</string>
   <string name="app_ops_summaries_read_cell_broadcasts">čtení zpráv buněk GSM</string>
@@ -69,7 +69,7 @@
   <string name="app_ops_summaries_bluetooth_change">přepnout bluetooth</string>
   <string name="app_ops_summaries_boot_completed">spustit při startu</string>
   <string name="app_ops_summaries_nfc_change">přepnout NFC</string>
-  <string name="app_ops_summaries_mobile_data_change">vypnout/zapnout mobilní data</string>
+  <string name="app_ops_summaries_data_connect_change">vypnout/zapnout mobilní data</string>
   <string name="app_ops_summaries_su">Root přístup</string>
   <string name="app_ops_labels_coarse_location">Získat přibližnou polohu</string>
   <string name="app_ops_labels_fine_location">Získat přesnou polohu</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">Přečíst stav telefonu</string>
   <string name="app_ops_labels_add_voicemail">Přidat hlasovou zprávu</string>
   <string name="app_ops_labels_use_sip">Použít SIP</string>
-  <string name="app_ops_labels_call_phone">Provést volání</string>
+  <string name="app_ops_labels_make_call">Provést volání</string>
   <string name="app_ops_labels_use_fingerprint">Použít otisk prstu</string>
   <string name="app_ops_labels_body_sensors">Použít senzor na těle</string>
   <string name="app_ops_labels_read_cell_broadcasts">Přečíst zprávy buněk GSM</string>
@@ -138,7 +138,7 @@
   <string name="app_ops_labels_bluetooth_change">Přepnout Bluetooth</string>
   <string name="app_ops_labels_boot_completed">Spustit při startu</string>
   <string name="app_ops_labels_nfc_change">Přepnout NFC</string>
-  <string name="app_ops_labels_mobile_data_change">Vypnout/zapnout mobilní data</string>
+  <string name="app_ops_labels_data_connect_change">Vypnout/zapnout mobilní data</string>
   <string name="app_ops_labels_su">Root přístup</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Poloha</string>

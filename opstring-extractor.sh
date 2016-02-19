@@ -22,6 +22,7 @@ PATTERNS=(
 	#'s/_make_call/_call_phone/g'
 	's/_superuser/_su/g'
 	's/_start_at_boot/_boot_completed/g'
+	's/_mobile_data/_data_connect/g'
 	's/_toggle_(.*?)"/_$1_change"/g'
 	's/_(labels|summaries)_(.*?)_volume/_$1_audio_$2_volume/g'
 )

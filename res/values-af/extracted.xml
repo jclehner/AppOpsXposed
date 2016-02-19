@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">lees foon status</string>
   <string name="app_ops_summaries_add_voicemail">voeg stem boodskap by</string>
   <string name="app_ops_summaries_use_sip">gebruik SIP</string>
-  <string name="app_ops_summaries_call_phone">maak oproep</string>
+  <string name="app_ops_summaries_make_call">maak oproep</string>
   <string name="app_ops_summaries_use_fingerprint">gebruik vingerafdruk</string>
   <string name="app_ops_summaries_body_sensors">gebruik liggaam sensors</string>
   <string name="app_ops_summaries_read_cell_broadcasts">lees sel uitsendings</string>
@@ -69,7 +69,7 @@
   <string name="app_ops_summaries_bluetooth_change">wissel bluetooth</string>
   <string name="app_ops_summaries_boot_completed">begin by stelsel begin</string>
   <string name="app_ops_summaries_nfc_change">wissel NFC</string>
-  <string name="app_ops_summaries_mobile_data_change">skakel sellulêre data aan/af</string>
+  <string name="app_ops_summaries_data_connect_change">skakel sellulêre data aan/af</string>
   <string name="app_ops_summaries_su">\'Root\' toegang</string>
   <string name="app_ops_labels_coarse_location">Growwe ligging</string>
   <string name="app_ops_labels_fine_location">Akurrate ligging</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">Lees foon status</string>
   <string name="app_ops_labels_add_voicemail">Voeg stem boodskap by</string>
   <string name="app_ops_labels_use_sip">Gebruik SIP</string>
-  <string name="app_ops_labels_call_phone">Maak oproep</string>
+  <string name="app_ops_labels_make_call">Maak oproep</string>
   <string name="app_ops_labels_use_fingerprint">Gebruik vingerafdruk</string>
   <string name="app_ops_labels_body_sensors">Gebruik liggaam sensors</string>
   <string name="app_ops_labels_read_cell_broadcasts">Lees sel uitsendings</string>
@@ -138,7 +138,7 @@
   <string name="app_ops_labels_bluetooth_change">Wissel bluetooth</string>
   <string name="app_ops_labels_boot_completed">Begin by stelsel begin</string>
   <string name="app_ops_labels_nfc_change">Wissel NFC</string>
-  <string name="app_ops_labels_mobile_data_change">Skakel sellulêre data aan/af</string>
+  <string name="app_ops_labels_data_connect_change">Skakel sellulêre data aan/af</string>
   <string name="app_ops_labels_su">\'Root\' toegang</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Ligging</string>

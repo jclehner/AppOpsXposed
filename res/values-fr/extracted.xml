@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">lire l\'état du téléphone</string>
   <string name="app_ops_summaries_add_voicemail">ajouter un message</string>
   <string name="app_ops_summaries_use_sip">utiliser SIP</string>
-  <string name="app_ops_summaries_call_phone">appeler</string>
+  <string name="app_ops_summaries_make_call">appeler</string>
   <string name="app_ops_summaries_use_fingerprint">utiliser les empreintes digitales</string>
   <string name="app_ops_summaries_body_sensors">utiliser les capteurs corporels</string>
   <string name="app_ops_summaries_read_cell_broadcasts">lire les diffusions cellulaires</string>
@@ -124,7 +124,7 @@
   <string name="app_ops_labels_read_phone_state">Lire l\'état du téléphone</string>
   <string name="app_ops_labels_add_voicemail">Ajouter la messagerie vocale</string>
   <string name="app_ops_labels_use_sip">Utiliser SIP</string>
-  <string name="app_ops_labels_call_phone">Appeler</string>
+  <string name="app_ops_labels_make_call">Appeler</string>
   <string name="app_ops_labels_use_fingerprint">Utiliser les empreintes digitales</string>
   <string name="app_ops_labels_body_sensors">Utiliser les capteurs corporels</string>
   <string name="app_ops_labels_read_cell_broadcasts">Lire les diffusions cellulaires</string>

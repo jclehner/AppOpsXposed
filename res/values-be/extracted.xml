@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">прачытаць стан тэлефону</string>
   <string name="app_ops_summaries_add_voicemail">дадаць галасаву пошту</string>
   <string name="app_ops_summaries_use_sip">выкарыстоўваць SIP</string>
-  <string name="app_ops_summaries_call_phone">зрабіць выклік</string>
+  <string name="app_ops_summaries_make_call">зрабіць выклік</string>
   <string name="app_ops_summaries_use_fingerprint">выкарыстоўваць адбітак пальцу</string>
   <string name="app_ops_summaries_body_sensors">выкарыстоваць датчыкі целу</string>
   <string name="app_ops_summaries_read_cell_broadcasts">чытаць шырокавяшчальныя паведамленні</string>
@@ -124,7 +124,7 @@
   <string name="app_ops_labels_read_phone_state">Прачытаць стан тэлефону</string>
   <string name="app_ops_labels_add_voicemail">Дадаць галасаву пошту</string>
   <string name="app_ops_labels_use_sip">Выкарыстанне SIP</string>
-  <string name="app_ops_labels_call_phone">Зрабіць выклік</string>
+  <string name="app_ops_labels_make_call">Зрабіць выклік</string>
   <string name="app_ops_labels_use_fingerprint">Выкарыстоўваць адбітак пальцу</string>
   <string name="app_ops_labels_body_sensors">Выкарыстоваць датчыкі целу</string>
   <string name="app_ops_labels_read_cell_broadcasts">Чытаць шырокавяшчальныя паведамленні</string>

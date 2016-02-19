@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">leggi stato telefono</string>
   <string name="app_ops_summaries_add_voicemail">aggiungi mail vocale</string>
   <string name="app_ops_summaries_use_sip">usa SIP</string>
-  <string name="app_ops_summaries_call_phone">effettua chiamata</string>
+  <string name="app_ops_summaries_make_call">effettua chiamata</string>
   <string name="app_ops_summaries_use_fingerprint">usa impronte digitali</string>
   <string name="app_ops_summaries_body_sensors">usa sensori corpo</string>
   <string name="app_ops_summaries_read_cell_broadcasts">leggi trasmissioni cellulari</string>
@@ -69,7 +69,7 @@
   <string name="app_ops_summaries_bluetooth_change">modifica bluetooth</string>
   <string name="app_ops_summaries_boot_completed">esecuzione all\'avvio</string>
   <string name="app_ops_summaries_nfc_change">modifica NFC</string>
-  <string name="app_ops_summaries_mobile_data_change">modifica dati mobili</string>
+  <string name="app_ops_summaries_data_connect_change">modifica dati mobili</string>
   <string name="app_ops_summaries_su">accesso root</string>
   <string name="app_ops_labels_coarse_location">Posizione approssimativa</string>
   <string name="app_ops_labels_fine_location">Posizione precisa</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">Leggi stato telefono</string>
   <string name="app_ops_labels_add_voicemail">Aggiungere voicemail</string>
   <string name="app_ops_labels_use_sip">Utilizzo SPI</string>
-  <string name="app_ops_labels_call_phone">Effettua una telefonata</string>
+  <string name="app_ops_labels_make_call">Effettua una telefonata</string>
   <string name="app_ops_labels_use_fingerprint">Utilizzo impronte digitali</string>
   <string name="app_ops_labels_body_sensors">Utilizzo sensori corpo</string>
   <string name="app_ops_labels_read_cell_broadcasts">Lettura broadcast cellulare</string>
@@ -138,7 +138,7 @@
   <string name="app_ops_labels_bluetooth_change">Modifica bluetooth</string>
   <string name="app_ops_labels_boot_completed">Esecuzione all\'avvio</string>
   <string name="app_ops_labels_nfc_change">Modifica NFC</string>
-  <string name="app_ops_labels_mobile_data_change">Attiva/Disattiva rete cellulare</string>
+  <string name="app_ops_labels_data_connect_change">Attiva/Disattiva rete cellulare</string>
   <string name="app_ops_labels_su">Accesso root</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Posizione</string>

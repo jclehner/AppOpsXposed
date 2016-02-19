@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">קרא את מצב הטלפון</string>
   <string name="app_ops_summaries_add_voicemail">הוסף תא קולי</string>
   <string name="app_ops_summaries_use_sip">השתמש ב-SIP</string>
-  <string name="app_ops_summaries_call_phone">התקשר</string>
+  <string name="app_ops_summaries_make_call">התקשר</string>
   <string name="app_ops_summaries_use_fingerprint">השתמש בטביעת אצבע</string>
   <string name="app_ops_summaries_body_sensors">השתמש בחיישני הגוף</string>
   <string name="app_ops_summaries_read_cell_broadcasts">קרא שידורים סלולריים</string>
@@ -69,7 +69,7 @@
   <string name="app_ops_summaries_bluetooth_change">שנה מצב Bluetooth</string>
   <string name="app_ops_summaries_boot_completed">הפעל בעת איתחול המכשיר</string>
   <string name="app_ops_summaries_nfc_change">שינוי מצב NFC</string>
-  <string name="app_ops_summaries_mobile_data_change">הפעל/כבה תקשורת נתונים סלולרית</string>
+  <string name="app_ops_summaries_data_connect_change">הפעל/כבה תקשורת נתונים סלולרית</string>
   <string name="app_ops_summaries_su">גישת שורש (Root)</string>
   <string name="app_ops_labels_coarse_location">מיקום משוער</string>
   <string name="app_ops_labels_fine_location">מיקום מדויק</string>
@@ -124,7 +124,7 @@
   <string name="app_ops_labels_read_phone_state">קריאת מצב הטלפון</string>
   <string name="app_ops_labels_add_voicemail">הוספת תא קולי</string>
   <string name="app_ops_labels_use_sip">שימוש ב-SIP</string>
-  <string name="app_ops_labels_call_phone">יצירת שיחה</string>
+  <string name="app_ops_labels_make_call">יצירת שיחה</string>
   <string name="app_ops_labels_use_fingerprint">שימוש בטביעת אצבע</string>
   <string name="app_ops_labels_body_sensors">שימוש בחיישני גוף</string>
   <string name="app_ops_labels_read_cell_broadcasts">קריאת שידורים סלולריים</string>
@@ -137,7 +137,7 @@
   <string name="app_ops_labels_bluetooth_change">שינוי מצב Bluetooth</string>
   <string name="app_ops_labels_boot_completed">הפעלה בעת איתחול המכשיר</string>
   <string name="app_ops_labels_nfc_change">שינוי מצב NFC</string>
-  <string name="app_ops_labels_mobile_data_change">הפעלת/כיבוי נתונים סלולריים</string>
+  <string name="app_ops_labels_data_connect_change">הפעלת/כיבוי נתונים סלולריים</string>
   <string name="app_ops_labels_su">גישת שורש (Root)</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">מיקום</string>

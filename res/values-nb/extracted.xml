@@ -49,7 +49,7 @@
   <string name="app_ops_summaries_activate_vpn">aktiver VPN</string>
   <string name="app_ops_summaries_add_voicemail">legg til mobilsvar</string>
   <string name="app_ops_summaries_use_sip">bruk SIP</string>
-  <string name="app_ops_summaries_call_phone">foreta anrop</string>
+  <string name="app_ops_summaries_make_call">foreta anrop</string>
   <string name="app_ops_summaries_use_fingerprint">bruk fingeravtrykk</string>
   <string name="app_ops_summaries_read_external_storage">lese ekstern lagring</string>
   <string name="app_ops_summaries_write_external_storage">skriv til ekstern lagring</string>
@@ -104,7 +104,7 @@
   <string name="app_ops_labels_activate_vpn">Aktiver VPN</string>
   <string name="app_ops_labels_add_voicemail">Legg til mobilsvar</string>
   <string name="app_ops_labels_use_sip">Bruk SIP</string>
-  <string name="app_ops_labels_call_phone">Foreta anrop</string>
+  <string name="app_ops_labels_make_call">Foreta anrop</string>
   <string name="app_ops_labels_read_external_storage">Les fra ekstern lagring</string>
   <string name="app_ops_labels_write_external_storage">Skriv til ekstern lagring</string>
   <string name="app_ops_labels_turn_screen_on">Slå skjermen på</string>

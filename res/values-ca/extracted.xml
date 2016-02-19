@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">llegir l\'estat del telèfon</string>
   <string name="app_ops_summaries_add_voicemail">afegir un correu de veu</string>
   <string name="app_ops_summaries_use_sip">utilitzar SIP</string>
-  <string name="app_ops_summaries_call_phone">fer trucades</string>
+  <string name="app_ops_summaries_make_call">fer trucades</string>
   <string name="app_ops_summaries_use_fingerprint">utilitzar empremtes digitals</string>
   <string name="app_ops_summaries_body_sensors">utilitzar sensors biomètrics</string>
   <string name="app_ops_summaries_read_cell_broadcasts">llegir cel·les de radiodifusió</string>
@@ -69,7 +69,7 @@
   <string name="app_ops_summaries_bluetooth_change">canviar el bluetooth</string>
   <string name="app_ops_summaries_boot_completed">iniciar a l\'arrancada</string>
   <string name="app_ops_summaries_nfc_change">canviar l\'NFC</string>
-  <string name="app_ops_summaries_mobile_data_change">commuta les dades mòbils</string>
+  <string name="app_ops_summaries_data_connect_change">commuta les dades mòbils</string>
   <string name="app_ops_summaries_su">accés de superusuari</string>
   <string name="app_ops_labels_coarse_location">Ubicació poc precisa</string>
   <string name="app_ops_labels_fine_location">Ubicació precisa</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">Llegir l\'estat del telèfon</string>
   <string name="app_ops_labels_add_voicemail">Afegir un correu de veu</string>
   <string name="app_ops_labels_use_sip">Utilitzar SIP</string>
-  <string name="app_ops_labels_call_phone">Fer trucades</string>
+  <string name="app_ops_labels_make_call">Fer trucades</string>
   <string name="app_ops_labels_use_fingerprint">Utilitzar empremtes digitals</string>
   <string name="app_ops_labels_body_sensors">Utilitzar sensors biomètrics</string>
   <string name="app_ops_labels_read_cell_broadcasts">Llegir radio difusions</string>
@@ -138,7 +138,7 @@
   <string name="app_ops_labels_bluetooth_change">Canviar el bluetooth</string>
   <string name="app_ops_labels_boot_completed">Inicia a l\'arrancada</string>
   <string name="app_ops_labels_nfc_change">Canviar l\'NFC</string>
-  <string name="app_ops_labels_mobile_data_change">Commuta les dades mòbils</string>
+  <string name="app_ops_labels_data_connect_change">Commuta les dades mòbils</string>
   <string name="app_ops_labels_su">Accés Root</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Ubicació</string>

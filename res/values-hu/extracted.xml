@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">telefon állapotának olvasása</string>
   <string name="app_ops_summaries_add_voicemail">hangposta hozzáadása</string>
   <string name="app_ops_summaries_use_sip">SIP használata</string>
-  <string name="app_ops_summaries_call_phone">hívás kezdeményezése</string>
+  <string name="app_ops_summaries_make_call">hívás kezdeményezése</string>
   <string name="app_ops_summaries_use_fingerprint">ujjlenyomat használata</string>
   <string name="app_ops_summaries_body_sensors">testszenzorok használata</string>
   <string name="app_ops_summaries_read_cell_broadcasts">hálózati üzenetek olvasása</string>
@@ -124,7 +124,7 @@
   <string name="app_ops_labels_read_phone_state">Telefon állapotának olvasása</string>
   <string name="app_ops_labels_add_voicemail">Hangposta hozzáadása</string>
   <string name="app_ops_labels_use_sip">SIP használata</string>
-  <string name="app_ops_labels_call_phone">Hívás kezdeményezése</string>
+  <string name="app_ops_labels_make_call">Hívás kezdeményezése</string>
   <string name="app_ops_labels_use_fingerprint">Ujjlenyomat használata</string>
   <string name="app_ops_labels_body_sensors">Testszenzorok használata</string>
   <string name="app_ops_labels_read_cell_broadcasts">Hálózati üzenetek olvasása</string>

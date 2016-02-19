@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">Telefonstatus lesen</string>
   <string name="app_ops_summaries_add_voicemail">Sprachnachricht hinzuzufügen</string>
   <string name="app_ops_summaries_use_sip">SIP verwenden</string>
-  <string name="app_ops_summaries_call_phone">Anrufe tätigen</string>
+  <string name="app_ops_summaries_make_call">Anrufe tätigen</string>
   <string name="app_ops_summaries_use_fingerprint">Fingerabdruck verwenden</string>
   <string name="app_ops_summaries_body_sensors">Körpersensoren verwenden</string>
   <string name="app_ops_summaries_read_cell_broadcasts">Notfall-Broadcasts lesen</string>
@@ -69,7 +69,7 @@
   <string name="app_ops_summaries_bluetooth_change">Bluetooth ein-/ausschalten</string>
   <string name="app_ops_summaries_boot_completed">Beim Booten starten</string>
   <string name="app_ops_summaries_nfc_change">NFC ein-/ausschalten</string>
-  <string name="app_ops_summaries_mobile_data_change">Mobile Daten ein-/ausschalten</string>
+  <string name="app_ops_summaries_data_connect_change">Mobile Daten ein-/ausschalten</string>
   <string name="app_ops_summaries_su">Root-Zugriff</string>
   <string name="app_ops_labels_coarse_location">Ungefährer Standort</string>
   <string name="app_ops_labels_fine_location">Genauer Standort</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">Telefonstatus lesen</string>
   <string name="app_ops_labels_add_voicemail">Sprachnachricht hinzufügen</string>
   <string name="app_ops_labels_use_sip">SIP verwenden</string>
-  <string name="app_ops_labels_call_phone">Anrufe tätigen</string>
+  <string name="app_ops_labels_make_call">Anrufe tätigen</string>
   <string name="app_ops_labels_use_fingerprint">Fingerabdruck nutzen</string>
   <string name="app_ops_labels_body_sensors">Körpersensoren verwenden</string>
   <string name="app_ops_labels_read_cell_broadcasts">Notfall-Broadcasts lesen</string>
@@ -138,7 +138,7 @@
   <string name="app_ops_labels_bluetooth_change">Bluetooth ein-/ausschalten</string>
   <string name="app_ops_labels_boot_completed">Beim Booten starten</string>
   <string name="app_ops_labels_nfc_change">NFC ein-/ausschalten</string>
-  <string name="app_ops_labels_mobile_data_change">Mobile Daten ein-/ausschalten</string>
+  <string name="app_ops_labels_data_connect_change">Mobile Daten ein-/ausschalten</string>
   <string name="app_ops_labels_su">Root-Zugriff</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Standort</string>

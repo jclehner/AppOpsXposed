@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">ler o estado do telefone</string>
   <string name="app_ops_summaries_add_voicemail">adicionar o correio de voz</string>
   <string name="app_ops_summaries_use_sip">usar o SIP</string>
-  <string name="app_ops_summaries_call_phone">fazer chamada</string>
+  <string name="app_ops_summaries_make_call">fazer chamada</string>
   <string name="app_ops_summaries_use_fingerprint">usar a impressão digital</string>
   <string name="app_ops_summaries_body_sensors">usar os sensores corporais</string>
   <string name="app_ops_summaries_read_cell_broadcasts">ler transmissões celulares</string>
@@ -69,7 +69,7 @@
   <string name="app_ops_summaries_bluetooth_change">alternar o estado do bluetooth</string>
   <string name="app_ops_summaries_boot_completed">iniciar no arranque</string>
   <string name="app_ops_summaries_nfc_change">alternar o estado do NFC</string>
-  <string name="app_ops_summaries_mobile_data_change">alternar o estado dos dados móveis</string>
+  <string name="app_ops_summaries_data_connect_change">alternar o estado dos dados móveis</string>
   <string name="app_ops_summaries_su">acesso root</string>
   <string name="app_ops_labels_coarse_location">Localização imprecisa</string>
   <string name="app_ops_labels_fine_location">Localização precisa</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">Ler o estado do telefone</string>
   <string name="app_ops_labels_add_voicemail">Adicionar o correio de voz</string>
   <string name="app_ops_labels_use_sip">Usar SIP</string>
-  <string name="app_ops_labels_call_phone">Fazer chamada</string>
+  <string name="app_ops_labels_make_call">Fazer chamada</string>
   <string name="app_ops_labels_use_fingerprint">Usar a impressão digital</string>
   <string name="app_ops_labels_body_sensors">Usar os sensores corporais</string>
   <string name="app_ops_labels_read_cell_broadcasts">Ler transmissões celulares</string>
@@ -138,7 +138,7 @@
   <string name="app_ops_labels_bluetooth_change">Alternar o estado do bluetooth</string>
   <string name="app_ops_labels_boot_completed">Iniciar no arranque</string>
   <string name="app_ops_labels_nfc_change">Alternar o estado do NFC</string>
-  <string name="app_ops_labels_mobile_data_change">Alternar o estado dos dados móveis</string>
+  <string name="app_ops_labels_data_connect_change">Alternar o estado dos dados móveis</string>
   <string name="app_ops_labels_su">Acesso root</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Localização</string>

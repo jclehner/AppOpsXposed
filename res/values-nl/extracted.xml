@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">telefoonstatus lezen</string>
   <string name="app_ops_summaries_add_voicemail">voicemail toevoegen</string>
   <string name="app_ops_summaries_use_sip">SIP gebruiken</string>
-  <string name="app_ops_summaries_call_phone">gesprek starten</string>
+  <string name="app_ops_summaries_make_call">gesprek starten</string>
   <string name="app_ops_summaries_use_fingerprint">vingerafdruk gebruiken</string>
   <string name="app_ops_summaries_body_sensors">lichaamssensoren gebruiken</string>
   <string name="app_ops_summaries_read_cell_broadcasts">nooduitzendingen lezen</string>
@@ -69,7 +69,7 @@
   <string name="app_ops_summaries_bluetooth_change">Bluetooth aan-/uitzetten</string>
   <string name="app_ops_summaries_boot_completed">starten tijdens opstarten</string>
   <string name="app_ops_summaries_nfc_change">NFC aan-/uitzetten</string>
-  <string name="app_ops_summaries_mobile_data_change">mobiele gegevens aan-/uitzetten</string>
+  <string name="app_ops_summaries_data_connect_change">mobiele gegevens aan-/uitzetten</string>
   <string name="app_ops_summaries_su">root-toegang</string>
   <string name="app_ops_labels_coarse_location">Geschatte locatie</string>
   <string name="app_ops_labels_fine_location">Nauwkeurige locatie</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">Telefoonstatus lezen</string>
   <string name="app_ops_labels_add_voicemail">Voicemail toevoegen</string>
   <string name="app_ops_labels_use_sip">SIP gebruiken</string>
-  <string name="app_ops_labels_call_phone">Gesprek starten</string>
+  <string name="app_ops_labels_make_call">Gesprek starten</string>
   <string name="app_ops_labels_use_fingerprint">Vingerafdruk gebruiken</string>
   <string name="app_ops_labels_body_sensors">Lichaamssensoren gebruiken</string>
   <string name="app_ops_labels_read_cell_broadcasts">Nooduitzendingen lezen</string>
@@ -138,7 +138,7 @@
   <string name="app_ops_labels_bluetooth_change">Bluetooth aan-/uitzetten</string>
   <string name="app_ops_labels_boot_completed">Starten tijdens opstarten</string>
   <string name="app_ops_labels_nfc_change">NFC aan-/uitzetten</string>
-  <string name="app_ops_labels_mobile_data_change">Mobiele gegevens aan-/uitzetten</string>
+  <string name="app_ops_labels_data_connect_change">Mobiele gegevens aan-/uitzetten</string>
   <string name="app_ops_labels_su">Root-toegang</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Locatie</string>

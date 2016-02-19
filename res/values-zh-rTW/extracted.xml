@@ -52,7 +52,7 @@
   <string name="app_ops_summaries_activate_vpn">啟用 VPN</string>
   <string name="app_ops_summaries_read_phone_state">讀取手機狀態</string>
   <string name="app_ops_summaries_use_sip">使用 SIP</string>
-  <string name="app_ops_summaries_call_phone">撥打電話</string>
+  <string name="app_ops_summaries_make_call">撥打電話</string>
   <string name="app_ops_summaries_read_cell_broadcasts">讀取區域廣播</string>
   <string name="app_ops_summaries_mock_location">模擬位置</string>
   <string name="app_ops_summaries_read_external_storage">讀取外部存儲空間</string>

@@ -50,7 +50,7 @@
   <string name="app_ops_summaries_activate_vpn">activează VPN</string>
   <string name="app_ops_summaries_write_wallpaper">scrie tapet</string>
   <string name="app_ops_summaries_read_phone_state">citește starea telefonului</string>
-  <string name="app_ops_summaries_call_phone">apelează</string>
+  <string name="app_ops_summaries_make_call">apelează</string>
   <string name="app_ops_summaries_use_fingerprint">utilizează amprentă digitală</string>
   <string name="app_ops_summaries_body_sensors">utilizează senzorii corporali</string>
   <string name="app_ops_summaries_read_cell_broadcasts">citește trasmisiunile din rețea</string>
@@ -62,7 +62,7 @@
   <string name="app_ops_summaries_bluetooth_change">comută bluetooth</string>
   <string name="app_ops_summaries_boot_completed">pornește la boot</string>
   <string name="app_ops_summaries_nfc_change">comută NFC</string>
-  <string name="app_ops_summaries_mobile_data_change">comutare date mobile</string>
+  <string name="app_ops_summaries_data_connect_change">comutare date mobile</string>
   <string name="app_ops_summaries_su">acces root</string>
   <string name="app_ops_labels_fine_location">Locație fină</string>
   <string name="app_ops_labels_gps">GPS</string>
@@ -113,7 +113,7 @@
   <string name="app_ops_labels_read_phone_state">Citește starea telefonului</string>
   <string name="app_ops_labels_add_voicemail">Adaugă mesaj vocal</string>
   <string name="app_ops_labels_use_sip">Utilizează SIP</string>
-  <string name="app_ops_labels_call_phone">Apelează</string>
+  <string name="app_ops_labels_make_call">Apelează</string>
   <string name="app_ops_labels_use_fingerprint">Utilizează amprentă digitală</string>
   <string name="app_ops_labels_body_sensors">Utilizează senzorii corporali</string>
   <string name="app_ops_labels_read_cell_broadcasts">Citește trasmisiunile din rețea</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_bluetooth_change">Comută bluetooth</string>
   <string name="app_ops_labels_boot_completed">Pornește la boot</string>
   <string name="app_ops_labels_nfc_change">Comută NFC</string>
-  <string name="app_ops_labels_mobile_data_change">Comutare date mobile</string>
+  <string name="app_ops_labels_data_connect_change">Comutare date mobile</string>
   <string name="app_ops_labels_su">Acces root</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Locație</string>

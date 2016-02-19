@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">telefonoaren egoera irakurri</string>
   <string name="app_ops_summaries_add_voicemail">ahots postontzia gehitu</string>
   <string name="app_ops_summaries_use_sip">SIP erabili</string>
-  <string name="app_ops_summaries_call_phone">deitu</string>
+  <string name="app_ops_summaries_make_call">deitu</string>
   <string name="app_ops_summaries_use_fingerprint">hatz-marka erabili</string>
   <string name="app_ops_summaries_body_sensors">gorputz sentsoreak erabili</string>
   <string name="app_ops_summaries_read_cell_broadcasts">zelulen banaketa mezuak irakurri</string>
@@ -69,7 +69,7 @@
   <string name="app_ops_summaries_bluetooth_change">bluetooth txandakatu</string>
   <string name="app_ops_summaries_boot_completed">abioan hasi</string>
   <string name="app_ops_summaries_nfc_change">NFC txandakatu</string>
-  <string name="app_ops_summaries_mobile_data_change">txandakatu datu mugikorrak</string>
+  <string name="app_ops_summaries_data_connect_change">txandakatu datu mugikorrak</string>
   <string name="app_ops_summaries_su">root sarbidea</string>
   <string name="app_ops_labels_coarse_location">Gutxi gora beherako kokalekua</string>
   <string name="app_ops_labels_fine_location">Kokaleku zehatza</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">Telefonoaren egoera irakurri</string>
   <string name="app_ops_labels_add_voicemail">Ahots postontzia gehitu</string>
   <string name="app_ops_labels_use_sip">SIP erabili</string>
-  <string name="app_ops_labels_call_phone">Deitu</string>
+  <string name="app_ops_labels_make_call">Deitu</string>
   <string name="app_ops_labels_use_fingerprint">Hatz-marka erabili</string>
   <string name="app_ops_labels_body_sensors">Gorputz sentsoreak erabili</string>
   <string name="app_ops_labels_read_cell_broadcasts">Zelulen banaketa mezuak irakurri</string>
@@ -138,7 +138,7 @@
   <string name="app_ops_labels_bluetooth_change">Bluetooth txandakatu</string>
   <string name="app_ops_labels_boot_completed">Abioan hasi</string>
   <string name="app_ops_labels_nfc_change">NFC txandakatu</string>
-  <string name="app_ops_labels_mobile_data_change">Txandakatu datu mugikorrak</string>
+  <string name="app_ops_labels_data_connect_change">Txandakatu datu mugikorrak</string>
   <string name="app_ops_labels_su">Root sarbidea</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Kokalekua</string>

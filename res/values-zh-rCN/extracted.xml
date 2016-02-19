@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">读取电话状态</string>
   <string name="app_ops_summaries_add_voicemail">添加语音邮件</string>
   <string name="app_ops_summaries_use_sip">使用 SIP</string>
-  <string name="app_ops_summaries_call_phone">拨打电话</string>
+  <string name="app_ops_summaries_make_call">拨打电话</string>
   <string name="app_ops_summaries_use_fingerprint">使用指纹</string>
   <string name="app_ops_summaries_body_sensors">使用身体传感器</string>
   <string name="app_ops_summaries_read_cell_broadcasts">读取小区广播</string>
@@ -69,7 +69,7 @@
   <string name="app_ops_summaries_bluetooth_change">切换蓝牙</string>
   <string name="app_ops_summaries_boot_completed">在开机时启动</string>
   <string name="app_ops_summaries_nfc_change">切换 NFC</string>
-  <string name="app_ops_summaries_mobile_data_change">切换移动数据</string>
+  <string name="app_ops_summaries_data_connect_change">切换移动数据</string>
   <string name="app_ops_summaries_su">Root 授权</string>
   <string name="app_ops_labels_coarse_location">粗略位置</string>
   <string name="app_ops_labels_fine_location">准确位置</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">读取电话状态</string>
   <string name="app_ops_labels_add_voicemail">添加语音邮件</string>
   <string name="app_ops_labels_use_sip">使用 SIP</string>
-  <string name="app_ops_labels_call_phone">拨打电话</string>
+  <string name="app_ops_labels_make_call">拨打电话</string>
   <string name="app_ops_labels_use_fingerprint">使用指纹</string>
   <string name="app_ops_labels_body_sensors">使用身体传感器</string>
   <string name="app_ops_labels_read_cell_broadcasts">读取小区广播</string>
@@ -138,7 +138,7 @@
   <string name="app_ops_labels_bluetooth_change">切换蓝牙</string>
   <string name="app_ops_labels_boot_completed">在开机时启动</string>
   <string name="app_ops_labels_nfc_change">切换 NFC</string>
-  <string name="app_ops_labels_mobile_data_change">切换移动数据</string>
+  <string name="app_ops_labels_data_connect_change">切换移动数据</string>
   <string name="app_ops_labels_su">Root 授权</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">位置</string>

@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">携帯電話の状態の読み取り</string>
   <string name="app_ops_summaries_add_voicemail">ボイスメールの追加</string>
   <string name="app_ops_summaries_use_sip">SIPの使用</string>
-  <string name="app_ops_summaries_call_phone">発信</string>
+  <string name="app_ops_summaries_make_call">発信</string>
   <string name="app_ops_summaries_use_fingerprint">指紋の使用</string>
   <string name="app_ops_summaries_body_sensors">ボディセンサーの使用</string>
   <string name="app_ops_summaries_read_cell_broadcasts">セルブロードキャストの読み取り</string>
@@ -69,7 +69,7 @@
   <string name="app_ops_summaries_bluetooth_change">Bluetoothの切り替え</string>
   <string name="app_ops_summaries_boot_completed">ブート時の実行</string>
   <string name="app_ops_summaries_nfc_change">NFCの切り替え</string>
-  <string name="app_ops_summaries_mobile_data_change">データ通信の切り替え</string>
+  <string name="app_ops_summaries_data_connect_change">データ通信の切り替え</string>
   <string name="app_ops_summaries_su">ルートアクセス</string>
   <string name="app_ops_labels_coarse_location">おおよその位置情報</string>
   <string name="app_ops_labels_fine_location">精細な位置情報</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">携帯電話の状態の読み取り</string>
   <string name="app_ops_labels_add_voicemail">ボイスメールの追加</string>
   <string name="app_ops_labels_use_sip">SIPの使用</string>
-  <string name="app_ops_labels_call_phone">発信</string>
+  <string name="app_ops_labels_make_call">発信</string>
   <string name="app_ops_labels_use_fingerprint">指紋の使用</string>
   <string name="app_ops_labels_body_sensors">ボディセンサーの使用</string>
   <string name="app_ops_labels_read_cell_broadcasts">セルブロードキャストの読み取り</string>
@@ -138,7 +138,7 @@
   <string name="app_ops_labels_bluetooth_change">Bluetoothの切り替え</string>
   <string name="app_ops_labels_boot_completed">ブート時の実行</string>
   <string name="app_ops_labels_nfc_change">NFCの切り替え</string>
-  <string name="app_ops_labels_mobile_data_change">データ通信の切り替え</string>
+  <string name="app_ops_labels_data_connect_change">データ通信の切り替え</string>
   <string name="app_ops_labels_su">ルートアクセス</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">位置情報</string>
