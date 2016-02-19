@@ -36,7 +36,6 @@
     <string name="icons">Иконки</string>
     <string name="import_export_summary">Импорт/экспорт настроек на/из внешнего хранилища.</string>
     <string name="import_export_title">Резервное копирование</string>
-    <string name="install_as_system_app">AppOpsXposed не запущен в качестве модуля Xposed. Установить в качестве системного приложения (требуется root; устройство перезагрузится)?</string>
     <string name="light_theme_summary">@null</string>
     <string name="light_theme_title">Светлая тема</string>
     <string name="must_reboot_device">Нужно перезагрузить устройство!</string>
