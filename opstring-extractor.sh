@@ -148,7 +148,7 @@ extract_lang() {
 				return 1
 			fi
 
-			ops=$(grep -oP 'app_ops_summaries_(\w+)' res/values/extracted.xml | sed -e 's/app_ops_summaries_//')
+			ops=$(grep -oP 'app_ops_summaries_(\w+)' res/values/ops.xml | sed -e 's/app_ops_summaries_//')
 			i=0
 
 			for op in $ops; do
@@ -186,7 +186,7 @@ extract_lang() {
 
 		echo "  <!-- Categories -->" >> "$TMP.ops"
 
-		cats=$(grep -oP 'app_ops_categories_(\w+)' res/values/extracted.xml)
+		cats=$(grep -oP 'app_ops_categories_(\w+)' res/values/ops.xml)
 		i=0
 
 		for c in $cats; do
