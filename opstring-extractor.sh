@@ -19,7 +19,7 @@ PATTERNS=(
 	's/_use_body_sensors/_body_sensors/g'
 	's/_data_change/_data_connect_change/g'
 	's/_cell_scan/_neighboring_cells/g'
-	's/_make_call/_call_phone/g'
+	#'s/_make_call/_call_phone/g'
 	's/_superuser/_su/g'
 	's/_start_at_boot/_boot_completed/g'
 	's/_toggle_(.*?)"/_$1_change"/g'
