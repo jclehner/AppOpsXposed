@@ -68,7 +68,7 @@ THE EXTRACTOR SCRIPT WILL FAIL OTHERWISE!
     <string name="app_ops_summaries_delete_mms">delete MMS</string>
     <string name="app_ops_summaries_delete_contacts">delete contacts</string>
     <string name="app_ops_summaries_delete_call_log">delete call log</string>
-    <string name="app_ops_summaries_data_change">data change</string>
+    <string name="app_ops_summaries_data_connect_change">data change</string>
     <string name="app_ops_summaries_alarm_wakeup">wake up</string>
     <string name="app_ops_summaries_su">root access</string>
     <string name="app_ops_summaries_neighboring_cells">cell scan</string>
@@ -81,7 +81,7 @@ THE EXTRACTOR SCRIPT WILL FAIL OTHERWISE!
     <string name="app_ops_summaries_use_sip">use SIP</string>
     <string name="app_ops_summaries_make_call">make call</string>
     <string name="app_ops_summaries_use_fingerprint">use fingerprint</string>
-    <string name="app_ops_summaries_use_body_sensors">use body sensors</string>
+    <string name="app_ops_summaries_body_sensors">use body sensors</string>
     <string name="app_ops_summaries_read_cell_broadcasts">read cell broadcasts</string>
     <string name="app_ops_summaries_mock_location">mock location</string>
     <string name="app_ops_summaries_read_external_storage">read external storage</string>
@@ -149,7 +149,7 @@ THE EXTRACTOR SCRIPT WILL FAIL OTHERWISE!
     <string name="app_ops_labels_delete_mms">Delete MMS</string>
     <string name="app_ops_labels_delete_contacts">Delete contacts</string>
     <string name="app_ops_labels_delete_call_log">Delete call log</string>
-    <string name="app_ops_labels_data_change">Data change</string>
+    <string name="app_ops_labels_data_connect_change">Data change</string>
     <string name="app_ops_labels_alarm_wakeup">Wake up</string>
     <string name="app_ops_labels_su">Root access</string>
     <string name="app_ops_labels_neighboring_cells">Location</string>

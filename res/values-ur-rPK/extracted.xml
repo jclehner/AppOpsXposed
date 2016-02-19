@@ -120,8 +120,8 @@
   <!-- app_ops_labels_delete_contacts missing -->
   <!-- app_ops_summaries_delete_call_log missing -->
   <!-- app_ops_labels_delete_call_log missing -->
-  <!-- app_ops_summaries_data_change missing -->
-  <!-- app_ops_labels_data_change missing -->
+  <!-- app_ops_summaries_data_connect_change missing -->
+  <!-- app_ops_labels_data_connect_change missing -->
   <!-- app_ops_summaries_alarm_wakeup missing -->
   <!-- app_ops_labels_alarm_wakeup missing -->
   <!-- app_ops_summaries_su missing -->
@@ -146,8 +146,8 @@
   <!-- app_ops_labels_make_call missing -->
   <!-- app_ops_summaries_use_fingerprint missing -->
   <!-- app_ops_labels_use_fingerprint missing -->
-  <!-- app_ops_summaries_use_body_sensors missing -->
-  <!-- app_ops_labels_use_body_sensors missing -->
+  <!-- app_ops_summaries_body_sensors missing -->
+  <!-- app_ops_labels_body_sensors missing -->
   <!-- app_ops_summaries_read_cell_broadcasts missing -->
   <!-- app_ops_labels_read_cell_broadcasts missing -->
   <!-- app_ops_summaries_mock_location missing -->
