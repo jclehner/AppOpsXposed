@@ -25,6 +25,7 @@ import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.PermissionInfo;
 import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
 import android.util.Log;
@@ -110,30 +111,45 @@ public class OpsLabelHelper
 
 			final String str = getAppOpsString(context, opName, getLabels);
 			if(str != null)
-				strings.append(op, Util.capitalizeFirst(str));
+				strings.append(op, str);
 			else
 				Util.debug("No ops string for " + opName);
 		}
 
-		final String[] ret = new String[maxOp + 1];
+		final String[] ret = new String[AppOpsManagerWrapper._NUM_OP];
 
-		for(int op = 0; op != ret.length; ++op)
+		for(int op = 0; op != maxOp; ++op)
 			ret[op] = strings.get(op, AppOpsManagerWrapper.opToName(op));
 
 		if(maxOp + 1 != AppOpsManagerWrapper._NUM_OP)
-			Util.log("maxOp=" + maxOp + ", but _NUM_OP=" + AppOpsManagerWrapper._NUM_OP);
+		{
+			for(int op = maxOp; op != AppOpsManagerWrapper._NUM_OP; ++op)
+			{
+				final String opName = AppOpsManagerWrapper.opToName(op);
+				if (opName != null)
+					ret[op] = getAppOpsString(context, opName, true);
+
+				if(ret[op] == null)
+					ret[op] = "OP #" + op;
+			}
+		}
 
 		return ret;
 	}
 
-	private static String getAppOpsString(Context context, String opName, boolean getLabel) {
-		return getAppOpsString(context, opName, getLabel, true);
+	private static String getAppOpsString(Context context, String opName, boolean getLabel)
+	{
+		final String str = getAppOpsString(context, opName, getLabel, true);
+		return str != null ? Util.capitalizeFirst(str) : null;
 	}
 
 	private static String getAppOpsString(Context context, String opName, boolean getLabel, boolean tryOther)
 	{
+		if(opName.startsWith("OP_"))
+			opName = opName.substring(3);
+
 		final String id = "app_ops_" + (getLabel ? "labels" : "summaries") + "_" +
-				opName.substring(3).toLowerCase(Locale.US);
+				opName.toLowerCase(Locale.US);
 
 		final Resources res;
 
@@ -147,7 +163,7 @@ public class OpsLabelHelper
 		catch(NameNotFoundException e)
 		{
 			Log.w("AOX", e);
-			return null;
+			return opName;
 		}
 
 		final int resId = res.getIdentifier(Constants.MODULE_PACKAGE + ":string/" + id, null, null);
@@ -186,7 +202,7 @@ public class OpsLabelHelper
 		}
 
 		final String[] array = getLabel ? sOpLabels : sOpSummaries;
-		return op < array.length ? array[op] : "OP #" + op;
+		return array[op];
 	}
 
 	private static String getFallbackString(Context context, String opName, boolean getLabel, boolean tryOther)
@@ -198,7 +214,8 @@ public class OpsLabelHelper
 				return other;
 		}
 
-		return opLabelFromPermission(context, opName);
+		final String fromPerm = opLabelFromPermission(context, opName);
+		return fromPerm != null ? fromPerm : opName;
 	}
 
 	public static int getOpValue(String name)
@@ -229,23 +246,25 @@ public class OpsLabelHelper
 	{
 		final int op = AppOpsManagerWrapper.opFromName(opName);
 		final String perm = AppOpsManagerWrapper.opToPermission(op);
-
-		if(perm != null)
-			return getPermissionLabel(context, perm, null).toString();
-
-		return null;
+		return perm != null ? getPermissionLabel(context, perm, null) : null;
 	}
 
-	private static CharSequence getPermissionLabel(Context context, String permission, String defValue)
+	private static String getPermissionLabel(Context context, String permission, String defValue)
 	{
 		try
 		{
 			final PackageManager pm = context.getPackageManager();
-			return pm.getPermissionInfo(permission, 0).loadLabel(pm);
+			final PermissionInfo pi = pm.getPermissionInfo(permission, 0);
+
+			final CharSequence label = pi.loadLabel(pm);
+			if(label != null && !label.toString().equals(permission))
+				return label.toString();
 		}
 		catch(NameNotFoundException e)
 		{
-			return defValue;
+			// om nom nom
 		}
+
+		return defValue;
 	}
 }
