@@ -335,7 +335,10 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 						Res.modPrefs.reload();
 						int icon = Res.modPrefs.getInt("icon_appinfo", Constants.ICON_LAUNCHER);
 
-						final MenuItem item = menu.add(getAppOpsTitle());
+						MenuItem item = menu.findItem(R.id.app_ops_settings);
+						if(item == null)
+							item = menu.add(0, R.id.app_ops_settings, 0, getAppOpsTitle());
+
 						item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 						item.setTitle(Res.modRes.getString(R.string.app_ops_settings));
 						item.setIcon(Res.modRes.getDrawable(Constants.ICONS[icon]));
