@@ -1,5 +1,6 @@
 ### 1.30
 * Better support for Marshmallow
+* Fix crashes
 * Fix label/summary issues
 * Fix multiple icons in "App info" screen
 
