@@ -45,6 +45,7 @@ import at.jclehner.appopsxposed.variants.AOSP;
 import at.jclehner.appopsxposed.variants.CyanogenMod;
 import at.jclehner.appopsxposed.variants.HTC;
 import at.jclehner.appopsxposed.variants.LG;
+import at.jclehner.appopsxposed.variants.Minimal;
 import at.jclehner.appopsxposed.variants.OmniROM;
 import at.jclehner.appopsxposed.variants.Oppo;
 import at.jclehner.appopsxposed.variants.Samsung;
@@ -90,6 +91,7 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 		new CyanogenMod(),
 		new OmniROM(),
 		new Oppo(),
+		new Minimal(),
 		new AOSP() // must be the last entry!
 	};
 

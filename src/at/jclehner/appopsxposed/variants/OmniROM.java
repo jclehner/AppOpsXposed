@@ -22,15 +22,10 @@ import android.content.pm.ApplicationInfo;
 import at.jclehner.appopsxposed.util.Util;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
-public class OmniROM extends AOSP
+public class OmniROM extends Minimal
 {
 	@Override
 	protected boolean onMatch(ApplicationInfo appInfo, ClassChecker classChecker) {
 		return Util.getSystemProperty("ro.omni.version", "").length() != 0;
-	}
-
-	@Override
-	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable {
-		addAppOpsToAppInfo(lpparam);
 	}
 }
