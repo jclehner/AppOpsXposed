@@ -29,7 +29,7 @@ public class SystemEventReceiver extends BroadcastReceiver
 	private void showPackageNotification(Context context, Intent intent)
 	{
 		final SharedPreferences sp = Util.getSharedPrefs(context);
-		if(!sp.getBoolean("show_pkg_notifications", true))
+		if(!sp.getBoolean("show_pkg_notifications", true) || !Util.isXposedModuleOrSystemApp(context))
 			return;
 
 		final PackageManager pm = context.getPackageManager();

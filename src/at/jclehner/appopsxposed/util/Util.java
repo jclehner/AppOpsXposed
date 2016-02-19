@@ -37,6 +37,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
@@ -110,6 +111,11 @@ public final class Util
 
 	public static boolean isXposedModuleEnabled() {
 		return sIsExposedModuleEnabled;
+	}
+
+	public static boolean isXposedModuleOrSystemApp(Context context)
+	{
+		return isXposedModuleEnabled() || isSystemApp(context);
 	}
 
 	public static boolean containsManufacturer(String str) {
