@@ -46,7 +46,7 @@
   <string name="app_ops_summaries_toast_window">bildiriş göstər</string>
   <string name="app_ops_summaries_project_media">medianı əks etdir</string>
   <string name="app_ops_summaries_activate_vpn">VPN\'ni aktivetmə</string>
-  <string name="app_ops_summaries_superuser">root müraciəti</string>
+  <string name="app_ops_summaries_su">root müraciəti</string>
   <string name="app_ops_labels_gps">GPS</string>
   <string name="app_ops_labels_vibrate">Titrəmə</string>
   <string name="app_ops_labels_read_contacts">Şəxsləri oxu</string>
@@ -80,7 +80,7 @@
   <string name="app_ops_labels_toast_window">Bildiriş göstər</string>
   <string name="app_ops_labels_project_media">Medianı əks etdir</string>
   <string name="app_ops_labels_activate_vpn">VPN\'ni aktivetmə</string>
-  <string name="app_ops_labels_superuser">Root müraciəti</string>
+  <string name="app_ops_labels_su">Root müraciəti</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Yer</string>
   <string name="app_ops_categories_personal">Şəxsi</string>

@@ -46,7 +46,7 @@
   <string name="app_ops_summaries_toast_window">แสดงกล่องข้อความ</string>
   <string name="app_ops_summaries_project_media">สื่อโครงการ</string>
   <string name="app_ops_summaries_activate_vpn">เปิดใช้งาน VPN</string>
-  <string name="app_ops_summaries_superuser">สิทธิผู้ดูแลระบบ</string>
+  <string name="app_ops_summaries_su">สิทธิผู้ดูแลระบบ</string>
   <string name="app_ops_labels_gps">GPS</string>
   <string name="app_ops_labels_vibrate">สั่น</string>
   <string name="app_ops_labels_read_contacts">อ่านรายชื่อ</string>
@@ -82,7 +82,7 @@
   <string name="app_ops_labels_toast_window">แสดงกล่องข้อความ</string>
   <string name="app_ops_labels_project_media">สื่อโครงการ</string>
   <string name="app_ops_labels_activate_vpn">เปิดใช้งาน VPN</string>
-  <string name="app_ops_labels_superuser">สิทธิผู้ดูแลระบบ</string>
+  <string name="app_ops_labels_su">สิทธิผู้ดูแลระบบ</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">ตำแหน่งที่ตั้ง</string>
   <string name="app_ops_categories_personal">ส่วนบุคคล</string>

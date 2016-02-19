@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">прачытаць стан тэлефону</string>
   <string name="app_ops_summaries_add_voicemail">дадаць галасаву пошту</string>
   <string name="app_ops_summaries_use_sip">выкарыстоўваць SIP</string>
-  <string name="app_ops_summaries_make_call">зрабіць выклік</string>
+  <string name="app_ops_summaries_call_phone">зрабіць выклік</string>
   <string name="app_ops_summaries_use_fingerprint">выкарыстоўваць адбітак пальцу</string>
   <string name="app_ops_summaries_body_sensors">выкарыстоваць датчыкі целу</string>
   <string name="app_ops_summaries_read_cell_broadcasts">чытаць шырокавяшчальныя паведамленні</string>
@@ -65,11 +65,11 @@
   <string name="app_ops_summaries_write_external_storage">запіс на знешні назапашнівальнік</string>
   <string name="app_ops_summaries_turn_screen_on">улучыць экран</string>
   <string name="app_ops_summaries_get_accounts">атрымаць запісы</string>
-  <string name="app_ops_summaries_toggle_wifi">пераключыць Wi-Fi</string>
-  <string name="app_ops_summaries_toggle_bluetooth">пераключыць bluetooth</string>
-  <string name="app_ops_summaries_start_at_boot">запуск падчас загрузкі</string>
-  <string name="app_ops_summaries_toggle_nfc">пераключыць NFC</string>
-  <string name="app_ops_summaries_superuser">суперкарыстальнік</string>
+  <string name="app_ops_summaries_wifi_change">пераключыць Wi-Fi</string>
+  <string name="app_ops_summaries_bluetooth_change">пераключыць bluetooth</string>
+  <string name="app_ops_summaries_boot_completed">запуск падчас загрузкі</string>
+  <string name="app_ops_summaries_nfc_change">пераключыць NFC</string>
+  <string name="app_ops_summaries_su">суперкарыстальнік</string>
   <string name="app_ops_labels_coarse_location">Прыблізнае месцазнаходжанне</string>
   <string name="app_ops_labels_fine_location">Дакладнае месцазнаходжанне</string>
   <string name="app_ops_labels_gps">GPS</string>
@@ -124,7 +124,7 @@
   <string name="app_ops_labels_read_phone_state">Прачытаць стан тэлефону</string>
   <string name="app_ops_labels_add_voicemail">Дадаць галасаву пошту</string>
   <string name="app_ops_labels_use_sip">Выкарыстанне SIP</string>
-  <string name="app_ops_labels_make_call">Зрабіць выклік</string>
+  <string name="app_ops_labels_call_phone">Зрабіць выклік</string>
   <string name="app_ops_labels_use_fingerprint">Выкарыстоўваць адбітак пальцу</string>
   <string name="app_ops_labels_body_sensors">Выкарыстоваць датчыкі целу</string>
   <string name="app_ops_labels_read_cell_broadcasts">Чытаць шырокавяшчальныя паведамленні</string>
@@ -133,11 +133,11 @@
   <string name="app_ops_labels_write_external_storage">Запіс на знешні назапашнівальнік</string>
   <string name="app_ops_labels_turn_screen_on">Улучыць экран</string>
   <string name="app_ops_labels_get_accounts">Атрымаць запісы</string>
-  <string name="app_ops_labels_toggle_wifi">Пераключыць Wi-Fi</string>
-  <string name="app_ops_labels_toggle_bluetooth">Пераключыць bluetooth</string>
-  <string name="app_ops_labels_start_at_boot">Запуск падчас загрузкі</string>
-  <string name="app_ops_labels_toggle_nfc">Пераключыць NFC</string>
-  <string name="app_ops_labels_superuser">Рэжым суперкарыстальніка</string>
+  <string name="app_ops_labels_wifi_change">Пераключыць Wi-Fi</string>
+  <string name="app_ops_labels_bluetooth_change">Пераключыць bluetooth</string>
+  <string name="app_ops_labels_boot_completed">Запуск падчас загрузкі</string>
+  <string name="app_ops_labels_nfc_change">Пераключыць NFC</string>
+  <string name="app_ops_labels_su">Рэжым суперкарыстальніка</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Месцазнаходжанне</string>
   <string name="app_ops_categories_personal">Асабістыя дадзеныя</string>

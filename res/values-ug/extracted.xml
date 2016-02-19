@@ -46,7 +46,7 @@
   <string name="app_ops_summaries_toast_window">ئەسكەرتىش ئۇچۇرىنى كۆرسىتىدۇ</string>
   <string name="app_ops_summaries_project_media">ۋاسىتىنى قويىدۇ</string>
   <string name="app_ops_summaries_activate_vpn">VPN نى ئاكتىپلا</string>
-  <string name="app_ops_summaries_superuser">Root ھوقۇقى</string>
+  <string name="app_ops_summaries_su">Root ھوقۇقى</string>
   <string name="app_ops_labels_gps">GPS</string>
   <string name="app_ops_labels_vibrate">تىترەت</string>
   <string name="app_ops_labels_read_contacts">ئالاقەداشلارنى ئوقۇيدۇ</string>
@@ -82,7 +82,7 @@
   <string name="app_ops_labels_toast_window">ئەسكەرتىش ئۇچۇرىنى كۆرسىتىدۇ</string>
   <string name="app_ops_labels_project_media">ۋاسىتىنى قويىدۇ</string>
   <string name="app_ops_labels_activate_vpn">VPN نى ئاكتىپلا</string>
-  <string name="app_ops_labels_superuser">Root ھوقۇقى</string>
+  <string name="app_ops_labels_su">Root ھوقۇقى</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">ئورنى</string>
   <string name="app_ops_categories_personal">شەخسىي</string>

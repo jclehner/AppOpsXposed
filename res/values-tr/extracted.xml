@@ -46,7 +46,7 @@
   <string name="app_ops_summaries_toast_window">bildirim göster</string>
   <string name="app_ops_summaries_project_media">ortamı yansıt</string>
   <string name="app_ops_summaries_activate_vpn">VPN\'yi etkinleştir</string>
-  <string name="app_ops_summaries_superuser">root erişimi</string>
+  <string name="app_ops_summaries_su">root erişimi</string>
   <string name="app_ops_labels_gps">GPS</string>
   <string name="app_ops_labels_vibrate">Titreşim</string>
   <string name="app_ops_labels_read_contacts">Kişileri oku</string>
@@ -82,7 +82,7 @@
   <string name="app_ops_labels_toast_window">Bildirim göster</string>
   <string name="app_ops_labels_project_media">Ortamı yansıt</string>
   <string name="app_ops_labels_activate_vpn">VPN\'yi etkinleştir</string>
-  <string name="app_ops_labels_superuser">Root erişimi</string>
+  <string name="app_ops_labels_su">Root erişimi</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Konum</string>
   <string name="app_ops_categories_personal">Kişisel</string>

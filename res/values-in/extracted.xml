@@ -46,7 +46,7 @@
   <string name="app_ops_summaries_toast_window">tampilkan toast</string>
   <string name="app_ops_summaries_project_media">proyek media</string>
   <string name="app_ops_summaries_activate_vpn">aktifkan VPN</string>
-  <string name="app_ops_summaries_superuser">akses root</string>
+  <string name="app_ops_summaries_su">akses root</string>
   <string name="app_ops_labels_gps">GPS</string>
   <string name="app_ops_labels_vibrate">Getar</string>
   <string name="app_ops_labels_read_contacts">Baca kontak</string>
@@ -82,7 +82,7 @@
   <string name="app_ops_labels_toast_window">tampilkan toast</string>
   <string name="app_ops_labels_project_media">proyek media</string>
   <string name="app_ops_labels_activate_vpn">aktifkan VPN</string>
-  <string name="app_ops_labels_superuser">Akses root</string>
+  <string name="app_ops_labels_su">Akses root</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Lokasi</string>
   <string name="app_ops_categories_personal">Pribadi</string>

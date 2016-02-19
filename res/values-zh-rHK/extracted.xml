@@ -46,7 +46,7 @@
   <string name="app_ops_summaries_toast_window">顯示彈出通知</string>
   <string name="app_ops_summaries_project_media">媒體投映</string>
   <string name="app_ops_summaries_activate_vpn">啟用 VPN</string>
-  <string name="app_ops_summaries_superuser">root 權限</string>
+  <string name="app_ops_summaries_su">root 權限</string>
   <string name="app_ops_labels_gps">GPS</string>
   <string name="app_ops_labels_vibrate">震動</string>
   <string name="app_ops_labels_read_contacts">讀取聯絡人</string>
@@ -82,7 +82,7 @@
   <string name="app_ops_labels_toast_window">顯示彈出通知</string>
   <string name="app_ops_labels_project_media">媒體投放</string>
   <string name="app_ops_labels_activate_vpn">啟用 VPN</string>
-  <string name="app_ops_labels_superuser">超級使用者存取</string>
+  <string name="app_ops_labels_su">超級使用者存取</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">位置</string>
   <string name="app_ops_categories_personal">個人</string>

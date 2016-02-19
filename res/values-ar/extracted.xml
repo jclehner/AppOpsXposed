@@ -46,7 +46,7 @@
   <string name="app_ops_summaries_toast_window">عرض الرسائل الإشعارية</string>
   <string name="app_ops_summaries_project_media">وسائط المشروع</string>
   <string name="app_ops_summaries_activate_vpn">تفعيل VPN</string>
-  <string name="app_ops_summaries_superuser">الوصول إلى الجذر</string>
+  <string name="app_ops_summaries_su">الوصول إلى الجذر</string>
   <string name="app_ops_labels_gps">نظام تحديد المواقع</string>
   <string name="app_ops_labels_vibrate">اهتزاز</string>
   <string name="app_ops_labels_read_contacts">قراءة جهات الاتصال</string>
@@ -82,7 +82,7 @@
   <string name="app_ops_labels_toast_window">عرض الرسائل الإشعارية</string>
   <string name="app_ops_labels_project_media">وسائط المشروع</string>
   <string name="app_ops_labels_activate_vpn">تفعيل VPN</string>
-  <string name="app_ops_labels_superuser">صلاحيات الجذر</string>
+  <string name="app_ops_labels_su">صلاحيات الجذر</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">الموقع</string>
   <string name="app_ops_categories_personal">شخصي</string>

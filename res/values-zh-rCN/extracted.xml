@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">读取电话状态</string>
   <string name="app_ops_summaries_add_voicemail">添加语音邮件</string>
   <string name="app_ops_summaries_use_sip">使用 SIP</string>
-  <string name="app_ops_summaries_make_call">拨打电话</string>
+  <string name="app_ops_summaries_call_phone">拨打电话</string>
   <string name="app_ops_summaries_use_fingerprint">使用指纹</string>
   <string name="app_ops_summaries_body_sensors">使用身体传感器</string>
   <string name="app_ops_summaries_read_cell_broadcasts">读取小区广播</string>
@@ -65,12 +65,12 @@
   <string name="app_ops_summaries_write_external_storage">写入外部存储器</string>
   <string name="app_ops_summaries_turn_screen_on">点亮屏幕</string>
   <string name="app_ops_summaries_get_accounts">获得帐户</string>
-  <string name="app_ops_summaries_toggle_wifi">切换 Wi-Fi</string>
-  <string name="app_ops_summaries_toggle_bluetooth">切换蓝牙</string>
-  <string name="app_ops_summaries_start_at_boot">在开机时启动</string>
-  <string name="app_ops_summaries_toggle_nfc">切换 NFC</string>
-  <string name="app_ops_summaries_toggle_mobile_data">切换移动数据</string>
-  <string name="app_ops_summaries_superuser">Root 授权</string>
+  <string name="app_ops_summaries_wifi_change">切换 Wi-Fi</string>
+  <string name="app_ops_summaries_bluetooth_change">切换蓝牙</string>
+  <string name="app_ops_summaries_boot_completed">在开机时启动</string>
+  <string name="app_ops_summaries_nfc_change">切换 NFC</string>
+  <string name="app_ops_summaries_mobile_data_change">切换移动数据</string>
+  <string name="app_ops_summaries_su">Root 授权</string>
   <string name="app_ops_labels_coarse_location">粗略位置</string>
   <string name="app_ops_labels_fine_location">准确位置</string>
   <string name="app_ops_labels_gps">GPS</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">读取电话状态</string>
   <string name="app_ops_labels_add_voicemail">添加语音邮件</string>
   <string name="app_ops_labels_use_sip">使用 SIP</string>
-  <string name="app_ops_labels_make_call">拨打电话</string>
+  <string name="app_ops_labels_call_phone">拨打电话</string>
   <string name="app_ops_labels_use_fingerprint">使用指纹</string>
   <string name="app_ops_labels_body_sensors">使用身体传感器</string>
   <string name="app_ops_labels_read_cell_broadcasts">读取小区广播</string>
@@ -134,12 +134,12 @@
   <string name="app_ops_labels_write_external_storage">写入外部存储器</string>
   <string name="app_ops_labels_turn_screen_on">点亮屏幕</string>
   <string name="app_ops_labels_get_accounts">获得帐户</string>
-  <string name="app_ops_labels_toggle_wifi">切换 Wi-Fi</string>
-  <string name="app_ops_labels_toggle_bluetooth">切换蓝牙</string>
-  <string name="app_ops_labels_start_at_boot">在开机时启动</string>
-  <string name="app_ops_labels_toggle_nfc">切换 NFC</string>
-  <string name="app_ops_labels_toggle_mobile_data">切换移动数据</string>
-  <string name="app_ops_labels_superuser">Root 授权</string>
+  <string name="app_ops_labels_wifi_change">切换 Wi-Fi</string>
+  <string name="app_ops_labels_bluetooth_change">切换蓝牙</string>
+  <string name="app_ops_labels_boot_completed">在开机时启动</string>
+  <string name="app_ops_labels_nfc_change">切换 NFC</string>
+  <string name="app_ops_labels_mobile_data_change">切换移动数据</string>
+  <string name="app_ops_labels_su">Root 授权</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">位置</string>
   <string name="app_ops_categories_personal">个人</string>

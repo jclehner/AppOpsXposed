@@ -55,7 +55,7 @@
   <string name="app_ops_summaries_read_phone_state">läs telefonstatus</string>
   <string name="app_ops_summaries_add_voicemail">lägg till röstbrevlåda</string>
   <string name="app_ops_summaries_use_sip">använd SIP</string>
-  <string name="app_ops_summaries_make_call">ring</string>
+  <string name="app_ops_summaries_call_phone">ring</string>
   <string name="app_ops_summaries_use_fingerprint">använd fingeravtryck</string>
   <string name="app_ops_summaries_body_sensors">använd kroppssensorer</string>
   <string name="app_ops_summaries_read_cell_broadcasts">läs mobila sändningar</string>
@@ -64,11 +64,11 @@
   <string name="app_ops_summaries_write_external_storage">skriv till extern lagring</string>
   <string name="app_ops_summaries_turn_screen_on">aktivera skärmen</string>
   <string name="app_ops_summaries_get_accounts">hämta konton</string>
-  <string name="app_ops_summaries_toggle_wifi">växla Wi\u2011Fi</string>
-  <string name="app_ops_summaries_toggle_bluetooth">växla Bluetooth</string>
-  <string name="app_ops_summaries_toggle_nfc">växla NFC</string>
-  <string name="app_ops_summaries_toggle_mobile_data">växla mobildata</string>
-  <string name="app_ops_summaries_superuser">root-åtkomst</string>
+  <string name="app_ops_summaries_wifi_change">växla Wi\u2011Fi</string>
+  <string name="app_ops_summaries_bluetooth_change">växla Bluetooth</string>
+  <string name="app_ops_summaries_nfc_change">växla NFC</string>
+  <string name="app_ops_summaries_mobile_data_change">växla mobildata</string>
+  <string name="app_ops_summaries_su">root-åtkomst</string>
   <string name="app_ops_labels_coarse_location">Grov lokalisering</string>
   <string name="app_ops_labels_fine_location">Fin lokalisering</string>
   <string name="app_ops_labels_gps">GPS</string>
@@ -122,7 +122,7 @@
   <string name="app_ops_labels_read_phone_state">Läs telefonstatus</string>
   <string name="app_ops_labels_add_voicemail">Lägg till röstbrevlåda</string>
   <string name="app_ops_labels_use_sip">Använd SIP</string>
-  <string name="app_ops_labels_make_call">Ring</string>
+  <string name="app_ops_labels_call_phone">Ring</string>
   <string name="app_ops_labels_use_fingerprint">Använd fingeravtryck</string>
   <string name="app_ops_labels_body_sensors">Använd kroppssensorer</string>
   <string name="app_ops_labels_read_cell_broadcasts">Läs mobila sändningar</string>
@@ -131,12 +131,12 @@
   <string name="app_ops_labels_write_external_storage">Skriv till extern lagring</string>
   <string name="app_ops_labels_turn_screen_on">Aktivera skärmen</string>
   <string name="app_ops_labels_get_accounts">Hämta konton</string>
-  <string name="app_ops_labels_toggle_wifi">Växla Wi\u2011Fi</string>
-  <string name="app_ops_labels_toggle_bluetooth">Växla Bluetooth</string>
-  <string name="app_ops_labels_start_at_boot">Starta vid uppstart</string>
-  <string name="app_ops_labels_toggle_nfc">Växla NFC</string>
-  <string name="app_ops_labels_toggle_mobile_data">Växla mobildata</string>
-  <string name="app_ops_labels_superuser">Rootåtkomst</string>
+  <string name="app_ops_labels_wifi_change">Växla Wi\u2011Fi</string>
+  <string name="app_ops_labels_bluetooth_change">Växla Bluetooth</string>
+  <string name="app_ops_labels_boot_completed">Starta vid uppstart</string>
+  <string name="app_ops_labels_nfc_change">Växla NFC</string>
+  <string name="app_ops_labels_mobile_data_change">Växla mobildata</string>
+  <string name="app_ops_labels_su">Rootåtkomst</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Plats</string>
   <string name="app_ops_categories_personal">Personligt</string>

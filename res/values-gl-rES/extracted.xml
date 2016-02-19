@@ -12,7 +12,7 @@
   <string name="app_ops_summaries_read_phone_state">ler o estado do teléfono</string>
   <string name="app_ops_summaries_add_voicemail">engadir mensaxe de voz</string>
   <string name="app_ops_summaries_use_sip">utilizar SIP</string>
-  <string name="app_ops_summaries_make_call">facer unha chamada</string>
+  <string name="app_ops_summaries_call_phone">facer unha chamada</string>
   <string name="app_ops_summaries_use_fingerprint">utilizar a pegada dactilar</string>
   <string name="app_ops_summaries_body_sensors">utilizar sensores do corpo</string>
   <string name="app_ops_summaries_read_cell_broadcasts">ler as transmisións de celulares</string>
@@ -21,10 +21,10 @@
   <string name="app_ops_summaries_write_external_storage">escribir no almacenamento externo</string>
   <string name="app_ops_summaries_turn_screen_on">acender a pantalla</string>
   <string name="app_ops_summaries_get_accounts">obter contas</string>
-  <string name="app_ops_summaries_toggle_wifi">trocar wifi</string>
-  <string name="app_ops_summaries_toggle_bluetooth">trocar bluetooh</string>
-  <string name="app_ops_summaries_start_at_boot">iniciar co arranque</string>
-  <string name="app_ops_summaries_toggle_nfc">trocar NFC</string>
+  <string name="app_ops_summaries_wifi_change">trocar wifi</string>
+  <string name="app_ops_summaries_bluetooth_change">trocar bluetooh</string>
+  <string name="app_ops_summaries_boot_completed">iniciar co arranque</string>
+  <string name="app_ops_summaries_nfc_change">trocar NFC</string>
   <string name="app_ops_labels_coarse_location">Localización imprecisa</string>
   <string name="app_ops_labels_fine_location">Localización precisa</string>
   <string name="app_ops_labels_gps">GPS</string>
@@ -45,7 +45,7 @@
   <string name="app_ops_labels_read_phone_state">Ler o estado do teléfono</string>
   <string name="app_ops_labels_add_voicemail">Engadir mensaxe de voz</string>
   <string name="app_ops_labels_use_sip">Utilizar SIP</string>
-  <string name="app_ops_labels_make_call">Facer unha chamada</string>
+  <string name="app_ops_labels_call_phone">Facer unha chamada</string>
   <string name="app_ops_labels_use_fingerprint">Utilizar a pegada dactilar</string>
   <string name="app_ops_labels_body_sensors">Utilizar os sensores do corpo</string>
   <string name="app_ops_labels_read_cell_broadcasts">Ler as transmisións de célula</string>
@@ -54,11 +54,11 @@
   <string name="app_ops_labels_write_external_storage">Escribir no almacenamento externo</string>
   <string name="app_ops_labels_turn_screen_on">Acender a pantalla</string>
   <string name="app_ops_labels_get_accounts">Obter contas</string>
-  <string name="app_ops_labels_toggle_wifi">Trocar wifi</string>
-  <string name="app_ops_labels_toggle_bluetooth">Trocar bluetooh</string>
-  <string name="app_ops_labels_start_at_boot">Iniciar co arranque</string>
-  <string name="app_ops_labels_toggle_nfc">Trocar NFC</string>
-  <string name="app_ops_labels_superuser">Acceso root</string>
+  <string name="app_ops_labels_wifi_change">Trocar wifi</string>
+  <string name="app_ops_labels_bluetooth_change">Trocar bluetooh</string>
+  <string name="app_ops_labels_boot_completed">Iniciar co arranque</string>
+  <string name="app_ops_labels_nfc_change">Trocar NFC</string>
+  <string name="app_ops_labels_su">Acceso root</string>
   <!-- Categories -->
   <!-- Misc -->
   <string name="version_text" >"versión %1$s"</string>

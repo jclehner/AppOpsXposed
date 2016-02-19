@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">lue puhelimen tila</string>
   <string name="app_ops_summaries_add_voicemail">lisää vastaaja</string>
   <string name="app_ops_summaries_use_sip">käytä SIP</string>
-  <string name="app_ops_summaries_make_call">soita puhelu</string>
+  <string name="app_ops_summaries_call_phone">soita puhelu</string>
   <string name="app_ops_summaries_use_fingerprint">käytä sormenjälkeä</string>
   <string name="app_ops_summaries_body_sensors">käytä kehon antureita</string>
   <string name="app_ops_summaries_read_cell_broadcasts">lue hätätilalähetyksiä</string>
@@ -65,12 +65,12 @@
   <string name="app_ops_summaries_write_external_storage">kirjoita ulkoiseen tallennustilaan</string>
   <string name="app_ops_summaries_turn_screen_on">avaa näyttö</string>
   <string name="app_ops_summaries_get_accounts">lue käyttäjiä</string>
-  <string name="app_ops_summaries_toggle_wifi">ota Wi-Fi:n käyttöön</string>
-  <string name="app_ops_summaries_toggle_bluetooth">ota Bluetoothin käyttöön</string>
-  <string name="app_ops_summaries_start_at_boot">avaa käynnistyksessä</string>
-  <string name="app_ops_summaries_toggle_nfc">ota NFC käyttöön</string>
-  <string name="app_ops_summaries_toggle_mobile_data">ota mobiilidata käyttöön</string>
-  <string name="app_ops_summaries_superuser">root-oikeudet</string>
+  <string name="app_ops_summaries_wifi_change">ota Wi-Fi:n käyttöön</string>
+  <string name="app_ops_summaries_bluetooth_change">ota Bluetoothin käyttöön</string>
+  <string name="app_ops_summaries_boot_completed">avaa käynnistyksessä</string>
+  <string name="app_ops_summaries_nfc_change">ota NFC käyttöön</string>
+  <string name="app_ops_summaries_mobile_data_change">ota mobiilidata käyttöön</string>
+  <string name="app_ops_summaries_su">root-oikeudet</string>
   <string name="app_ops_labels_coarse_location">Karkea sijainti</string>
   <string name="app_ops_labels_fine_location">Tarkka sijainti</string>
   <string name="app_ops_labels_gps">GPS</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">Lue puhelimen tila</string>
   <string name="app_ops_labels_add_voicemail">Lisää vastaaja</string>
   <string name="app_ops_labels_use_sip">Käytä SIP</string>
-  <string name="app_ops_labels_make_call">Tee puhelu</string>
+  <string name="app_ops_labels_call_phone">Tee puhelu</string>
   <string name="app_ops_labels_use_fingerprint">Käytä sormenjälkeä</string>
   <string name="app_ops_labels_body_sensors">Käytä kehon antureita</string>
   <string name="app_ops_labels_read_cell_broadcasts">Lue hätätilalähetyksiä</string>
@@ -134,12 +134,12 @@
   <string name="app_ops_labels_write_external_storage">Kirjoita ulkoiseen tallennustilaan</string>
   <string name="app_ops_labels_turn_screen_on">Avaa näyttö</string>
   <string name="app_ops_labels_get_accounts">Lue tilejä</string>
-  <string name="app_ops_labels_toggle_wifi">Vaihda Wi-Fi:n tilaa</string>
-  <string name="app_ops_labels_toggle_bluetooth">Vaihda Bluetoothin tilaa</string>
-  <string name="app_ops_labels_start_at_boot">Avaa käynnistyksessä</string>
-  <string name="app_ops_labels_toggle_nfc">Vaihda NFC:n tilaa</string>
-  <string name="app_ops_labels_toggle_mobile_data">Ota mobiilidata käyttöön</string>
-  <string name="app_ops_labels_superuser">Root-oikeudet</string>
+  <string name="app_ops_labels_wifi_change">Vaihda Wi-Fi:n tilaa</string>
+  <string name="app_ops_labels_bluetooth_change">Vaihda Bluetoothin tilaa</string>
+  <string name="app_ops_labels_boot_completed">Avaa käynnistyksessä</string>
+  <string name="app_ops_labels_nfc_change">Vaihda NFC:n tilaa</string>
+  <string name="app_ops_labels_mobile_data_change">Ota mobiilidata käyttöön</string>
+  <string name="app_ops_labels_su">Root-oikeudet</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Sijainti</string>
   <string name="app_ops_categories_personal">Henkilökohtainen</string>

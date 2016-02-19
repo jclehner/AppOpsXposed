@@ -46,7 +46,7 @@
   <string name="app_ops_summaries_toast_window">Rodyti informacinius langelius</string>
   <string name="app_ops_summaries_project_media">medijos projektas</string>
   <string name="app_ops_summaries_activate_vpn">suaktyvinti VPN</string>
-  <string name="app_ops_summaries_superuser">„root“ prieiga</string>
+  <string name="app_ops_summaries_su">„root“ prieiga</string>
   <string name="app_ops_labels_gps">GPS</string>
   <string name="app_ops_labels_vibrate">Vibruoti</string>
   <string name="app_ops_labels_read_contacts">Skaityti kontaktus</string>
@@ -82,7 +82,7 @@
   <string name="app_ops_labels_toast_window">Rodyti informacinius langelius</string>
   <string name="app_ops_labels_project_media">Medijos projektas</string>
   <string name="app_ops_labels_activate_vpn">Suaktyvinti VPN</string>
-  <string name="app_ops_labels_superuser">Prieiga prie „Root“</string>
+  <string name="app_ops_labels_su">Prieiga prie „Root“</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Vieta</string>
   <string name="app_ops_categories_personal">Asmeninės</string>

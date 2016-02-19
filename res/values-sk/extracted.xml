@@ -46,7 +46,7 @@
   <string name="app_ops_summaries_toast_window">Zobraziť vyskakovacie upozornenia</string>
   <string name="app_ops_summaries_project_media">premietať médiá</string>
   <string name="app_ops_summaries_activate_vpn">aktivovať VPN</string>
-  <string name="app_ops_summaries_superuser">root prístup</string>
+  <string name="app_ops_summaries_su">root prístup</string>
   <string name="app_ops_labels_gps">GPS</string>
   <string name="app_ops_labels_vibrate">Vibrovať</string>
   <string name="app_ops_labels_read_contacts">Čítať údaje z kontaktov</string>
@@ -82,7 +82,7 @@
   <string name="app_ops_labels_toast_window">Zobraziť vyskakovacie upozornenia</string>
   <string name="app_ops_labels_project_media">Premietať médiá</string>
   <string name="app_ops_labels_activate_vpn">Aktivovať VPN</string>
-  <string name="app_ops_labels_superuser">Root prístup</string>
+  <string name="app_ops_labels_su">Root prístup</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Poloha</string>
   <string name="app_ops_categories_personal">Osobné</string>

@@ -46,7 +46,7 @@
   <string name="app_ops_summaries_toast_window">hiển thị thông báo nhanh</string>
   <string name="app_ops_summaries_project_media">chiếu đa phương tiện</string>
   <string name="app_ops_summaries_activate_vpn">kích hoạt VPN</string>
-  <string name="app_ops_summaries_superuser">truy cập root</string>
+  <string name="app_ops_summaries_su">truy cập root</string>
   <string name="app_ops_labels_gps">GPS</string>
   <string name="app_ops_labels_vibrate">Rung</string>
   <string name="app_ops_labels_read_contacts">Đọc số liên lạc</string>
@@ -82,7 +82,7 @@
   <string name="app_ops_labels_toast_window">Hiển thị thông báo nhanh</string>
   <string name="app_ops_labels_project_media">Chiếu đa phương tiện</string>
   <string name="app_ops_labels_activate_vpn">Kích hoạt VPN</string>
-  <string name="app_ops_labels_superuser">Quyền truy cập root</string>
+  <string name="app_ops_labels_su">Quyền truy cập root</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Vị trí</string>
   <string name="app_ops_categories_personal">Cá nhân</string>

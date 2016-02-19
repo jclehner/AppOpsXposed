@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">čitanje stanja telefona</string>
   <string name="app_ops_summaries_add_voicemail">dodajte glasovnu poštu</string>
   <string name="app_ops_summaries_use_sip">koristi SIP</string>
-  <string name="app_ops_summaries_make_call">nazvati</string>
+  <string name="app_ops_summaries_call_phone">nazvati</string>
   <string name="app_ops_summaries_use_fingerprint">koristi otisak prsta</string>
   <string name="app_ops_summaries_body_sensors">koristi senzore</string>
   <string name="app_ops_summaries_read_cell_broadcasts">pročitati signal odašiljača</string>
@@ -65,12 +65,12 @@
   <string name="app_ops_summaries_write_external_storage">piši na vanjsku pohranu</string>
   <string name="app_ops_summaries_turn_screen_on">uključi zaslon</string>
   <string name="app_ops_summaries_get_accounts">pridobi račune</string>
-  <string name="app_ops_summaries_toggle_wifi">upravljati Wi-Fi-em</string>
-  <string name="app_ops_summaries_toggle_bluetooth">upravljati Bluetooth-om</string>
-  <string name="app_ops_summaries_start_at_boot">pokreni pri pokretanju</string>
-  <string name="app_ops_summaries_toggle_nfc">uključi/isključi NFC</string>
-  <string name="app_ops_summaries_toggle_mobile_data">uključi/isključi mobilne podatke</string>
-  <string name="app_ops_summaries_superuser">root pristup</string>
+  <string name="app_ops_summaries_wifi_change">upravljati Wi-Fi-em</string>
+  <string name="app_ops_summaries_bluetooth_change">upravljati Bluetooth-om</string>
+  <string name="app_ops_summaries_boot_completed">pokreni pri pokretanju</string>
+  <string name="app_ops_summaries_nfc_change">uključi/isključi NFC</string>
+  <string name="app_ops_summaries_mobile_data_change">uključi/isključi mobilne podatke</string>
+  <string name="app_ops_summaries_su">root pristup</string>
   <string name="app_ops_labels_coarse_location">Gruba lokacija</string>
   <string name="app_ops_labels_fine_location">Dobra lokacija</string>
   <string name="app_ops_labels_gps">GPS</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">Čitanje stanja telefona</string>
   <string name="app_ops_labels_add_voicemail">Dodajte glasovnu poštu</string>
   <string name="app_ops_labels_use_sip">Koristite SIP</string>
-  <string name="app_ops_labels_make_call">Nazvati</string>
+  <string name="app_ops_labels_call_phone">Nazvati</string>
   <string name="app_ops_labels_use_fingerprint">Koristi otisak prsta</string>
   <string name="app_ops_labels_body_sensors">Koristi senzore</string>
   <string name="app_ops_labels_read_cell_broadcasts">Pročitati signal odašiljača</string>
@@ -134,12 +134,12 @@
   <string name="app_ops_labels_write_external_storage">Piši na vanjsku pohranu</string>
   <string name="app_ops_labels_turn_screen_on">Uključi zaslon</string>
   <string name="app_ops_labels_get_accounts">Pridobi račune</string>
-  <string name="app_ops_labels_toggle_wifi">Upravljati Wi-Fi-em</string>
-  <string name="app_ops_labels_toggle_bluetooth">Upravljati Bluetooth-om</string>
-  <string name="app_ops_labels_start_at_boot">Pokreni pri pokretanju</string>
-  <string name="app_ops_labels_toggle_nfc">Uključi/isključi NFC</string>
-  <string name="app_ops_labels_toggle_mobile_data">Uključi/isključi mobilne podatke</string>
-  <string name="app_ops_labels_superuser">Root pristup</string>
+  <string name="app_ops_labels_wifi_change">Upravljati Wi-Fi-em</string>
+  <string name="app_ops_labels_bluetooth_change">Upravljati Bluetooth-om</string>
+  <string name="app_ops_labels_boot_completed">Pokreni pri pokretanju</string>
+  <string name="app_ops_labels_nfc_change">Uključi/isključi NFC</string>
+  <string name="app_ops_labels_mobile_data_change">Uključi/isključi mobilne podatke</string>
+  <string name="app_ops_labels_su">Root pristup</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Lokacija</string>
   <string name="app_ops_categories_personal">Osobno</string>

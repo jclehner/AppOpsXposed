@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">branje stanja telefona</string>
   <string name="app_ops_summaries_add_voicemail">dodajanje glasovne pošte</string>
   <string name="app_ops_summaries_use_sip">uporaba SIP</string>
-  <string name="app_ops_summaries_make_call">klicanje</string>
+  <string name="app_ops_summaries_call_phone">klicanje</string>
   <string name="app_ops_summaries_use_fingerprint">uporaba prstnih odtisov</string>
   <string name="app_ops_summaries_body_sensors">uporaba tipal naprave</string>
   <string name="app_ops_summaries_read_cell_broadcasts">branje signala oddajnikov</string>
@@ -65,12 +65,12 @@
   <string name="app_ops_summaries_write_external_storage">pisanje na zunanji pomnilnik</string>
   <string name="app_ops_summaries_turn_screen_on">vklop zaslona</string>
   <string name="app_ops_summaries_get_accounts">pridobivanje računov</string>
-  <string name="app_ops_summaries_toggle_wifi">vklop/izklop omr. Wi-Fi</string>
-  <string name="app_ops_summaries_toggle_bluetooth">vklop/izklop Bluetootha</string>
-  <string name="app_ops_summaries_start_at_boot">zaganjanje pri zagonu</string>
-  <string name="app_ops_summaries_toggle_nfc">vklop/izklop NFC-ja</string>
-  <string name="app_ops_summaries_toggle_mobile_data">preklapljanje mobilnih podatkov</string>
-  <string name="app_ops_summaries_superuser">skrbniški dostop</string>
+  <string name="app_ops_summaries_wifi_change">vklop/izklop omr. Wi-Fi</string>
+  <string name="app_ops_summaries_bluetooth_change">vklop/izklop Bluetootha</string>
+  <string name="app_ops_summaries_boot_completed">zaganjanje pri zagonu</string>
+  <string name="app_ops_summaries_nfc_change">vklop/izklop NFC-ja</string>
+  <string name="app_ops_summaries_mobile_data_change">preklapljanje mobilnih podatkov</string>
+  <string name="app_ops_summaries_su">skrbniški dostop</string>
   <string name="app_ops_labels_coarse_location">Groba lokacija</string>
   <string name="app_ops_labels_fine_location">Natančna lokacija</string>
   <string name="app_ops_labels_gps">GPS</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">Branje stanja telefona</string>
   <string name="app_ops_labels_add_voicemail">Dodajanje glasovne pošte</string>
   <string name="app_ops_labels_use_sip">Uporaba SIP-a</string>
-  <string name="app_ops_labels_make_call">Klicanje</string>
+  <string name="app_ops_labels_call_phone">Klicanje</string>
   <string name="app_ops_labels_use_fingerprint">Uporaba prstnih odtisov</string>
   <string name="app_ops_labels_body_sensors">Uporaba tipal naprave</string>
   <string name="app_ops_labels_read_cell_broadcasts">Branje signala oddajnikov</string>
@@ -134,12 +134,12 @@
   <string name="app_ops_labels_write_external_storage">Pisanje na zunanji pomnilnik</string>
   <string name="app_ops_labels_turn_screen_on">Vklop zaslona</string>
   <string name="app_ops_labels_get_accounts">Pridobivanje računov</string>
-  <string name="app_ops_labels_toggle_wifi">Vklop/izklop omr. Wi-Fi</string>
-  <string name="app_ops_labels_toggle_bluetooth">Vklop/izklop Bluetootha</string>
-  <string name="app_ops_labels_start_at_boot">Zaganjanje pri zagonu</string>
-  <string name="app_ops_labels_toggle_nfc">Vklop/izklop NFC-ja</string>
-  <string name="app_ops_labels_toggle_mobile_data">Preklapljanje mobilnih podatkov</string>
-  <string name="app_ops_labels_superuser">Skrbniški dostop</string>
+  <string name="app_ops_labels_wifi_change">Vklop/izklop omr. Wi-Fi</string>
+  <string name="app_ops_labels_bluetooth_change">Vklop/izklop Bluetootha</string>
+  <string name="app_ops_labels_boot_completed">Zaganjanje pri zagonu</string>
+  <string name="app_ops_labels_nfc_change">Vklop/izklop NFC-ja</string>
+  <string name="app_ops_labels_mobile_data_change">Preklapljanje mobilnih podatkov</string>
+  <string name="app_ops_labels_su">Skrbniški dostop</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Lokacija</string>
   <string name="app_ops_categories_personal">Osebni</string>

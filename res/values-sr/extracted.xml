@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">прочитај стање телефона</string>
   <string name="app_ops_summaries_add_voicemail">додај говорну пошту</string>
   <string name="app_ops_summaries_use_sip">користи SIP</string>
-  <string name="app_ops_summaries_make_call">позови</string>
+  <string name="app_ops_summaries_call_phone">позови</string>
   <string name="app_ops_summaries_use_fingerprint">користи отисак прста</string>
   <string name="app_ops_summaries_body_sensors">користи сензоре уређаја</string>
   <string name="app_ops_summaries_read_cell_broadcasts">читај ћелију емитовања</string>
@@ -65,12 +65,12 @@
   <string name="app_ops_summaries_write_external_storage">пиши у спољно складиште</string>
   <string name="app_ops_summaries_turn_screen_on">Укључи екран</string>
   <string name="app_ops_summaries_get_accounts">добави налоге</string>
-  <string name="app_ops_summaries_toggle_wifi">Укључи Wi-Fi</string>
-  <string name="app_ops_summaries_toggle_bluetooth">укључи bleutooth</string>
-  <string name="app_ops_summaries_start_at_boot">старт при покретању</string>
-  <string name="app_ops_summaries_toggle_nfc">укључи NFC</string>
-  <string name="app_ops_summaries_toggle_mobile_data">укључи/искључи мобилне податке</string>
-  <string name="app_ops_summaries_superuser">рoot приступ</string>
+  <string name="app_ops_summaries_wifi_change">Укључи Wi-Fi</string>
+  <string name="app_ops_summaries_bluetooth_change">укључи bleutooth</string>
+  <string name="app_ops_summaries_boot_completed">старт при покретању</string>
+  <string name="app_ops_summaries_nfc_change">укључи NFC</string>
+  <string name="app_ops_summaries_mobile_data_change">укључи/искључи мобилне податке</string>
+  <string name="app_ops_summaries_su">рoot приступ</string>
   <string name="app_ops_labels_coarse_location">Груба локација</string>
   <string name="app_ops_labels_fine_location">Фина локација</string>
   <string name="app_ops_labels_gps">GPS</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">Прочитај стање телефона</string>
   <string name="app_ops_labels_add_voicemail">Додај говорну пошту</string>
   <string name="app_ops_labels_use_sip">Користи SIP</string>
-  <string name="app_ops_labels_make_call">Позови</string>
+  <string name="app_ops_labels_call_phone">Позови</string>
   <string name="app_ops_labels_use_fingerprint">Користи отисак прста</string>
   <string name="app_ops_labels_body_sensors">Користи сензоре уређаја</string>
   <string name="app_ops_labels_read_cell_broadcasts">читај ћелију емитовања</string>
@@ -134,12 +134,12 @@
   <string name="app_ops_labels_write_external_storage">Пиши у спољно складиште</string>
   <string name="app_ops_labels_turn_screen_on">Укључи екран</string>
   <string name="app_ops_labels_get_accounts">Добави налоге</string>
-  <string name="app_ops_labels_toggle_wifi">Укључи Wi-Fi</string>
-  <string name="app_ops_labels_toggle_bluetooth">Укључи bleutooth</string>
-  <string name="app_ops_labels_start_at_boot">Старт при покретању</string>
-  <string name="app_ops_labels_toggle_nfc">Укључи NFC</string>
-  <string name="app_ops_labels_toggle_mobile_data">Укључи/искључи мобилне податке</string>
-  <string name="app_ops_labels_superuser">Root приступ</string>
+  <string name="app_ops_labels_wifi_change">Укључи Wi-Fi</string>
+  <string name="app_ops_labels_bluetooth_change">Укључи bleutooth</string>
+  <string name="app_ops_labels_boot_completed">Старт при покретању</string>
+  <string name="app_ops_labels_nfc_change">Укључи NFC</string>
+  <string name="app_ops_labels_mobile_data_change">Укључи/искључи мобилне податке</string>
+  <string name="app_ops_labels_su">Root приступ</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Локација</string>
   <string name="app_ops_categories_personal">Лично</string>

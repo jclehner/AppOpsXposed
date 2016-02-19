@@ -49,7 +49,7 @@
   <string name="app_ops_summaries_toast_window">display toasts</string>
   <string name="app_ops_summaries_project_media">project media</string>
   <string name="app_ops_summaries_activate_vpn">activate VPN</string>
-  <string name="app_ops_summaries_superuser">root access</string>
+  <string name="app_ops_summaries_su">root access</string>
   <string name="app_ops_labels_gps">GPS</string>
   <string name="app_ops_labels_vibrate">Vibrate</string>
   <string name="app_ops_labels_read_contacts">Read contacts</string>
@@ -85,7 +85,7 @@
   <string name="app_ops_labels_toast_window">Display toasts</string>
   <string name="app_ops_labels_project_media">Project media</string>
   <string name="app_ops_labels_activate_vpn">Activate VPN</string>
-  <string name="app_ops_labels_superuser">Root access</string>
+  <string name="app_ops_labels_su">Root access</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Location</string>
   <string name="app_ops_categories_personal">Personal</string>

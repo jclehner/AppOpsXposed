@@ -46,7 +46,7 @@
   <string name="app_ops_summaries_toast_window">ಟೋಸ್ಟ್ ಗಳನ್ನು ಪ್ರದರ್ಶಿಸು</string>
   <string name="app_ops_summaries_project_media">ಮಾಧ್ಯಮವನ್ನು ಪ್ರೊಜೆಕ್ಟ್ ಮಾಡು</string>
   <string name="app_ops_summaries_activate_vpn">ವಿಪಿಎನ್ ಸಕ್ರಿಯಗೊಳಿಸು</string>
-  <string name="app_ops_summaries_superuser">ರೂಟ್ ಪ್ರವೇಶ</string>
+  <string name="app_ops_summaries_su">ರೂಟ್ ಪ್ರವೇಶ</string>
   <string name="app_ops_labels_gps">ಜಿಪಿಎಸ್</string>
   <string name="app_ops_labels_vibrate">ಕಂಪಿಸು</string>
   <string name="app_ops_labels_read_contacts">ಸಂಪರ್ಕಗಳನ್ನು ಓದು</string>
@@ -82,7 +82,7 @@
   <string name="app_ops_labels_toast_window">ಟೋಸ್ಟ್ ಗಳನ್ನು ಪ್ರದರ್ಶಿಸು</string>
   <string name="app_ops_labels_project_media">ಮಾಧ್ಯಮ ಪ್ರೊಜೆಕ್ಟ್ ಮಾಡು</string>
   <string name="app_ops_labels_activate_vpn">ವಿ‍ಪಿಎನ್ ಸಕ್ರಿಯಗೊಳಿಸು</string>
-  <string name="app_ops_labels_superuser">ರೂಟ್ ಪ್ರವೇಶ</string>
+  <string name="app_ops_labels_su">ರೂಟ್ ಪ್ರವೇಶ</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">ಸ್ಥಳ</string>
   <string name="app_ops_categories_personal">ವಯಕ್ತಿಕ</string>

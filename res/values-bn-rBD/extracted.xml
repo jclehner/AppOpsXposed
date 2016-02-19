@@ -73,7 +73,7 @@
   <string name="app_ops_labels_audio_notification_volume">নোটিফিকেশন ভলিউম</string>
   <string name="app_ops_labels_audio_bluetooth_volume">ব্লু-টুথ ভলিউম</string>
   <string name="app_ops_labels_wake_lock">জাগ্রত রাখা</string>
-  <string name="app_ops_labels_superuser">রুট এক্সেস</string>
+  <string name="app_ops_labels_su">রুট এক্সেস</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">অবস্থান</string>
   <string name="app_ops_categories_personal">ব্যক্তিগত</string>

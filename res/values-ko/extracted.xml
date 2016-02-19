@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">전화 상태 읽기</string>
   <string name="app_ops_summaries_add_voicemail">음성 메일 추가</string>
   <string name="app_ops_summaries_use_sip">SIP 사용</string>
-  <string name="app_ops_summaries_make_call">전화 걸기</string>
+  <string name="app_ops_summaries_call_phone">전화 걸기</string>
   <string name="app_ops_summaries_use_fingerprint">지문인식 사용</string>
   <string name="app_ops_summaries_body_sensors">신체 센서를 사용함</string>
   <string name="app_ops_summaries_read_cell_broadcasts">셀 브로드캐스트 읽기</string>
@@ -65,12 +65,12 @@
   <string name="app_ops_summaries_write_external_storage">외부 저장소에 쓰기</string>
   <string name="app_ops_summaries_turn_screen_on">화면을 켜기</string>
   <string name="app_ops_summaries_get_accounts">계정 얻기</string>
-  <string name="app_ops_summaries_toggle_wifi">Wi-Fi 켜기/끄기</string>
-  <string name="app_ops_summaries_toggle_bluetooth">블루투스 켜기/끄기</string>
-  <string name="app_ops_summaries_start_at_boot">부팅시 시작</string>
-  <string name="app_ops_summaries_toggle_nfc">NFC 켜기/끄기</string>
-  <string name="app_ops_summaries_toggle_mobile_data">셀룰러 데이터 켜기/끄기</string>
-  <string name="app_ops_summaries_superuser">루트 권한</string>
+  <string name="app_ops_summaries_wifi_change">Wi-Fi 켜기/끄기</string>
+  <string name="app_ops_summaries_bluetooth_change">블루투스 켜기/끄기</string>
+  <string name="app_ops_summaries_boot_completed">부팅시 시작</string>
+  <string name="app_ops_summaries_nfc_change">NFC 켜기/끄기</string>
+  <string name="app_ops_summaries_mobile_data_change">셀룰러 데이터 켜기/끄기</string>
+  <string name="app_ops_summaries_su">루트 권한</string>
   <string name="app_ops_labels_coarse_location">대략적인 위치</string>
   <string name="app_ops_labels_fine_location">자세한 위치</string>
   <string name="app_ops_labels_gps">GPS</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">전화 상태 읽기</string>
   <string name="app_ops_labels_add_voicemail">음성 메일 추가</string>
   <string name="app_ops_labels_use_sip">SIP 사용</string>
-  <string name="app_ops_labels_make_call">전화 걸기</string>
+  <string name="app_ops_labels_call_phone">전화 걸기</string>
   <string name="app_ops_labels_use_fingerprint">지문인식 사용</string>
   <string name="app_ops_labels_body_sensors">신체 센서 사용</string>
   <string name="app_ops_labels_read_cell_broadcasts">셀 브로드캐스트 읽기</string>
@@ -134,12 +134,12 @@
   <string name="app_ops_labels_write_external_storage">외부 저장소에 쓰기</string>
   <string name="app_ops_labels_turn_screen_on">화면을 켜기</string>
   <string name="app_ops_labels_get_accounts">계정 얻기</string>
-  <string name="app_ops_labels_toggle_wifi">Wi-Fi 켜기/끄기</string>
-  <string name="app_ops_labels_toggle_bluetooth">블루투스 켜기/끄기</string>
-  <string name="app_ops_labels_start_at_boot">부팅시 시작</string>
-  <string name="app_ops_labels_toggle_nfc">NFC 켜기/끄기</string>
-  <string name="app_ops_labels_toggle_mobile_data">셀룰러 데이터 켜기/끄기</string>
-  <string name="app_ops_labels_superuser">루트 권한</string>
+  <string name="app_ops_labels_wifi_change">Wi-Fi 켜기/끄기</string>
+  <string name="app_ops_labels_bluetooth_change">블루투스 켜기/끄기</string>
+  <string name="app_ops_labels_boot_completed">부팅시 시작</string>
+  <string name="app_ops_labels_nfc_change">NFC 켜기/끄기</string>
+  <string name="app_ops_labels_mobile_data_change">셀룰러 데이터 켜기/끄기</string>
+  <string name="app_ops_labels_su">루트 권한</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">위치</string>
   <string name="app_ops_categories_personal">개인</string>

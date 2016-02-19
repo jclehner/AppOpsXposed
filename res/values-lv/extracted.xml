@@ -73,7 +73,7 @@
   <string name="app_ops_labels_audio_notification_volume">Ziņojumu skaļums</string>
   <string name="app_ops_labels_audio_bluetooth_volume">Bluetooth skaļums</string>
   <string name="app_ops_labels_wake_lock">Neaizmigt</string>
-  <string name="app_ops_labels_superuser">Root pieeja</string>
+  <string name="app_ops_labels_su">Root pieeja</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Atrašanās vieta</string>
   <string name="app_ops_categories_personal">Personīgi</string>

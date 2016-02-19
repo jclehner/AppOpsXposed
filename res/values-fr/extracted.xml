@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">lire l\'état du téléphone</string>
   <string name="app_ops_summaries_add_voicemail">ajouter un message</string>
   <string name="app_ops_summaries_use_sip">utiliser SIP</string>
-  <string name="app_ops_summaries_make_call">appeler</string>
+  <string name="app_ops_summaries_call_phone">appeler</string>
   <string name="app_ops_summaries_use_fingerprint">utiliser les empreintes digitales</string>
   <string name="app_ops_summaries_body_sensors">utiliser les capteurs corporels</string>
   <string name="app_ops_summaries_read_cell_broadcasts">lire les diffusions cellulaires</string>
@@ -65,11 +65,11 @@
   <string name="app_ops_summaries_write_external_storage">écrire sur le stockage externe</string>
   <string name="app_ops_summaries_turn_screen_on">allumer l\'écran</string>
   <string name="app_ops_summaries_get_accounts">obtenir les comptes</string>
-  <string name="app_ops_summaries_toggle_wifi">activer/désactiver le Wi-Fi</string>
-  <string name="app_ops_summaries_toggle_bluetooth">activer/désactiver le Bluetooth</string>
-  <string name="app_ops_summaries_start_at_boot">démarrer au lancement</string>
-  <string name="app_ops_summaries_toggle_nfc">activer/désactiver le NFC</string>
-  <string name="app_ops_summaries_superuser">accès root</string>
+  <string name="app_ops_summaries_wifi_change">activer/désactiver le Wi-Fi</string>
+  <string name="app_ops_summaries_bluetooth_change">activer/désactiver le Bluetooth</string>
+  <string name="app_ops_summaries_boot_completed">démarrer au lancement</string>
+  <string name="app_ops_summaries_nfc_change">activer/désactiver le NFC</string>
+  <string name="app_ops_summaries_su">accès root</string>
   <string name="app_ops_labels_coarse_location">Localisation approximative</string>
   <string name="app_ops_labels_fine_location">Localisation précise</string>
   <string name="app_ops_labels_gps">GPS</string>
@@ -124,7 +124,7 @@
   <string name="app_ops_labels_read_phone_state">Lire l\'état du téléphone</string>
   <string name="app_ops_labels_add_voicemail">Ajouter la messagerie vocale</string>
   <string name="app_ops_labels_use_sip">Utiliser SIP</string>
-  <string name="app_ops_labels_make_call">Appeler</string>
+  <string name="app_ops_labels_call_phone">Appeler</string>
   <string name="app_ops_labels_use_fingerprint">Utiliser les empreintes digitales</string>
   <string name="app_ops_labels_body_sensors">Utiliser les capteurs corporels</string>
   <string name="app_ops_labels_read_cell_broadcasts">Lire les diffusions cellulaires</string>
@@ -133,11 +133,11 @@
   <string name="app_ops_labels_write_external_storage">Ecrire sur le stockage externe</string>
   <string name="app_ops_labels_turn_screen_on">Allumer l\'écran</string>
   <string name="app_ops_labels_get_accounts">Obtenir les comptes</string>
-  <string name="app_ops_labels_toggle_wifi">Activer/désactiver le Wi-Fi</string>
-  <string name="app_ops_labels_toggle_bluetooth">Activer/désactiver le Bluetooth</string>
-  <string name="app_ops_labels_start_at_boot">Démarrer au lancement</string>
-  <string name="app_ops_labels_toggle_nfc">Activer/désactiver le NFC</string>
-  <string name="app_ops_labels_superuser">Accès root</string>
+  <string name="app_ops_labels_wifi_change">Activer/désactiver le Wi-Fi</string>
+  <string name="app_ops_labels_bluetooth_change">Activer/désactiver le Bluetooth</string>
+  <string name="app_ops_labels_boot_completed">Démarrer au lancement</string>
+  <string name="app_ops_labels_nfc_change">Activer/désactiver le NFC</string>
+  <string name="app_ops_labels_su">Accès root</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Localisation</string>
   <string name="app_ops_categories_personal">Personnel</string>

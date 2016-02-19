@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">lees foon status</string>
   <string name="app_ops_summaries_add_voicemail">voeg stem boodskap by</string>
   <string name="app_ops_summaries_use_sip">gebruik SIP</string>
-  <string name="app_ops_summaries_make_call">maak oproep</string>
+  <string name="app_ops_summaries_call_phone">maak oproep</string>
   <string name="app_ops_summaries_use_fingerprint">gebruik vingerafdruk</string>
   <string name="app_ops_summaries_body_sensors">gebruik liggaam sensors</string>
   <string name="app_ops_summaries_read_cell_broadcasts">lees sel uitsendings</string>
@@ -65,12 +65,12 @@
   <string name="app_ops_summaries_write_external_storage">skryf na eksterne stoor spasie</string>
   <string name="app_ops_summaries_turn_screen_on">skakel skerm aan</string>
   <string name="app_ops_summaries_get_accounts">kry rekeninge</string>
-  <string name="app_ops_summaries_toggle_wifi">wissel Wi-Fi</string>
-  <string name="app_ops_summaries_toggle_bluetooth">wissel bluetooth</string>
-  <string name="app_ops_summaries_start_at_boot">begin by stelsel begin</string>
-  <string name="app_ops_summaries_toggle_nfc">wissel NFC</string>
-  <string name="app_ops_summaries_toggle_mobile_data">skakel sellulêre data aan/af</string>
-  <string name="app_ops_summaries_superuser">\'Root\' toegang</string>
+  <string name="app_ops_summaries_wifi_change">wissel Wi-Fi</string>
+  <string name="app_ops_summaries_bluetooth_change">wissel bluetooth</string>
+  <string name="app_ops_summaries_boot_completed">begin by stelsel begin</string>
+  <string name="app_ops_summaries_nfc_change">wissel NFC</string>
+  <string name="app_ops_summaries_mobile_data_change">skakel sellulêre data aan/af</string>
+  <string name="app_ops_summaries_su">\'Root\' toegang</string>
   <string name="app_ops_labels_coarse_location">Growwe ligging</string>
   <string name="app_ops_labels_fine_location">Akurrate ligging</string>
   <string name="app_ops_labels_gps">GPS</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">Lees foon status</string>
   <string name="app_ops_labels_add_voicemail">Voeg stem boodskap by</string>
   <string name="app_ops_labels_use_sip">Gebruik SIP</string>
-  <string name="app_ops_labels_make_call">Maak oproep</string>
+  <string name="app_ops_labels_call_phone">Maak oproep</string>
   <string name="app_ops_labels_use_fingerprint">Gebruik vingerafdruk</string>
   <string name="app_ops_labels_body_sensors">Gebruik liggaam sensors</string>
   <string name="app_ops_labels_read_cell_broadcasts">Lees sel uitsendings</string>
@@ -134,12 +134,12 @@
   <string name="app_ops_labels_write_external_storage">Skryf na eksterne stoor spasie</string>
   <string name="app_ops_labels_turn_screen_on">Skakel skerm aan</string>
   <string name="app_ops_labels_get_accounts">Kry rekeninge</string>
-  <string name="app_ops_labels_toggle_wifi">Wissel Wi-Fi</string>
-  <string name="app_ops_labels_toggle_bluetooth">Wissel bluetooth</string>
-  <string name="app_ops_labels_start_at_boot">Begin by stelsel begin</string>
-  <string name="app_ops_labels_toggle_nfc">Wissel NFC</string>
-  <string name="app_ops_labels_toggle_mobile_data">Skakel sellulêre data aan/af</string>
-  <string name="app_ops_labels_superuser">\'Root\' toegang</string>
+  <string name="app_ops_labels_wifi_change">Wissel Wi-Fi</string>
+  <string name="app_ops_labels_bluetooth_change">Wissel bluetooth</string>
+  <string name="app_ops_labels_boot_completed">Begin by stelsel begin</string>
+  <string name="app_ops_labels_nfc_change">Wissel NFC</string>
+  <string name="app_ops_labels_mobile_data_change">Skakel sellulêre data aan/af</string>
+  <string name="app_ops_labels_su">\'Root\' toegang</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Ligging</string>
   <string name="app_ops_categories_personal">Persoonlik</string>

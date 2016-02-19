@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">прочитать состояние телефона</string>
   <string name="app_ops_summaries_add_voicemail">Добавить голосовую почту</string>
   <string name="app_ops_summaries_use_sip">Использовать SIP</string>
-  <string name="app_ops_summaries_make_call">позвонить</string>
+  <string name="app_ops_summaries_call_phone">позвонить</string>
   <string name="app_ops_summaries_use_fingerprint">использовать отпечаток пальца</string>
   <string name="app_ops_summaries_body_sensors">использовать нательные датчики</string>
   <string name="app_ops_summaries_read_cell_broadcasts">прочитать сообщения оповещения населения</string>
@@ -65,12 +65,12 @@
   <string name="app_ops_summaries_write_external_storage">записать на внешний накопитель</string>
   <string name="app_ops_summaries_turn_screen_on">включить экран</string>
   <string name="app_ops_summaries_get_accounts">получить аккаунты</string>
-  <string name="app_ops_summaries_toggle_wifi">включить или выключить Wi-Fi</string>
-  <string name="app_ops_summaries_toggle_bluetooth">Переключить bluetooth</string>
-  <string name="app_ops_summaries_start_at_boot">запуск при загрузке</string>
-  <string name="app_ops_summaries_toggle_nfc">переключить состояние модуля NFC</string>
-  <string name="app_ops_summaries_toggle_mobile_data">переключить состояние мобильного интернета</string>
-  <string name="app_ops_summaries_superuser">суперпользователь</string>
+  <string name="app_ops_summaries_wifi_change">включить или выключить Wi-Fi</string>
+  <string name="app_ops_summaries_bluetooth_change">Переключить bluetooth</string>
+  <string name="app_ops_summaries_boot_completed">запуск при загрузке</string>
+  <string name="app_ops_summaries_nfc_change">переключить состояние модуля NFC</string>
+  <string name="app_ops_summaries_mobile_data_change">переключить состояние мобильного интернета</string>
+  <string name="app_ops_summaries_su">суперпользователь</string>
   <string name="app_ops_labels_coarse_location">Приблизительное местоположение</string>
   <string name="app_ops_labels_fine_location">Точное местоположение</string>
   <string name="app_ops_labels_gps">GPS</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">Прочитать состояние телефона</string>
   <string name="app_ops_labels_add_voicemail">Добавить голосовую почту</string>
   <string name="app_ops_labels_use_sip">Использовать SIP</string>
-  <string name="app_ops_labels_make_call">Позвонить</string>
+  <string name="app_ops_labels_call_phone">Позвонить</string>
   <string name="app_ops_labels_use_fingerprint">Использовать отпечаток пальца</string>
   <string name="app_ops_labels_body_sensors">Использовать нательные датчики</string>
   <string name="app_ops_labels_read_cell_broadcasts">Прочитать сообщения оповещения населения</string>
@@ -134,12 +134,12 @@
   <string name="app_ops_labels_write_external_storage">Записать на внешний накопитель</string>
   <string name="app_ops_labels_turn_screen_on">Включить экран</string>
   <string name="app_ops_labels_get_accounts">Получить аккаунты</string>
-  <string name="app_ops_labels_toggle_wifi">Переключить Wi-Fi</string>
-  <string name="app_ops_labels_toggle_bluetooth">Переключить bluetooth</string>
-  <string name="app_ops_labels_start_at_boot">Запуск при загрузке</string>
-  <string name="app_ops_labels_toggle_nfc">Переключить состояние модуля NFC</string>
-  <string name="app_ops_labels_toggle_mobile_data">Переключить состояние Мобильного интернета</string>
-  <string name="app_ops_labels_superuser">Режим суперпользователя</string>
+  <string name="app_ops_labels_wifi_change">Переключить Wi-Fi</string>
+  <string name="app_ops_labels_bluetooth_change">Переключить bluetooth</string>
+  <string name="app_ops_labels_boot_completed">Запуск при загрузке</string>
+  <string name="app_ops_labels_nfc_change">Переключить состояние модуля NFC</string>
+  <string name="app_ops_labels_mobile_data_change">Переключить состояние Мобильного интернета</string>
+  <string name="app_ops_labels_su">Режим суперпользователя</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Местоположение</string>
   <string name="app_ops_categories_personal">Личные данные</string>

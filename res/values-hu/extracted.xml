@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">telefon állapotának olvasása</string>
   <string name="app_ops_summaries_add_voicemail">hangposta hozzáadása</string>
   <string name="app_ops_summaries_use_sip">SIP használata</string>
-  <string name="app_ops_summaries_make_call">hívás kezdeményezése</string>
+  <string name="app_ops_summaries_call_phone">hívás kezdeményezése</string>
   <string name="app_ops_summaries_use_fingerprint">ujjlenyomat használata</string>
   <string name="app_ops_summaries_body_sensors">testszenzorok használata</string>
   <string name="app_ops_summaries_read_cell_broadcasts">hálózati üzenetek olvasása</string>
@@ -65,11 +65,11 @@
   <string name="app_ops_summaries_write_external_storage">külső tárolóra írás</string>
   <string name="app_ops_summaries_turn_screen_on">képernyő bekapcsolása</string>
   <string name="app_ops_summaries_get_accounts">fiókok lekérdezése</string>
-  <string name="app_ops_summaries_toggle_wifi">Wi-Fi kapcsolása</string>
-  <string name="app_ops_summaries_toggle_bluetooth">bluetooth kapcsolása</string>
-  <string name="app_ops_summaries_start_at_boot">indítás rendszerbetöltéskor</string>
-  <string name="app_ops_summaries_toggle_nfc">NFC kapcsolása</string>
-  <string name="app_ops_summaries_superuser">rendszergazdai hozzáférés</string>
+  <string name="app_ops_summaries_wifi_change">Wi-Fi kapcsolása</string>
+  <string name="app_ops_summaries_bluetooth_change">bluetooth kapcsolása</string>
+  <string name="app_ops_summaries_boot_completed">indítás rendszerbetöltéskor</string>
+  <string name="app_ops_summaries_nfc_change">NFC kapcsolása</string>
+  <string name="app_ops_summaries_su">rendszergazdai hozzáférés</string>
   <string name="app_ops_labels_coarse_location">Pontatlan hely</string>
   <string name="app_ops_labels_fine_location">Pontos hely</string>
   <string name="app_ops_labels_gps">GPS</string>
@@ -124,7 +124,7 @@
   <string name="app_ops_labels_read_phone_state">Telefon állapotának olvasása</string>
   <string name="app_ops_labels_add_voicemail">Hangposta hozzáadása</string>
   <string name="app_ops_labels_use_sip">SIP használata</string>
-  <string name="app_ops_labels_make_call">Hívás kezdeményezése</string>
+  <string name="app_ops_labels_call_phone">Hívás kezdeményezése</string>
   <string name="app_ops_labels_use_fingerprint">Ujjlenyomat használata</string>
   <string name="app_ops_labels_body_sensors">Testszenzorok használata</string>
   <string name="app_ops_labels_read_cell_broadcasts">Hálózati üzenetek olvasása</string>
@@ -133,11 +133,11 @@
   <string name="app_ops_labels_write_external_storage">Külső tárolóra írás</string>
   <string name="app_ops_labels_turn_screen_on">Képernyő bekapcsolása</string>
   <string name="app_ops_labels_get_accounts">Fiókok lekérdezése</string>
-  <string name="app_ops_labels_toggle_wifi">Wi-Fi kapcsolása</string>
-  <string name="app_ops_labels_toggle_bluetooth">Bluetooth kapcsolása</string>
-  <string name="app_ops_labels_start_at_boot">Indítás rendszerbetöltéskor</string>
-  <string name="app_ops_labels_toggle_nfc">NFC kapcsolása</string>
-  <string name="app_ops_labels_superuser">Rendszergazda hozzáférés</string>
+  <string name="app_ops_labels_wifi_change">Wi-Fi kapcsolása</string>
+  <string name="app_ops_labels_bluetooth_change">Bluetooth kapcsolása</string>
+  <string name="app_ops_labels_boot_completed">Indítás rendszerbetöltéskor</string>
+  <string name="app_ops_labels_nfc_change">NFC kapcsolása</string>
+  <string name="app_ops_labels_su">Rendszergazda hozzáférés</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Helymeghatározás</string>
   <string name="app_ops_categories_personal">Személyes</string>

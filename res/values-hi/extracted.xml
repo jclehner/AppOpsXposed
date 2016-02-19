@@ -46,7 +46,7 @@
   <string name="app_ops_summaries_toast_window">टोस्ट दिखाएँ</string>
   <string name="app_ops_summaries_project_media">परियोजना माध्यम</string>
   <string name="app_ops_summaries_activate_vpn">वीपीएन को सक्रिय करें</string>
-  <string name="app_ops_summaries_superuser">मूल पहुँच</string>
+  <string name="app_ops_summaries_su">मूल पहुँच</string>
   <string name="app_ops_labels_gps">जीपीएस</string>
   <string name="app_ops_labels_vibrate">कंपन करें</string>
   <string name="app_ops_labels_read_contacts">संपर्कों को पढ़ें</string>
@@ -82,7 +82,7 @@
   <string name="app_ops_labels_toast_window">टोस्ट दिखाएँ</string>
   <string name="app_ops_labels_project_media">परियोजना माध्यम</string>
   <string name="app_ops_labels_activate_vpn">वीपीएन को सक्रिय करें</string>
-  <string name="app_ops_labels_superuser">मूल पहुँच</string>
+  <string name="app_ops_labels_su">मूल पहुँच</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">स्थान</string>
   <string name="app_ops_categories_personal">व्यक्तिगत</string>

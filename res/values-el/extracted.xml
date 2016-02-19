@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">ανάγνωση κατάστασης τηλεφώνου</string>
   <string name="app_ops_summaries_add_voicemail">προσθήκη φωνητικού μηνύματος</string>
   <string name="app_ops_summaries_use_sip">χρήση SIP</string>
-  <string name="app_ops_summaries_make_call">κλήση</string>
+  <string name="app_ops_summaries_call_phone">κλήση</string>
   <string name="app_ops_summaries_use_fingerprint">χρήση δακτυλικού αποτυπώματος</string>
   <string name="app_ops_summaries_body_sensors">χρήση αισθητήρων σώματος</string>
   <string name="app_ops_summaries_read_cell_broadcasts">ανάγνωση εκπομπών κινητής τηλεφωνίας</string>
@@ -65,12 +65,12 @@
   <string name="app_ops_summaries_write_external_storage">εγγραφή εξωτερικού αποθ. χώρου</string>
   <string name="app_ops_summaries_turn_screen_on">ενεργοποίηση οθόνης</string>
   <string name="app_ops_summaries_get_accounts">ανάγνωση λογαριασμών</string>
-  <string name="app_ops_summaries_toggle_wifi">εναλλαγή Wi-Fi</string>
-  <string name="app_ops_summaries_toggle_bluetooth">εναλλαγή bluetooth</string>
-  <string name="app_ops_summaries_start_at_boot">έναρξη κατά την εκκίνηση</string>
-  <string name="app_ops_summaries_toggle_nfc">εναλλαγή NFC</string>
-  <string name="app_ops_summaries_toggle_mobile_data">εναλλαγή δεδομένων κινητής τηλεφωνίας</string>
-  <string name="app_ops_summaries_superuser">πρόσβαση root</string>
+  <string name="app_ops_summaries_wifi_change">εναλλαγή Wi-Fi</string>
+  <string name="app_ops_summaries_bluetooth_change">εναλλαγή bluetooth</string>
+  <string name="app_ops_summaries_boot_completed">έναρξη κατά την εκκίνηση</string>
+  <string name="app_ops_summaries_nfc_change">εναλλαγή NFC</string>
+  <string name="app_ops_summaries_mobile_data_change">εναλλαγή δεδομένων κινητής τηλεφωνίας</string>
+  <string name="app_ops_summaries_su">πρόσβαση root</string>
   <string name="app_ops_labels_coarse_location">Τοποθεσία κατά προσέγγιση</string>
   <string name="app_ops_labels_fine_location">Ακριβής τοποθεσία</string>
   <string name="app_ops_labels_gps">GPS</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">Ανάγνωση κατάστασης τηλεφώνου</string>
   <string name="app_ops_labels_add_voicemail">Προσθήκη φωνητικού μηνύματος</string>
   <string name="app_ops_labels_use_sip">Χρήση SIP</string>
-  <string name="app_ops_labels_make_call">Κλήση</string>
+  <string name="app_ops_labels_call_phone">Κλήση</string>
   <string name="app_ops_labels_use_fingerprint">Χρήση δακτυλικού αποτυπώματος</string>
   <string name="app_ops_labels_body_sensors">Χρήση αισθητήρων σώματος</string>
   <string name="app_ops_labels_read_cell_broadcasts">Ανάγνωση εκπομπών κινητής τηλεφωνίας</string>
@@ -134,12 +134,12 @@
   <string name="app_ops_labels_write_external_storage">Εγγραφή εξωτερικού αποθ. χώρου</string>
   <string name="app_ops_labels_turn_screen_on">Ενεργοποίηση οθόνης</string>
   <string name="app_ops_labels_get_accounts">Ανάγνωση λογαριασμών</string>
-  <string name="app_ops_labels_toggle_wifi">Εναλλαγή Wi-Fi</string>
-  <string name="app_ops_labels_toggle_bluetooth">Εναλλαγή bluetooth</string>
-  <string name="app_ops_labels_start_at_boot">Έναρξη κατά την εκκίνηση</string>
-  <string name="app_ops_labels_toggle_nfc">Εναλλαγή NFC</string>
-  <string name="app_ops_labels_toggle_mobile_data">Εναλλαγή δεδομένων κινητής τηλεφωνίας</string>
-  <string name="app_ops_labels_superuser">Πρόσβαση root</string>
+  <string name="app_ops_labels_wifi_change">Εναλλαγή Wi-Fi</string>
+  <string name="app_ops_labels_bluetooth_change">Εναλλαγή bluetooth</string>
+  <string name="app_ops_labels_boot_completed">Έναρξη κατά την εκκίνηση</string>
+  <string name="app_ops_labels_nfc_change">Εναλλαγή NFC</string>
+  <string name="app_ops_labels_mobile_data_change">Εναλλαγή δεδομένων κινητής τηλεφωνίας</string>
+  <string name="app_ops_labels_su">Πρόσβαση root</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Τοποθεσία</string>
   <string name="app_ops_categories_personal">Προσωπικά</string>

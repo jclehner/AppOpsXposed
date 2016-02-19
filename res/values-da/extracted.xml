@@ -46,7 +46,7 @@
   <string name="app_ops_summaries_toast_window">Vis toastbeskeder</string>
   <string name="app_ops_summaries_project_media">projekt medie</string>
   <string name="app_ops_summaries_activate_vpn">aktiver VPN</string>
-  <string name="app_ops_summaries_superuser">root-adgang</string>
+  <string name="app_ops_summaries_su">root-adgang</string>
   <string name="app_ops_labels_gps">GPS</string>
   <string name="app_ops_labels_vibrate">Vibrér</string>
   <string name="app_ops_labels_read_contacts">Læs kontaktpersoner</string>
@@ -82,7 +82,7 @@
   <string name="app_ops_labels_toast_window">Vis toastbeskeder</string>
   <string name="app_ops_labels_project_media">Projekt medie</string>
   <string name="app_ops_labels_activate_vpn">Aktiver VPN</string>
-  <string name="app_ops_labels_superuser">Root-adgang</string>
+  <string name="app_ops_labels_su">Root-adgang</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Placering</string>
   <string name="app_ops_categories_personal">Personlig</string>

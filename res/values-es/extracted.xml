@@ -46,7 +46,7 @@
   <string name="app_ops_summaries_toast_window">mostrar notificaciones emergentes</string>
   <string name="app_ops_summaries_project_media">proyectar medios</string>
   <string name="app_ops_summaries_activate_vpn">activar VPN</string>
-  <string name="app_ops_summaries_superuser">acceso administrativo</string>
+  <string name="app_ops_summaries_su">acceso administrativo</string>
   <string name="app_ops_labels_gps">GPS</string>
   <string name="app_ops_labels_vibrate">Vibrar</string>
   <string name="app_ops_labels_read_contacts">Leer contactos</string>
@@ -82,7 +82,7 @@
   <string name="app_ops_labels_toast_window">Mostrar notificaciones emergentes</string>
   <string name="app_ops_labels_project_media">Proyectar medios</string>
   <string name="app_ops_labels_activate_vpn">Activar VPN</string>
-  <string name="app_ops_labels_superuser">Acceso administrativo</string>
+  <string name="app_ops_labels_su">Acceso administrativo</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Ubicación</string>
   <string name="app_ops_categories_personal">Personal</string>

@@ -73,7 +73,7 @@
   <string name="app_ops_labels_audio_notification_volume">දැනුම්දීමේ ශබ්ද ප්‍රමාණය</string>
   <string name="app_ops_labels_audio_bluetooth_volume">බ්ලූටූත් ශබ්ද ප්‍රමාණය</string>
   <string name="app_ops_labels_wake_lock">ඇහැරවා තැබීම</string>
-  <string name="app_ops_labels_superuser">මූල ප්‍රවේශය</string>
+  <string name="app_ops_labels_su">මූල ප්‍රවේශය</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">ස්ථානය</string>
   <string name="app_ops_categories_personal">පුද්ගලික</string>

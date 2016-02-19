@@ -55,7 +55,7 @@
   <string name="app_ops_summaries_read_phone_state">читати стан телефона</string>
   <string name="app_ops_summaries_add_voicemail">додавати голосову пошту</string>
   <string name="app_ops_summaries_use_sip">використовувати SIP</string>
-  <string name="app_ops_summaries_make_call">зробити дзвінок</string>
+  <string name="app_ops_summaries_call_phone">зробити дзвінок</string>
   <string name="app_ops_summaries_use_fingerprint">використовувати відбитки пальців</string>
   <string name="app_ops_summaries_body_sensors">використання датчиків на тілі</string>
   <string name="app_ops_summaries_mock_location">підробляти розташування</string>
@@ -63,11 +63,11 @@
   <string name="app_ops_summaries_write_external_storage">писати дані до карти пам\'яті</string>
   <string name="app_ops_summaries_turn_screen_on">вмикати екран</string>
   <string name="app_ops_summaries_get_accounts">отримати доступ до облікових записів</string>
-  <string name="app_ops_summaries_toggle_wifi">переключити Wi-Fi</string>
-  <string name="app_ops_summaries_toggle_bluetooth">переключити Bluetooth</string>
-  <string name="app_ops_summaries_start_at_boot">запуск при завантаженні</string>
-  <string name="app_ops_summaries_toggle_nfc">переключити NFC</string>
-  <string name="app_ops_summaries_superuser">root доступ</string>
+  <string name="app_ops_summaries_wifi_change">переключити Wi-Fi</string>
+  <string name="app_ops_summaries_bluetooth_change">переключити Bluetooth</string>
+  <string name="app_ops_summaries_boot_completed">запуск при завантаженні</string>
+  <string name="app_ops_summaries_nfc_change">переключити NFC</string>
+  <string name="app_ops_summaries_su">root доступ</string>
   <string name="app_ops_labels_coarse_location">Приблизне розташування</string>
   <string name="app_ops_labels_fine_location">Точне розташування</string>
   <string name="app_ops_labels_gps">GPS</string>
@@ -121,12 +121,12 @@
   <string name="app_ops_labels_read_phone_state">Читати стан телефона</string>
   <string name="app_ops_labels_add_voicemail">Додавати голосову пошту</string>
   <string name="app_ops_labels_use_sip">Використання SIP</string>
-  <string name="app_ops_labels_make_call">Зробити дзвінок</string>
+  <string name="app_ops_labels_call_phone">Зробити дзвінок</string>
   <string name="app_ops_labels_use_fingerprint">Використовувати відбитки пальців</string>
   <string name="app_ops_labels_body_sensors">Використання датчиків на тілі</string>
   <string name="app_ops_labels_read_cell_broadcasts">Читати широкомовні повідомлення</string>
   <string name="app_ops_labels_mock_location">Підробляти розташування</string>
-  <string name="app_ops_labels_superuser">Root доступ</string>
+  <string name="app_ops_labels_su">Root доступ</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Місцезнаходження</string>
   <string name="app_ops_categories_personal">Особисті дані</string>

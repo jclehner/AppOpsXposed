@@ -46,7 +46,7 @@
   <string name="app_ops_summaries_toast_window">Kuerzzäit-Notifikatiounen uweisen</string>
   <string name="app_ops_summaries_project_media">Projektioun vu Medieninhalter</string>
   <string name="app_ops_summaries_activate_vpn">VPN aktivéieren</string>
-  <string name="app_ops_summaries_superuser">Root-Zougrëff</string>
+  <string name="app_ops_summaries_su">Root-Zougrëff</string>
   <string name="app_ops_labels_gps">GPS</string>
   <string name="app_ops_labels_vibrate">Vibréieren</string>
   <string name="app_ops_labels_read_contacts">Kontakter liesen</string>
@@ -82,7 +82,7 @@
   <string name="app_ops_labels_toast_window">Kuerzzäit-Notifikatiounen uweisen</string>
   <string name="app_ops_labels_project_media">Projektioun vu Medieninhalter</string>
   <string name="app_ops_labels_activate_vpn">VPN aktivéieren</string>
-  <string name="app_ops_labels_superuser">Root-Zougrëff</string>
+  <string name="app_ops_labels_su">Root-Zougrëff</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Standuert</string>
   <string name="app_ops_categories_personal">Perséinlech</string>

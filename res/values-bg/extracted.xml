@@ -56,7 +56,7 @@
   <string name="app_ops_summaries_read_phone_state">Прочетете състоянието на телефона</string>
   <string name="app_ops_summaries_add_voicemail">Добавяне на гласова поща</string>
   <string name="app_ops_summaries_use_sip">използва SIP</string>
-  <string name="app_ops_summaries_make_call">Направете повикване</string>
+  <string name="app_ops_summaries_call_phone">Направете повикване</string>
   <string name="app_ops_summaries_use_fingerprint">използвай пръстов отпечатък</string>
   <string name="app_ops_summaries_body_sensors">използвай сензорите за тяло</string>
   <string name="app_ops_summaries_read_cell_broadcasts">регистрирай излъчването на антенна клетка</string>
@@ -65,12 +65,12 @@
   <string name="app_ops_summaries_write_external_storage">пишете на външната памет</string>
   <string name="app_ops_summaries_turn_screen_on">включване на екрана</string>
   <string name="app_ops_summaries_get_accounts">вземи акаунти</string>
-  <string name="app_ops_summaries_toggle_wifi">активирай/деактивирай Wi-Fi</string>
-  <string name="app_ops_summaries_toggle_bluetooth">превключване на Bluetooth</string>
-  <string name="app_ops_summaries_start_at_boot">изпълнява се при стартиране</string>
-  <string name="app_ops_summaries_toggle_nfc">активиране/деактивиране NFC</string>
-  <string name="app_ops_summaries_toggle_mobile_data">Превключване клетъчен данни</string>
-  <string name="app_ops_summaries_superuser">root достъп</string>
+  <string name="app_ops_summaries_wifi_change">активирай/деактивирай Wi-Fi</string>
+  <string name="app_ops_summaries_bluetooth_change">превключване на Bluetooth</string>
+  <string name="app_ops_summaries_boot_completed">изпълнява се при стартиране</string>
+  <string name="app_ops_summaries_nfc_change">активиране/деактивиране NFC</string>
+  <string name="app_ops_summaries_mobile_data_change">Превключване клетъчен данни</string>
+  <string name="app_ops_summaries_su">root достъп</string>
   <string name="app_ops_labels_coarse_location">Приблизително местоположение</string>
   <string name="app_ops_labels_fine_location">точно местоположение</string>
   <string name="app_ops_labels_gps">GPS</string>
@@ -125,7 +125,7 @@
   <string name="app_ops_labels_read_phone_state">Прочетете състоянието на телефона</string>
   <string name="app_ops_labels_add_voicemail">Добавяне на гласова поща</string>
   <string name="app_ops_labels_use_sip">Използвай SIP</string>
-  <string name="app_ops_labels_make_call">Направете повикване</string>
+  <string name="app_ops_labels_call_phone">Направете повикване</string>
   <string name="app_ops_labels_use_fingerprint">използвай пръстов отпечатък</string>
   <string name="app_ops_labels_body_sensors">използвай сензорите за тяло</string>
   <string name="app_ops_labels_read_cell_broadcasts">регистрирай излъчването на антенна клетка</string>
@@ -134,12 +134,12 @@
   <string name="app_ops_labels_write_external_storage">пишете на външната памет</string>
   <string name="app_ops_labels_turn_screen_on">включване на екрана</string>
   <string name="app_ops_labels_get_accounts">Вземи акаунти</string>
-  <string name="app_ops_labels_toggle_wifi">активирай/деактивирай Wi-Fi</string>
-  <string name="app_ops_labels_toggle_bluetooth">Превключване на Bluetooth</string>
-  <string name="app_ops_labels_start_at_boot">Изпълнява се при стартиране</string>
-  <string name="app_ops_labels_toggle_nfc">активиране/деактивиране NFC</string>
-  <string name="app_ops_labels_toggle_mobile_data">Превключване клетъчен данни</string>
-  <string name="app_ops_labels_superuser">Администраторски достъп</string>
+  <string name="app_ops_labels_wifi_change">активирай/деактивирай Wi-Fi</string>
+  <string name="app_ops_labels_bluetooth_change">Превключване на Bluetooth</string>
+  <string name="app_ops_labels_boot_completed">Изпълнява се при стартиране</string>
+  <string name="app_ops_labels_nfc_change">активиране/деактивиране NFC</string>
+  <string name="app_ops_labels_mobile_data_change">Превключване клетъчен данни</string>
+  <string name="app_ops_labels_su">Администраторски достъп</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Местоположение</string>
   <string name="app_ops_categories_personal">Лични</string>

@@ -46,7 +46,7 @@
   <string name="app_ops_summaries_toast_window">Kuva hüpikud</string>
   <string name="app_ops_summaries_project_media">projekteerida meediat</string>
   <string name="app_ops_summaries_activate_vpn">Aktiveeri VPN</string>
-  <string name="app_ops_summaries_superuser">Root ligipääs</string>
+  <string name="app_ops_summaries_su">Root ligipääs</string>
   <string name="app_ops_labels_gps">GPS</string>
   <string name="app_ops_labels_vibrate">Vibreeri</string>
   <string name="app_ops_labels_read_contacts">Loe kontakte</string>
@@ -82,7 +82,7 @@
   <string name="app_ops_labels_toast_window">Kuva hüpikud</string>
   <string name="app_ops_labels_project_media">projekteerida meediat</string>
   <string name="app_ops_labels_activate_vpn">Aktiveeri VPN</string>
-  <string name="app_ops_labels_superuser">Root ligipääs</string>
+  <string name="app_ops_labels_su">Root ligipääs</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">Asukoht</string>
   <string name="app_ops_categories_personal">Isiklik</string>

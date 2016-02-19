@@ -46,7 +46,7 @@
   <string name="app_ops_summaries_toast_window">نمایش متن‌های کوچک</string>
   <string name="app_ops_summaries_project_media">پخش رسانه</string>
   <string name="app_ops_summaries_activate_vpn">فعال کردن وی‌پی‌ان</string>
-  <string name="app_ops_summaries_superuser">دسترسی روت</string>
+  <string name="app_ops_summaries_su">دسترسی روت</string>
   <string name="app_ops_labels_gps">جی‌پی‌اس</string>
   <string name="app_ops_labels_vibrate">لرزش</string>
   <string name="app_ops_labels_read_contacts">مشاهده مخاطبین</string>
@@ -82,7 +82,7 @@
   <string name="app_ops_labels_toast_window">نمایش متن‌های کوچک</string>
   <string name="app_ops_labels_project_media">پخش رسانه</string>
   <string name="app_ops_labels_activate_vpn">فعال کردن وی‌پی‌ان</string>
-  <string name="app_ops_labels_superuser">دسترسی روت</string>
+  <string name="app_ops_labels_su">دسترسی روت</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">مکان</string>
   <string name="app_ops_categories_personal">شخصی</string>

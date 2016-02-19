@@ -52,13 +52,13 @@
   <string name="app_ops_summaries_activate_vpn">啟用 VPN</string>
   <string name="app_ops_summaries_read_phone_state">讀取手機狀態</string>
   <string name="app_ops_summaries_use_sip">使用 SIP</string>
-  <string name="app_ops_summaries_make_call">撥打電話</string>
+  <string name="app_ops_summaries_call_phone">撥打電話</string>
   <string name="app_ops_summaries_read_cell_broadcasts">讀取區域廣播</string>
   <string name="app_ops_summaries_mock_location">模擬位置</string>
   <string name="app_ops_summaries_read_external_storage">讀取外部存儲空間</string>
   <string name="app_ops_summaries_write_external_storage">寫到外部存儲空間</string>
   <string name="app_ops_summaries_turn_screen_on">開啟螢幕</string>
-  <string name="app_ops_summaries_superuser">Root 權限</string>
+  <string name="app_ops_summaries_su">Root 權限</string>
   <string name="app_ops_labels_gps">GPS</string>
   <string name="app_ops_labels_vibrate">震動</string>
   <string name="app_ops_labels_read_contacts">讀取聯絡人資料</string>
@@ -95,7 +95,7 @@
   <string name="app_ops_labels_toast_window">顯示 toasts 通知</string>
   <string name="app_ops_labels_project_media">媒體投放</string>
   <string name="app_ops_labels_activate_vpn">啟用 VPN</string>
-  <string name="app_ops_labels_superuser">Root 權限</string>
+  <string name="app_ops_labels_su">Root 權限</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">位置</string>
   <string name="app_ops_categories_personal">個人</string>

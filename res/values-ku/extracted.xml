@@ -46,7 +46,7 @@
   <string name="app_ops_summaries_toast_window">پیشاندانی برژاوەکان</string>
   <string name="app_ops_summaries_project_media">پرۆژەی ڕەنگاڵە</string>
   <string name="app_ops_summaries_activate_vpn">چالاککردنی VPN</string>
-  <string name="app_ops_summaries_superuser">ڕێگای ڕەگ</string>
+  <string name="app_ops_summaries_su">ڕێگای ڕەگ</string>
   <string name="app_ops_labels_gps">GPS</string>
   <string name="app_ops_labels_vibrate">له‌رینه‌وه‌</string>
   <string name="app_ops_labels_read_contacts">خوێندنه‌وه‌ی ناوه‌کان</string>
@@ -82,7 +82,7 @@
   <string name="app_ops_labels_toast_window">پیشاندانی برژاوەکان</string>
   <string name="app_ops_labels_project_media">پرۆژەی میدیا</string>
   <string name="app_ops_labels_activate_vpn">چالاککردنی VPN</string>
-  <string name="app_ops_labels_superuser">ڕێگای ڕەگ</string>
+  <string name="app_ops_labels_su">ڕێگای ڕەگ</string>
   <!-- Categories -->
   <string name="app_ops_categories_location">ناوچه‌</string>
   <string name="app_ops_categories_personal">که‌سێتی</string>
