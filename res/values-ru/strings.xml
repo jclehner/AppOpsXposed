@@ -4,7 +4,6 @@
     <string name="advanced_settings_summary">Изменение этих параметров может привести к поломке AppOpsXposed. Используйте с осторожностью!</string>
     <string name="advanced_settings_title">Дополнительно</string>
     <string name="aox_settings">Настройки AppOpsXposed</string>
-    <string name="app_ops_settings">Разрешения приложений</string>
     <string name="appearance_summary">Настройка внешнего вида AppOpsXposed.</string>
     <string name="appearance_title">Внешний вид</string>
     <string name="automatic">(автоматически)</string>
@@ -68,7 +67,6 @@
     <string name="use_layout_fix_title">Исправлено размещение</string>
     <string name="verbose_logs_summary">Перед отправкой отчета об ошибке, включите это и перезагрузите устройство!</string>
     <string name="verbose_logs_title">Журнал работы</string>
-    <string name="version_text">Версия %1$s</string>
     <string name="will_reboot">Устройство будет перезагружено!</string>
     <string name="xperia_allowed">Разрешено</string>
     <string name="xperia_always_ask">Всегда спрашивать</string>

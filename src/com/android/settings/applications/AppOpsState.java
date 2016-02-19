@@ -136,7 +136,8 @@ public class AppOpsState {
                     false,
                     false,
                     false,
-                    false}
+                    false,
+                    true}
             );
 
     public static final OpsTemplate PERSONAL_TEMPLATE = new OpsTemplate(
@@ -159,6 +160,13 @@ public class AppOpsState {
                     AppOpsManagerWrapper.OP_READ_CLIPBOARD,
                     AppOpsManagerWrapper.OP_WRITE_CLIPBOARD },
             new boolean[] { true,
+                    true,
+                    true,
+                    true,
+                    true,
+                    true,
+                    true,
+                    true,
                     true,
                     true,
                     true,
@@ -237,6 +245,9 @@ public class AppOpsState {
                     false,
                     true,
                     true,
+                    true,
+                    true,
+                    true,
                     true, }
             );
 
@@ -273,6 +284,10 @@ public class AppOpsState {
                     AppOpsManagerWrapper.OP_WAKEUP_ALARM,
                     AppOpsManagerWrapper.OP_TOAST_WINDOW, },
             new boolean[] { false,
+                    true,
+                    true,
+                    true,
+                    true,
                     true,
                     true,
                     true,
