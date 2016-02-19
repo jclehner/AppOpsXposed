@@ -29,6 +29,7 @@ import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.os.Build;
 import android.util.SparseIntArray;
 
 @TargetApi(19)
@@ -464,6 +465,8 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		private long mTime;
 		private long mRejectTime;
 		private int mDuration;
+		private int mProxyUid = -1;
+		private String mProxyPackageName = null;
 
 		public OpEntryWrapper(int op, int mode, long time, long rejectTime, int duration)
 		{
@@ -474,6 +477,14 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 			mTime = time;
 			mRejectTime = rejectTime;
 			mDuration = duration;
+		}
+
+		public OpEntryWrapper(int op, int mode, long time, long rejectTime, int duration, int proxyId, String proxyPackageName)
+		{
+			this(op, mode, time, rejectTime, duration);
+
+			mProxyUid = proxyId;
+			mProxyPackageName = proxyPackageName;
 		}
 
 		public static List<OpEntryWrapper> convertList(List<?> list)
@@ -534,6 +545,28 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 				return (Integer) call("getDuration");
 
 			return mDuration == -1 ? (int)(System.currentTimeMillis() - mTime) : mDuration;
+		}
+
+		public int getProxyUid()
+		{
+			if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1)
+				return -1;
+
+			if(mObj != null)
+				return (Integer) call("getProxyUid");
+
+			return mProxyUid;
+		}
+
+		public String getProxyPackageName()
+		{
+			if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1)
+				return null;
+
+			if(mObj != null)
+				return (String) call("getProxyPackageName");
+
+			return mProxyPackageName;
 		}
 	}
 }
