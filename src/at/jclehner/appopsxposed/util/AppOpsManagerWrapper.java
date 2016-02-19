@@ -27,10 +27,8 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.os.Build;
-import android.util.SparseIntArray;
 
 @TargetApi(19)
 public class AppOpsManagerWrapper extends ObjectWrapper
@@ -248,20 +246,24 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		return callStatic(AppOpsManager.class, "opToSwitch", new Class<?>[] { int.class }, op);
 	}
 
-	private static boolean sUseOpToDefaultMode = true;
+	private static Class<?>[] sOpToDefaultModeFuncArgs =  new Class<?>[] { int.class };
 
 	public static int opToDefaultMode(int op)
 	{
-		if(sUseOpToDefaultMode)
+		if(sOpToDefaultModeFuncArgs != null)
 		{
 			try
 			{
-				return callStatic(AppOpsManager.class, "opToDefaultMode", new Class<?>[] { int.class }, op);
+				return callStatic(AppOpsManager.class, "opToDefaultMode", sOpToDefaultModeFuncArgs, op, false);
 			}
 			catch(ReflectiveException e)
 			{
+				if(sOpToDefaultModeFuncArgs.length != 2)
+					sOpToDefaultModeFuncArgs = new Class<?>[] { int.class, boolean.class };
+				else
+					sOpToDefaultModeFuncArgs = null;
+
 				Util.debug(e);
-				sUseOpToDefaultMode = false;
 			}
 		}
 
