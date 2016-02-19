@@ -67,7 +67,6 @@
     <string name="use_layout_fix_title">布局修正</string>
     <string name="verbose_logs_summary">发送问题日志前，请启用此项并重启！</string>
     <string name="verbose_logs_title">详情日志</string>
-    <string name="version_text">版本 %1$s</string>
     <string name="will_reboot">设备必需重启！</string>
     <string name="xperia_allowed">允许</string>
     <string name="xperia_always_ask">总是询问</string>

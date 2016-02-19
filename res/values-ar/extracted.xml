@@ -62,7 +62,7 @@
   <string name="app_ops_summaries_delete_contacts">مسح جهات الاتصال</string>
   <string name="app_ops_summaries_delete_call_log">حذف سجل المكالمات</string>
   <string name="app_ops_summaries_data_change">تغيير البيانات</string>
-  <string name="app_ops_summaries_alarm_wakeup">استيقظ
+  <string name="app_ops_summaries_alarm_wakeup">استيقظ</string>
   <string name="app_ops_summaries_su">الوصول إلى الجذر</string>
   <string name="app_ops_labels_location">الموقع</string>
   <string name="app_ops_labels_vibrate">اهتزاز</string>
@@ -125,8 +125,8 @@
   <string name="app_ops_categories_bootup">إعادة تحميل</string>
   <string name="app_ops_categories_su">الوصول إلى الجذر</string>
   <!-- Misc -->
-  <string name="version_text" >"الإصدار %1$s"</string>
-  <string name="app_ops_settings" >"عمليات التطبيق"</string>
-  <string name="app_ops_running" >"جارية التنفيذ"</string>
-  <string name="app_ops_never_used" >"(لم يسبق الاستخدام مطلقًا)"</string>
+  <string name="version_text">"الإصدار %1$s"</string>
+  <string name="app_ops_settings">"عمليات التطبيق"</string>
+  <string name="app_ops_running">"جارية التنفيذ"</string>
+  <string name="app_ops_never_used">"(لم يسبق الاستخدام مطلقًا)"</string>
 </resources>
