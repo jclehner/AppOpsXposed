@@ -1,3 +1,7 @@
+### 1.30.1
+* Fixed crash
+* Updated Slovak translation
+
 ### 1.30
 * Better support for Marshmallow
 * Fix crashes
