@@ -1,5 +1,9 @@
+### 1.30.3:
+* Fix missing op labels/summaries
+* Fix issue in "Show changed"
+
 ### 1.30.2
-* Fix more crashes on previous Android versions
+* Fixed crashes
 
 ### 1.30.1
 * Fixed crash
