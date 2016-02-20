@@ -169,13 +169,16 @@ public class OpsLabelHelper
 		{
 			try
 			{
-				return context.getString(resId);
+				final String str = context.getString(resId);
+				if(str != null)
+					return str;
 			}
 			catch(NotFoundException e)
 			{
-				Util.debug("Failed to get string " + id);
-				Util.debug(e);
+				//Util.debug(e);
 			}
+
+			Util.debug("Failed to get string " + id);
 		}
 
 		return getFallbackString(context, opName, getLabel, tryOther);
