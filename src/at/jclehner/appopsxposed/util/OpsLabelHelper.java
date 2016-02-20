@@ -117,19 +117,19 @@ public class OpsLabelHelper
 
 		final String[] ret = new String[AppOpsManagerWrapper._NUM_OP];
 
-		for(int op = 0; op != maxOp; ++op)
+		for(int op = 0; op <= maxOp; ++op)
 			ret[op] = strings.get(op, AppOpsManagerWrapper.opToName(op));
 
 		if(maxOp + 1 != AppOpsManagerWrapper._NUM_OP)
 		{
-			for(int op = maxOp; op != AppOpsManagerWrapper._NUM_OP; ++op)
+			for(int op = maxOp + 1; op != AppOpsManagerWrapper._NUM_OP; ++op)
 			{
 				final String opName = AppOpsManagerWrapper.opToName(op);
 				if (opName != null)
 					ret[op] = getAppOpsString(context, opName, true);
 
 				if(ret[op] == null)
-					ret[op] = "OP #" + op;
+					ret[op] = opName != null ? opName : "OP #" + op;
 			}
 		}
 
@@ -204,9 +204,11 @@ public class OpsLabelHelper
 		}
 
 		final String[] array = getLabel ? sOpLabels : sOpSummaries;
-		if (op < array.length && !TextUtils.isEmpty(array[op]))
+		if(op < array.length && !TextUtils.isEmpty(array[op]))
 			return array[op];
 
+		// Now that getOpLabelsOrSummaries has been fixed, this shouldn't happen
+		Util.log("op #" + op + " (" + opName +") has no valid array entry");
 		return opName != null ? opName : "OP #" + op;
 	}
 
