@@ -1,3 +1,6 @@
+### 1.30.2
+* Fix more crashes on previous Android versions
+
 ### 1.30.1
 * Fixed crash
 * Updated Slovak translation
