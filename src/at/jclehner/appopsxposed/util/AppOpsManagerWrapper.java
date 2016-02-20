@@ -246,27 +246,52 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		return callStatic(AppOpsManager.class, "opToSwitch", new Class<?>[] { int.class }, op);
 	}
 
-	private static Class<?>[] sOpToDefaultModeFuncArgs =  new Class<?>[] { int.class };
+	// 0        AppOpsManager.opToDefaultMode(op)
+	// 1        AppOpsManager.opToDefaultMode(op, false)
+	// 2        AppOpsManager.sOpDefaultMode[op]
+	// 3        (disabled)
+	private static int sOpToDefaultModeType = 0;
+	private static int[] sOpDefaultModes;
 
 	public static int opToDefaultMode(int op)
 	{
-		if(sOpToDefaultModeFuncArgs != null)
+		// default op modes were introduced in KitKat
+		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
+			return MODE_ALLOWED;
+
+		try
 		{
-			try
+			switch(sOpToDefaultModeType)
 			{
-				return callStatic(AppOpsManager.class, "opToDefaultMode", sOpToDefaultModeFuncArgs, op, false);
-			}
-			catch(ReflectiveException e)
-			{
-				if(sOpToDefaultModeFuncArgs.length != 2)
-					sOpToDefaultModeFuncArgs = new Class<?>[]{ int.class, boolean.class };
-				else
-				{
-					sOpToDefaultModeFuncArgs = null;
-					Util.debug(e);
-				}
+				case 0:
+					return callStatic(AppOpsManager.class, "opToDefaultMode",
+							new Class[]{ int.class }, op);
+				case 1:
+					return callStatic(AppOpsManager.class, "opToDefaultMode",
+							new Class[]{ int.class, boolean.class }, op, false);
+				case 2:
+					sOpDefaultModes = getStatic(AppOpsManager.class, "sOpDefaultMode");
+					// fall through
+				default:
+					break;
 			}
 		}
+		catch(ReflectiveException e)
+		{
+			Util.debug(e);
+			++sOpToDefaultModeType;
+			return opToDefaultMode(op);
+		}
+		catch(Exception e)
+		{
+			Util.log(e);
+		}
+
+		if(sOpDefaultModes == null)
+			sOpDefaultModes = getFallbackDefaultModes();
+
+		if(op < sOpDefaultModes.length)
+			return sOpDefaultModes[op];
 
 		return MODE_ALLOWED;
 	}
@@ -386,6 +411,32 @@ public class AppOpsManagerWrapper extends ObjectWrapper
 		}
 
 		return getOpInt("_NUM_OP");
+	}
+
+	private static int[] getFallbackDefaultModes()
+	{
+		final int[] defaults = new int[_NUM_OP];
+		for(int op = 0; op != defaults.length; ++op)
+			defaults[op] = opToDefaultModeInternal(op);
+
+		return defaults;
+	}
+
+	private static int opToDefaultModeInternal(int op)
+	{
+		if(op == OP_WRITE_SETTINGS || op == OP_SYSTEM_ALERT_WINDOW)
+			return Build.VERSION.SDK_INT < Build.VERSION_CODES.M ? MODE_ALLOWED : MODE_DEFAULT;
+
+		if(op == OP_WRITE_SMS)
+			return MODE_IGNORED;
+
+		if(op == OP_PROJECT_MEDIA || op == OP_ACTIVATE_VPN || op == OP_GET_USAGE_STATS)
+			return MODE_DEFAULT;
+
+		if(op == OP_MOCK_LOCATION)
+			return MODE_ERRORED;
+
+		return MODE_ALLOWED;
 	}
 
 	private static void mergeOpEntryWrappers(List<OpEntryWrapper> dest, List<OpEntryWrapper> src)
