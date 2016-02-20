@@ -1,6 +1,8 @@
 package at.jclehner.appopsxposed.util;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import android.util.Log;
 
@@ -27,7 +29,7 @@ public class ObjectWrapper
 	{
 		try
 		{
-			return (T) mObj.getClass().getField(fieldName).get(mObj);
+			return (T) getDeclaredField(mObj.getClass(), fieldName).get(mObj);
 		}
 		catch(IllegalAccessException e)
 		{
@@ -38,6 +40,10 @@ public class ObjectWrapper
 			throw new ReflectiveException(e);
 		}
 		catch(NoSuchFieldException e)
+		{
+			throw new ReflectiveException(e);
+		}
+		catch(ClassCastException e)
 		{
 			throw new ReflectiveException(e);
 		}
@@ -61,7 +67,7 @@ public class ObjectWrapper
 	{
 		try
 		{
-			return (T) clazz.getField(fieldName).get(null);
+			return (T) getDeclaredField(clazz, fieldName).get(null);
 		}
 		catch(IllegalAccessException e)
 		{
@@ -75,13 +81,17 @@ public class ObjectWrapper
 		{
 			throw new ReflectiveException(e);
 		}
+		catch(ClassCastException e)
+		{
+			throw new ReflectiveException(e);
+		}
 	}
 
 	public void set(String fieldName, Object value)
 	{
 		try
 		{
-			mObj.getClass().getField(fieldName).set(mObj, value);
+			getDeclaredField(mObj.getClass(), fieldName).set(mObj, value);
 		}
 		catch(NoSuchFieldException e)
 		{
@@ -126,7 +136,7 @@ public class ObjectWrapper
 	{
 		try
 		{
-			return (T) clazz.getMethod(methodName, parameterTypes).invoke(receiver, args);
+			return (T) getDeclaredMethod(clazz, methodName, parameterTypes).invoke(receiver, args);
 		}
 		catch(NoSuchMethodException e)
 		{
@@ -148,6 +158,25 @@ public class ObjectWrapper
 
 			throw new ReflectiveException(e);
 		}
+		catch(ClassCastException e)
+		{
+			throw new ReflectiveException(e);
+		}
+	}
+
+	private static Field getDeclaredField(Class<?> clazz, String name) throws NoSuchFieldException
+	{
+		final Field f = clazz.getDeclaredField(name);
+		f.setAccessible(true);
+		return f;
+	}
+
+	private static Method getDeclaredMethod(Class<?> clazz, String name, Class<?>[] parameterTypes)
+			throws NoSuchMethodException
+	{
+		final Method m = clazz.getDeclaredMethod(name, parameterTypes);
+		m.setAccessible(true);
+		return m;
 	}
 
 	private static Class<?>[] getTypes(Object[] args)
