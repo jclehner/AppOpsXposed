@@ -159,6 +159,16 @@ THE EXTRACTOR SCRIPT WILL FAIL OTHERWISE!
     <string name="app_ops_labels_write_external_storage">Write to external storage</string>
     <string name="app_ops_labels_turn_screen_on">Turn screen on</string>
     <string name="app_ops_labels_get_accounts">Get accounts</string>
+    <string name="app_ops_labels_write_wallpaper">@string/app_ops_summaries_write_wallpaper</string>
+    <string name="app_ops_labels_assist_structure">@string/app_ops_summaries_assist_structure</string>
+    <string name="app_ops_labels_assist_screenshot">@string/app_ops_summaries_assist_screenshot</string>
+    <string name="app_ops_labels_read_phone_state">@string/app_ops_summaries_read_phone_state</string>
+    <string name="app_ops_labels_add_voicemail">@string/app_ops_summaries_add_voicemail</string>
+    <string name="app_ops_labels_use_sip">@string/app_ops_summaries_use_sip</string>
+    <string name="app_ops_labels_make_call">@string/app_ops_summaries_make_call</string>
+    <string name="app_ops_labels_use_fingerprint">@string/app_ops_summaries_use_fingerprint</string>
+    <string name="app_ops_labels_body_sensors">@string/app_ops_summaries_body_sensors</string>
+    <string name="app_ops_labels_read_cell_broadcasts">@string/app_ops_summaries_read_cell_broadcasts</string>
     
     <string name="app_ops_categories_location">Location</string>
     <string name="app_ops_categories_personal">Personal</string>
