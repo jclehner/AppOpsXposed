@@ -28,6 +28,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.PermissionInfo;
 import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 import at.jclehner.appopsxposed.AppOpsXposed;
@@ -203,7 +204,10 @@ public class OpsLabelHelper
 		}
 
 		final String[] array = getLabel ? sOpLabels : sOpSummaries;
-		return array[op];
+		if (op < array.length && !TextUtils.isEmpty(array[op]))
+			return array[op];
+
+		return opName != null ? opName : "OP #" + op;
 	}
 
 	private static String getFallbackString(Context context, String opName, boolean getLabel, boolean tryOther)

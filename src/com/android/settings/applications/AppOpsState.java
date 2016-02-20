@@ -38,6 +38,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.style.StrikethroughSpan;
 import android.util.Log;
@@ -493,7 +494,7 @@ public class AppOpsState {
             for (int i=0; i<ops.size(); i++) {
                 int op = ops.get(i).getOp();
                 SpannableString ss;
-                if (op < items.length && items[op].length() != 0) {
+                if (op < items.length && !TextUtils.isEmpty(items[op])) {
                     ss = new SpannableString(items[op]);
                 } else if (isSummary) {
                     ss = new SpannableString(OpsLabelHelper.getOpSummary(context, op));
