@@ -38,6 +38,7 @@ import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.SettingsActivity;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.ObjectWrapper;
+import at.jclehner.appopsxposed.util.Util;
 
 public class AppOpsSummary extends Fragment {
     // layout inflater object used to inflate views
@@ -73,13 +74,18 @@ public class AppOpsSummary extends Fragment {
         @Override
         public int getCount() {
             int count = sPageTemplates.length;
-            int bootCompletedOp = AppOpsManagerWrapper.getBootCompletedOp();
-            if (bootCompletedOp == -1) {
-                --count;
-            } else {
-                AppOpsState.BOOTUP_TEMPLATE.ops[0] = bootCompletedOp;
+
+            if (AppOpsManagerWrapper.hasTrueBootCompletedOp() || Util.isBootCompletedHackWorking()) {
+                int bootCompletedOp = AppOpsManagerWrapper.getBootCompletedOp();
+                if (bootCompletedOp != -1) {
+                    AppOpsState.BOOTUP_TEMPLATE.ops[0] = bootCompletedOp;
+                    return count;
+                }
+
+                Util.log("bootCompletedOp is -1");
             }
-            return count;
+
+            return count - 1;
         }
 
         @Override

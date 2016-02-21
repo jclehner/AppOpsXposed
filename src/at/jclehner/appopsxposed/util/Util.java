@@ -60,7 +60,10 @@ import eu.chainfire.libsuperuser.Shell.SU;
 
 public final class Util
 {
+	// keep this variable, because some versions of ART seem to inline
+	// a function that simply returns a constant.
 	private static boolean sIsExposedModuleEnabled = false;
+	public static boolean sIsBootCompletedHackWorking = false;
 
 	public interface Logger
 	{
@@ -112,6 +115,8 @@ public final class Util
 	public static boolean isXposedModuleEnabled() {
 		return sIsExposedModuleEnabled;
 	}
+
+	public static boolean isBootCompletedHackWorking() { return sIsBootCompletedHackWorking; }
 
 	public static boolean isXposedModuleOrSystemApp(Context context)
 	{

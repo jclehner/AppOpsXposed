@@ -70,8 +70,8 @@ public class OpsLabelHelper
 	private static String[] getOpLabelsOrSummaries(Context context, boolean getLabels)
 	{
 		final SparseArray<String> strings = new SparseArray<String>();
-		final boolean hasFakeBootCompleted = AppOpsManagerWrapper.OP_POST_NOTIFICATION
-				== AppOpsManagerWrapper.getBootCompletedOp();
+		final boolean hasFakeBootCompleted = Util.isBootCompletedHackWorking() &&
+				AppOpsManagerWrapper.OP_POST_NOTIFICATION == AppOpsManagerWrapper.getBootCompletedOp();
 		int maxOp = 0;
 
 		for(Field field : AppOpsManagerWrapper.class.getDeclaredFields())

@@ -33,6 +33,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+
+import at.jclehner.appopsxposed.AppOpsXposed;
 import at.jclehner.appopsxposed.Hack;
 import at.jclehner.appopsxposed.R;
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
@@ -42,6 +44,7 @@ import at.jclehner.appopsxposed.util.Res;
 import at.jclehner.appopsxposed.util.Util;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
+import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
@@ -96,11 +99,19 @@ public class BootCompletedHack extends Hack
 		// constructors anymore!
 		addBootupTemplate(lpparam);
 		injectLabelAndSummary(lpparam);
+		Util.sIsBootCompletedHackWorking = true;
 	}
 
 	@Override
-	protected void handleLoadAnyPackage(LoadPackageParam lpparam) throws Throwable {
+	protected void handleLoadAnyPackage(LoadPackageParam lpparam) throws Throwable
+	{
 		patchAppOpsManager(lpparam.classLoader);
+
+		if(AppOpsXposed.MODULE_PACKAGE.equals(lpparam.packageName))
+		{
+			XposedHelpers.findAndHookMethod(Util.class.getName(), lpparam.classLoader,
+					"isBootCompletedHackWorking", XC_MethodReplacement.returnConstant(true));
+		}
 	}
 
 	@Override
@@ -169,22 +180,18 @@ public class BootCompletedHack extends Hack
 		final Class<?> iIntentRecvrClazz = classLoader.loadClass(
 				"android.content.IIntentReceiver");
 
-		XposedHelpers.findAndHookMethod(amServiceClazz, "broadcastIntentLocked",
-				procRecordClazz, String.class, Intent.class, String.class,
-				iIntentRecvrClazz, int.class, String.class, Bundle.class,
-				String.class, int.class, boolean.class, boolean.class, int.class,
-				int.class, int.class, new XC_MethodHook() {
+		XposedBridge.hookAllMethods(amServiceClazz, "broadcastIntentLocked", new XC_MethodHook() {
 
-					@Override
-					protected void beforeHookedMethod(MethodHookParam param) throws Throwable
-					{
-						if(Manifest.permission.RECEIVE_BOOT_COMPLETED.equals(param.args[8]))
-						{
-							param.args[9] = OP_BOOT_COMPLETED;
-							log("broadcastIntentLocked called; setting op to OP_BOOT_COMPLETED");
-							log("  processRecord=" + param.args[0]);
-						}
-					}
+			@Override
+			protected void beforeHookedMethod(MethodHookParam param) throws Throwable
+			{
+				if(Manifest.permission.RECEIVE_BOOT_COMPLETED.equals(param.args[8]))
+				{
+					param.args[9] = OP_BOOT_COMPLETED;
+					log("broadcastIntentLocked called; setting op to OP_BOOT_COMPLETED");
+					log("  processRecord=" + param.args[0]);
+				}
+			}
 		});
 	}
 
