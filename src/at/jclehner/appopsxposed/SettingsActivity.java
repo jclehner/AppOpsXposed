@@ -21,6 +21,8 @@ package at.jclehner.appopsxposed;
 
 import at.jclehner.appopsxposed.util.Constants;
 import eu.chainfire.libsuperuser.Shell.SU;
+
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
@@ -40,7 +42,11 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.support.v13.app.FragmentCompat;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,12 +56,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.Arrays;
+
 import at.jclehner.appopsxposed.util.AppOpsManagerWrapper;
 import at.jclehner.appopsxposed.util.OpsLabelHelper;
 import at.jclehner.appopsxposed.util.Util;
 
 public class SettingsActivity extends Activity
 {
+	private static final int REQUEST_CREATE_BACKUP = 0;
+	private static final int REQUEST_RESTORE_BACKUP = 1;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -131,7 +142,8 @@ public class SettingsActivity extends Activity
 	}
 
 	public static class SettingsFragment extends PreferenceFragment implements
-			OnPreferenceChangeListener, OnSharedPreferenceChangeListener
+			OnPreferenceChangeListener, OnSharedPreferenceChangeListener,
+			FragmentCompat.OnRequestPermissionsResultCallback
 	{
 		private SharedPreferences mPrefs;
 
@@ -222,6 +234,18 @@ public class SettingsActivity extends Activity
 			}
 
 			return true;
+		}
+
+		@Override
+		public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+		{
+			if(requestCode == REQUEST_CREATE_BACKUP || requestCode == REQUEST_RESTORE_BACKUP)
+			{
+				if(grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+					createOrRestoreBackup(requestCode == REQUEST_CREATE_BACKUP);
+				else
+					Toast.makeText(getActivity(), R.string.failed, Toast.LENGTH_SHORT).show();
+			}
 		}
 
 		private void setupPreferences()
@@ -318,20 +342,22 @@ public class SettingsActivity extends Activity
 			for(String key: keys)
 			{
 				p = findPreference(key);
-				p.setOnPreferenceClickListener(new OnPreferenceClickListener()
-				{
+				p.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 					@Override
-					public boolean onPreferenceClick(Preference preference)
-					{
-						final boolean success;
+					public boolean onPreferenceClick(Preference preference) {
+						final int status = ContextCompat.checkSelfPermission(getActivity(),
+								Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-						if("backup_create".equals(preference.getKey()))
-							success = Backup.create(getActivity());
+						final boolean create = "backup_create".equals(preference.getKey());
+
+						if(status == PackageManager.PERMISSION_GRANTED)
+							createOrRestoreBackup(create);
 						else
-							success = Backup.restore(getActivity());
-
-						Toast.makeText(getActivity(), success ? R.string.success
-								: R.string.failed, Toast.LENGTH_SHORT).show();
+						{
+							FragmentCompat.requestPermissions(SettingsFragment.this,
+									new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+									create ? REQUEST_CREATE_BACKUP : REQUEST_RESTORE_BACKUP);
+						}
 
 						return true;
 					}
@@ -362,6 +388,15 @@ public class SettingsActivity extends Activity
 						((PreferenceScreen) ps).removePreference(p);
 				}
 			}
+		}
+
+		private void createOrRestoreBackup(boolean create)
+		{
+			final boolean status = create ? Backup.create(getActivity())
+					: Backup.restore(getActivity());
+
+			Toast.makeText(getActivity(), status ? R.string.success
+					: R.string.failed, Toast.LENGTH_SHORT).show();
 		}
 
 		private void callOnChangeListenerWithCurrentValue(Preference p)
