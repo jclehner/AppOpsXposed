@@ -332,9 +332,9 @@ public abstract class ApkVariant implements IXposedHookLoadPackage, IXposedHookI
 					protected void afterHookedMethod(final MethodHookParam param) throws Throwable
 					{
 						final Menu menu = (Menu) param.args[0];
-						//menu.clear();
 
-						Res.modPrefs.reload();
+						XUtils.reloadPrefs();
+
 						int icon = Res.modPrefs.getInt("icon_appinfo", Constants.ICON_LAUNCHER);
 
 						MenuItem item = menu.findItem(R.id.app_ops_settings);
