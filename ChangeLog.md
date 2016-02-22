@@ -1,6 +1,7 @@
 ### 1.30.3:
 * Fix missing op labels/summaries
 * Fix issue in "Show changed"
+* Fix OP_BOOT_COMPLETED on Marshmallow
 
 ### 1.30.2
 * Fixed crashes
