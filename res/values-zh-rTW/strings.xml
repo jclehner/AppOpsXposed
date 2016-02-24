@@ -81,4 +81,7 @@
 	<string name="success">成功。</string>
 	<string name="light_theme_title">明亮主題</string>
 	<string name="light_theme_summary">@null</string>
+	<string name="enable_module">AppOpsXposed 尚未運作為 Xposed 模組；請在 %1$s 啟動它！</string>
+	<string name="cannot_enable">AppOpsXposed 尚未運作為 Xposed 模組，而且你還沒在系統中安裝 Xposed。</string>
+	<string name="install_system_app_helper">安裝系統程式小幫手 (需要 root)?</string>
 </resources>
