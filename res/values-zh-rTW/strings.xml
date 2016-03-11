@@ -4,13 +4,11 @@
     <string name="description">在 Android 4.3+ 開啟應用程式作業 ，並加入至原生設定選單。</string>
     <string name="btn_launch">開啟</string>
     <string name="btn_help">幫助</string>
-    <string name="xposed_not_installed">Xposed Installer is not installed on your system and you are running Android 4.4+. \"%1$s\"
-        is likely disabled, but you may try to launch it using the \"%2$s\" button below. Please note that your device must be rooted to install the
-        Xposed Framework.</string>
+    <string name="xposed_not_installed">Xposed Installer 未安裝，而且你的手機是 Android 4.4+。 \"%1$s\" 已被停用，但你可以試著用底下 \"%2$s\" 按鈕啟動。請注意你的裝置必須已經 root 而且安裝了 Xposed 框架。</string>
 	<string name="xperia_allowed">允許</string>
 	<string name="xperia_ignored">拒絕</string>
 	<string name="xperia_always_ask">每次詢問</string>
-    <string name="advanced_settings_summary">Changing these settings may break AppOpsXposed. Use with care!</string>
+    <string name="advanced_settings_summary">修改這些設定可能導致 AppOpsXposed 崩潰。請小心使用！</string>
     <string name="advanced_settings_title">進階設定</string>
     <string name="show_launcher_icon_title">程式圖示</string>
     <string name="show_launcher_icon_summary">顯示程式圖示。如果您的\"設定\"中找不到\"應用程式作業\"才需要勾選。</string>
@@ -24,7 +22,7 @@
 	<string name="hacks_title">破解</string>
 	<string name="hacks_summary">實驗功能。使用者風險自負！</string>	    
 	<string name="use_hack_boot_completed_title">增加 OP_BOOT_COMPLETED</string>
-	<string name="use_hack_boot_completed_summary">允許您控制應用程式是否允許開機啟動。This replaces the \"%1$s\" option (which has been merged with the \"%2$s\" option);
+	<string name="use_hack_boot_completed_summary">允許您控制應用程式是否允許開機啟動。這會取代 \"%1$s\" 選項 (which has been merged with the \"%2$s\" option);
 	    if \"%1$s\" is currently disabled for an app, it will not boot if you
 	    enable this setting and reboot your device!
 	</string>
