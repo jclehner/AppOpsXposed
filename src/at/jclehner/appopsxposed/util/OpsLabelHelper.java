@@ -252,6 +252,9 @@ public class OpsLabelHelper
 	private static String opLabelFromPermission(Context context, String opName)
 	{
 		final int op = AppOpsManagerWrapper.opFromName(opName);
+		if (op == -1) {
+			return null;
+		}
 		final String perm = AppOpsManagerWrapper.opToPermission(op);
 		return perm != null ? getPermissionLabel(context, perm, null) : null;
 	}
