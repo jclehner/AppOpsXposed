@@ -17,15 +17,12 @@
     <string name="use_layout_fix_summary">Use a fix that alleviates layout issues in the per-app \"應用程式作業\" screen.</string>
     <string name="automatic">(自動)</string>
 	<string name="failsafe_mode_title">故障保護模式</string>
-	<string name="failsafe_mode_summary">Use only the minimum patches required for \"應用程式作業\" to work; in this case, a launcher icon
-	    must be used. 如果程式會閃退時使用。</string>
+	<string name="failsafe_mode_summary">只使用能供 \"應用程式作業\" 運作的最小破解；在這種情況下，必須使用一個啟動器圖示。如果程式會閃退時使用。</string>
 	<string name="hacks_title">破解</string>
 	<string name="hacks_summary">實驗功能。使用者風險自負！</string>	    
 	<string name="use_hack_boot_completed_title">增加 OP_BOOT_COMPLETED</string>
-	<string name="use_hack_boot_completed_summary">允許您控制應用程式是否允許開機啟動。這會取代 \"%1$s\" 選項 (which has been merged with the \"%2$s\" option);
-	    if \"%1$s\" is currently disabled for an app, it will not boot if you
-	    enable this setting and reboot your device!
-	</string>
+	<string name="use_hack_boot_completed_summary">允許您控制應用程式是否允許開機啟動。這會取代 \"%1$s\" 選項 (已合併到 \"%2$s\" 選項)；
+	    如果某個程式的 \"%1$s\" 被停用，並且啟動此設定。程式就不會在開機時啟動！</string>
 
 	<string name="hacks_dialog_title">警告</string>
 	<string name="hacks_dialog_message">這些功能是<strong>實驗功能</strong>，而且可能讓你的裝置變磚，卡在boot-loop畫面而無法使用。<em>僅供</em>你知道如何在救援模式(recovery mode)或shell裡，停用Xposed(或是此模組)。我已經警告過你了！</string>
@@ -37,12 +34,11 @@
 	<string name="build_bugreport_summary">上傳經由 email/Dropbox/Google Drive/等；需要root。</string>
 	<string name="building_toast">建立中&#8230;</string>
 	<string name="use_hack_pm_crash_title">修復程式安裝器</string>
-	<string name="use_hack_pm_crash_summary">Fixes a crash in a system component that prevents \"%1$s\" from loading.</string>
+	<string name="use_hack_pm_crash_summary">修復阻止載入 \"%1$s\" 的系統組件崩潰。</string>
 	<string name="toast_needs_root">這個操作需要root</string>
 	<string name="show_changed_only_title">顯示更新內容</string>
 	<string name="compatibility_mode_title">兼容模式(測試)</string>
-	<string name="compatibility_mode_summary">Use an alternate 應用程式作業 implementation to improve compatibility on most devices. A launcher icon
-	    must be used. </string>
+	<string name="compatibility_mode_summary">使用應用程式作業的替代方案，提高大多數設備的兼容性。必須使用一個啟動器圖示。</string>
 	<string name="checking_root">檢查 root&#8230;</string>
 	<string name="settings">設定</string>
 	<string name="xposed_settings_warning">運行於Xposed模組之前，這些設定沒有任何效果！</string>
@@ -51,7 +47,7 @@
 	<string name="aox_settings">AppOpsXposed 設定</string>
 	<string name="dont_show_again">不要再顯示</string>
 	<string name="must_reboot_device">必須重啟裝置！</string>
-	<string name="permissions_not_granted">\"%1$s\" permissions were not granted. 注意，當你啟用 \"%2$s\" 或安裝為系統程式，必須重新開機。如果這個訊息持續出現，請用詳細錯誤回報！</string>
+	<string name="permissions_not_granted">\"%1$s\" 權限未授予。注意，當你啟用 \"%2$s\" 或安裝為系統程式，必須重新開機。如果這個訊息持續出現，請用詳細錯誤回報！</string>
 	<string name="verbose_logs_title">詳細記錄</string>
 	<string name="verbose_logs_summary">在你回報錯誤以前，請先勾選並且重新開機！</string>
 
